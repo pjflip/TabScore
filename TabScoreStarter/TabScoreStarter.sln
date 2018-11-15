@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.10
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabScoreStarter", "TabScoreStarter\TabScoreStarter.csproj", "{9EE6B38E-5CBA-4A82-A3FF-12C784125E8A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{31A38531-4FEB-4270-8FB6-642DAA2C483A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EE6B38E-5CBA-4A82-A3FF-12C784125E8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EE6B38E-5CBA-4A82-A3FF-12C784125E8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EE6B38E-5CBA-4A82-A3FF-12C784125E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EE6B38E-5CBA-4A82-A3FF-12C784125E8A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8399694-3A65-4851-8EE4-844112F7B9CF}
+	EndGlobalSection
+EndGlobal
