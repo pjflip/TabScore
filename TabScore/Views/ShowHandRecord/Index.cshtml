@@ -1,0 +1,169 @@
+﻿@model TabScore.Models.HandRecordClass
+
+@{
+    ViewBag.Title = "Show Hand Record";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row my-3">
+    <div class="col-12 text-center">
+        <h3>
+            Board @ViewData["Board"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-5">
+    </div>
+    <div class="col-3">
+        <div class="row">
+            <h5><a>&spades;</a>@Model.NorthSpades</h5>
+        </div>
+        <div class="row">
+            <h5><a style="color:red">&hearts;</a>@Model.NorthHearts</h5>
+        </div>
+        <div class="row">
+            <h5><a style="color:red">&diams;</a>@Model.NorthDiamonds</h5>
+        </div>
+        <div class="row">
+            <h5><a>&clubs;</a>@Model.NorthClubs</h5>
+        </div>
+    </div>
+    <div class="col-4">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1">
+    </div>
+    <div class="col-3">
+        <div class="row">
+            <h5><a>&spades;</a>@Model.WestSpades</h5>
+        </div>
+        <div class="row">
+            <h5><a style="color:red">&hearts;</a>@Model.WestHearts</h5>
+        </div>
+        <div class="row">
+            <h5><a style="color:red">&diams;</a>@Model.WestDiamonds</h5>
+        </div>
+        <div class="row">
+            <h5><a>&clubs;</a>@Model.WestClubs</h5>
+        </div>
+    </div>
+    <div class="col-4 px-3 py-2" style="background-color:green">
+        @if (Model.EvalNorthNT != -1)
+        {
+            <div class="row h-25">
+                <div class="col-12 text-center" style="color:aqua">
+                    @Model.HCPNorth
+                </div>
+            </div>
+            <div class="row h-25 mt-3">
+                <div class="col-12" style="color:aqua; display: inline-block; vertical-align: middle;">
+                    <a class="float-left">@Model.HCPWest</a>
+                    <a class="float-right">@Model.HCPEast</a>
+                </div>
+            </div>
+            <div class="row h-25 mt-3">
+                <div class="col-12 text-center" style="color:aqua">
+                    @Model.HCPSouth
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-3">
+        <div class="row">
+            <h5><a>&spades;</a>@Model.EastSpades</h5>
+        </div>
+        <div class="row">
+            <h5><a style="color:red">&hearts;</a>@Model.EastHearts</h5>
+        </div>
+        <div class="row">
+            <h5><a style="color:red">&diams;</a>@Model.EastDiamonds</h5>
+        </div>
+        <div class="row">
+            <h5><a>&clubs;</a>@Model.EastClubs</h5>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-4 text-center">
+        @if (Model.EvalNorthNT != -1)
+        {
+            <table class="table-sm table-bordered text-center mt-1 bg-white" style="font-size:smaller; margin:auto; width:50%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>NT</th>
+                        <th>&spades;</th>
+                        <th style="color:red">&hearts;</th>
+                        <th style="color:red">&diams;</th>
+                        <th>&clubs;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>N</td>
+                        <td>@Model.EvalNorthNT</td>
+                        <td>@Model.EvalNorthSpades</td>
+                        <td style="color:red">@Model.EvalNorthHearts</td>
+                        <td style="color:red">@Model.EvalNorthDiamonds</td>
+                        <td><a>@Model.EvalNorthClubs</a></td>
+                    </tr>
+                    <tr>
+                        <td>S</td>
+                        <td>@Model.EvalSouthNT</td>
+                        <td>@Model.EvalSouthSpades</td>
+                        <td style="color:red">@Model.EvalSouthHearts</td>
+                        <td style="color:red">@Model.EvalSouthDiamonds</td>
+                        <td><a>@Model.EvalSouthClubs</a></td>
+                    </tr>
+                    <tr>
+                        <td>E</td>
+                        <td>@Model.EvalEastNT</td>
+                        <td>@Model.EvalEastSpades</td>
+                        <td style="color:red">@Model.EvalEastHearts</td>
+                        <td style="color:red">@Model.EvalEastDiamonds</td>
+                        <td><a>@Model.EvalEastClubs</a></td>
+                    </tr>
+                    <tr>
+                        <td>W</td>
+                        <td>@Model.EvalWestNT</td>
+                        <td>@Model.EvalWestSpades</td>
+                        <td style="color:red">@Model.EvalWestHearts</td>
+                        <td style="color:red">@Model.EvalWestDiamonds</td>
+                        <td><a>@Model.EvalWestClubs</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-3">
+        <div class="row">
+            <h5><a>&spades;</a>@Model.SouthSpades</h5>
+        </div>
+        <div class="row">
+            <h5><a style="color:red">&hearts;</a>@Model.SouthHearts</h5>
+        </div>
+        <div class="row">
+            <h5><a style="color:red">&diams;</a>@Model.SouthDiamonds</h5>
+        </div>
+        <div class="row">
+            <h5><a>&clubs;</a>@Model.SouthClubs</h5>
+        </div>
+    </div>
+    <div class="col-4">
+    </div>
+</div>
+
+<script>
+    function validateOK() {
+        location.href = '/ShowHandRecord/OKButtonClick';
+    }
+</script>

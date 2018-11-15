@@ -1,0 +1,48 @@
+﻿@model List<TabScore.Models.ResultClass>
+@{
+    ViewBag.Title = "Show Boards";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row my-5">
+    <div class="col-12 text-center">
+        <h3>
+            Boards:
+        </h3>
+    </div>
+</div>
+
+@foreach (var Result in Model)
+{
+    <div class="row">
+        <div class="col-1">
+        </div>
+        <div class="col-2 align-self-center">
+            <h4>
+                @Result.Board:
+            </h4>
+        </div>
+        <div class="col-3">
+            <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterContract/Index?board=' + @Result.Board">
+                Edit
+            </button>
+        </div>
+        <div class="col-6 align-self-center">
+            <h4>
+                @Html.Raw(Result.DisplayContract())
+            </h4>
+        </div>
+    </div>
+}
+
+<script>
+    function validateOK() {
+        if ("@ViewData["GotAllResults"]" == "TRUE") {
+            location.href = '/ShowBoards/OKButtonClick';
+        }
+        else if (window.confirm("Some boards do not have a result entered.  Are you sure you want to skip these boards and move to the next round?")) {
+            location.href = '/ShowBoards/OKButtonClick';
+        }
+    }
+</script>
+

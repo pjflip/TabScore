@@ -1,0 +1,224 @@
+﻿
+@{
+    ViewBag.Title = "Enter Contract";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Board @ViewData["Board"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h3>
+            Enter contract:
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <button id="pass" class="btn btn-primary btn-lg m-1" onclick="setPass()">
+            PASS Out
+        </button>
+        <button id="n1" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumber('1')">
+            1
+        </button>
+        <button id="n2" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumber('2')">
+            2
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="n3" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumber('3')">
+            3
+        </button>
+        <button id="n4" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumber('4')">
+            4
+        </button>
+        <button id="n5" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumber('5')">
+            5
+        </button>
+        <button id="n6" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumber('6')">
+            6
+        </button>
+        <button id="n7" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumber('7')">
+            7
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="sNT" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setSuit('NT')">
+            NT
+        </button>
+        <button id="sS" class="btn btn-primary btn-lg m-1" style="color:black; width: 3em" onclick="setSuit('S')">
+            &spades;
+        </button>
+        <button id="sH" class="btn btn-primary btn-lg m-1" style="color:red; width: 3em" onclick="setSuit('H')">
+            &hearts;
+        </button>
+        <button id="sD" class="btn btn-primary btn-lg m-1" style="color:red; width: 3em" onclick="setSuit('D')">
+            &diams;
+        </button>
+        <button id="sC" class="btn btn-primary btn-lg m-1" style="color:black; width: 3em" onclick="setSuit('C')">
+            &clubs;
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="X" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setX()">
+            X
+        </button>
+        <button id="XX" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setXX()">
+            XX
+        </button>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12 text-center">
+        <h3>
+            by:
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12 text-center">
+        <button id="dN" class="btn btn-primary btn-lg m-1" onclick="setNSEW('N')">
+            North
+        </button>
+        <button id="dS" class="btn btn-primary btn-lg m-1" onclick="setNSEW('S')">
+            South
+        </button>
+        <button id="dE" class="btn btn-primary btn-lg m-1" onclick="setNSEW('E')">
+            East
+        </button>
+        <button id="dW" class="btn btn-primary btn-lg m-1" onclick="setNSEW('W')">
+            West
+        </button>
+     </div>
+</div>
+
+<script>
+    var number = "";
+    var suit = "";
+    var double = "NONE";
+    var NSEW = "";
+
+    function clearPass() {
+        number = "";
+        document.getElementById('pass').className = "btn btn-primary btn-lg m-1";
+    }
+
+    function clearNumbers() {
+        document.getElementById('pass').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n1').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n2').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n3').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n4').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n5').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n6').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n7').className = "btn btn-primary btn-lg m-1";
+    }
+
+    function clearSuits() {
+        document.getElementById('sNT').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sS').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sH').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sD').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sC').className = "btn btn-primary btn-lg m-1";
+    }
+
+    function clearNSEWs() {
+        document.getElementById('dN').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('dS').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('dE').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('dW').className = "btn btn-primary btn-lg m-1";
+    }
+
+    function setNumber(n) {
+        number = n;
+        clearNumbers();
+        document.getElementById('n' + number).className = "btn btn-dark btn-lg m-1";
+    }
+
+    function setPass() {
+        number = "PASS";
+        suit = "";
+        double = "NONE";
+        NSEW = "";
+        clearNumbers();
+        clearSuits();
+        clearNSEWs();
+        document.getElementById('X').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('XX').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('pass').className = "btn btn-dark btn-lg m-1";
+    }
+
+    function setSuit(s) {
+        suit = s;
+        clearSuits();
+        if (number == "PASS") clearPass();
+        document.getElementById('s' + suit).className = "btn btn-dark btn-lg m-1";
+    }
+
+    function setX() {
+        if (double != 'x') {
+            double = "x";
+            if (number == "PASS") clearPass();
+            document.getElementById('X').className = "btn btn-dark btn-lg m-1";
+            document.getElementById('XX').className = "btn btn-primary btn-lg m-1";
+        }
+        else {
+            double = "NONE";
+            document.getElementById('X').className = "btn btn-primary btn-lg m-1";
+        }
+    }
+
+    function setXX() {
+        if (double != 'xx') {
+            double = "xx";
+            if (number == "PASS") clearPass();
+            document.getElementById('XX').className = "btn btn-dark btn-lg m-1";
+            document.getElementById('X').className = "btn btn-primary btn-lg m-1";
+        }
+        else {
+            double = "NONE";
+            document.getElementById('XX').className = "btn btn-primary btn-lg m-1";
+        }
+    }
+
+    function setNSEW(d) {
+        NSEW = d;
+        clearNSEWs();
+        if (number == "PASS") clearPass();
+        document.getElementById('d' + NSEW).className = "btn btn-dark btn-lg m-1";
+    }
+
+    function validateOK() {
+        if (number == "PASS") {
+            location.href = '/EnterContract/OKButtonPASS';
+        }
+        else if (number != "" && suit != "" && NSEW != "") {
+            location.href = '/EnterContract/OKButtonContract?cLevel=' + number + '&cSuit=' + suit + '&cX=' + double + '&cNSEW=' + NSEW;
+        }
+        else {
+            window.alert("Please select all contract elements");
+        }
+    }
+
+    function cancelClick() {
+        location.href = '/EnterContract/CancelButtonClick';
+    }
+</script>

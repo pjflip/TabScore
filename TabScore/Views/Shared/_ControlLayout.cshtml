@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+@{
+    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="shortcut icon" href="~/TabScoreIcon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+</head>
+
+<body style="background-color: lightsteelblue">
+    <div class="container-fluid fixed-top" style="background-color: steelblue; border-bottom-style: solid">
+        <div class="row">
+            <div class="col-12 text-center" style="height: 60px">
+                <h4 class="m-3">@Html.Raw(ViewBag.Header)</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="padding-top: 80px">
+        @RenderBody()
+    </div>
+
+    <div class="container-fluid fixed-bottom" style="background-color: steelblue; border-top-style: solid">
+        <div class="row">
+            <div class="col-6">
+                @if (ViewData["CancelButton"].ToString() == "TRUE")
+                {
+                    <button class="btn btn-danger btn-lg ml-2 my-2 float-left" onclick="cancelClick()">
+                        <span class="fa fa-times-circle"></span> Cancel
+                    </button>
+                }
+            </div>
+            <div class="col-6">
+                <button class="btn btn-success btn-lg mr-2 my-2 float-right" onclick="validateOK()">
+                    OK <span class="fa fa-chevron-circle-right"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

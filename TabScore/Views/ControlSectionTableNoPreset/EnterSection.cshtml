@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Control - Enter Section Preset";
+    Layout = "~/Views/Shared/_ControlLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Current section is @ViewData["SectionLetter"]
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-1">
+    <div class="col-12 text-center">
+        <h3>
+            Select preset section:
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="sA" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectSection('A')">
+            A
+        </button>
+        <button id="sB" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectSection('B')">
+            B
+        </button>
+        <button id="sC" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectSection('C')">
+            C
+        </button>
+        <button id="sD" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectSection('D')">
+            D
+        </button>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col">
+    </div>
+    <div class="col-8 text-center">
+        <h5>
+            Note: This does not change the current section until you restart
+        </h5>
+    </div>
+    <div class="col">
+    </div>
+</div>
+
+<script>
+    var section = "";
+
+    function selectSection(n) {
+        if (section != "") {
+            document.getElementById("s" + section).className = "btn btn-primary btn-lg m-1";
+        }
+        document.getElementById("s" + n).className = "btn btn-dark btn-lg m-1";
+        section = n;
+    }
+
+    function validateOK() {
+        if (section != "") {
+            var d = new Date();
+            d.setTime(d.getTime() + 315360000);
+            document.cookie = "SectionLetter=" + section + ";expires=" + d.toUTCString() + ";path=/";
+            location.href = '/ControlSectionTableNoPreset/SectionOKButtonClick';
+        }
+        else {
+            window.alert("Please select a Section");
+        }
+    }
+
+    function cancelClick() {
+        location.href = '/ControlSectionTableNoPreset/CancelButtonClick';
+    }
+</script>

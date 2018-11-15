@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Control Menu";
+    Layout = "~/Views/Shared/_ControlLayout.cshtml";
+}
+
+<body>
+    <div class="row mt-5 justify-content-sm-center">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='/ControlSectionTableNoPreset/EnterSection'">
+                <span class="fa fa-dot-circle-o"></span> Section and Table No Preset
+            </button>
+        </div>
+    </div>
+    <div class="row mt-1 justify-content-sm-center">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='/ControlSectionTableNoPreset/CancelPreset'">
+                <span class="fa fa-ban"></span> Cancel Preset 
+            </button>
+        </div>
+    </div>
+
+    <div class="row mt-4 justify-content-sm-center">
+        <div class="col-12">
+            <button type="button" class="btn btn-danger btn-lg btn-block" onclick="location.href='/ControlRestart/Index'">
+                <span class="fa fa-fast-backward"></span> Restart 
+            </button>
+        </div>
+    </div>
+</body>
+
+ <script>
+     function validateOK() {
+         location.href = '/ControlMenu/OKButtonClick';
+     }
+
+     function cancelClick() {
+         location.href = '/ControlMenu/CancelButtonClick';
+     }
+</script>

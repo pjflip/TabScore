@@ -1,0 +1,45 @@
+﻿@model List<TabScore.Models.SectionClass>
+    ViewBag.Title = "Enter Section";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Select Section:
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @foreach (var Section in Model)
+        {
+            <button id="s@(Section.Letter)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectSection('@(Section.Letter)')">
+                @Section.Letter
+            </button>
+        }
+    </div>
+</div>
+
+
+<script>
+    var section = "";
+
+    function selectSection(n) {
+        if (section != "") {
+            document.getElementById("s" + section).className = "btn btn-primary btn-lg m-1";
+        }
+        document.getElementById("s" + n).className = "btn btn-dark btn-lg m-1";
+        section = n;
+    }
+
+    function validateOK() {
+        if (section != "") {
+            location.href = '/EnterSection/OKButtonClick?&s=' + section;
+        }
+        else {
+            window.alert("Please select a Section");
+        }
+    }
+</script>

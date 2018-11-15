@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Enter Player Nos EW Missing";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Select Players:
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h4 style="color:blue">
+            North/South: Pair @ViewData["PairNS"]
+        </h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1">
+    </div>
+    <div class="col-2 align-self-center">
+        <h4>
+            North:
+        </h4>
+    </div>
+    <div class="col-2">
+        <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=North'">
+            Edit
+        </button>
+    </div>
+    <div class="col-7 align-self-center">
+        <h4>
+            @ViewData["PlayerNameNorth"]
+        </h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1">
+    </div>
+    <div class="col-2 align-self-center">
+        <h4>
+            South:
+        </h4>
+    </div>
+    <div class="col-2">
+        <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=South'">
+            Edit
+        </button>
+    </div>
+    <div class="col-7 align-self-center">
+        <h4>
+            @ViewData["PlayerNameSouth"]
+        </h4>
+    </div>
+</div>
+
+<script>
+    function validateOK() {
+        if ("@ViewData["PlayerNameNorth"]" == "" || "@ViewData["PlayerNameSouth"]" == "") {
+            window.alert("Please select a name for both North and South");
+        }
+        else {
+            location.href = '/ShowPlayerNos/OKButtonClick';
+        }
+    }
+</script>

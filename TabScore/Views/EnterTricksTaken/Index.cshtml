@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "Enter Tricks Taken";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Board @ViewData["Board"]: @Html.Raw(ViewData["DisplayContract"])
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h3>
+            Enter tricks taken:
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <button id="n0" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('0')">
+            0
+        </button>
+        <button id="n1" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('1')">
+            1
+        </button>
+        <button id="n2" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('2')">
+            2
+        </button>
+        <button id="n3" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('3')">
+            3
+        </button>
+        <button id="n4" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('4')">
+            4
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="n5" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('5')">
+            5
+        </button>
+        <button id="n6" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('6')">
+            6
+        </button>
+        <button id="n7" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('7')">
+            7
+        </button>
+        <button id="n8" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('8')">
+            8
+        </button>
+        <button id="n9" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('9')">
+            9
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="n10" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('10')">
+            10
+        </button>
+        <button id="n11" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('11')">
+            11
+        </button>
+        <button id="n12" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('12')">
+            12
+        </button>
+        <button id="n13" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setNumTricks('13')">
+            13
+        </button>
+    </div>
+</div>
+
+<script>
+    var numTricks = "";
+
+    function setNumTricks(n) {
+        numTricks = n;
+        document.getElementById('n0').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n1').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n2').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n3').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n4').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n5').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n6').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n7').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n8').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n9').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n10').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n11').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n12').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n13').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('n' + numTricks).className = "btn btn-dark btn-lg m-1";
+    }
+
+    function validateOK() {
+        if (numTricks == "") {
+            window.alert("Please select number of tricks");
+        }
+        else {
+            location.href = '/EnterTricksTaken/OKButtonClick?numTricks=' + numTricks;
+        }
+    }
+
+    function cancelClick() {
+        location.href = '/EnterTricksTaken/CancelButtonClick';
+    }
+</script>
+

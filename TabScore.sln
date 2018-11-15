@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.10
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabScore", "TabScore\TabScore.csproj", "{05270894-260B-474E-844A-E3EAAF3EB3DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{05270894-260B-474E-844A-E3EAAF3EB3DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05270894-260B-474E-844A-E3EAAF3EB3DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05270894-260B-474E-844A-E3EAAF3EB3DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05270894-260B-474E-844A-E3EAAF3EB3DC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA5A3DE7-F85F-4F23-9834-D5CDDA5AB06C}
+	EndGlobalSection
+EndGlobal

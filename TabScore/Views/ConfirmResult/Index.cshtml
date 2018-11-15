@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "ConfirmResult";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Board @ViewData["Board"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h3>
+            Confirm result:
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3>
+            @Html.Raw(ViewData["DisplayContract"])
+        </h3>
+    </div>
+</div>
+
+@if (ViewData["DisplayContract"].ToString() != "PASSed Out")
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            <h3>
+                @ViewData["Score"] to @ViewData["Direction"]
+            </h3>
+        </div>
+    </div>
+}
+
+<script>
+    function validateOK() {
+        location.href = '/ConfirmResult/OKButtonClick';
+    }
+
+    function cancelClick() {
+        location.href = '/ConfirmResult/CancelButtonClick';
+    }
+</script>

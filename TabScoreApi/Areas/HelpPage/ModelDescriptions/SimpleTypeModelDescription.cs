@@ -1,0 +1,6 @@
+namespace TabScoreApi.Areas.HelpPage.ModelDescriptions
+{
+    public class SimpleTypeModelDescription : ModelDescription
+    {
+    }
+}

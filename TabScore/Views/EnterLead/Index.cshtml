@@ -1,0 +1,186 @@
+﻿
+@{
+    ViewBag.Title = "Enter Lead";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Board @ViewData["Board"]: @Html.Raw(ViewData["DisplayContract"])
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h3>
+            Enter lead:
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <button id="cA" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('A')">
+            A
+        </button>
+        <button id="cK" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('K')">
+            K
+        </button>
+        <button id="cQ" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('Q')">
+            Q
+        </button>
+        <button id="cJ" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('J')">
+            J
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="c10" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('10')">
+            10
+        </button>
+        <button id="c9" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('9')">
+            9
+        </button>
+        <button id="c8" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('8')">
+            8
+        </button>
+        <button id="c7" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('7')">
+            7
+        </button>
+        <button id="c6" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('6')">
+            6
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="c5" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('5')">
+            5
+        </button>
+        <button id="c4" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('4')">
+            4
+        </button>
+        <button id="c3" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('3')">
+            3
+        </button>
+        <button id="c2" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="setCard('2')">
+            2
+        </button>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12 text-center">
+        <button id="sS" class="btn btn-primary btn-lg m-1" style="color:black; width: 3em" onclick="setSuit('S')">
+            &spades;
+        </button>
+        <button id="sH" class="btn btn-primary btn-lg m-1" style="color:red; width: 3em" onclick="setSuit('H')">
+            &hearts;
+        </button>
+        <button id="sD" class="btn btn-primary btn-lg m-1" style="color:red; width: 3em" onclick="setSuit('D')">
+            &diams;
+        </button>
+        <button id="sC" class="btn btn-primary btn-lg m-1" style="color:black; width: 3em" onclick="setSuit('C')">
+            &clubs;
+        </button>
+    </div>
+</div>
+
+@if (ViewData["SecondPass"].ToString() == "TRUE")
+{
+    <div class="row mt-2">
+        <div class="col-12 text-center">
+            <button id="skip" class="btn btn-warning btn-lg m-1" onclick="setSkip()">
+                Skip
+            </button>
+         </div>
+    </div>
+
+    <script>
+        window.alert('Lead does not match hand record');
+    </script>
+}
+
+<script>
+    var card = "";
+    var suit = "";
+
+    function setCard(c) {
+        card = c;
+        if (suit == "SKIP") suit = "";
+        document.getElementById('cA').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('cK').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('cQ').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('cJ').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c10').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c9').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c8').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c7').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c6').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c5').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c4').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c3').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c2').className = "btn btn-primary btn-lg m-1";
+        if (document.getElementById('skip')) {
+            document.getElementById('skip').className = "btn btn-warning btn-lg m-1";
+        }
+        document.getElementById('c' + card).className = "btn btn-dark btn-lg m-1";
+    }
+
+    function setSuit(s) {
+        suit = s;
+        document.getElementById('sS').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sH').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sD').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sC').className = "btn btn-primary btn-lg m-1";
+        if (document.getElementById('skip')) {
+            document.getElementById('skip').className = "btn btn-warning btn-lg m-1";
+        }
+        document.getElementById('s' + suit).className = "btn btn-dark btn-lg m-1";
+    }
+
+    function setSkip() {
+        suit = "SKIP";
+        card = "";
+        document.getElementById('cA').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('cK').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('cQ').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('cJ').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c10').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c9').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c8').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c7').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c6').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c5').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c4').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c3').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('c2').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sS').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sH').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sD').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('sC').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('skip').className = "btn btn-dark btn-lg m-1";
+    }
+
+    function validateOK() {
+        if (suit != "SKIP" && (card == "" || suit == "")) {
+            window.alert("Please select card and suit");
+        }
+        else {
+            location.href = '/EnterLead/OKButtonClick?card=' + suit + card + '&secondPass=' + '@ViewData["SecondPass"].ToString()';
+        }
+    }
+
+    function cancelClick() {
+        location.href = '/EnterLead/CancelButtonClick';
+    }
+
+</script>
+
+
+

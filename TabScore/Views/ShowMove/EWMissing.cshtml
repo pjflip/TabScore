@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Show Move EW Missing";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Move for Round @ViewData["Round"]
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3 style="color:blue">
+            North/South: Pair @ViewData["PairNS"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @if (ViewData["StayMoveNS"].ToString() == "Move")
+        {
+            <h3>
+                Move to Table @ViewData["NSNewTable"] @ViewData["NSNewDirection"]
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Stay at Table @ViewData["NSNewTable"] @ViewData["NSNewDirection"]
+            </h3>
+        }
+    </div>
+</div>
+
+<script>
+    function validateOK() {
+        location.href = '/ShowMove/OKButtonClick';
+    }
+</script>

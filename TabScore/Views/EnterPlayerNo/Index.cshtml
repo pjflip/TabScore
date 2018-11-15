@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Enter Player No";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h2>
+            Enter ID for @ViewData["Direction"]:
+        </h2>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <input class="form-control-lg text-center mx-auto my-1" style="width: 8em" type="text" id="PIDbox" value="" readonly>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <button id="nk" class="btn btn-primary btn-lg m-1" style="width: 6em" onclick="unknown()">
+            Unknown
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(1)">
+            1
+        </button>
+        <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(2)">
+            2
+        </button>
+        <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(3)">
+            3
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(4)">
+            4
+        </button>
+        <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(5)">
+            5
+        </button>
+        <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(6)">
+            6
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(7)">
+            7
+        </button>
+        <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(8)">
+            8
+        </button>
+        <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(9)">
+            9
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button class="btn btn-warning btn-lg m-1" style="width: 3em" onclick="clearLastEntry()">
+            CE
+        </button>
+        <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(0)">
+            0
+        </button>
+        <button class="btn btn-danger btn-lg m-1" style="width: 3em" onclick="clearPID()">
+            C
+        </button>
+    </div>
+</div>
+
+<script>
+    var PID = "";
+
+    function addNumber(e) {
+        if (PID == "Unknown") {
+            document.getElementById('nk').className = "btn btn-primary btn-lg m-1";
+            PID = "";
+        }
+        PID = PID + e;
+        document.getElementById('PIDbox').value = PID;
+    }
+
+    function unknown() {
+        PID = "Unknown";
+        document.getElementById('nk').className = "btn btn-dark btn-lg m-1";
+        document.getElementById('PIDbox').value = PID;
+    }
+
+    function clearPID() {
+        document.getElementById('nk').className = "btn btn-primary btn-lg m-1";
+        PID = ""
+        document.getElementById('PIDbox').value = "";
+    }
+
+    function clearLastEntry() {
+        if (PID == "Unknown") {
+            document.getElementById('nk').className = "btn btn-primary btn-lg m-1";
+            PID = "";
+        }
+        else
+        {
+            if (PID.length > 0) {
+                PID = PID.substr(0, PID.length - 1);
+            }
+        }
+        document.getElementById('PIDbox').value = PID;
+    }
+
+    function validateOK() {
+        location.href = '/EnterPlayerNo/OKButtonClick?dir=' + '@ViewData["Direction"]' + '&PID=' + PID;
+    }
+</script>

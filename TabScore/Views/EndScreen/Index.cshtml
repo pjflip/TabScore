@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "End Screen";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h2>
+            Score entry complete
+        </h2>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col">
+    </div>
+    <div class="col-6 text-center">
+        <h5>
+            Please turn off tablet or press OK to restart
+        </h5>
+    </div>
+    <div class="col">
+    </div>
+</div>
+
+<script>
+    function validateOK() {
+        location.href = '/EndScreen/OKButtonClick';
+    }
+</script>
