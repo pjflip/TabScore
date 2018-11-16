@@ -17,17 +17,26 @@
     <div class="row">
         <div class="col-1">
         </div>
-        <div class="col-2 align-self-center">
+        <div class="col-1 align-self-center">
             <h4>
                 @Result.Board:
             </h4>
         </div>
         <div class="col-3">
-            <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterContract/Index?board=' + @Result.Board">
-                Edit
-            </button>
+            @if (Result.ContractLevel == null)
+            {
+                <button class="btn btn-primary btn-lg m-1" style="min-width: 80px" onclick="location.href = '/EnterContract/Index?board=' + @Result.Board">
+                    Enter
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-info btn-lg m-1" style="min-width: 80px" onclick="location.href = '/EnterContract/Index?board=' + @Result.Board">
+                    Edit
+                </button>
+            }
         </div>
-        <div class="col-6 align-self-center">
+        <div class="col-5 align-self-center">
             <h4>
                 @Html.Raw(Result.DisplayContract())
             </h4>

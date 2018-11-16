@@ -19,7 +19,7 @@ namespace TabScore.Controllers
                 ViewData["HandRecord"] = "TRUE";
             }
 
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
+            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["CancelButton"] = "TRUE";
             ViewData["Board"] = Session["Board"];
             ViewData["PairNS"] = Session["PairNS"];

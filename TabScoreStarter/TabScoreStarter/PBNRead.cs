@@ -200,8 +200,8 @@ namespace TabScoreStarter
                             hand.EvalEastHearts = ddConvert(line.Substring(12, 1));
                             hand.EvalEastDiamonds = ddConvert(line.Substring(13, 1));
                             hand.EvalEastClubs = ddConvert(line.Substring(14, 1));
-                            hand.EvalWestSpades = ddConvert(line.Substring(15, 1));
-                            hand.EvalWestNT = ddConvert(line.Substring(16, 1));
+                            hand.EvalWestNT = ddConvert(line.Substring(15, 1));
+                            hand.EvalWestSpades = ddConvert(line.Substring(16, 1));
                             hand.EvalWestHearts = ddConvert(line.Substring(17, 1));
                             hand.EvalWestDiamonds = ddConvert(line.Substring(18, 1));
                             hand.EvalWestClubs = ddConvert(line.Substring(19, 1));

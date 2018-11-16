@@ -24,6 +24,7 @@ namespace TabScore
             Session.Add("PairNS", "0");
             Session.Add("PairEW", "0");
             Session.Add("MissingPair", "0");
+            Session.Add("Winners", "0");
             Session.Add("LowBoard", "0");
             Session.Add("HighBoard", "0");
             Session.Add("Board", "0");

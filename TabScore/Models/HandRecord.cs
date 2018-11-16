@@ -10,7 +10,7 @@ namespace TabScore.Models
             HandRecordClass hr = new HandRecordClass()
             {
                 NorthSpades = "###",
-                EvalNorthSpades = -1
+                EvalNorthSpades = "###"
             };
 
             using (OdbcConnection connection = new OdbcConnection(DB))
@@ -62,31 +62,171 @@ namespace TabScore.Models
                     OdbcDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
-                        hr.EvalNorthSpades = reader.GetInt16(0);
-                        hr.EvalNorthHearts = reader.GetInt16(1);
-                        hr.EvalNorthDiamonds = reader.GetInt16(2);
-                        hr.EvalNorthClubs = reader.GetInt16(3);
-                        hr.EvalNorthNT = reader.GetInt16(4);
-                        hr.EvalEastSpades = reader.GetInt16(5);
-                        hr.EvalEastHearts = reader.GetInt16(6);
-                        hr.EvalEastDiamonds = reader.GetInt16(7);
-                        hr.EvalEastClubs = reader.GetInt16(8);
-                        hr.EvalEastNT = reader.GetInt16(9);
-                        hr.EvalSouthSpades = reader.GetInt16(10);
-                        hr.EvalSouthHearts = reader.GetInt16(11);
-                        hr.EvalSouthDiamonds = reader.GetInt16(12);
-                        hr.EvalSouthClubs = reader.GetInt16(13);
-                        hr.EvalSouthNT = reader.GetInt16(14);
-                        hr.EvalWestSpades = reader.GetInt16(15);
-                        hr.EvalWestHearts = reader.GetInt16(16);
-                        hr.EvalWestDiamonds = reader.GetInt16(17);
-                        hr.EvalWestClubs = reader.GetInt16(18);
-                        hr.EvalWestNT = reader.GetInt16(19);
+                        if (reader.GetInt16(0) > 6)
+                        {
+                            hr.EvalNorthSpades = (reader.GetInt16(0) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalNorthSpades = "";
+                        }
+                        if (reader.GetInt16(1) > 6)
+                        {
+                            hr.EvalNorthHearts = (reader.GetInt16(1) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalNorthHearts = "";
+                        }
+                        if (reader.GetInt16(2) > 6)
+                        {
+                            hr.EvalNorthDiamonds = (reader.GetInt16(2) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalNorthDiamonds = "";
+                        }
+                        if (reader.GetInt16(3) > 6)
+                        {
+                            hr.EvalNorthClubs = (reader.GetInt16(3) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalNorthClubs = "";
+                        }
+                        if (reader.GetInt16(4) > 6)
+                        {
+                            hr.EvalNorthNT = (reader.GetInt16(4) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalNorthNT = "";
+                        }
+                        if (reader.GetInt16(5) > 6)
+                        {
+                            hr.EvalEastSpades = (reader.GetInt16(5) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalEastSpades = "";
+                        }
+                        if (reader.GetInt16(6) > 6)
+                        {
+                            hr.EvalEastHearts = (reader.GetInt16(6) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalEastHearts = "";
+                        }
+                        if (reader.GetInt16(7) > 6)
+                        {
+                            hr.EvalEastDiamonds = (reader.GetInt16(7) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalEastDiamonds = "";
+                        }
+                        if (reader.GetInt16(8) > 6)
+                        {
+                            hr.EvalEastClubs = (reader.GetInt16(8) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalEastClubs = "";
+                        }
+                        if (reader.GetInt16(9) > 6)
+                        {
+                            hr.EvalEastNT = (reader.GetInt16(9) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalEastNT = "";
+                        }
+                        if (reader.GetInt16(10) > 6)
+                        {
+                            hr.EvalSouthSpades = (reader.GetInt16(10) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalSouthSpades = "";
+                        }
+                        if (reader.GetInt16(11) > 6)
+                        {
+                            hr.EvalSouthHearts = (reader.GetInt16(11) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalSouthHearts = "";
+                        }
+                        if (reader.GetInt16(12) > 6)
+                        {
+                            hr.EvalSouthDiamonds = (reader.GetInt16(12) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalSouthDiamonds = "";
+                        }
+                        if (reader.GetInt16(13) > 6)
+                        {
+                            hr.EvalSouthClubs = (reader.GetInt16(13) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalSouthClubs = "";
+                        }
+                        if (reader.GetInt16(14) > 6)
+                        {
+                            hr.EvalSouthNT = (reader.GetInt16(14) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalSouthNT = "";
+                        }
+                        if (reader.GetInt16(15) > 6)
+                        {
+                            hr.EvalWestSpades = (reader.GetInt16(15) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalWestSpades = "";
+                        }
+                        if (reader.GetInt16(16) > 6)
+                        {
+                            hr.EvalWestHearts = (reader.GetInt16(16) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalWestHearts = "";
+                        }
+                        if (reader.GetInt16(17) > 6)
+                        {
+                            hr.EvalWestDiamonds = (reader.GetInt16(17) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalWestDiamonds = "";
+                        }
+                        if (reader.GetInt16(18) > 6)
+                        {
+                            hr.EvalWestClubs = (reader.GetInt16(18) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalWestClubs = "";
+                        }
+                        if (reader.GetInt16(19) > 6)
+                        {
+                            hr.EvalWestNT = (reader.GetInt16(19) - 6).ToString();
+                        }
+                        else
+                        {
+                            hr.EvalWestNT = "";
+                        }
 
-                        hr.HCPNorth = reader.GetInt16(20);
-                        hr.HCPEast = reader.GetInt16(21);
-                        hr.HCPSouth = reader.GetInt16(22);
-                        hr.HCPWest = reader.GetInt16(23);
+                        hr.HCPNorth = reader.GetInt16(20).ToString();
+                        hr.HCPEast = reader.GetInt16(21).ToString();
+                        hr.HCPSouth = reader.GetInt16(22).ToString();
+                        hr.HCPWest = reader.GetInt16(23).ToString();
                     }
                     reader.Close();
                 }
@@ -105,6 +245,10 @@ namespace TabScore.Models
         public static bool ValidateLead(string DB, string sectionID, string board, string card, string NSEW)
         {
             if (card == "SKIP") return true;
+            if (card.Substring(1,1) == "1")    // Account for different representations of '10'
+            {
+                card = card.Substring(0, 1) + "T";
+            }
             StringBuilder SQLString = new StringBuilder();
             SQLString.Append("SELECT ");
             switch (NSEW)

@@ -19,30 +19,30 @@
         public string WestDiamonds;
         public string WestClubs;
 
-        public int EvalNorthNT;
-        public int EvalNorthSpades;
-        public int EvalNorthHearts;
-        public int EvalNorthDiamonds;
-        public int EvalNorthClubs;
-        public int EvalEastNT;
-        public int EvalEastSpades;
-        public int EvalEastHearts;
-        public int EvalEastDiamonds;
-        public int EvalEastClubs;
-        public int EvalSouthNT;
-        public int EvalSouthSpades;
-        public int EvalSouthHearts;
-        public int EvalSouthDiamonds;
-        public int EvalSouthClubs;
-        public int EvalWestSpades;
-        public int EvalWestNT;
-        public int EvalWestHearts;
-        public int EvalWestDiamonds;
-        public int EvalWestClubs;
+        public string EvalNorthNT;
+        public string EvalNorthSpades;
+        public string EvalNorthHearts;
+        public string EvalNorthDiamonds;
+        public string EvalNorthClubs;
+        public string EvalEastNT;
+        public string EvalEastSpades;
+        public string EvalEastHearts;
+        public string EvalEastDiamonds;
+        public string EvalEastClubs;
+        public string EvalSouthNT;
+        public string EvalSouthSpades;
+        public string EvalSouthHearts;
+        public string EvalSouthDiamonds;
+        public string EvalSouthClubs;
+        public string EvalWestSpades;
+        public string EvalWestNT;
+        public string EvalWestHearts;
+        public string EvalWestDiamonds;
+        public string EvalWestClubs;
 
-        public int HCPNorth;
-        public int HCPSouth;
-        public int HCPEast;
-        public int HCPWest;
+        public string HCPNorth;
+        public string HCPSouth;
+        public string HCPEast;
+        public string HCPWest;
     }
 }

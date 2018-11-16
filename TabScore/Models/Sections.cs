@@ -13,7 +13,7 @@ namespace TabScore.Models
             {
                 SectionClass s = new SectionClass();
 
-                string SQLString = "SELECT ID, Letter, Tables, MissingPair FROM Section";
+                string SQLString = "SELECT ID, Letter, Tables, MissingPair, Winners FROM Section";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
                 OdbcDataReader reader = cmd.ExecuteReader();
@@ -23,6 +23,7 @@ namespace TabScore.Models
                     s.Letter = reader.GetString(1);
                     s.Tables = reader.GetInt32(2);
                     s.MissingPair = reader.GetInt32(3);
+                    s.Winners = reader.GetInt32(4);
                     sList.Add(s);
                 }
                 reader.Close();

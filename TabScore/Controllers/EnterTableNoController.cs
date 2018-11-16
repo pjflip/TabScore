@@ -13,17 +13,27 @@ namespace TabScore.Controllers
             return View();
         }
 
-        public ActionResult OKButtonClick(string tn)
+        public ActionResult OKButtonClick(string tn, string confirm)
         {
-            if (Tables.LogonTable(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tn))
+            if (confirm == "TRUE")
             {
                 Session["Table"] = tn;
+                Tables.LogonTable(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tn);
                 return RedirectToAction("Index", "ShowPlayerNos");
             }
             else
             {
-                TempData["alertMessage"] = $"Table {tn} already logged on";
-                return RedirectToAction("Index", "EnterTableNo");
+                if (Tables.CheckTableLogonStatus(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tn))
+                {
+                    TempData["LoggedOnTable"] = tn;
+                    return RedirectToAction("Index", "EnterTableNo");
+                }
+                else
+                {
+                    Session["Table"] = tn;
+                    Tables.LogonTable(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tn);
+                    return RedirectToAction("Index", "ShowPlayerNos");
+                }
             }
         }
 

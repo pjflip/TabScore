@@ -40,7 +40,14 @@ namespace TabScore.Models
                     s.Append("<a>&clubs;</a>");
                     break;
             }
-            s.Append(LeadCard.Substring(1));
+            if (LeadCard.Substring(1,1) == "1")
+            {
+                s.Append("T");
+            }
+            else
+            {
+                s.Append(LeadCard.Substring(1));
+            }
             return s.ToString();
         }
 

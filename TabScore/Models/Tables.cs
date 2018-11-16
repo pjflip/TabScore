@@ -4,7 +4,7 @@ namespace TabScore.Models
 {
     public static class Tables
     {
-        public static bool LogonTable(string DB, string sectionID, string table)
+        public static bool CheckTableLogonStatus(string DB, string sectionID, string table)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
@@ -12,30 +12,25 @@ namespace TabScore.Models
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
                 object queryResult = cmd.ExecuteScalar();
-                if (queryResult == null || queryResult.ToString() == "1")
+                cmd.Dispose();
+                if (queryResult.ToString() == "1")
                 {
-                    cmd.Dispose();
-                    return false;
+                    return true;
                 }
                 else
                 {
-                    SQLString = $"UPDATE Tables SET LogOnOff=1 WHERE Section={sectionID} AND [Table]={table}";
-                    cmd = new OdbcCommand(SQLString, connection);
-                    cmd.ExecuteNonQuery();
-                    cmd.Dispose();
-                    return true;
+                    return false;
                 }
             }
         }
 
-        public static void LogoffTable(string DB, string sectionID, string table)
+        public static void LogonTable(string DB, string sectionID, string table)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                string SQLString = $"UPDATE Tables SET LogOnOff=2 WHERE Section={sectionID} AND [Table]={table}";
+                string SQLString = $"UPDATE Tables SET LogOnOff=1 WHERE Section={sectionID} AND [Table]={table}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
-                cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
                 cmd.Dispose();
             }
