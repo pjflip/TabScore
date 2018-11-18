@@ -35,7 +35,6 @@ namespace TabScore
             Session.Add("TricksTakenNumber", "0");
             Session.Add("LeadCard", "");
             Session.Add("Score", "0");
-            Session.Add("ControlReturnScreen", "StartScreen");
         }
     }
 }

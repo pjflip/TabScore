@@ -36,11 +36,5 @@ namespace TabScore.Controllers
                 }
             }
         }
-
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "EnterSection";
-            return RedirectToAction("Index", "ControlMenu");
-        }
     }
 }

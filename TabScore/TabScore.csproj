@@ -117,12 +117,14 @@
     <Compile Include="Controllers\EnterTricksTakenController.cs" />
     <Compile Include="Controllers\ShowBoardsController.cs" />
     <Compile Include="Controllers\ShowMoveController.cs" />
+    <Compile Include="Controllers\ShowRankingListController.cs" />
     <Compile Include="Controllers\ShowRoundInfoController.cs" />
     <Compile Include="Controllers\ShowTravellerController.cs" />
     <Compile Include="Controllers\StartScreenController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dealer.cs" />
     <Compile Include="Models\HandRecord.cs" />
     <Compile Include="Models\HandRecordClass.cs" />
     <Compile Include="Models\Move.cs" />
@@ -131,11 +133,15 @@
     <Compile Include="Models\PairNames.cs" />
     <Compile Include="Models\PlayerID.cs" />
     <Compile Include="Models\PlayerNumbers.cs" />
+    <Compile Include="Models\RankingList.cs" />
+    <Compile Include="Models\RankingListClass.cs" />
     <Compile Include="Models\RoundClass.cs" />
     <Compile Include="Models\ResultClass.cs" />
     <Compile Include="Models\Round.cs" />
     <Compile Include="Models\SectionClass.cs" />
     <Compile Include="Models\Sections.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\SettingsClass.cs" />
     <Compile Include="Models\Tables.cs" />
     <Compile Include="Models\Traveller.cs" />
     <Compile Include="Models\TravellerResultClass.cs" />
@@ -241,6 +247,8 @@
     <Content Include="Views\ShowMove\NSMissing.cshtml" />
     <Content Include="Views\ShowMove\EWMissing.cshtml" />
     <Content Include="Views\ShowHandRecord\Index.cshtml" />
+    <Content Include="Views\ShowRankingList\OneWinner.cshtml" />
+    <Content Include="Views\ShowRankingList\TwoWinners.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

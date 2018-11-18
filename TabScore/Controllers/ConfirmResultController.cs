@@ -66,6 +66,7 @@ namespace TabScore.Controllers
             };
             res.UpdateDB(Session["DBConnectionString"].ToString());
             Session["Score"] = res.Score().ToString();
+
             return RedirectToAction("Index", "ShowTraveller");
         }
 
@@ -79,12 +80,6 @@ namespace TabScore.Controllers
             {
                 return RedirectToAction("Index", "EnterTricksTaken");
             }
-        }
-
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "ConfirmResult";
-            return RedirectToAction("Index", "ControlMenu");
         }
     }
 }

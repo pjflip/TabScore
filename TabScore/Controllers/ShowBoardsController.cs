@@ -9,9 +9,6 @@ namespace TabScore.Controllers
     {
        public ActionResult Index()
         {
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
-            ViewData["CancelButton"] = "FALSE";
-
             List<ResultClass> resList = new List<ResultClass>();
             int iLowBoard = Convert.ToInt32(Session["LowBoard"]);
             int iHighBoard = Convert.ToInt32(Session["HighBoard"]);
@@ -40,19 +37,15 @@ namespace TabScore.Controllers
             {
                 ViewData["GotAllResults"] = "FALSE";
             }
+            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
+            ViewData["CancelButton"] = "FALSE";
+
             return View(resList);
         }
 
         public ActionResult OKButtonClick()
         {
-            return RedirectToAction("Index", "ShowMove");
+            return RedirectToAction("Index", "ShowRankingList", new { finalRound = "No" });
         }
-
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "ShowBoards";
-            return RedirectToAction("Index", "ControlMenu");
-        }
-
     }
 }

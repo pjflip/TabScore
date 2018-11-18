@@ -33,13 +33,5 @@ namespace TabScore.Controllers
 
             return RedirectToAction("Index", "ShowPlayerNos");
         }
-
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "ShowPlayerNos";
-            return RedirectToAction("Index", "ControlMenu");
-        }
-
     }
-
 }

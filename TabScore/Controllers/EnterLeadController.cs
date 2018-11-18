@@ -7,6 +7,13 @@ namespace TabScore.Controllers
     {
         public ActionResult Index(string secondPass)
         {
+            SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
+            if (!settings.EnterLeadCard)
+            {
+                Session["LeadCard"] = "SKIP";
+                return RedirectToAction("Index", "EnterTricksTaken");
+            }
+
             ResultClass res = new ResultClass()
             {
                 ContractLevel = Session["ContractLevel"].ToString(),
@@ -20,12 +27,18 @@ namespace TabScore.Controllers
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["CancelButton"] = "TRUE";
             ViewData["SecondPass"] = secondPass;
-            return View(); 
+            return View();
         }
 
         public ActionResult OKButtonClick(string card, string secondPass)
         {
-            if (secondPass == "FALSE")
+            SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
+            if (!settings.ValidateLeadCard || secondPass == "TRUE")
+            {
+                Session["LeadCard"] = card;
+                return RedirectToAction("Index", "EnterTricksTaken");
+            }
+            else
             {
                 if (HandRecord.ValidateLead(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Board"].ToString(), card, Session["NSEW"].ToString()))
                 {
@@ -37,23 +50,11 @@ namespace TabScore.Controllers
                     return RedirectToAction("Index", "EnterLead", new { secondPass = "TRUE" });
                 }
             }
-            else
-            {
-                Session["LeadCard"] = card;
-                return RedirectToAction("Index", "EnterTricksTaken");
-            }
         }
 
         public ActionResult CancelButtonClick()
         {
             return RedirectToAction("Index", "EnterContract", new { board = Session["Board"].ToString() } );
         }
-
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "ShowBoards";
-            return RedirectToAction("Index", "ControlMenu");
-        }
-
     }
 }

@@ -33,8 +33,7 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(string s)
         {
-            List<SectionClass> sectionsList = new List<SectionClass>();
-            sectionsList = Sections.GetSections(Session["DBConnectionString"].ToString());
+            List<SectionClass> sectionsList = Sections.GetSections(Session["DBConnectionString"].ToString());
 
             Session["SectionLetter"] = s;
             SectionClass sect = sectionsList.Find(x => x.Letter == s);
@@ -43,12 +42,6 @@ namespace TabScore.Controllers
             Session["MissingPair"] = sect.MissingPair.ToString();
             Session["Winners"] = sect.Winners.ToString();
             return RedirectToAction("Index", "EnterTableNo");
-        }
-
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "EnterSection";
-            return RedirectToAction("Index", "ControlMenu");
         }
     }
 }

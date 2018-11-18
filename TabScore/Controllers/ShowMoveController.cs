@@ -8,6 +8,7 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
+            // Go to the next round
             int x = Convert.ToInt32(Session["Round"]);
             x++;
             Session["Round"] = x.ToString();
@@ -19,7 +20,15 @@ namespace TabScore.Controllers
                 if (m.Table == "0")
                 {
                     // No move possible, so session complete
-                    return RedirectToAction("Index", "EndScreen");
+                    SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
+                    if (settings.ShowRanking == 2)
+                    {
+                        return RedirectToAction("Index", "ShowRanking", new { finalRound = "Yes" });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "EndScreen");
+                    }
                 }
                 ViewData["NSNewTable"] = m.Table;
                 ViewData["NSNewDirection"] = m.Direction;
@@ -39,7 +48,15 @@ namespace TabScore.Controllers
                 if (m.Table == "0")
                 {
                     // No move possible, so session complete
-                    return RedirectToAction("Index", "EndScreen");
+                    SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
+                    if (settings.ShowRanking == 2)
+                    {
+                        return RedirectToAction("Index", "ShowRanking", new { finalRound = "Yes" });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "EndScreen");
+                    }
                 }
                 ViewData["EWNewTable"] = m.Table;
                 ViewData["EWNewDirection"] = m.Direction;
@@ -69,17 +86,10 @@ namespace TabScore.Controllers
             }
             return View();
         }
-
-
+        
         public ActionResult OKButtonClick()
         {
             return RedirectToAction("Index", "ShowRoundInfo");
-        }
-
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "ShowRoundInfo";
-            return RedirectToAction("Index", "ControlMenu");
         }
     }
 }

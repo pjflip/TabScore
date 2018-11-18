@@ -1,0 +1,93 @@
+﻿@model List<TabScore.Models.RankingListClass>
+@{
+    ViewBag.Title = "Show Ranking List - Two Winners";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h4>
+            Ranking List
+        </h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <table class="table-sm table-bordered text-center" style="margin:auto; width:70%">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Rank NS</th>
+                    <th>Pair No</th>
+                    <th>%age</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Result in Model)
+                {
+                    if (Result.Orientation == "N")
+                    {
+                        if (ViewData["PairNS"].ToString() == Result.PairNo.ToString())
+                        {
+                            <tr class="table-success">
+                                <td>@Result.Rank</td>
+                                <td>@Result.PairNo</td>
+                                <td>@Result.Score%</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@Result.Rank</td>
+                                <td>@Result.PairNo</td>
+                                <td>@Result.Score%</td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-6">
+        <table class="table-sm table-bordered text-center" style="margin:auto; width:70%">
+            <thead>
+                <tr>
+                    <th>Rank EW</th>
+                    <th>Pair No</th>
+                    <th>%age</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Result in Model)
+                {
+                    if (Result.Orientation == "N")
+                    {
+                        if (ViewData["PairEW"].ToString() == Result.PairNo.ToString())
+                        {
+                            <tr class="table-warning">
+                                <td>@Result.Rank</td>
+                                <td>@Result.PairNo</td>
+                                <td>@Result.Score%</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@Result.Rank</td>
+                                <td>@Result.PairNo</td>
+                                <td>@Result.Score%</td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function validateOK() {
+        location.href = '/ShowRankingList/OKButtonClick';
+    }
+</script>

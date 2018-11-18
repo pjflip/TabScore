@@ -17,7 +17,6 @@ namespace TabScore.Controllers
             }
             Session["Round"] = "1";
 
-            // Check for missing pair
             RoundClass r = Round.GetRoundInfo(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), "1");
             Session["LowBoard"] = r.LowBoard;
             Session["HighBoard"] = r.HighBoard;
@@ -48,12 +47,6 @@ namespace TabScore.Controllers
         public ActionResult OKButtonClick()
         {
             return RedirectToAction("Index", "ShowRoundInfo");
-        }
-
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "ShowPlayerNos";
-            return RedirectToAction("Index", "ControlMenu");
         }
     }
 }

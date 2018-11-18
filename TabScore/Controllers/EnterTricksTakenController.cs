@@ -32,11 +32,5 @@ namespace TabScore.Controllers
         {
             return RedirectToAction("Index", "EnterLead", new { secondPass = "FALSE" });
         }
-        
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "ShowBoards";
-            return RedirectToAction("Index", "ControlMenu");
-        }
     }
 }

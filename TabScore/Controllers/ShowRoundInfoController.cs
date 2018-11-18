@@ -50,11 +50,5 @@ namespace TabScore.Controllers
         {
             return RedirectToAction("Index", "ShowMove");
         }
-
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "ShowRoundInfo";
-            return RedirectToAction("Index", "ControlMenu");
-        }
     }
 }

@@ -9,42 +9,61 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            HandRecordClass hr = HandRecord.GetHandRecord(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Board"].ToString());
-            if (hr.NorthSpades == "###")
+            SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
+            if (!settings.ShowResults)
             {
-                ViewData["HandRecord"] = "FALSE";
+                return RedirectToAction("Index", "ShowBoards");
+            }
+            if (settings.ShowHandRecord)
+            {
+                HandRecordClass hr = HandRecord.GetHandRecord(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Board"].ToString());
+                if (hr.NorthSpades == "###")
+                {
+                    ViewData["HandRecord"] = "FALSE";
+                }
+                else
+                {
+                    ViewData["HandRecord"] = "TRUE";
+                }
             }
             else
             {
-                ViewData["HandRecord"] = "TRUE";
+                ViewData["HandRecord"] = "FALSE";
+            }
+
+            List<TravellerResultClass> resList = Traveller.GetResults(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Board"].ToString());
+            resList.Sort((x, y) => y.Score.CompareTo(x.Score));
+            if (settings.ShowPercentage)
+            {
+                int numEqual = 0;
+                int numBelow = 0;
+                int thisScore = Convert.ToInt32(Session["Score"]);
+                foreach (TravellerResultClass tr in resList)
+                {
+                    if (tr.Score == thisScore) numEqual++;
+                    if (tr.Score < thisScore) numBelow++;
+                }
+                int percentageNS;
+                if (resList.Count == 1)
+                {
+                    percentageNS = 50;
+                }
+                else
+                {
+                    percentageNS = Convert.ToInt32(100.0 * (numBelow + 0.5 * (numEqual - 1)) / (resList.Count - 1));
+                }
+                ViewData["PercentageNS"] = percentageNS.ToString();
+                ViewData["PercentageEW"] = (100 - percentageNS).ToString();
+            }
+            else
+            {
+                ViewData["PercentageNS"] = "###";
             }
 
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["CancelButton"] = "TRUE";
             ViewData["Board"] = Session["Board"];
             ViewData["PairNS"] = Session["PairNS"];
-
-            List<TravellerResultClass> resList = Traveller.GetResults(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Board"].ToString());
-            resList.Sort((x, y) => y.Score.CompareTo(x.Score));
-            int numEqual = 0;
-            int numBelow = 0;
-            int thisScore = Convert.ToInt32(Session["Score"]);
-            foreach (TravellerResultClass tr in resList)
-            {
-                if (tr.Score == thisScore) numEqual++;
-                if (tr.Score < thisScore) numBelow++;
-            }
-            int percentageNS;
-            if (resList.Count == 1)
-            {
-                percentageNS = 50;
-            }
-            else
-            {
-                percentageNS = Convert.ToInt32(100.0 * (numBelow + 0.5 * (numEqual - 1)) / (resList.Count - 1));
-            }
-            ViewData["PercentageNS"] = percentageNS.ToString();
-            ViewData["PercentageEW"] = (100 - percentageNS).ToString();
             return View(resList);
         }
 
@@ -62,12 +81,6 @@ namespace TabScore.Controllers
         public ActionResult HandRecordButtonClick()
         {
             return RedirectToAction("Index", "ShowHandRecord");
-        }
-
-        public ActionResult ControlButtonClick()
-        {
-            Session["ControlReturnScreen"] = "ShowTraveller";
-            return RedirectToAction("Index", "ControlMenu");
         }
     }
 }
