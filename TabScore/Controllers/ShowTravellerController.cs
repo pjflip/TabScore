@@ -20,6 +20,14 @@ namespace TabScore.Controllers
                 if (hr.NorthSpades == "###")
                 {
                     ViewData["HandRecord"] = "FALSE";
+                    if (Session["SectionID"].ToString() != "1")    // Try default Section 1 hand records
+                    {
+                        hr = HandRecord.GetHandRecord(Session["DBConnectionString"].ToString(), "1", Session["Board"].ToString());
+                        if (hr.NorthSpades != "###")
+                        {
+                            ViewData["HandRecord"] = "TRUE";
+                        }
+                    }
                 }
                 else
                 {
@@ -57,7 +65,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                ViewData["PercentageNS"] = "###";
+                ViewData["PercentageNS"] = "###";   // Don't show percentage
             }
 
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";

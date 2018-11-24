@@ -30,14 +30,17 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TabScoreForm));
             this.lblScoringDatabase = new System.Windows.Forms.Label();
-            this.lblDBName = new System.Windows.Forms.Label();
-            this.btnHRF = new System.Windows.Forms.Button();
+            this.lblPathToDB = new System.Windows.Forms.Label();
+            this.btnAddHandRecordFile = new System.Windows.Forms.Button();
             this.lblHandRecordFile = new System.Windows.Forms.Label();
-            this.lblHandRecord = new System.Windows.Forms.Label();
-            this.btnSDB = new System.Windows.Forms.Button();
-            this.fd = new System.Windows.Forms.OpenFileDialog();
-            this.btnStart = new System.Windows.Forms.Button();
-            this.lblServerState = new System.Windows.Forms.Label();
+            this.lblPathToHandRecordFile = new System.Windows.Forms.Label();
+            this.btnAddSDBFile = new System.Windows.Forms.Button();
+            this.fdSDBFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.lblSessionStatus = new System.Windows.Forms.Label();
+            this.lblDDAnalysing = new System.Windows.Forms.Label();
+            this.pbDDAnalysing = new System.Windows.Forms.ProgressBar();
+            this.fdHRFFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.bwAnalysisCalculation = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // lblScoringDatabase
@@ -47,29 +50,29 @@
             this.lblScoringDatabase.Location = new System.Drawing.Point(15, 17);
             this.lblScoringDatabase.Name = "lblScoringDatabase";
             this.lblScoringDatabase.Size = new System.Drawing.Size(137, 16);
-            this.lblScoringDatabase.TabIndex = 0;
+            this.lblScoringDatabase.TabIndex = 100;
             this.lblScoringDatabase.Text = "Scoring Database:";
             // 
-            // lblDBName
+            // lblPathToDB
             // 
-            this.lblDBName.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lblDBName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDBName.Location = new System.Drawing.Point(16, 39);
-            this.lblDBName.Name = "lblDBName";
-            this.lblDBName.Size = new System.Drawing.Size(477, 21);
-            this.lblDBName.TabIndex = 1;
-            this.lblDBName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblPathToDB.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblPathToDB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblPathToDB.Location = new System.Drawing.Point(16, 39);
+            this.lblPathToDB.Name = "lblPathToDB";
+            this.lblPathToDB.Size = new System.Drawing.Size(477, 21);
+            this.lblPathToDB.TabIndex = 101;
+            this.lblPathToDB.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // btnHRF
+            // btnAddHandRecordFile
             // 
-            this.btnHRF.Enabled = false;
-            this.btnHRF.Location = new System.Drawing.Point(302, 90);
-            this.btnHRF.Name = "btnHRF";
-            this.btnHRF.Size = new System.Drawing.Size(191, 23);
-            this.btnHRF.TabIndex = 2;
-            this.btnHRF.Text = "Add/modify hand record file...";
-            this.btnHRF.UseVisualStyleBackColor = true;
-            this.btnHRF.Click += new System.EventHandler(this.btnHRF_Click);
+            this.btnAddHandRecordFile.Location = new System.Drawing.Point(302, 90);
+            this.btnAddHandRecordFile.Name = "btnAddHandRecordFile";
+            this.btnAddHandRecordFile.Size = new System.Drawing.Size(191, 23);
+            this.btnAddHandRecordFile.TabIndex = 2;
+            this.btnAddHandRecordFile.Text = "Add hand record file...";
+            this.btnAddHandRecordFile.UseVisualStyleBackColor = true;
+            this.btnAddHandRecordFile.Visible = false;
+            this.btnAddHandRecordFile.Click += new System.EventHandler(this.btnAddHandRecordFile_Click);
             // 
             // lblHandRecordFile
             // 
@@ -78,65 +81,92 @@
             this.lblHandRecordFile.Location = new System.Drawing.Point(15, 93);
             this.lblHandRecordFile.Name = "lblHandRecordFile";
             this.lblHandRecordFile.Size = new System.Drawing.Size(134, 16);
-            this.lblHandRecordFile.TabIndex = 3;
+            this.lblHandRecordFile.TabIndex = 102;
             this.lblHandRecordFile.Text = "Hand Record File:";
             // 
-            // lblHandRecord
+            // lblPathToHandRecordFile
             // 
-            this.lblHandRecord.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lblHandRecord.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblHandRecord.Location = new System.Drawing.Point(18, 114);
-            this.lblHandRecord.Name = "lblHandRecord";
-            this.lblHandRecord.Size = new System.Drawing.Size(475, 21);
-            this.lblHandRecord.TabIndex = 4;
-            this.lblHandRecord.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblPathToHandRecordFile.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblPathToHandRecordFile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblPathToHandRecordFile.Location = new System.Drawing.Point(18, 114);
+            this.lblPathToHandRecordFile.Name = "lblPathToHandRecordFile";
+            this.lblPathToHandRecordFile.Size = new System.Drawing.Size(475, 21);
+            this.lblPathToHandRecordFile.TabIndex = 104;
+            this.lblPathToHandRecordFile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // btnSDB
+            // btnAddSDBFile
             // 
-            this.btnSDB.Location = new System.Drawing.Point(302, 14);
-            this.btnSDB.Name = "btnSDB";
-            this.btnSDB.Size = new System.Drawing.Size(191, 23);
-            this.btnSDB.TabIndex = 7;
-            this.btnSDB.Text = "Add/modify scoring database file...";
-            this.btnSDB.UseVisualStyleBackColor = true;
-            this.btnSDB.Click += new System.EventHandler(this.btnSDB_Click);
+            this.btnAddSDBFile.Location = new System.Drawing.Point(302, 14);
+            this.btnAddSDBFile.Name = "btnAddSDBFile";
+            this.btnAddSDBFile.Size = new System.Drawing.Size(191, 23);
+            this.btnAddSDBFile.TabIndex = 1;
+            this.btnAddSDBFile.Text = "Add scoring database file...";
+            this.btnAddSDBFile.UseVisualStyleBackColor = true;
+            this.btnAddSDBFile.Visible = false;
+            this.btnAddSDBFile.Click += new System.EventHandler(this.btnAddSDBFile_Click);
             // 
-            // btnStart
+            // fdSDBFileDialog
             // 
-            this.btnStart.BackColor = System.Drawing.Color.Gray;
-            this.btnStart.Enabled = false;
-            this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStart.ForeColor = System.Drawing.Color.White;
-            this.btnStart.Location = new System.Drawing.Point(16, 151);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(102, 42);
-            this.btnStart.TabIndex = 8;
-            this.btnStart.Text = "Start";
-            this.btnStart.UseVisualStyleBackColor = false;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            this.fdSDBFileDialog.Filter = "BWS Files (*.bws)|*.bws";
+            this.fdSDBFileDialog.Title = "Select Scoring Database";
             // 
-            // lblServerState
+            // lblSessionStatus
             // 
-            this.lblServerState.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblServerState.ForeColor = System.Drawing.Color.Red;
-            this.lblServerState.Location = new System.Drawing.Point(152, 162);
-            this.lblServerState.Name = "lblServerState";
-            this.lblServerState.Size = new System.Drawing.Size(203, 23);
-            this.lblServerState.TabIndex = 10;
-            this.lblServerState.Text = "Session Not Started";
-            this.lblServerState.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblSessionStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSessionStatus.ForeColor = System.Drawing.Color.Red;
+            this.lblSessionStatus.Location = new System.Drawing.Point(150, 194);
+            this.lblSessionStatus.Name = "lblSessionStatus";
+            this.lblSessionStatus.Size = new System.Drawing.Size(203, 23);
+            this.lblSessionStatus.TabIndex = 107;
+            this.lblSessionStatus.Text = "Session Not Started";
+            this.lblSessionStatus.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lblDDAnalysing
+            // 
+            this.lblDDAnalysing.AutoSize = true;
+            this.lblDDAnalysing.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDDAnalysing.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblDDAnalysing.Location = new System.Drawing.Point(15, 151);
+            this.lblDDAnalysing.Name = "lblDDAnalysing";
+            this.lblDDAnalysing.Size = new System.Drawing.Size(120, 16);
+            this.lblDDAnalysing.TabIndex = 105;
+            this.lblDDAnalysing.Text = "Analysis Complete";
+            this.lblDDAnalysing.Visible = false;
+            // 
+            // pbDDAnalysing
+            // 
+            this.pbDDAnalysing.ForeColor = System.Drawing.Color.Blue;
+            this.pbDDAnalysing.Location = new System.Drawing.Point(141, 147);
+            this.pbDDAnalysing.Name = "pbDDAnalysing";
+            this.pbDDAnalysing.Size = new System.Drawing.Size(352, 23);
+            this.pbDDAnalysing.Step = 1;
+            this.pbDDAnalysing.TabIndex = 106;
+            this.pbDDAnalysing.Visible = false;
+            // 
+            // fdHRFFileDialog
+            // 
+            this.fdHRFFileDialog.Filter = "PBN Files (*.pbn)|*.pbn";
+            this.fdHRFFileDialog.Title = "Select Hand Record File";
+            // 
+            // bwAnalysisCalculation
+            // 
+            this.bwAnalysisCalculation.WorkerReportsProgress = true;
+            this.bwAnalysisCalculation.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwAnalysisCalculation_DoWork);
+            this.bwAnalysisCalculation.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bwAnalysisCalculation_ProgressChanged);
+            this.bwAnalysisCalculation.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwAnalysisCalculation_RunWorkerCompleted);
             // 
             // TabScoreForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(505, 205);
-            this.Controls.Add(this.lblServerState);
-            this.Controls.Add(this.btnStart);
-            this.Controls.Add(this.btnSDB);
-            this.Controls.Add(this.lblHandRecord);
+            this.ClientSize = new System.Drawing.Size(505, 235);
+            this.Controls.Add(this.pbDDAnalysing);
+            this.Controls.Add(this.lblDDAnalysing);
+            this.Controls.Add(this.lblSessionStatus);
+            this.Controls.Add(this.btnAddSDBFile);
+            this.Controls.Add(this.lblPathToHandRecordFile);
             this.Controls.Add(this.lblHandRecordFile);
-            this.Controls.Add(this.btnHRF);
-            this.Controls.Add(this.lblDBName);
+            this.Controls.Add(this.btnAddHandRecordFile);
+            this.Controls.Add(this.lblPathToDB);
             this.Controls.Add(this.lblScoringDatabase);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -153,13 +183,16 @@
         #endregion
 
         private System.Windows.Forms.Label lblScoringDatabase;
-        private System.Windows.Forms.Label lblDBName;
-        private System.Windows.Forms.Button btnHRF;
+        private System.Windows.Forms.Label lblPathToDB;
+        private System.Windows.Forms.Button btnAddHandRecordFile;
         private System.Windows.Forms.Label lblHandRecordFile;
-        private System.Windows.Forms.Label lblHandRecord;
-        private System.Windows.Forms.Button btnSDB;
-        private System.Windows.Forms.OpenFileDialog fd;
-        private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.Label lblServerState;
+        private System.Windows.Forms.Label lblPathToHandRecordFile;
+        private System.Windows.Forms.Button btnAddSDBFile;
+        private System.Windows.Forms.OpenFileDialog fdSDBFileDialog;
+        private System.Windows.Forms.Label lblSessionStatus;
+        private System.Windows.Forms.Label lblDDAnalysing;
+        private System.Windows.Forms.ProgressBar pbDDAnalysing;
+        private System.Windows.Forms.OpenFileDialog fdHRFFileDialog;
+        private System.ComponentModel.BackgroundWorker bwAnalysisCalculation;
     }
 }
