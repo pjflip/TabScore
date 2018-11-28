@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Odbc;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Odbc;
 
 namespace TabScore.Models
 {
@@ -70,6 +66,7 @@ namespace TabScore.Models
                     }
                 }
                 reader.Close();
+                cmd.Dispose();
                 return sc;
             }
         }

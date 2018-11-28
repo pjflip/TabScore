@@ -28,9 +28,18 @@
         </h4>
     </div>
     <div class="col-2">
-        <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=North'">
-            Edit
-        </button>
+        @if (ViewData["PlayerNameNorth"].ToString() == "")
+        {
+            <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=North'">
+                Enter
+            </button>
+        }
+        else
+        {
+            <button class="btn btn-info btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=North'">
+                Edit
+            </button>
+        }
     </div>
     <div class="col-7 align-self-center">
         <h4>
@@ -48,9 +57,18 @@
         </h4>
     </div>
     <div class="col-2">
-        <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=South'">
-            Edit
-        </button>
+        @if (ViewData["PlayerNameSouth"].ToString() == "")
+        {
+            <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=South'">
+                Enter
+            </button>
+        }
+        else
+        {
+            <button class="btn btn-info btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=South'">
+                Edit
+            </button>
+        }
     </div>
     <div class="col-7 align-self-center">
         <h4>

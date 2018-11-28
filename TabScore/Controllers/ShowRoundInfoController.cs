@@ -21,11 +21,40 @@ namespace TabScore.Controllers
             ViewData["PairEW"] = r.PairEW;
 
             NamesClass pn = PairNames.GetNamesForPairNo(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), r.PairNS.ToString(), "NS");
-            ViewData["PlayerNameNorth"] = pn.NameNE;
-            ViewData["PlayerNameSouth"] = pn.NameSW;
+            if (pn.NameNE == "")
+            {
+                ViewData["PlayerNameNorth"] = "Unknown";
+            }
+            else
+            {
+                ViewData["PlayerNameNorth"] = pn.NameNE;
+            }
+            if (pn.NameSW == "")
+            {
+                ViewData["PlayerNameSouth"] = "Unknown";
+            }
+            else
+            {
+                ViewData["PlayerNameSouth"] = pn.NameSW;
+            }
+
             pn = PairNames.GetNamesForPairNo(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), r.PairEW.ToString(), "EW");
-            ViewData["PlayerNameEast"] = pn.NameNE;
-            ViewData["PlayerNameWest"] = pn.NameSW;
+            if (pn.NameNE == "")
+            {
+                ViewData["PlayerNameEast"] = "Unknown";
+            }
+            else
+            {
+                ViewData["PlayerNameEast"] = pn.NameNE;
+            }
+            if (pn.NameSW == "")
+            {
+                ViewData["PlayerNameWest"] = "Unknown";
+            }
+            else
+            {
+                ViewData["PlayerNameWest"] = pn.NameSW;
+            }
 
             ViewData["CancelButton"] = "FALSE";
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]}";

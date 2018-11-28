@@ -23,6 +23,7 @@ namespace TabScore.Models
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
                 queryResult = cmd.ExecuteScalar();
+                cmd.Dispose();
                 if (queryResult != null)
                 {
                     move.Table = queryResult.ToString();
@@ -59,7 +60,6 @@ namespace TabScore.Models
                         move.Direction = "";
                     }
                 }
-                cmd.Dispose();
             }
             return move;
         }

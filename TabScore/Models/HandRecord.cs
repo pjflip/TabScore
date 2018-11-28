@@ -290,6 +290,7 @@ namespace TabScore.Models
                 try
                 {
                     object queryResult = cmd.ExecuteScalar();
+                    cmd.Dispose();
                     if (queryResult == null)
                     {
                         return true;

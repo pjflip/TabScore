@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data.Odbc;
+﻿using System.Data.Odbc;
 
 namespace TabScore.Models
 {

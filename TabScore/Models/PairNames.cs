@@ -42,7 +42,6 @@ namespace TabScore.Models
                     }
                     cmd = new OdbcCommand(SQLString, connection);
                     queryResult = cmd.ExecuteScalar();
-                    cmd.Dispose();
                     Table = queryResult.ToString();
                     if (Direction == "NS")
                     {
@@ -53,6 +52,7 @@ namespace TabScore.Models
                         StartDirection = "NS";
                     }
                 }
+                cmd.Dispose();
             }
             // Now get names from that starting table
             return GetNamesForStartTableNo(DB, SectionID, Table, StartDirection);
@@ -78,7 +78,7 @@ namespace TabScore.Models
                 }
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 queryResult = cmd.ExecuteScalar();
-                if (queryResult != null)
+                if (queryResult != null  && queryResult.ToString() != "")
                 {
                     names.NameNE = queryResult.ToString();
                 }
@@ -96,7 +96,7 @@ namespace TabScore.Models
                 }
                 cmd = new OdbcCommand(SQLString, connection);
                 queryResult = cmd.ExecuteScalar();
-                if (queryResult != null)
+                if (queryResult != null && queryResult.ToString() != "")
                 {
                     names.NameSW = queryResult.ToString();
                 }
