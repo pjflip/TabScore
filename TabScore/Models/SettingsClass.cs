@@ -7,11 +7,11 @@ namespace TabScore.Models
 {
     public class SettingsClass
     {
-        public bool ShowResults;
-        public bool ShowPercentage;
-        public bool EnterLeadCard;
-        public bool ValidateLeadCard;
-        public int ShowRanking;
-        public bool ShowHandRecord;
+        public bool ShowResults = true;
+        public bool ShowPercentage = true;
+        public bool EnterLeadCard = true;
+        public bool ValidateLeadCard = true;
+        public int ShowRanking = 1;
+        public bool ShowHandRecord = true;
     }
 }

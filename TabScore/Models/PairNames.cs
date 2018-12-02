@@ -70,39 +70,59 @@ namespace TabScore.Models
                 connection.Open();
                 if (StartDirection == "NS")
                 {
-                    SQLString = $"SELECT Name FROM PlayerNumbers WHERE Section={SectionID} AND Direction='N' AND Table={Table}";
+                    SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='N' AND Table={Table}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Name FROM PlayerNumbers WHERE Section={SectionID} AND Direction='E' AND Table={Table}";
+                    SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='E' AND Table={Table}";
                 }
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 queryResult = cmd.ExecuteScalar();
-                if (queryResult != null  && queryResult.ToString() != "")
-                {
-                    names.NameNE = queryResult.ToString();
-                }
-                else
+                if (queryResult == null  || queryResult.ToString() == "")
                 {
                     names.NameNE = "";
                 }
+                else
+                {
+                    SQLString = $"SELECT Name FROM PlayerNames WHERE ID={queryResult.ToString()}";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    queryResult = cmd.ExecuteScalar();
+                    if (queryResult == null || queryResult.ToString() == "")
+                    {
+                        names.NameNE = "";
+                    }
+                    else
+                    {
+                        names.NameNE = queryResult.ToString();
+                    }
+                }
                 if (StartDirection == "NS")
                 {
-                    SQLString = $"SELECT Name FROM PlayerNumbers WHERE Section={SectionID} AND Direction='S' AND Table={Table}";
+                    SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='S' AND Table={Table}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Name FROM PlayerNumbers WHERE Section={SectionID} AND Direction='W' AND Table={Table}";
+                    SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='W' AND Table={Table}";
                 }
                 cmd = new OdbcCommand(SQLString, connection);
                 queryResult = cmd.ExecuteScalar();
-                if (queryResult != null && queryResult.ToString() != "")
+                if (queryResult == null || queryResult.ToString() == "")
                 {
-                    names.NameSW = queryResult.ToString();
+                    names.NameSW = "";
                 }
                 else
                 {
-                    names.NameSW = "";
+                    SQLString = $"SELECT Name FROM PlayerNames WHERE ID={queryResult.ToString()}";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    queryResult = cmd.ExecuteScalar();
+                    if (queryResult == null || queryResult.ToString() == "")
+                    {
+                        names.NameSW = "";
+                    }
+                    else
+                    {
+                        names.NameSW = queryResult.ToString();
+                    }
                 }
                 cmd.Dispose();
             }

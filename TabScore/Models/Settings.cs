@@ -10,62 +10,58 @@ namespace TabScore.Models
 
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord FROM Settings";
+                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
-                OdbcDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                try
                 {
-                    if (!reader.IsDBNull(0))
+                    OdbcDataReader reader = cmd.ExecuteReader();
+                    if (reader.Read())
                     {
-                        sc.ShowResults = reader.GetBoolean(0);
+                        if (!reader.IsDBNull(0))
+                        {
+                            sc.ShowResults = reader.GetBoolean(0);
+                        }
+                        if (!reader.IsDBNull(1))
+                        {
+                            sc.ShowPercentage = reader.GetBoolean(1);
+                        }
+                        if (!reader.IsDBNull(2))
+                        {
+                            sc.EnterLeadCard = reader.GetBoolean(2);
+                        }
                     }
-                    else
-                    {
-                        sc.ShowResults = true;
-                    }
-                    if (!reader.IsDBNull(1))
-                    {
-                        sc.ShowPercentage = reader.GetBoolean(1);
-                    }
-                    else
-                    {
-                        sc.ShowPercentage = true;
-                    }
-                    if (!reader.IsDBNull(2))
-                    {
-                        sc.EnterLeadCard = reader.GetBoolean(2);
-                    }
-                    else
-                    {
-                        sc.EnterLeadCard = true;
-                    }
-                    if (!reader.IsDBNull(3))
-                    {
-                        sc.ValidateLeadCard = reader.GetBoolean(3);
-                    }
-                    else
-                    {
-                        sc.ValidateLeadCard = true;
-                    }
-                    if (!reader.IsDBNull(4))
-                    {
-                        sc.ShowRanking = reader.GetInt16(4);
-                    }
-                    else
-                    {
-                        sc.ShowRanking = 1;
-                    }
-                    if (!reader.IsDBNull(5))
-                    {
-                        sc.ShowHandRecord = reader.GetBoolean(5);
-                    }
-                    else
-                    {
-                        sc.ShowHandRecord = true;
-                    }
+                    reader.Close();
                 }
-                reader.Close();
+                catch
+                {
+                }
+
+                SQLString = $"SELECT BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord FROM Settings";
+                cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    OdbcDataReader reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        if (!reader.IsDBNull(0))
+                        {
+                            sc.ValidateLeadCard = reader.GetBoolean(0);
+                        }
+                        if (!reader.IsDBNull(1))
+                        {
+                            sc.ShowRanking = reader.GetInt16(1);
+                        }
+                        if (!reader.IsDBNull(2))
+                        {
+                            sc.ShowHandRecord = reader.GetBoolean(2);
+                        }
+                    }
+                    reader.Close();
+                }
+                catch
+                {
+                }
                 cmd.Dispose();
                 return sc;
             }

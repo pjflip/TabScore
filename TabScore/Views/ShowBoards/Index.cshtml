@@ -25,13 +25,13 @@
         <div class="col-3">
             @if (Result.ContractLevel == null)
             {
-                <button class="btn btn-primary btn-lg m-1" style="min-width: 80px" onclick="location.href = '/EnterContract/Index?board=' + @Result.Board">
+                <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterContract/Index?board=' + @Result.Board">
                     Enter
                 </button>
             }
             else
             {
-                <button class="btn btn-info btn-lg m-1" style="min-width: 80px" onclick="location.href = '/EnterContract/Index?board=' + @Result.Board">
+                <button class="btn btn-info btn-lg m-1" onclick="location.href = '/EnterContract/Index?board=' + @Result.Board">
                     Edit
                 </button>
             }

@@ -12,7 +12,16 @@ namespace TabScore.Models
                 string SQLString = $"UPDATE PlayerNumbers SET [Number]='{number}', [Name]='{name}' WHERE Section={sectionID} AND [Table]={table} AND Direction='{direction}'";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch   // Error if 'Name' not in PlayerNumbers table
+                {
+                    SQLString = $"UPDATE PlayerNumbers SET [Number]='{number}' WHERE Section={sectionID} AND [Table]={table} AND Direction='{direction}'";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    cmd.ExecuteNonQuery();
+                }
                 cmd.Dispose();
             }
         }
