@@ -120,6 +120,11 @@
     }
 
     function validateOK() {
-        location.href = '/EnterPlayerNo/OKButtonClick?dir=' + '@ViewData["Direction"]' + '&PID=' + PID;
+        if (PID == "") {
+            window.alert("Please select a player number, or select 'Unknown'");
+        }
+        else {
+            location.href = '/EnterPlayerNo/OKButtonClick?dir=' + '@ViewData["Direction"]' + '&PID=' + PID;
+        }
     }
 </script>

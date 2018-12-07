@@ -20,10 +20,9 @@ namespace TabScore.Controllers
                 if (m.Table == "0")
                 {
                     // No move possible, so session complete
-                    SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
-                    if (settings.ShowRanking == 2)
+                    if (Settings.ShowRanking(Session["DBConnectionString"].ToString()) == 2)
                     {
-                        return RedirectToAction("Index", "ShowRanking", new { finalRound = "Yes" });
+                        return RedirectToAction("Index", "ShowRankingList", new { finalRound = "Yes" });
                     }
                     else
                     {
@@ -48,8 +47,7 @@ namespace TabScore.Controllers
                 if (m.Table == "0")
                 {
                     // No move possible, so session complete
-                    SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
-                    if (settings.ShowRanking == 2)
+                    if (Settings.ShowRanking(Session["DBConnectionString"].ToString()) == 2)
                     {
                         return RedirectToAction("Index", "ShowRanking", new { finalRound = "Yes" });
                     }

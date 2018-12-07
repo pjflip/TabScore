@@ -7,8 +7,7 @@ namespace TabScore.Controllers
     {
         public ActionResult Index(string secondPass)
         {
-            SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
-            if (!settings.EnterLeadCard)
+            if (!Settings.EnterLeadCard(Session["DBConnectionString"].ToString()))
             {
                 Session["LeadCard"] = "SKIP";
                 return RedirectToAction("Index", "EnterTricksTaken");
@@ -21,7 +20,7 @@ namespace TabScore.Controllers
                 ContractX = Session["ContractX"].ToString(),
                 NSEW = Session["NSEW"].ToString()
             };
-            ViewData["DisplayContract"] = res.DisplayContract(1);
+            ViewData["DisplayContract"] = res.DisplayContract(2);
 
             ViewData["Board"] = Session["Board"];
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
@@ -32,8 +31,7 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(string card, string secondPass)
         {
-            SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
-            if (!settings.ValidateLeadCard || secondPass == "TRUE")
+            if (!Settings.ValidateLeadCard(Session["DBConnectionString"].ToString()) || secondPass == "TRUE")
             {
                 Session["LeadCard"] = card;
                 return RedirectToAction("Index", "EnterTricksTaken");

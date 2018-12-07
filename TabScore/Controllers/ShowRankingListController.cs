@@ -11,8 +11,8 @@ namespace TabScore.Controllers
         {
             if (Convert.ToInt32(Session["Round"]) > 1)
             {
-                SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
-                if (settings.ShowRanking == 1 || (settings.ShowRanking == 2 && finalRound == "Yes"))
+                int showRankingSetting = Settings.ShowRanking(Session["DBConnectionString"].ToString());
+                if (showRankingSetting == 1 || (showRankingSetting == 2 && finalRound == "Yes"))
                 {
                     List<RankingListClass> rankingList = RankingList.GetRankingList(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString());
                     if (rankingList != null)
@@ -44,8 +44,7 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick()
         {
-            SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
-            if (settings.ShowRanking == 2)   // Can only get here if finalRound = "Yes"
+            if (Settings.ShowRanking(Session["DBConnectionString"].ToString()) == 2)   // Can only get here if finalRound = "Yes"
             {
                 return RedirectToAction("Index", "EndScreen");
             }

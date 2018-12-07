@@ -32,7 +32,7 @@ namespace TabScore.Models
                 }
                 catch (OdbcException e)
                 {
-                    if (e.Errors.Count == 1 && e.Errors[0].SQLState != "42S02")  // Results table does not exist
+                    if (e.Errors.Count == 1 && e.Errors[0].SQLState == "42S02")  // Results table does not exist
                     {
                         cmd.Dispose();
                         return null;

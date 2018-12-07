@@ -74,7 +74,7 @@ namespace TabScore.Controllers
         {
             if (Session["ContractLevel"].ToString() == "PASS")
             {
-                return RedirectToAction("Index", "EnterContact", new { board = Session["Board"].ToString() });
+                return RedirectToAction("Index", "EnterContract", new { board = Session["Board"].ToString() });
             }
             else
             {

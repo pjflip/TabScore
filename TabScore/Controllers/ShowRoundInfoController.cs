@@ -77,7 +77,7 @@ namespace TabScore.Controllers
 
         public ActionResult OKSitOutButtonClick()
         {
-            return RedirectToAction("Index", "ShowMove");
+            return RedirectToAction("Index", "ShowRankingList", new { finalRound = "No" });
         }
     }
 }

@@ -9,12 +9,11 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            SettingsClass settings = Settings.GetSettings(Session["DBConnectionString"].ToString());
-            if (!settings.ShowResults)
+            if (!Settings.ShowResults(Session["DBConnectionString"].ToString()))
             {
                 return RedirectToAction("Index", "ShowBoards");
             }
-            if (settings.ShowHandRecord)
+            if (Settings.ShowHandRecord(Session["DBConnectionString"].ToString()))
             {
                 HandRecordClass hr = HandRecord.GetHandRecord(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Board"].ToString());
                 if (hr.NorthSpades == "###")
@@ -41,7 +40,7 @@ namespace TabScore.Controllers
 
             List<TravellerResultClass> resList = Traveller.GetResults(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Board"].ToString());
             resList.Sort((x, y) => y.Score.CompareTo(x.Score));
-            if (settings.ShowPercentage)
+            if (Settings.ShowPercentage(Session["DBConnectionString"].ToString()))
             {
                 int numEqual = 0;
                 int numBelow = 0;

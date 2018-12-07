@@ -5,43 +5,65 @@
 }
 
 <div class="row my-1">
-    <div class="col-9">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h4>
-                    Board @ViewData["Board"]
-                </h4>
+    @if (ViewData["HandRecord"].ToString() == "TRUE")
+    {
+        <div class="col-9">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h4>
+                        Board @ViewData["Board"]
+                    </h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    @if (ViewData["PercentageNS"].ToString() == "###")
+                    {
+                        <h4>
+                            Traveller
+                        </h4>
+                    }
+                    else
+                    {
+                        <h4>
+                            NS: @ViewData["PercentageNS"]% - EW: @ViewData["PercentageEW"]%
+                        </h4>
+                    }
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 text-center">
-                @if (ViewData["PercentageNS"].ToString() == "###")
-                {
-                    <h4>
-                        Traveller
-                    </h4>
-                }
-                else
-                {
-                    <h4>
-                        NS: @ViewData["PercentageNS"]% - EW: @ViewData["PercentageEW"]%
-                    </h4>
-                }
-            </div>
-        </div>
-    </div>
-    <div class="col-3">
-        @if (ViewData["HandRecord"].ToString() == "TRUE")
-        {
+        <div class="col-3">
             <button class="btn btn-outline-light btn-lg mr-2 my-2 float-right" onclick="handRecordClick()">
                 <img src="~/Cards Logo.png" />
             </button>
-        }
-    </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-12 text-center">
+            <h4>
+                Board @ViewData["Board"]
+            </h4>
+        </div>
+        <div class="col-12 text-center">
+            @if (ViewData["PercentageNS"].ToString() == "###")
+            {
+                <h4>
+                    Traveller
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    NS: @ViewData["PercentageNS"]% - EW: @ViewData["PercentageEW"]%
+                </h4>
+            }
+        </div>
+    }
 </div>
 
 <div class="row">
-    <div class="col-12" >
+    <div class="col-12">
         <table class="table-sm table-bordered text-center" style="margin:auto; width:50%">
             <thead class="thead-dark">
                 <tr>

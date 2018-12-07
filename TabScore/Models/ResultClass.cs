@@ -148,7 +148,7 @@ namespace TabScore.Models
             }
             if (FormatType > 0)
             {
-                s.Append($"{ TricksTakenSymbol} by ");
+                s.Append($"{TricksTakenSymbol} by ");
                 if (FormatType > 1)
                 {
                     switch (NSEW)

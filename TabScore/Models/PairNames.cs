@@ -82,6 +82,10 @@ namespace TabScore.Models
                 {
                     names.NameNE = "";
                 }
+                else if (queryResult.ToString() == "0")
+                {
+                    names.NameNE = "Unknown";
+                }
                 else
                 {
                     SQLString = $"SELECT Name FROM PlayerNames WHERE ID={queryResult.ToString()}";
@@ -109,6 +113,10 @@ namespace TabScore.Models
                 if (queryResult == null || queryResult.ToString() == "")
                 {
                     names.NameSW = "";
+                }
+                else if (queryResult.ToString() == "0")
+                {
+                    names.NameSW = "Unknown";
                 }
                 else
                 {

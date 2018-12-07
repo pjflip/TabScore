@@ -1,70 +1,153 @@
-﻿using System.Data.Odbc;
+﻿using System;
+using System.Data.Odbc;
 
 namespace TabScore.Models
 {
     public class Settings
     {
-        public static SettingsClass GetSettings(string DB)
+        public static bool ShowResults(string DB)
         {
-            SettingsClass sc = new SettingsClass();
-
+            bool showResults = true;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard FROM Settings";
+                string SQLString = $"SELECT ShowResults FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
                 try
                 {
-                    OdbcDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read())
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult != null)
                     {
-                        if (!reader.IsDBNull(0))
-                        {
-                            sc.ShowResults = reader.GetBoolean(0);
-                        }
-                        if (!reader.IsDBNull(1))
-                        {
-                            sc.ShowPercentage = reader.GetBoolean(1);
-                        }
-                        if (!reader.IsDBNull(2))
-                        {
-                            sc.EnterLeadCard = reader.GetBoolean(2);
-                        }
+                        showResults = Convert.ToBoolean(queryResult);
                     }
-                    reader.Close();
-                }
-                catch
-                {
-                }
-
-                SQLString = $"SELECT BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord FROM Settings";
-                cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    OdbcDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read())
-                    {
-                        if (!reader.IsDBNull(0))
-                        {
-                            sc.ValidateLeadCard = reader.GetBoolean(0);
-                        }
-                        if (!reader.IsDBNull(1))
-                        {
-                            sc.ShowRanking = reader.GetInt16(1);
-                        }
-                        if (!reader.IsDBNull(2))
-                        {
-                            sc.ShowHandRecord = reader.GetBoolean(2);
-                        }
-                    }
-                    reader.Close();
                 }
                 catch
                 {
                 }
                 cmd.Dispose();
-                return sc;
             }
+            return showResults;
+        }
+
+        public static bool ShowPercentage(string DB)
+        {
+            bool showPercentage = true;
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                string SQLString = $"SELECT ShowPercentage FROM Settings";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                try
+                {
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult != null)
+                    {
+                        showPercentage = Convert.ToBoolean(queryResult);
+                    }
+                }
+                catch
+                {
+                }
+                cmd.Dispose();
+            }
+            return showPercentage;
+        }
+
+        public static bool EnterLeadCard(string DB)
+        {
+            bool enterLeadCard = true;
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                string SQLString = $"SELECT LeadCard FROM Settings";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                try
+                {
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult != null)
+                    {
+                        enterLeadCard = Convert.ToBoolean(queryResult);
+                    }
+                }
+                catch
+                {
+                }
+                cmd.Dispose();
+            }
+            return enterLeadCard;
+        }
+
+        public static bool ValidateLeadCard(string DB)
+        {
+            bool validateLeadCard = true;
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                string SQLString = $"SELECT BM2ValidateLeadCard FROM Settings";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                try
+                {
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult != null)
+                    {
+                        validateLeadCard = Convert.ToBoolean(queryResult);
+                    }
+                }
+                catch
+                {
+                }
+                cmd.Dispose();
+            }
+            return validateLeadCard;
+        }
+
+        public static int ShowRanking(string DB)
+        {
+            int showRanking = 1;
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                string SQLString = $"SELECT BM2Ranking FROM Settings";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                try
+                {
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult != null)
+                    {
+                        showRanking = Convert.ToInt32(queryResult);
+                    }
+                }
+                catch
+                {
+                }
+                cmd.Dispose();
+            }
+            return showRanking;
+        }
+
+        public static bool ShowHandRecord(string DB)
+        {
+            bool showHandRecord = true;
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                string SQLString = $"SELECT BM2ViewHandRecord FROM Settings";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                try
+                {
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult != null)
+                    {
+                        showHandRecord = Convert.ToBoolean(queryResult);
+                    }
+                }
+                catch
+                {
+                }
+                cmd.Dispose();
+            }
+            return showHandRecord;
         }
     }
 }
+
