@@ -16,7 +16,8 @@ IMPORTANT: Please ensure you have completed all the steps in the 'TabScore
 Installation Guide' document before attempting to run TabScore.
 
 TabScore is limited to 4 section (A, B, C and D in that order) and 30 tables
-per section.
+per section.  It also only allows players to enter their player numbers at 
+the start of round 1.
 
 TabScore implements a limited range of display options which can be set by 
 the scoring program.  See the document 'BridgeMate BCS Options in TabScore' 

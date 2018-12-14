@@ -20,7 +20,7 @@ namespace TabScore.Controllers
                 Session["NumTables"] = sectionsList[0].Tables.ToString();
                 Session["MissingPair"] = sectionsList[0].MissingPair.ToString();
                 Session["Winners"] = sectionsList[0].Winners.ToString();
-                return RedirectToAction("Index", "EnterTableNo");
+                return RedirectToAction("Index", "EnterTableNumber");
             }
             else
             // Get Section
@@ -31,17 +31,17 @@ namespace TabScore.Controllers
             }
         }
 
-        public ActionResult OKButtonClick(string s)
+        public ActionResult OKButtonClick(string sectionLetter)
         {
             List<SectionClass> sectionsList = Sections.GetSections(Session["DBConnectionString"].ToString());
 
-            Session["SectionLetter"] = s;
-            SectionClass sect = sectionsList.Find(x => x.Letter == s);
-            Session["SectionID"] = sect.ID.ToString();
-            Session["NumTables"] = sect.Tables.ToString();
-            Session["MissingPair"] = sect.MissingPair.ToString();
-            Session["Winners"] = sect.Winners.ToString();
-            return RedirectToAction("Index", "EnterTableNo");
+            Session["SectionLetter"] = sectionLetter;
+            SectionClass section = sectionsList.Find(x => x.Letter == sectionLetter);
+            Session["SectionID"] = section.ID.ToString();
+            Session["NumTables"] = section.Tables.ToString();
+            Session["MissingPair"] = section.MissingPair.ToString();
+            Session["Winners"] = section.Winners.ToString();
+            return RedirectToAction("Index", "EnterTableNumber");
         }
     }
 }

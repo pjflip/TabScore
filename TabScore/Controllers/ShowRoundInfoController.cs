@@ -20,7 +20,7 @@ namespace TabScore.Controllers
             ViewData["PairNS"] = r.PairNS;
             ViewData["PairEW"] = r.PairEW;
 
-            NamesClass pn = PairNames.GetNamesForPairNo(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), r.PairNS.ToString(), "NS");
+            NamesClass pn = PairNames.GetNamesForPairNumber(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), r.PairNS.ToString(), "NS");
             if (pn.NameNE == "")
             {
                 ViewData["PlayerNameNorth"] = "Unknown";
@@ -38,7 +38,7 @@ namespace TabScore.Controllers
                 ViewData["PlayerNameSouth"] = pn.NameSW;
             }
 
-            pn = PairNames.GetNamesForPairNo(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), r.PairEW.ToString(), "EW");
+            pn = PairNames.GetNamesForPairNumber(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), r.PairEW.ToString(), "EW");
             if (pn.NameNE == "")
             {
                 ViewData["PlayerNameEast"] = "Unknown";

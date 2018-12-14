@@ -50,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBase.cs" />
+    <Compile Include="ScoringDatabase.cs" />
     <Compile Include="DoubleDummySolver.cs" />
     <Compile Include="Hand.cs" />
     <Compile Include="HandEvaluation.cs" />

@@ -28,7 +28,7 @@ namespace TabScoreStarter
             {
                 if (s.StartsWith("f:[")) pathToDB = s.Split(new char[] { '[', ']' })[1];
             }
-            if (pathToDB == "" || !DataBase.ConnectionOK(SetDBConnectionString(pathToDB)))
+            if (pathToDB == "" || !ScoringDatabase.ConnectionOK(SetDBConnectionString(pathToDB)))
             {
                 btnAddSDBFile.Visible = true;   // No valid database in arguments
             }
@@ -38,7 +38,7 @@ namespace TabScoreStarter
                 lblSessionStatus.Text = "Session Running";
                 lblSessionStatus.ForeColor = Color.Green;
 
-                if (DataBase.InitializeHandRecords(SetDBConnectionString(pathToDB)))
+                if (ScoringDatabase.InitializeHandRecords(SetDBConnectionString(pathToDB)))
                 {
                     btnAddHandRecordFile.Visible = true;    // No hand records in database, so let user add them
                 }
@@ -59,14 +59,14 @@ namespace TabScoreStarter
             {
                 string pathToDB = fdSDBFileDialog.FileName;
                 string DBConnection = SetDBConnectionString(pathToDB);
-                if (DataBase.ConnectionOK(DBConnection))
+                if (ScoringDatabase.ConnectionOK(DBConnection))
                 {
                     btnAddSDBFile.Enabled = false;
                     SetDBFilePath(pathToDB);
                     lblSessionStatus.Text = "Session Running";
                     lblSessionStatus.ForeColor = Color.Green;
 
-                    if (DataBase.InitializeHandRecords(DBConnection))
+                    if (ScoringDatabase.InitializeHandRecords(DBConnection))
                     {
                         btnAddHandRecordFile.Visible = true;    // No hand records in database, so let user add them
                     }
@@ -140,7 +140,7 @@ namespace TabScoreStarter
             HandsList handsList = new HandsList();
             string DBConnection = SetDBConnectionString(lblPathToDB.Text);
             handsList.ReadFromDB(DBConnection);
-            DataBase.InitializeHandEvaluations(DBConnection);
+            ScoringDatabase.InitializeHandEvaluations(DBConnection);
             HandEvaluationsList handEvaluationList = new HandEvaluationsList();
             int counter = 0;
             foreach (Hand hand in handsList.Hands)

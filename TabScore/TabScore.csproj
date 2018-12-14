@@ -109,11 +109,11 @@
     <Compile Include="Controllers\EndScreenController.cs" />
     <Compile Include="Controllers\EnterContractController.cs" />
     <Compile Include="Controllers\EnterLeadController.cs" />
+    <Compile Include="Controllers\EnterPlayerNumberController.cs" />
     <Compile Include="Controllers\ShowHandRecordController.cs" />
-    <Compile Include="Controllers\ShowPlayerNosController.cs" />
+    <Compile Include="Controllers\ShowPlayerNumbersController.cs" />
     <Compile Include="Controllers\EnterSectionController.cs" />
-    <Compile Include="Controllers\EnterPlayerNoController.cs" />
-    <Compile Include="Controllers\EnterTableNoController.cs" />
+    <Compile Include="Controllers\EnterTableNumberController.cs" />
     <Compile Include="Controllers\EnterTricksTakenController.cs" />
     <Compile Include="Controllers\ShowBoardsController.cs" />
     <Compile Include="Controllers\ShowMoveController.cs" />
@@ -131,8 +131,7 @@
     <Compile Include="Models\MoveClass.cs" />
     <Compile Include="Models\NamesClass.cs" />
     <Compile Include="Models\PairNames.cs" />
-    <Compile Include="Models\PlayerID.cs" />
-    <Compile Include="Models\PlayerNumbers.cs" />
+    <Compile Include="Models\PlayerNumber.cs" />
     <Compile Include="Models\RankingList.cs" />
     <Compile Include="Models\RankingListClass.cs" />
     <Compile Include="Models\RoundClass.cs" />
@@ -229,26 +228,26 @@
     <Content Include="Views\EndScreen\Index.cshtml" />
     <Content Include="Views\EnterContract\Index.cshtml" />
     <Content Include="Views\EnterLead\Index.cshtml" />
-    <Content Include="Views\ShowPlayerNos\Index.cshtml" />
-    <Content Include="Views\EnterPlayerNo\Index.cshtml" />
     <Content Include="Views\EnterTricksTaken\Index.cshtml" />
     <Content Include="Views\ShowBoards\Index.cshtml" />
     <Content Include="Views\ShowMove\Index.cshtml" />
     <Content Include="Views\ShowRoundInfo\Index.cshtml" />
     <Content Include="Views\StartScreen\Index.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
-    <Content Include="Views\EnterTableNo\Index.cshtml" />
+    <Content Include="Views\EnterTableNumber\Index.cshtml" />
     <Content Include="Views\EnterSection\Index.cshtml" />
     <Content Include="Views\ShowRoundInfo\NSMissing.cshtml" />
     <Content Include="Views\ShowRoundInfo\EWMissing.cshtml" />
-    <Content Include="Views\ShowPlayerNos\NSMissing.cshtml" />
-    <Content Include="Views\ShowPlayerNos\EWMissing.cshtml" />
     <Content Include="Views\ShowTraveller\Index.cshtml" />
     <Content Include="Views\ShowMove\NSMissing.cshtml" />
     <Content Include="Views\ShowMove\EWMissing.cshtml" />
     <Content Include="Views\ShowHandRecord\Index.cshtml" />
     <Content Include="Views\ShowRankingList\OneWinner.cshtml" />
     <Content Include="Views\ShowRankingList\TwoWinners.cshtml" />
+    <Content Include="Views\ShowPlayerNumbers\EWMissing.cshtml" />
+    <Content Include="Views\ShowPlayerNumbers\Index.cshtml" />
+    <Content Include="Views\ShowPlayerNumbers\NSMissing.cshtml" />
+    <Content Include="Views\EnterPlayerNumber\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

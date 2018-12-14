@@ -4,7 +4,7 @@ namespace TabScore.Models
 {
     public static class PairNames
     {
-        public static NamesClass GetNamesForPairNo(string DB, string SectionID, string PairNo, string Direction)
+        public static NamesClass GetNamesForPairNumber(string DB, string SectionID, string PairNo, string Direction)
         {
             string SQLString;
             object queryResult;
@@ -55,10 +55,10 @@ namespace TabScore.Models
                 cmd.Dispose();
             }
             // Now get names from that starting table
-            return GetNamesForStartTableNo(DB, SectionID, Table, StartDirection);
+            return GetNamesForStartTableNumber(DB, SectionID, Table, StartDirection);
         }
 
-        public static NamesClass GetNamesForStartTableNo(string DB, string SectionID, string Table, string StartDirection)
+        public static NamesClass GetNamesForStartTableNumber(string DB, string SectionID, string Table, string StartDirection)
         {
             NamesClass names = new NamesClass();
 
@@ -68,68 +68,85 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
+                // Get North or East name
                 if (StartDirection == "NS")
                 {
-                    SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='N' AND Table={Table}";
+                    SQLString = $"SELECT Name FROM PlayerNumbers WHERE Section={SectionID} AND Direction='N' AND Table={Table}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='E' AND Table={Table}";
+                    SQLString = $"SELECT Name FROM PlayerNumbers WHERE Section={SectionID} AND Direction='E' AND Table={Table}";
                 }
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 queryResult = cmd.ExecuteScalar();
-                if (queryResult == null  || queryResult.ToString() == "")
+                if (queryResult == null)
                 {
                     names.NameNE = "";
                 }
-                else if (queryResult.ToString() == "0")
-                {
-                    names.NameNE = "Unknown";
-                }
                 else
                 {
-                    SQLString = $"SELECT Name FROM PlayerNames WHERE ID={queryResult.ToString()}";
+                    names.NameNE = queryResult.ToString();
+                }
+                if (names.NameNE == "")  // Blank name, so try using Number instead
+                {
+                    if (StartDirection == "NS")
+                    {
+                        SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='N' AND Table={Table}";
+                    }
+                    else
+                    {
+                        SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='E' AND Table={Table}";
+                    }
                     cmd = new OdbcCommand(SQLString, connection);
                     queryResult = cmd.ExecuteScalar();
-                    if (queryResult == null || queryResult.ToString() == "")
+                    if (queryResult == null)
                     {
                         names.NameNE = "";
                     }
                     else
                     {
-                        names.NameNE = queryResult.ToString();
+                        names.NameNE = PlayerNumber.GetNameFromPlayerNumber(DB, queryResult.ToString());
                     }
                 }
+
+                // Get South or West name
                 if (StartDirection == "NS")
                 {
-                    SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='S' AND Table={Table}";
+                    SQLString = $"SELECT Name FROM PlayerNumbers WHERE Section={SectionID} AND Direction='S' AND Table={Table}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='W' AND Table={Table}";
+                    SQLString = $"SELECT Name FROM PlayerNumbers WHERE Section={SectionID} AND Direction='W' AND Table={Table}";
                 }
                 cmd = new OdbcCommand(SQLString, connection);
                 queryResult = cmd.ExecuteScalar();
-                if (queryResult == null || queryResult.ToString() == "")
+                if (queryResult == null)
                 {
                     names.NameSW = "";
                 }
-                else if (queryResult.ToString() == "0")
-                {
-                    names.NameSW = "Unknown";
-                }
                 else
                 {
-                    SQLString = $"SELECT Name FROM PlayerNames WHERE ID={queryResult.ToString()}";
+                    names.NameSW = queryResult.ToString();
+                }
+                if (names.NameSW == "")  // Blank name, so try using Number instead
+                {
+                    if (StartDirection == "NS")
+                    {
+                        SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='S' AND Table={Table}";
+                    }
+                    else
+                    {
+                        SQLString = $"SELECT Number FROM PlayerNumbers WHERE Section={SectionID} AND Direction='W' AND Table={Table}";
+                    }
                     cmd = new OdbcCommand(SQLString, connection);
                     queryResult = cmd.ExecuteScalar();
-                    if (queryResult == null || queryResult.ToString() == "")
+                    if (queryResult == null)
                     {
                         names.NameSW = "";
                     }
                     else
                     {
-                        names.NameSW = queryResult.ToString();
+                        names.NameSW = PlayerNumber.GetNameFromPlayerNumber(DB, queryResult.ToString());
                     }
                 }
                 cmd.Dispose();

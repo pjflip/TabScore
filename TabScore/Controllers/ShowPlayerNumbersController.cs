@@ -4,7 +4,7 @@ using TabScore.Models;
 
 namespace TabScore.Controllers
 {
-    public class ShowPlayerNosController : Controller
+    public class ShowPlayerNumbersController : Controller
     {
         public ActionResult Index()
         {
@@ -24,10 +24,10 @@ namespace TabScore.Controllers
             ViewData["PairEW"] = r.PairEW.ToString();
 
             // Get names if there are any
-            NamesClass pn = PairNames.GetNamesForStartTableNo(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), "NS");
+            NamesClass pn = PairNames.GetNamesForStartTableNumber(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), "NS");
             ViewData["PlayerNameNorth"] = pn.NameNE;
             ViewData["PlayerNameSouth"] = pn.NameSW;
-            pn = PairNames.GetNamesForStartTableNo(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), "EW");
+            pn = PairNames.GetNamesForStartTableNumber(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), "EW");
             ViewData["PlayerNameEast"] = pn.NameNE;
             ViewData["PlayerNameWest"] = pn.NameSW;
 

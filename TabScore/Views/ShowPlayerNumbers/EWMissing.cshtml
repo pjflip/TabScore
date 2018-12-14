@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Enter Player Nos EW Missing";
+    ViewBag.Title = "Show Player Numbers EW Missing";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -30,13 +30,13 @@
     <div class="col-2">
         @if (ViewData["PlayerNameNorth"].ToString() == "")
         {
-            <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=North'">
+            <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterPlayerNumber/Index?dir=North'">
                 Enter
             </button>
         }
         else
         {
-            <button class="btn btn-info btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=North'">
+            <button class="btn btn-info btn-lg m-1" onclick="location.href = '/EnterPlayerNumber/Index?dir=North'">
                 Edit
             </button>
         }
@@ -59,13 +59,13 @@
     <div class="col-2">
         @if (ViewData["PlayerNameSouth"].ToString() == "")
         {
-            <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=South'">
+            <button class="btn btn-primary btn-lg m-1" onclick="location.href = '/EnterPlayerNumber/Index?dir=South'">
                 Enter
             </button>
         }
         else
         {
-            <button class="btn btn-info btn-lg m-1" onclick="location.href = '/EnterPlayerNo/Index?dir=South'">
+            <button class="btn btn-info btn-lg m-1" onclick="location.href = '/EnterPlayerNumber/Index?dir=South'">
                 Edit
             </button>
         }
@@ -83,7 +83,7 @@
             window.alert("Please select a name for both North and South");
         }
         else {
-            location.href = '/ShowPlayerNos/OKButtonClick';
+            location.href = '/ShowPlayerNumbers/OKButtonClick';
         }
     }
 </script>

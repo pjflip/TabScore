@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Enter Table No";
+    ViewBag.Title = "Enter Table Number";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     var numTables = Convert.ToInt32(ViewData["NumTables"].ToString());
 }
@@ -16,7 +16,7 @@
     <div class="col-12 text-center">
         @for (int i = 1; i <= numTables && i < 6; i++)
             {
-            <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNo('@i')">
+            <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNumber('@i')">
                 @i
             </button>
         }
@@ -29,7 +29,7 @@
         <div class="col-12 text-center">
             @for (int i = 6; i <= numTables && i < 11; i++)
                 {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNo('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -43,7 +43,7 @@
         <div class="col-12 text-center">
             @for (int i = 11; i <= numTables && i < 16; i++)
                 {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNo('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -57,7 +57,7 @@
         <div class="col-12 text-center">
             @for (int i = 16; i <= numTables && i < 21; i++)
                 {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNo('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -70,7 +70,7 @@
         <div class="col-12 text-center">
             @for (int i = 21; i <= numTables && i < 26; i++)
                 {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNo('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -84,7 +84,7 @@
         <div class="col-12 text-center">
             @for (int i = 26; i <= numTables && i < 31; i++)
                 {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNo('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -96,25 +96,25 @@
 {
     <script>
         if (window.confirm('Table @TempData["LoggedOnTable"] already logged on.  Do not press OK unless the TD has told you to do so')) {
-            location.href = '/EnterTableNo/OKButtonClick?&tn=@TempData["LoggedOnTable"]&confirm=TRUE';
+            location.href = '/EnterTableNumber/OKButtonClick?&tableNumber=@TempData["LoggedOnTable"]&confirm=TRUE';
         }
     </script>
 }
 
 <script>
-    var tableNo = "";
+    var tableNumber = "";
 
-    function selectTableNo(n) {
-        if (tableNo != "") {
-            document.getElementById("tn" + tableNo).className = "btn btn-primary btn-lg m-1";
+    function selectTableNumber(n) {
+        if (tableNumber != "") {
+            document.getElementById("tn" + tableNumber).className = "btn btn-primary btn-lg m-1";
         }
         document.getElementById("tn" + n).className = "btn btn-dark btn-lg m-1";
-        tableNo = n;
+        tableNumber = n;
     }
 
     function validateOK() {
-        if (tableNo != "") {
-            location.href = '/EnterTableNo/OKButtonClick?tn=' + tableNo + '&confirm=FALSE';
+        if (tableNumber != "") {
+            location.href = '/EnterTableNumber/OKButtonClick?tableNumber=' + tableNumber + '&confirm=FALSE';
         }
         else {
             window.alert('Please select a Table number');

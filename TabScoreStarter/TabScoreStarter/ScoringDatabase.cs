@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Odbc;
 using System.Windows.Forms;
 
 namespace TabScoreStarter
 {
-    public static class DataBase
+    public static class ScoringDatabase
     {
         public static bool ConnectionOK(string DB)
         {
@@ -45,6 +44,22 @@ namespace TabScoreStarter
                         return false;
                     }
 
+                    // Add column 'Name' to table 'PlayerNumbers' if it doesn't already exist
+                    SQLString = "ALTER TABLE PlayerNumbers ADD [Name] Varchar(30)";
+                    cmd = new OdbcCommand(SQLString, connnection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+
+                    // Check if any previous results in database
                     object Result;
                     cmd = new OdbcCommand("SELECT * FROM ReceivedData", connnection);
                     Result = cmd.ExecuteScalar();
@@ -53,9 +68,9 @@ namespace TabScoreStarter
                         MessageBox.Show("Database contains previous results", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    MessageBox.Show(ex.Message, "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(e.Message, "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
             }

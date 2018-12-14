@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Enter Player No";
+    ViewBag.Title = "Enter Player Number";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -13,7 +13,7 @@
 
 <div class="row mt-4">
     <div class="col-12 text-center">
-        <input class="form-control-lg text-center mx-auto my-1" style="width: 8em" type="text" id="PIDbox" value="" readonly>
+        <input class="form-control-lg text-center mx-auto my-1" style="width: 8em" type="text" id="playerNumberBox" value="" readonly>
     </div>
 </div>
 
@@ -75,56 +75,56 @@
         <button class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="addNumber(0)">
             0
         </button>
-        <button class="btn btn-danger btn-lg m-1" style="width: 3em" onclick="clearPID()">
+        <button class="btn btn-danger btn-lg m-1" style="width: 3em" onclick="clearplayerNumber()">
             C
         </button>
     </div>
 </div>
 
 <script>
-    var PID = "";
+    var playerNumber = "";
 
     function addNumber(e) {
-        if (PID == "Unknown") {
+        if (playerNumber == "Unknown") {
             document.getElementById('nk').className = "btn btn-primary btn-lg m-1";
-            PID = "";
+            playerNumber = "";
         }
-        PID = PID + e;
-        document.getElementById('PIDbox').value = PID;
+        playerNumber = playerNumber + e;
+        document.getElementById('playerNumberBox').value = playerNumber;
     }
 
     function unknown() {
-        PID = "Unknown";
+        playerNumber = "Unknown";
         document.getElementById('nk').className = "btn btn-dark btn-lg m-1";
-        document.getElementById('PIDbox').value = PID;
+        document.getElementById('playerNumberBox').value = playerNumber;
     }
 
-    function clearPID() {
+    function clearplayerNumber() {
         document.getElementById('nk').className = "btn btn-primary btn-lg m-1";
-        PID = ""
-        document.getElementById('PIDbox').value = "";
+        playerNumber = ""
+        document.getElementById('playerNumberBox').value = "";
     }
 
     function clearLastEntry() {
-        if (PID == "Unknown") {
+        if (playerNumber == "Unknown") {
             document.getElementById('nk').className = "btn btn-primary btn-lg m-1";
-            PID = "";
+            playerNumber = "";
         }
         else
         {
-            if (PID.length > 0) {
-                PID = PID.substr(0, PID.length - 1);
+            if (playerNumber.length > 0) {
+                playerNumber = playerNumber.substr(0, playerNumber.length - 1);
             }
         }
-        document.getElementById('PIDbox').value = PID;
+        document.getElementById('playerNumberBox').value = playerNumber;
     }
 
     function validateOK() {
-        if (PID == "") {
+        if (playerNumber == "") {
             window.alert("Please select a player number, or select 'Unknown'");
         }
         else {
-            location.href = '/EnterPlayerNo/OKButtonClick?dir=' + '@ViewData["Direction"]' + '&PID=' + PID;
+            location.href = '/EnterPlayerNumber/OKButtonClick?direction=' + '@ViewData["Direction"]' + '&playerNumber=' + playerNumber;
         }
     }
 </script>
