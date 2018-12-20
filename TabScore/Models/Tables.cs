@@ -4,7 +4,7 @@ namespace TabScore.Models
 {
     public static class Tables
     {
-        public static bool CheckTableLogonStatus(string DB, string sectionID, string table)
+        public static bool IsLoggedOn(string DB, string sectionID, string table)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
@@ -24,7 +24,7 @@ namespace TabScore.Models
             }
         }
 
-        public static void LogonTable(string DB, string sectionID, string table)
+        public static void Logon(string DB, string sectionID, string table)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {

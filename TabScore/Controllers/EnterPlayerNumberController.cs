@@ -17,7 +17,7 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(string direction, string playerNumber)
         {
-            PlayerNumber.UpdateDB(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), direction, playerNumber);
+            Player.UpdateDatabase(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), direction, playerNumber);
 
             return RedirectToAction("Index", "ShowPlayerNumbers");
         }

@@ -6,47 +6,17 @@ namespace TabScoreStarter
 {
     public static class ScoringDatabase
     {
-        public static bool ConnectionOK(string DB)
+        public static bool Setup(string DB)
         {
-            using (OdbcConnection connnection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                int SectionID = 0;
-                string Section;
-                int numTables;
                 try
                 {
-                    string SQLString = "SELECT ID, Letter, [Tables] FROM Section";
-                    OdbcCommand cmd = new OdbcCommand(SQLString, connnection);
-                    connnection.Open();
-                    OdbcDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        SectionID = reader.GetInt32(0);
-                        Section = reader.GetString(1);
-                        numTables = reader.GetInt32(2);
-                        if (SectionID < 1 || SectionID > 4 || (Section != "A" && Section != "B" && Section != "C" && Section != "D"))
-                        {
-                            reader.Close();
-                            MessageBox.Show("Database countains incorrect Sections.  Maximum 4 Sections labelled A, B, C, D", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return false;
-                        }
-                        if (numTables > 30)
-                        {
-                            reader.Close();
-                            MessageBox.Show("Database countains > 30 Tables in a Section", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return false;
-                        }
-                    }
-                    reader.Close();
-                    if (SectionID == 0)
-                    {
-                        MessageBox.Show("Database contains no Sections", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return false;
-                    }
+                    connection.Open();
 
-                    // Add column 'Name' to table 'PlayerNumbers' if it doesn't already exist
-                    SQLString = "ALTER TABLE PlayerNumbers ADD [Name] Varchar(30)";
-                    cmd = new OdbcCommand(SQLString, connnection);
+                    // Add column 'Winners' to table 'PlayerNumbers' if it doesn't already exist
+                    string SQLString = "ALTER TABLE Section ADD Winners SHORT";
+                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     try
                     {
                         cmd.ExecuteNonQuery();
@@ -59,9 +29,146 @@ namespace TabScoreStarter
                         }
                     }
 
+                    // Check sections, and set a Winners value if necessary
+                    int sectionID = 0;
+                    SQLString = "SELECT ID, Letter, [Tables], EWMoveBeforePlay, Winners FROM Section";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    OdbcDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        sectionID = reader.GetInt32(0);
+                        string sectionLetter = reader.GetString(1);
+                        int numTables = reader.GetInt32(2);
+                        if (sectionID < 1 || sectionID > 4 || (sectionLetter != "A" && sectionLetter != "B" && sectionLetter != "C" && sectionLetter != "D"))
+                        {
+                            reader.Close();
+                            MessageBox.Show("Database countains incorrect Sections.  Maximum 4 Sections labelled A, B, C, D", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                        if (numTables > 30)
+                        {
+                            reader.Close();
+                            MessageBox.Show("Database countains > 30 Tables in a Section", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+
+                        int EWMoveBeforePlay = 0;
+                        if (!reader.IsDBNull(3))
+                        {
+                            EWMoveBeforePlay = Convert.ToInt32(reader.GetValue(3));
+                        }
+
+                        if (reader.IsDBNull(4) || Convert.ToInt32(reader.GetValue(4)) == 0)   // Winners not specified, so guess
+                        {
+                            int winners;
+                            if (EWMoveBeforePlay != 0)
+                            {
+                                winners = 2;   // Assuming teams, so ranking list would have 2 winners
+                            }
+                            else
+                            {
+                                SQLString = $"SELECT EWPair FROM RoundData WHERE Section={sectionID.ToString()} AND Round=1 AND NSPair=1";
+                                cmd = new OdbcCommand(SQLString, connection);
+                                object queryResult = cmd.ExecuteScalar();
+                                if (queryResult == null || queryResult.ToString() != "1")
+                                {
+                                    winners = 1;   // NSPair!=EWPair so assuming one winner movement
+                                }
+                                else
+                                {
+                                    winners = 2;   // NSPair==EWPair so assuming Mitchell type movement with 2 winners
+                                }
+                            }
+                            SQLString = $"UPDATE Section SET Winners={winners.ToString()} WHERE ID={sectionID.ToString()}";
+                            cmd = new OdbcCommand(SQLString, connection);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                
+                    reader.Close();
+                    if (sectionID == 0)
+                    {
+                        MessageBox.Show("Database contains no Sections", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
+
+                    // Add column 'Name' to table 'PlayerNumbers' if it doesn't already exist
+                    SQLString = "ALTER TABLE PlayerNumbers ADD [Name] VARCHAR(30)";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+
+                    // Add column 'Round' to table 'PlayerNumbers' if it doesn't already exist
+                    SQLString = "ALTER TABLE PlayerNumbers ADD [Round] SHORT";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    // Ensure that all Round values are set to 0 to start with
+                    SQLString = "UPDATE PlayerNumbers SET [Round]=0";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    cmd.ExecuteNonQuery();
+
+
+                    // Add a new column 'TabScorePairNo' to table 'PlayerNumbers' if it doesn't exist and populate it if possible
+                    SQLString = "ALTER TABLE PlayerNumbers ADD TabScorePairNo SHORT";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int section = reader.GetInt32(0);
+                        int table = reader.GetInt32(1);
+                        string direction = reader.GetString(2);
+                        if (direction == "N" || direction == "S")
+                        {
+                            SQLString = $"SELECT NSPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                        }
+                        else
+                        {
+                            SQLString = $"SELECT EWPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                        }
+                        cmd = new OdbcCommand(SQLString, connection);
+                        object queryResult = cmd.ExecuteScalar();
+                        string pairNo = queryResult.ToString();
+                        SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={pairNo} WHERE Section={section.ToString()} AND [Table]={table.ToString()} AND Direction='{direction}'";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+
                     // Check if any previous results in database
                     object Result;
-                    cmd = new OdbcCommand("SELECT * FROM ReceivedData", connnection);
+                    SQLString = "SELECT * FROM ReceivedData";
+                    cmd = new OdbcCommand(SQLString, connection);
                     Result = cmd.ExecuteScalar();
                     if (Result != null)
                     {

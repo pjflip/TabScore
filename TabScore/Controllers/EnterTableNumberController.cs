@@ -15,25 +15,27 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(string tableNumber, string confirm)
         {
-            if (confirm == "TRUE")
+            if (confirm == "TRUE" || !Tables.IsLoggedOn(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tableNumber))
             {
                 Session["Table"] = tableNumber;
-                Tables.LogonTable(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tableNumber);
-                return RedirectToAction("Index", "ShowPlayerNumbers");
-            }
-            else
-            {
-                if (Tables.CheckTableLogonStatus(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tableNumber))
+                Tables.Logon(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tableNumber);
+
+                // Check if results data exist - set round number accordingly
+                int round = Round.GetLastEnteredRound(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString());
+                Session["Round"] = round.ToString();
+                if (round == 1 || Settings.NumberEntryEachRound(Session["DBConnectionString"].ToString()))
                 {
-                    TempData["LoggedOnTable"] = tableNumber;
-                    return RedirectToAction("Index", "EnterTableNumber");
+                    return RedirectToAction("Index", "ShowPlayerNumbers");
                 }
                 else
                 {
-                    Session["Table"] = tableNumber;
-                    Tables.LogonTable(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tableNumber);
-                    return RedirectToAction("Index", "ShowPlayerNumbers");
+                    return RedirectToAction("Index", "ShowRoundInfo");
                 }
+            }
+            else  // Table already logged on - confirm log on anyway?
+            {
+                TempData["LoggedOnTable"] = tableNumber;
+                return RedirectToAction("Index", "EnterTableNumber");
             }
         }
     }

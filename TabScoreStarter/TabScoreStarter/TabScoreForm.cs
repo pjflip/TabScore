@@ -28,7 +28,7 @@ namespace TabScoreStarter
             {
                 if (s.StartsWith("f:[")) pathToDB = s.Split(new char[] { '[', ']' })[1];
             }
-            if (pathToDB == "" || !ScoringDatabase.ConnectionOK(SetDBConnectionString(pathToDB)))
+            if (pathToDB == "" || !ScoringDatabase.Setup(SetDBConnectionString(pathToDB)))
             {
                 btnAddSDBFile.Visible = true;   // No valid database in arguments
             }
@@ -59,7 +59,7 @@ namespace TabScoreStarter
             {
                 string pathToDB = fdSDBFileDialog.FileName;
                 string DBConnection = SetDBConnectionString(pathToDB);
-                if (ScoringDatabase.ConnectionOK(DBConnection))
+                if (ScoringDatabase.Setup(DBConnection))
                 {
                     btnAddSDBFile.Enabled = false;
                     SetDBFilePath(pathToDB);

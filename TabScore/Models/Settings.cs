@@ -148,6 +148,30 @@ namespace TabScore.Models
             }
             return showHandRecord;
         }
+
+        public static bool NumberEntryEachRound(string DB)
+        {
+            bool numberEntryEachRound = false;
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                string SQLString = $"SELECT BM2NumberEntryEachRound FROM Settings";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                try
+                {
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult != null)
+                    {
+                        numberEntryEachRound = Convert.ToBoolean(queryResult);
+                    }
+                }
+                catch
+                {
+                }
+                cmd.Dispose();
+            }
+            return numberEntryEachRound;
+        }
     }
 }
 

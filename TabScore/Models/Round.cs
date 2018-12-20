@@ -35,7 +35,7 @@ namespace TabScore.Models
 
         public static int GetLastEnteredRound(string DB, string sectionID, string table)
         {
-            int maxRound = 0;
+            int maxRound = 1;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 string SQLString = $"SELECT Round FROM ReceivedData WHERE Section={sectionID} AND [Table]={table}";

@@ -129,9 +129,7 @@
     <Compile Include="Models\HandRecordClass.cs" />
     <Compile Include="Models\Move.cs" />
     <Compile Include="Models\MoveClass.cs" />
-    <Compile Include="Models\NamesClass.cs" />
-    <Compile Include="Models\PairNames.cs" />
-    <Compile Include="Models\PlayerNumber.cs" />
+    <Compile Include="Models\Player.cs" />
     <Compile Include="Models\RankingList.cs" />
     <Compile Include="Models\RankingListClass.cs" />
     <Compile Include="Models\RoundClass.cs" />

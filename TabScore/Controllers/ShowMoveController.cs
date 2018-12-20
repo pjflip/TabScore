@@ -87,7 +87,14 @@ namespace TabScore.Controllers
         
         public ActionResult OKButtonClick()
         {
-            return RedirectToAction("Index", "ShowRoundInfo");
+            if (Settings.NumberEntryEachRound(Session["DBConnectionString"].ToString()))
+            {
+                return RedirectToAction("Index", "ShowPlayerNumbers");
+            }
+            else
+            {
+                return RedirectToAction("Index", "ShowRoundInfo");
+            }
         }
     }
 }
