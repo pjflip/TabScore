@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabScoreStarter", "TabScore
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7589BEA4-87AE-4993-94B6-09AA51FD0250}"
 	ProjectSection(SolutionItems) = preProject
-		TabScore Documents\BridgeMate BCS Options in TabScore.odt = TabScore Documents\BridgeMate BCS Options in TabScore.odt
-		TabScore Documents\TabScore Installation Guide.odt = TabScore Documents\TabScore Installation Guide.odt
-		TabScore Documents\TabScore ReadMe.txt = TabScore Documents\TabScore ReadMe.txt
+		TabScore Documents\BridgeMate BCS Options in TabScore 1.0.1.odt = TabScore Documents\BridgeMate BCS Options in TabScore 1.0.1.odt
+		TabScore Documents\TabScore Installation Guide 1.0.1.odt = TabScore Documents\TabScore Installation Guide 1.0.1.odt
+		TabScore Documents\TabScore ReadMe 1.0.1.txt = TabScore Documents\TabScore ReadMe 1.0.1.txt
 		TabScore Documents\TabScoreDB.txt = TabScore Documents\TabScoreDB.txt
 	EndProjectSection
 EndProject

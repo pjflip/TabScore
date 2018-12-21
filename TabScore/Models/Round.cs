@@ -6,17 +6,10 @@ namespace TabScore.Models
     {
         public static RoundClass GetRoundInfo(string DB, string sectionID, string table, string round)
         {
-            RoundClass rd = new RoundClass()
-            {
-                PairNS = 0,
-                PairEW = 0,
-                LowBoard = 0,
-                HighBoard = 0
-            };
-
+            RoundClass rd = new RoundClass();
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                string SQLString = "SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section=" + sectionID + " AND Table=" + table + " AND Round=" + round;
+                string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={round}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
                 OdbcDataReader reader = cmd.ExecuteReader();

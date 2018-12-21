@@ -68,7 +68,7 @@ namespace TabScore.Controllers
                 }
             }
 
-            ViewData["Round"] = x.ToString();
+            ViewData["Round"] = Session["Round"].ToString();
             ViewData["PairNS"] = Session["PairNS"];
             ViewData["PairEW"] = Session["PairEW"];
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]}";
@@ -78,11 +78,14 @@ namespace TabScore.Controllers
             {
                 return View("NSMissing");
             }
-            if (Session["PairEW"].ToString() == "0" || Session["PairEW"].ToString() == Session["MissingPair"].ToString())
+            else if (Session["PairEW"].ToString() == "0" || Session["PairEW"].ToString() == Session["MissingPair"].ToString())
             {
                 return View("EWMissing");
             }
-            return View();
+            else
+            {
+                return View();
+            }
         }
         
         public ActionResult OKButtonClick()

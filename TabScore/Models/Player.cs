@@ -92,6 +92,34 @@ namespace TabScore.Models
             {
                 return "";
             }
+            int nameSource = Settings.NameSource(DB);
+            switch (nameSource)
+            {
+                case 0:
+                    return GetNameFromPlayerNamesTable(DB, playerNumber);
+                case 1:
+                    return GetNameFromExternalDatabase(playerNumber);
+                case 2:
+                    return "";
+                case 3:
+                    string name;
+                    name = GetNameFromPlayerNamesTable(DB, playerNumber);
+                    if (name == "" || name.Substring(0,1) == "#" || (name.Length >= 7 && name.Substring(0,7) == "Unknown"))
+                    {
+                        return GetNameFromExternalDatabase(playerNumber);
+                    }
+                    else
+                    {
+                        return name;
+                    }
+                default:
+                    return "";
+
+            }
+        }
+
+        private static string GetNameFromPlayerNamesTable(string DB, string playerNumber)
+        {
             string name;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
@@ -126,9 +154,42 @@ namespace TabScore.Models
             return name;
         }
 
+        private static string GetNameFromExternalDatabase(string playerNumber)
+        {
+            string name;
+            OdbcConnectionStringBuilder externalDB = new OdbcConnectionStringBuilder();
+            externalDB.Driver = "Microsoft Access Driver (*.mdb)";
+            externalDB.Add("Dbq", @"C:\Bridgemate\BMPlayerDB.mdb");
+            externalDB.Add("Uid", "Admin");
+            using (OdbcConnection connection = new OdbcConnection(externalDB.ToString()))
+            {
+                string SQLString = $"SELECT Name FROM PlayerNameDatabase WHERE ID={playerNumber}";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                try
+                {
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult == null)
+                    {
+                        name = "Unknown #" + playerNumber;
+                    }
+                    else
+                    {
+                        name = queryResult.ToString();
+                    }
+                }
+                catch   // If we can't access the external database for whatever reason...
+                {
+                    name = "#" + playerNumber;
+                }
+                cmd.Dispose();
+            }
+            return name;
+        }
+
         public static string GetName(string DB, string sectionID, string table, string round, string pairNo, string direction, bool formatUnknown)
         {
-            string number = "";
+            string number = "###";
             string name = "";
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
@@ -152,7 +213,7 @@ namespace TabScore.Models
                         biggestRoundSoFar = readerRound;
                     }
                 }
-                if (number == "")  // Nothing found so try Round 0 entries in the other direction (for Howell type pairs movement)
+                if (number == "###")  // Nothing found so try Round 0 entries in the other direction (for Howell type pairs movement)
                 {
                     string otherDirection;
                     switch (direction)
@@ -187,6 +248,10 @@ namespace TabScore.Models
                 }
                 reader.Close();
                 cmd.Dispose();
+                if (number == "###")  // Nothing found in either direction!!
+                {
+                    number = "";
+                }
             }
             return FormatName(name, number, formatUnknown);
         }

@@ -172,6 +172,30 @@ namespace TabScore.Models
             }
             return numberEntryEachRound;
         }
+
+        public static int NameSource(string DB)
+        {
+            int nameSource = 0;
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                string SQLString = $"SELECT BM2NameSource FROM Settings";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                try
+                {
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult != null)
+                    {
+                        nameSource = Convert.ToInt32(queryResult);
+                    }
+                }
+                catch
+                {
+                }
+                cmd.Dispose();
+            }
+            return nameSource;
+        }
     }
 }
 

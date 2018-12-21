@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -16,13 +15,13 @@ namespace TabScore.Controllers
             ViewData["CancelButton"] = "FALSE";
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"].ToString()}";
 
-            if (round.PairNS == 0 || round.PairNS == Convert.ToInt32(Session["MissingPair"].ToString()))
+            if (round.PairNS == 0 || round.PairNS.ToString() == Session["MissingPair"].ToString())
             {
                 ViewData["PlayerNameEast"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "E", false);
                 ViewData["PlayerNameWest"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "W", false);
                 return View("NSMissing");
             }
-            else if (round.PairEW == 0 || round.PairEW == Convert.ToInt32(Session["MissingPair"].ToString()))
+            else if (round.PairEW == 0 || round.PairEW.ToString() == Session["MissingPair"].ToString())
             {
                 ViewData["PlayerNameNorth"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "N", false);
                 ViewData["PlayerNameSouth"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "S", false);
