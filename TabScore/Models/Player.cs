@@ -205,7 +205,10 @@ namespace TabScore.Models
                     int readerRound = Convert.ToInt32(reader.GetValue(2));
                     if (readerRound <= roundAsInt && readerRound > biggestRoundSoFar)
                     {
-                        number = reader.GetString(0);
+                        if (!reader.IsDBNull(0))
+                        {
+                            number = reader.GetString(0);
+                        }
                         if (!reader.IsDBNull(1))
                         {
                             name = reader.GetString(1);
@@ -239,7 +242,10 @@ namespace TabScore.Models
                     reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        number = reader.GetString(0);
+                        if (!reader.IsDBNull(0))
+                        {
+                            number = reader.GetString(0);
+                        }
                         if (!reader.IsDBNull(1))
                         {
                             name = reader.GetString(1);

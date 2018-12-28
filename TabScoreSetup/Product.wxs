@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="3c146288-31a8-4eec-a6b6-e53d90c5ff28" Name="TabScore" Language="1033" Version="1.0.1" Manufacturer="" UpgradeCode="910e14b2-1e97-47d0-9f52-40f18959a936">
+		<Package Id="*" InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="TabScoreSetup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+  
+    <!-- following Lines for IIS install -->
+    <Property Id="DISMForIISInstall" Value="[System64Folder]dism.exe" />
+
+    <CustomAction 
+      Id="InstallIIS"
+      Return="check"
+      Property="DISMForIISInstall"
+      Execute="deferred"
+      HideTarget="yes"
+      Impersonate="yes"
+      ExeCommand="/Online /Enable-Feature /FeatureName:IIS-WebServerRole /FeatureName:IIS-WebServer /FeatureName:IIS-CommonHttpFeatures /FeatureName:IIS-StaticContent /FeatureName:IIS-DefaultDocument /FeatureName:IIS-DirectoryBrowsing /FeatureName:IIS-HttpErrors /FeatureName:IIS-HttpRedirect /FeatureName:IIS-ApplicationDevelopment /FeatureName:IIS-ASPNET /FeatureName:IIS-NetFxExtensibility /FeatureName:IIS-ASP /FeatureName:IIS-ISAPIExtensions /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-HealthAndDiagnostics /FeatureName:IIS-HttpLogging /FeatureName:IIS-LoggingLibraries /FeatureName:IIS-RequestMonitor /FeatureName:IIS-HttpTracing /FeatureName:IIS-CustomLogging     /FeatureName:IIS-Security /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-RequestFiltering /FeatureName:IIS-IPSecurity /FeatureName:IIS-Performance /FeatureName:IIS-HttpCompressionStatic     /FeatureName:IIS-WebServerManagementTools /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ManagementScriptingTools /FeatureName:IIS-ManagementService /FeatureName:WAS-WindowsActivationService /FeatureName:WAS-ProcessModel /FeatureName:WAS-NetFxEnvironment /FeatureName:WAS-ConfigurationAPI /FeatureName:NetFx3" />
+
+    <InstallExecuteSequence>
+       <Custom Action="InstallIIS" Before="InstallFiles">
+          <![CDATA[NOT Installed AND IISMAJORVERSION]]>
+       </Custom>
+    </InstallExecuteSequence> 
+    <!-- end IIS install -->
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="TabScoreSetup" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+			<!-- </Component> -->
+		</ComponentGroup>
+	</Fragment>
+</Wix>

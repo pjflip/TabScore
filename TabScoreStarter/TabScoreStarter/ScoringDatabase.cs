@@ -31,7 +31,7 @@ namespace TabScoreStarter
 
                     // Check sections, and set a Winners value if necessary
                     int sectionID = 0;
-                    SQLString = "SELECT ID, Letter, [Tables], EWMoveBeforePlay, Winners FROM Section";
+                    SQLString = "SELECT ID, Letter, [Tables], Winners FROM Section";
                     cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
@@ -53,12 +53,25 @@ namespace TabScoreStarter
                         }
 
                         int EWMoveBeforePlay = 0;
-                        if (!reader.IsDBNull(3))
+                        SQLString = $"SELECT EWMoveBeforePlay FROM Section WHERE ID={sectionID}";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        try
                         {
-                            EWMoveBeforePlay = Convert.ToInt32(reader.GetValue(3));
+                            object queryResult = cmd.ExecuteScalar();
+                            if(queryResult != null)
+                            {
+                                EWMoveBeforePlay = Convert.ToInt32(reader.GetValue(3));
+                            }
+                        }
+                        catch (OdbcException e)
+                        {
+                            if (e.Errors.Count != 1 || e.Errors[0].SQLState != "07002")
+                            {
+                                throw e;
+                            }
                         }
 
-                        if (reader.IsDBNull(4) || Convert.ToInt32(reader.GetValue(4)) == 0)   // Winners not specified, so guess
+                        if (reader.IsDBNull(3) || Convert.ToInt32(reader.GetValue(3)) == 0)   // Winners not specified, so guess
                         {
                             int winners;
                             if (EWMoveBeforePlay != 0)
