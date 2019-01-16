@@ -72,7 +72,7 @@ namespace TabScore.Controllers
             ViewData["PairNS"] = Session["PairNS"];
             ViewData["PairEW"] = Session["PairEW"];
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]}";
-            ViewData["CancelButton"] = "FALSE";
+            ViewData["BackButton"] = "FALSE";
 
             if (Session["PairNS"].ToString() == "0" || Session["PairNS"].ToString() == Session["MissingPair"].ToString())
             {

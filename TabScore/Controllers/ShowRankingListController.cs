@@ -18,16 +18,17 @@ namespace TabScore.Controllers
                     if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0")
                     {
                         ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
-                        ViewData["CancelButton"] = "FALSE";
+                        ViewData["BackButton"] = "FALSE";
                         ViewData["PairNS"] = Session["PairNS"];
                         ViewData["PairEW"] = Session["PairEW"];
-                        if (Session["Winners"].ToString() == "1")
-                        {
-                            return View("OneWinner", rankingList);
-                        }
-                        else if (Session["Winners"].ToString() == "2")
+                        bool twoWinners = rankingList.Exists(x => x.Orientation == "E");
+                        if (twoWinners)
                         {
                             return View("TwoWinners", rankingList);
+                        }
+                        else
+                        {
+                            return View("OneWinner", rankingList);
                         }
                     }
                 }

@@ -12,7 +12,7 @@ namespace TabScore.Controllers
             ViewData["PairNS"] = round.PairNS.ToString();
             ViewData["PairEW"] = round.PairEW.ToString();
 
-            ViewData["CancelButton"] = "FALSE";
+            ViewData["BackButton"] = "FALSE";
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"].ToString()}";
 
             if (round.PairNS == 0 || round.PairNS.ToString() == Session["MissingPair"].ToString())

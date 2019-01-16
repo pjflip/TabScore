@@ -22,9 +22,19 @@ namespace TabScore.Controllers
             };
             ViewData["DisplayContract"] = res.DisplayContract(2);
 
+            if (Session["LeadCard"].ToString() == "")
+            {
+                ViewData["Suit"] = "";
+                ViewData["Card"] = "";
+            }
+            else
+            {
+                ViewData["Suit"] = Session["LeadCard"].ToString().Substring(0, 1);
+                ViewData["Card"] = Session["LeadCard"].ToString().Substring(1, 1);
+            }
             ViewData["Board"] = Session["Board"];
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
-            ViewData["CancelButton"] = "TRUE";
+            ViewData["BackButton"] = "TRUE";
             ViewData["SecondPass"] = secondPass;
             return View();
         }
@@ -50,7 +60,7 @@ namespace TabScore.Controllers
             }
         }
 
-        public ActionResult CancelButtonClick()
+        public ActionResult BackButtonClick()
         {
             return RedirectToAction("Index", "EnterContract", new { board = Session["Board"].ToString() } );
         }

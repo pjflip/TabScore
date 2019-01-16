@@ -43,7 +43,7 @@ namespace TabScore.Controllers
                 }
             }
 
-            ViewData["CancelButton"] = "TRUE";
+            ViewData["BackButton"] = "TRUE";
             return View();
         }
 
@@ -70,7 +70,7 @@ namespace TabScore.Controllers
             return RedirectToAction("Index", "ShowTraveller");
         }
 
-        public ActionResult CancelButtonClick()
+        public ActionResult BackButtonClick()
         {
             if (Session["ContractLevel"].ToString() == "PASS")
             {

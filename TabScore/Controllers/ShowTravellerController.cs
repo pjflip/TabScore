@@ -68,7 +68,7 @@ namespace TabScore.Controllers
             }
 
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
-            ViewData["CancelButton"] = "TRUE";
+            ViewData["BackButton"] = "TRUE";
             ViewData["Board"] = Session["Board"];
             ViewData["PairNS"] = Session["PairNS"];
             return View(resList);
@@ -79,7 +79,7 @@ namespace TabScore.Controllers
             return RedirectToAction("Index", "ShowBoards");
         }
 
-        public ActionResult CancelButtonClick()
+        public ActionResult BackButtonClick()
         {
             return RedirectToAction("Index", "ConfirmResult");
         }

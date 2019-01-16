@@ -7,7 +7,7 @@ namespace TabScore.Controllers
         public ActionResult Index()
         {
             ViewBag.Header = "";
-            ViewData["CancelButton"] = "FALSE";
+            ViewData["BackButton"] = "FALSE";
             return View();
         }
 

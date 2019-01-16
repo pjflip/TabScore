@@ -16,9 +16,10 @@ namespace TabScore.Controllers
             };
             ViewData["DisplayContract"] = res.DisplayContract(2);
 
+            ViewData["TricksTakenNumber"] = Session["TricksTakenNumber"];
             ViewData["Board"] = Session["Board"];
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
-            ViewData["CancelButton"] = "TRUE";
+            ViewData["BackButton"] = "TRUE";
             return View();
         }
 
@@ -28,7 +29,7 @@ namespace TabScore.Controllers
             return RedirectToAction("Index", "ConfirmResult");
         }
 
-        public ActionResult CancelButtonClick()
+        public ActionResult BackButtonClick()
         {
             if (Settings.EnterLeadCard(Session["DBConnectionString"].ToString()))
             {

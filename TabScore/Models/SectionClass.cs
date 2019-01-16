@@ -6,6 +6,5 @@
         public string Letter;
         public int Tables;
         public int MissingPair;
-        public int Winners;
     }
 }

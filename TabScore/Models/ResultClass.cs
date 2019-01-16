@@ -412,7 +412,7 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 string SQLString;
-                SQLString = $"SELECT [NS/EW], Contract, Result FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={Round} AND Board={Board}";
+                SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={Round} AND Board={Board}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
                 OdbcDataReader reader = cmd.ExecuteReader();
@@ -427,6 +427,7 @@ namespace TabScore.Models
                         ContractX = "";
                         NSEW = "";
                         TricksTakenNumber = -1;
+                        LeadCard = "";
                     }
                     else
                     {
@@ -437,6 +438,7 @@ namespace TabScore.Models
                         else ContractX = "NONE";
                         NSEW = reader.GetString(0);
                         TricksTakenSymbol = reader.GetString(2);
+                        LeadCard = reader.GetString(3);
                     }
                 }
                 reader.Close();

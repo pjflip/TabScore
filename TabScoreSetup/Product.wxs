@@ -1,49 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="3c146288-31a8-4eec-a6b6-e53d90c5ff28" Name="TabScore" Language="1033" Version="1.0.1" Manufacturer="" UpgradeCode="910e14b2-1e97-47d0-9f52-40f18959a936">
-		<Package Id="*" InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+  xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+  xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
+  <!-- File source definitions -->
+  <?define TabScoreStarterSourceDir = "C:\Users\Peter\source\repos\TabScore\TabScoreStarter\TabScoreStarter\bin\Release" ?>
+  <?define TabScoreDocumentsSourceDir = "C:\Users\Peter\source\repos\TabScore\TabScore Documents" ?>
 
-		<Feature Id="ProductFeature" Title="TabScoreSetup" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
-		</Feature>
-  
-    <!-- following Lines for IIS install -->
-    <Property Id="DISMForIISInstall" Value="[System64Folder]dism.exe" />
+  <Product Id="{3c146288-31a8-4eec-a6b6-e53d90c5ff28}" Name="TabScore" Language="1033" Version="1.0.1" Manufacturer="TabScore" UpgradeCode="{910e14b2-1e97-47d0-9f52-40f18959a936}">
+    <Package Id="*" InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-    <CustomAction 
-      Id="InstallIIS"
-      Return="check"
-      Property="DISMForIISInstall"
-      Execute="deferred"
-      HideTarget="yes"
-      Impersonate="yes"
-      ExeCommand="/Online /Enable-Feature /FeatureName:IIS-WebServerRole /FeatureName:IIS-WebServer /FeatureName:IIS-CommonHttpFeatures /FeatureName:IIS-StaticContent /FeatureName:IIS-DefaultDocument /FeatureName:IIS-DirectoryBrowsing /FeatureName:IIS-HttpErrors /FeatureName:IIS-HttpRedirect /FeatureName:IIS-ApplicationDevelopment /FeatureName:IIS-ASPNET /FeatureName:IIS-NetFxExtensibility /FeatureName:IIS-ASP /FeatureName:IIS-ISAPIExtensions /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-HealthAndDiagnostics /FeatureName:IIS-HttpLogging /FeatureName:IIS-LoggingLibraries /FeatureName:IIS-RequestMonitor /FeatureName:IIS-HttpTracing /FeatureName:IIS-CustomLogging     /FeatureName:IIS-Security /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-RequestFiltering /FeatureName:IIS-IPSecurity /FeatureName:IIS-Performance /FeatureName:IIS-HttpCompressionStatic     /FeatureName:IIS-WebServerManagementTools /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ManagementScriptingTools /FeatureName:IIS-ManagementService /FeatureName:WAS-WindowsActivationService /FeatureName:WAS-ProcessModel /FeatureName:WAS-NetFxEnvironment /FeatureName:WAS-ConfigurationAPI /FeatureName:NetFx3" />
+    <MajorUpgrade DowngradeErrorMessage="A later version of TabScore is already installed"/>
 
-    <InstallExecuteSequence>
-       <Custom Action="InstallIIS" Before="InstallFiles">
-          <![CDATA[NOT Installed AND IISMAJORVERSION]]>
-       </Custom>
-    </InstallExecuteSequence> 
-    <!-- end IIS install -->
-	</Product>
+    <MediaTemplate EmbedCab="yes" />
 
-	<Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="TabScoreSetup" />
-			</Directory>
-		</Directory>
-	</Fragment>
+    <!-- Common documents folder for TabScoreDB.txt install -->
+    <SetDirectory Id="UsersPublicFolder" Value="[%PUBLIC]" Sequence="both" />
 
-	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-			<!-- <Component Id="ProductComponent"> -->
-				<!-- TODO: Insert files, registry keys, and other resources here. -->
-			<!-- </Component> -->
-		</ComponentGroup>
-	</Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="TabScoreInstallFolder" Name="TabScore">
+          <Directory Id="WebAppInstallFolder" Name="WebApp" />
+        </Directory>
+      </Directory>
+      <Directory Id="UsersPublicFolder">
+        <Directory Id="TabScoreDBtxtInstallFolder" Name="TabScore" />
+      </Directory>
+    </Directory>
+
+    <Feature Id="TabScoreFeature" Title="TabScore" Level="1">
+      <ComponentGroupRef Id="TabScoreStarterComponents" />
+      <ComponentGroupRef Id="WebAppComponents" />
+      <!-- Link to WebApp.wxs file -->
+      <ComponentRef Id="TabScoreDB.txtComponent"/>
+      <ComponentRef Id="IISConfigurationComponent" />
+    </Feature>
+
+    <ComponentGroup Id="TabScoreStarterComponents" Directory="TabScoreInstallFolder">
+      <Component Id="TabScoreStarter.exe" Guid="{6F4E6488-65FA-4FCB-A9FC-4BC2C6FE2645}">
+        <File Id="TabScoreStarter.exe" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.exe" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="dds.dll" Guid="{4496934B-7E7F-4E23-BDB3-673BBF565960}">
+        <File Id="dds.dll" Source="$(var.TabScoreStarterSourceDir)\dds.dll" KeyPath="yes"/>
+      </Component>
+      <Component Id="TabScoreStarter.exe.config" Guid="{BFEA859C-4FBC-4B02-8425-92918A8BA5CB}">
+        <File Id="TabScoreStarter.exe.config" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.exe.config" KeyPath="yes"/>
+      </Component>
+      <Component Id="TabScoreStarter.pdb" Guid="{8EA97C3C-B0BE-4C86-B1A9-FA0F83015696}">
+        <File Id="TabScoreStarter.pdb" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.pdb" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+
+    <Component Id="TabScoreDB.txtComponent" Directory="TabScoreDBtxtInstallFolder" Guid="{85D79EC4-6F75-4651-87B3-C3065D33A2DC}">
+      <File Id="TabScoreDB.txt" Source="$(var.TabScoreDocumentsSourceDir)\TabScoreDB.txt" KeyPath="yes"/>
+    </Component>
+
+    <!-- Use built-in Default Web Site to enable binding to Port 80 -->
+    <iis:WebSite Id="DefaultWebSite" Description="Default Web Site">
+      <iis:WebAddress Id="AllUnassigned" Port="80"/>
+    </iis:WebSite>
+
+    <Component Id="IISConfigurationComponent" Guid="{975F9F17-DACA-42A2-AC54-128609B9AA40}" Directory="WebAppInstallFolder">
+      <iis:WebAppPool Id="TabScoreAppPool" Name="TabScoreAppPool" Identity="applicationPoolIdentity" ManagedRuntimeVersion="v4.0" ManagedPipelineMode="integrated" />
+      <iis:WebVirtualDir Id="TabScoreVirtualDirectory" Alias="TabScore" Directory="WebAppInstallFolder" WebSite="DefaultWebSite">
+        <iis:WebApplication Id="TabScoreWebApp" Name="TabScore" WebAppPool="TabScoreAppPool" />
+      </iis:WebVirtualDir>
+      <CreateFolder/>
+    </Component>
+
+  </Product>
 </Wix>

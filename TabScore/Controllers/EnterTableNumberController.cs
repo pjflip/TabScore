@@ -8,7 +8,7 @@ namespace TabScore.Controllers
         public ActionResult Index()
         {
             ViewBag.Header = $"Section {Session["SectionLetter"]}";
-            ViewData["CancelButton"] = "FALSE";
+            ViewData["BackButton"] = "FALSE";
             ViewData["NumTables"] = Session["NumTables"];
             return View();
         }

@@ -9,6 +9,13 @@ namespace TabScore.Controllers
     {
        public ActionResult Index()
         {
+            Session["ContractLevel"] = "";
+            Session["ContractSuit"] = "";
+            Session["ContractX"] = "NONE";
+            Session["NSEW"] = "";
+            Session["TricksTakenNumber"] = "-1";
+            Session["LeadCard"] = "";
+            
             List<ResultClass> resList = new List<ResultClass>();
             int iLowBoard = Convert.ToInt32(Session["LowBoard"]);
             int iHighBoard = Convert.ToInt32(Session["HighBoard"]);
@@ -38,7 +45,7 @@ namespace TabScore.Controllers
                 ViewData["GotAllResults"] = "FALSE";
             }
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
-            ViewData["CancelButton"] = "FALSE";
+            ViewData["BackButton"] = "FALSE";
 
             return View(resList);
         }

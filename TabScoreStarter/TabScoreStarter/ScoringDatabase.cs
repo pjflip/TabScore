@@ -14,25 +14,10 @@ namespace TabScoreStarter
                 {
                     connection.Open();
 
-                    // Add column 'Winners' to table 'PlayerNumbers' if it doesn't already exist
-                    string SQLString = "ALTER TABLE Section ADD Winners SHORT";
-                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (OdbcException e)
-                    {
-                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
-                        {
-                            throw e;
-                        }
-                    }
-
-                    // Check sections, and set a Winners value if necessary
+                    // Check sections
                     int sectionID = 0;
-                    SQLString = "SELECT ID, Letter, [Tables], Winners FROM Section";
-                    cmd = new OdbcCommand(SQLString, connection);
+                    string SQLString = "SELECT ID, Letter, [Tables], Winners FROM Section";
+                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -51,53 +36,7 @@ namespace TabScoreStarter
                             MessageBox.Show("Database countains > 30 Tables in a Section", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }
-
-                        int EWMoveBeforePlay = 0;
-                        SQLString = $"SELECT EWMoveBeforePlay FROM Section WHERE ID={sectionID}";
-                        cmd = new OdbcCommand(SQLString, connection);
-                        try
-                        {
-                            object queryResult = cmd.ExecuteScalar();
-                            if(queryResult != null)
-                            {
-                                EWMoveBeforePlay = Convert.ToInt32(reader.GetValue(3));
-                            }
-                        }
-                        catch (OdbcException e)
-                        {
-                            if (e.Errors.Count != 1 || e.Errors[0].SQLState != "07002")
-                            {
-                                throw e;
-                            }
-                        }
-
-                        if (reader.IsDBNull(3) || Convert.ToInt32(reader.GetValue(3)) == 0)   // Winners not specified, so guess
-                        {
-                            int winners;
-                            if (EWMoveBeforePlay != 0)
-                            {
-                                winners = 2;   // Assuming teams, so ranking list would have 2 winners
-                            }
-                            else
-                            {
-                                SQLString = $"SELECT EWPair FROM RoundData WHERE Section={sectionID.ToString()} AND Round=1 AND NSPair=1";
-                                cmd = new OdbcCommand(SQLString, connection);
-                                object queryResult = cmd.ExecuteScalar();
-                                if (queryResult == null || queryResult.ToString() != "1")
-                                {
-                                    winners = 1;   // NSPair!=EWPair so assuming one winner movement
-                                }
-                                else
-                                {
-                                    winners = 2;   // NSPair==EWPair so assuming Mitchell type movement with 2 winners
-                                }
-                            }
-                            SQLString = $"UPDATE Section SET Winners={winners.ToString()} WHERE ID={sectionID.ToString()}";
-                            cmd = new OdbcCommand(SQLString, connection);
-                            cmd.ExecuteNonQuery();
-                        }
                     }
-                
                     reader.Close();
                     if (sectionID == 0)
                     {

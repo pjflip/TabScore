@@ -8,7 +8,7 @@ namespace TabScore.Controllers
         public ActionResult Index()
         {
             ViewBag.Header = "";
-            ViewData["CancelButton"] = "FALSE";
+            ViewData["BackButton"] = "FALSE";
             return View();
         }
 
@@ -23,7 +23,7 @@ namespace TabScore.Controllers
             }
             if (pathToDB == "")
             {
-                TempData["alertMessage"] = "Scoring database not yet started";
+                TempData["warningMessage"] = "Scoring database not yet started";
                 return RedirectToAction("Index", "StartScreen");
             }
             else
@@ -41,7 +41,7 @@ namespace TabScore.Controllers
                     }
                     catch (OdbcException e)
                     {
-                        TempData["alertMessage"] = e.Message;
+                        TempData["warningMessage"] = e.Message;
                         return RedirectToAction("Index", "StartScreen");
                     }
                 }

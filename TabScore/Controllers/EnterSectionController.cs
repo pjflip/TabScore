@@ -18,14 +18,13 @@ namespace TabScore.Controllers
                 Session["SectionID"] = sectionsList[0].ID.ToString();
                 Session["NumTables"] = sectionsList[0].Tables.ToString();
                 Session["MissingPair"] = sectionsList[0].MissingPair.ToString();
-                Session["Winners"] = sectionsList[0].Winners.ToString();
                 return RedirectToAction("Index", "EnterTableNumber");
             }
             else
             // Get Section
             {
                 ViewBag.Header = "";
-                ViewData["CancelButton"] = "FALSE";
+                ViewData["BackButton"] = "FALSE";
                 return View(sectionsList);
             }
         }
@@ -39,7 +38,6 @@ namespace TabScore.Controllers
             Session["SectionID"] = section.ID.ToString();
             Session["NumTables"] = section.Tables.ToString();
             Session["MissingPair"] = section.MissingPair.ToString();
-            Session["Winners"] = section.Winners.ToString();
             return RedirectToAction("Index", "EnterTableNumber");
         }
     }
