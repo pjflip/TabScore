@@ -358,6 +358,39 @@ namespace TabScore.Models
 
         public void UpdateDB(string DB)
         {
+            string contract;
+            string declarer;
+            if (ContractLevel == "PASS")
+            {
+                contract = "PASS";
+                declarer = "0";
+            }
+            else
+            {
+                contract = $"{ContractLevel} {ContractSuit}";
+                if (ContractX != "NONE")
+                {
+                    contract = $"{contract} {ContractX}";
+                }
+                if (NSEW == "N" || NSEW == "S")
+                {
+                    declarer = PairNS;
+                }
+                else
+                {
+                    declarer = PairEW;
+                }
+            }
+            string leadcard;
+            if (LeadCard == null || LeadCard == "" || LeadCard == "SKIP")
+            {
+                leadcard = "";
+            }
+            else
+            {
+                leadcard = LeadCard;
+            }
+
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 // Delete any previous result
@@ -367,39 +400,6 @@ namespace TabScore.Models
                 cmd.ExecuteNonQuery();
 
                 // Add new result
-                string contract;
-                string declarer;
-                if (ContractLevel == "PASS")
-                {
-                    contract = "PASS";
-                    declarer = "0";
-                }
-                else
-                {
-                    contract = $"{ContractLevel} {ContractSuit}";
-                    if (ContractX != "NONE")
-                    {
-                        contract = $"{contract} {ContractX}";
-                    }
-                    if (NSEW == "N" || NSEW == "S")
-                    {
-                        declarer = PairNS;
-                    }
-                    else
-                    {
-                        declarer = PairEW;
-                    }
-                }
-                string leadcard;
-                if (LeadCard == null || LeadCard == "" || LeadCard == "SKIP")
-                {
-                    leadcard = "";
-                }
-                else
-                {
-                    leadcard = LeadCard;
-                }
-
                 SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();

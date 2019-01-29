@@ -142,14 +142,14 @@
                 setPass()
             }
             else {
-                document.getElementById('n' + number).className = "btn btn-dark btn-lg m-1";
-                document.getElementById('s' + suit).className = "btn btn-dark btn-lg m-1";
-                document.getElementById('d' + NSEW).className = "btn btn-dark btn-lg m-1";
+                document.getElementById('n' + number).className = "btn btn-warning btn-lg m-1";
+                document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1";
+                document.getElementById('d' + NSEW).className = "btn btn-warning btn-lg m-1";
                 if (double == 'x') {
-                    document.getElementById('X').className = "btn btn-dark btn-lg m-1";
+                    document.getElementById('X').className = "btn btn-warning btn-lg m-1";
                 }
                 else if (double == 'xx') {
-                    document.getElementById('XX').className = "btn btn-dark btn-lg m-1";
+                    document.getElementById('XX').className = "btn btn-warning btn-lg m-1";
                 }
             }
         }
@@ -189,7 +189,7 @@
     function setNumber(n) {
         number = n;
         clearNumbers();
-        document.getElementById('n' + number).className = "btn btn-dark btn-lg m-1";
+        document.getElementById('n' + number).className = "btn btn-warning btn-lg m-1";
     }
 
     function setPass() {
@@ -202,21 +202,21 @@
         clearNSEWs();
         document.getElementById('X').className = "btn btn-primary btn-lg m-1";
         document.getElementById('XX').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('pass').className = "btn btn-dark btn-lg m-1";
+        document.getElementById('pass').className = "btn btn-warning btn-lg m-1";
     }
 
     function setSuit(s) {
         suit = s;
         clearSuits();
         if (number == "PASS") clearPass();
-        document.getElementById('s' + suit).className = "btn btn-dark btn-lg m-1";
+        document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1";
     }
 
     function setX() {
         if (double != 'x') {
             double = "x";
             if (number == "PASS") clearPass();
-            document.getElementById('X').className = "btn btn-dark btn-lg m-1";
+            document.getElementById('X').className = "btn btn-warning btn-lg m-1";
             document.getElementById('XX').className = "btn btn-primary btn-lg m-1";
         }
         else {
@@ -229,7 +229,7 @@
         if (double != 'xx') {
             double = "xx";
             if (number == "PASS") clearPass();
-            document.getElementById('XX').className = "btn btn-dark btn-lg m-1";
+            document.getElementById('XX').className = "btn btn-warning btn-lg m-1";
             document.getElementById('X').className = "btn btn-primary btn-lg m-1";
         }
         else {
@@ -242,7 +242,7 @@
         NSEW = d;
         clearNSEWs();
         if (number == "PASS") clearPass();
-        document.getElementById('d' + NSEW).className = "btn btn-dark btn-lg m-1";
+        document.getElementById('d' + NSEW).className = "btn btn-warning btn-lg m-1";
     }
 
     function validateOK() {

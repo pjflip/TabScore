@@ -131,7 +131,7 @@
 {
     <div class="row mt-2">
         <div class="col-12 text-center">
-            <button id="skip" class="btn btn-warning btn-lg m-1" onclick="setSkip()">
+            <button id="skip" class="btn btn-danger btn-lg m-1" onclick="setSkip()">
                 Skip
             </button>
         </div>
@@ -150,8 +150,8 @@
 
     function setCurrentSelections() {
         if (suit != "") {
-            document.getElementById('s' + suit).className = "btn btn-dark btn-lg m-1";
-            document.getElementById('c' + card).className = "btn btn-dark btn-lg m-1";
+            document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1";
+            document.getElementById('c' + card).className = "btn btn-warning btn-lg m-1";
         }
     }
     
@@ -172,9 +172,9 @@
         document.getElementById('c3').className = "btn btn-primary btn-lg m-1";
         document.getElementById('c2').className = "btn btn-primary btn-lg m-1";
         if (document.getElementById('skip')) {
-            document.getElementById('skip').className = "btn btn-warning btn-lg m-1";
+            document.getElementById('skip').className = "btn btn-danger btn-lg m-1";
         }
-        document.getElementById('c' + card).className = "btn btn-dark btn-lg m-1";
+        document.getElementById('c' + card).className = "btn btn-warning btn-lg m-1";
     }
 
     function setSuit(s) {
@@ -184,9 +184,9 @@
         document.getElementById('sD').className = "btn btn-info btn-lg m-1";
         document.getElementById('sC').className = "btn btn-info btn-lg m-1";
         if (document.getElementById('skip')) {
-            document.getElementById('skip').className = "btn btn-warning btn-lg m-1";
+            document.getElementById('skip').className = "btn btn-danger btn-lg m-1";
         }
-        document.getElementById('s' + suit).className = "btn btn-dark btn-lg m-1";
+        document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1";
     }
 
     function setSkip() {
@@ -209,7 +209,7 @@
         document.getElementById('sH').className = "btn btn-info btn-lg m-1";
         document.getElementById('sD').className = "btn btn-info btn-lg m-1";
         document.getElementById('sC').className = "btn btn-info btn-lg m-1";
-        document.getElementById('skip').className = "btn btn-dark btn-lg m-1";
+        document.getElementById('skip').className = "btn btn-warning btn-lg m-1";
     }
 
     function validateOK() {

@@ -194,9 +194,42 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
-                // First look for entries in the same direction
-                string SQLString = $"SELECT Number, Name, Round FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={pairNo} AND Direction='{direction}'";
+
+                // Check to see if TabScorePairNo exists (it may get overwritten), and if not recreate it
+                string SQLString = $"SELECT 1 FROM PlayerNumbers WHERE TabScorePairNo IS NULL";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                object queryResult = cmd.ExecuteScalar();
+                if (queryResult != null)
+                {
+                    // This duplicates the code in TabScoreStarter
+                    SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    OdbcDataReader tempReader = cmd.ExecuteReader();
+                    while (tempReader.Read())
+                    {
+                        int tempSectionID = tempReader.GetInt32(0);
+                        int tempTable = tempReader.GetInt32(1);
+                        string tempDirection = tempReader.GetString(2);
+                        if (tempDirection == "N" || tempDirection == "S")
+                        {
+                            SQLString = $"SELECT NSPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                        }
+                        else
+                        {
+                            SQLString = $"SELECT EWPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                        }
+                        cmd = new OdbcCommand(SQLString, connection);
+                        queryResult = cmd.ExecuteScalar();
+                        string TSpairNo = queryResult.ToString();
+                        SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID.ToString()} AND [Table]={tempTable.ToString()} AND Direction='{tempDirection}'";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                // First look for entries in the same direction
+                SQLString = $"SELECT Number, Name, Round FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={pairNo} AND Direction='{direction}'";
+                cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = cmd.ExecuteReader();
                 int biggestRoundSoFar = -1;
                 int roundAsInt = Convert.ToInt32(round);
