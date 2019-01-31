@@ -29,13 +29,13 @@
             <div class="col-6">
                 @if (ViewData["BackButton"].ToString() == "TRUE")
                 {
-                    <button class="btn btn-danger btn-xl ml-2 my-2 float-left" style="font-size: 1.5rem" onclick="backClick()">
+                    <button class="btn btn-danger btn-xl ml-2 my-2 float-left" style="font-size: 1.5rem" ontouchstart="backClick()">
                         <span class="fa fa-chevron-circle-left"></span> Back
                     </button>
                 }
             </div>
             <div class="col-6">
-                <button class="btn btn-success btn-xl mr-2 my-2 float-right" style="font-size: 1.5rem" onclick="validateOK()">
+                <button class="btn btn-success btn-xl mr-2 my-2 float-right" style="font-size: 1.5rem" ontouchstart="validateOK()">
                     OK <span class="fa fa-chevron-circle-right"></span>
                 </button>
             </div>

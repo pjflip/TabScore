@@ -33,7 +33,7 @@
     <div class="col-12 text-center">
         @foreach (var Section in Model)
         {
-            <button id="s@(Section.Letter)" class="btn btn-primary btn-lg m-1" style="width: 3em" onclick="selectSection('@(Section.Letter)')">
+            <button id="s@(Section.Letter)" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="selectSection('@(Section.Letter)')">
                 @Section.Letter
             </button>
         }
