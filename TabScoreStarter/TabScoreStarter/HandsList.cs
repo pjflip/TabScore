@@ -99,15 +99,12 @@ namespace TabScoreStarter
                 }
                 catch (OdbcException e)
                 {
-                    if (e.Errors.Count == 1 && e.Errors[0].SQLState != "42S02")  // HandRecord table does not exist
-                    {
-                        cmd.Dispose();
-                    }
-                    else
+                    if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Error other than HandRecord table does not exist
                     {
                         throw e;
                     }
                 }
+                cmd.Dispose();
             }
         }
 

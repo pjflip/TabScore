@@ -126,12 +126,14 @@ namespace TabScoreStarter
                     {
                         MessageBox.Show("Database contains previous results", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
+                    cmd.Dispose();
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message, "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
+                
             }
             return true;
 
