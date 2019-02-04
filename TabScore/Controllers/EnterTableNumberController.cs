@@ -15,15 +15,21 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(string tableNumber, string confirm)
         {
-            if (confirm == "TRUE" || !Tables.IsLoggedOn(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tableNumber))
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+
+            if (confirm == "TRUE" || !Tables.IsLoggedOn(DBConnectionString, Session["SectionID"].ToString(), tableNumber))
             {
                 Session["Table"] = tableNumber;
-                Tables.Logon(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), tableNumber);
+                Tables.Logon(DBConnectionString, Session["SectionID"].ToString(), tableNumber);
 
                 // Check if results data exist - set round number accordingly
-                int round = Round.GetLastEnteredRound(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString());
+                int round = Round.GetLastEnteredRound(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString());
                 Session["Round"] = round.ToString();
-                if (round == 1 || Settings.NumberEntryEachRound(Session["DBConnectionString"].ToString()))
+                if (round == 1 || Settings.NumberEntryEachRound(DBConnectionString))
                 {
                     return RedirectToAction("Index", "ShowPlayerNumbers");
                 }

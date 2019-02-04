@@ -49,6 +49,12 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick()
         {
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+
             ResultClass res = new ResultClass
             {
                 SectionID = Session["SectionID"].ToString(),
@@ -64,7 +70,7 @@ namespace TabScore.Controllers
                 TricksTakenNumber = Convert.ToInt32(Session["TricksTakenNumber"]),
                 LeadCard = Session["LeadCard"].ToString()
             };
-            res.UpdateDB(Session["DBConnectionString"].ToString());
+            res.UpdateDB(DBConnectionString);
             Session["Score"] = res.Score().ToString();
 
             return RedirectToAction("Index", "ShowTraveller");

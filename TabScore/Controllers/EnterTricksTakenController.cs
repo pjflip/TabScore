@@ -31,7 +31,13 @@ namespace TabScore.Controllers
 
         public ActionResult BackButtonClick()
         {
-            if (Settings.EnterLeadCard(Session["DBConnectionString"].ToString()))
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+
+            if (Settings.EnterLeadCard(DBConnectionString))
             {
                 return RedirectToAction("Index", "EnterLead", new { secondPass = "FALSE" });
             }

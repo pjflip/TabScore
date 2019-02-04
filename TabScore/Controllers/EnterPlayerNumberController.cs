@@ -17,8 +17,12 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(string direction, string playerNumber)
         {
-            Player.UpdateDatabase(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), direction, playerNumber);
-
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+            Player.UpdateDatabase(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), direction, playerNumber);
             return RedirectToAction("Index", "ShowPlayerNumbers");
         }
     }

@@ -7,6 +7,11 @@ namespace TabScore.Controllers
     {
         public ActionResult Index(string board)
         {
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
             Session["Board"] = board;
 
             if (Session["ContractLevel"].ToString() == "")
@@ -25,7 +30,7 @@ namespace TabScore.Controllers
                     TricksTakenNumber = -1,
                     LeadCard = ""
                 };
-                res.GetDBResult(Session["DBConnectionString"].ToString());
+                res.GetDBResult(DBConnectionString);
                 Session["ContractLevel"] = res.ContractLevel;
                 Session["ContractSuit"] = res.ContractSuit;
                 Session["ContractX"] = res.ContractX;

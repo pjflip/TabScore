@@ -8,6 +8,12 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+
             // Go to the next round
             int x = Convert.ToInt32(Session["Round"]);
             x++;
@@ -16,11 +22,11 @@ namespace TabScore.Controllers
             MoveClass m = new MoveClass();
             if (Session["PairNS"].ToString() != "0")
             {
-                m = Move.GetMoveInfo(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Round"].ToString(), Session["PairNS"].ToString(), "NS");
+                m = Move.GetMoveInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Round"].ToString(), Session["PairNS"].ToString(), "NS");
                 if (m.Table == "0")
                 {
                     // No move possible, so session complete
-                    if (Settings.ShowRanking(Session["DBConnectionString"].ToString()) == 2)
+                    if (Settings.ShowRanking(DBConnectionString) == 2)
                     {
                         return RedirectToAction("Index", "ShowRankingList", new { finalRound = "Yes" });
                     }
@@ -43,11 +49,11 @@ namespace TabScore.Controllers
 
             if (Session["PairEW"].ToString() != "0")
             {
-                m = Move.GetMoveInfo(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Round"].ToString(), Session["PairEW"].ToString(), "EW");
+                m = Move.GetMoveInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Round"].ToString(), Session["PairEW"].ToString(), "EW");
                 if (m.Table == "0")
                 {
                     // No move possible, so session complete
-                    if (Settings.ShowRanking(Session["DBConnectionString"].ToString()) == 2)
+                    if (Settings.ShowRanking(DBConnectionString) == 2)
                     {
                         return RedirectToAction("Index", "ShowRanking", new { finalRound = "Yes" });
                     }
@@ -90,7 +96,13 @@ namespace TabScore.Controllers
         
         public ActionResult OKButtonClick()
         {
-            if (Settings.NumberEntryEachRound(Session["DBConnectionString"].ToString()))
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+
+            if (Settings.NumberEntryEachRound(DBConnectionString))
             {
                 return RedirectToAction("Index", "ShowPlayerNumbers");
             }

@@ -9,12 +9,18 @@ namespace TabScore.Controllers
     {
         public ActionResult Index(string finalRound)
         {
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+
             if (Convert.ToInt32(Session["Round"]) > 1)
             {
-                int showRankingSetting = Settings.ShowRanking(Session["DBConnectionString"].ToString());
+                int showRankingSetting = Settings.ShowRanking(DBConnectionString);
                 if (showRankingSetting == 1 || (showRankingSetting == 2 && finalRound == "Yes"))
                 {
-                    List<RankingListClass> rankingList = RankingList.GetRankingList(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString());
+                    List<RankingListClass> rankingList = RankingList.GetRankingList(DBConnectionString, Session["SectionID"].ToString());
                     if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0")
                     {
                         ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
@@ -45,7 +51,13 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick()
         {
-            if (Settings.ShowRanking(Session["DBConnectionString"].ToString()) == 2)   // Can only get here if finalRound = "Yes"
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+
+            if (Settings.ShowRanking(DBConnectionString) == 2)   // Can only get here if finalRound = "Yes"
             {
                 return RedirectToAction("Index", "EndScreen");
             }

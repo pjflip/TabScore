@@ -9,19 +9,25 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            if (!Settings.ShowResults(Session["DBConnectionString"].ToString()))
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+
+            if (!Settings.ShowResults(DBConnectionString))
             {
                 return RedirectToAction("Index", "ShowBoards");
             }
-            if (Settings.ShowHandRecord(Session["DBConnectionString"].ToString()))
+            if (Settings.ShowHandRecord(DBConnectionString))
             {
-                HandRecordClass hr = HandRecord.GetHandRecord(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Board"].ToString());
+                HandRecordClass hr = HandRecord.GetHandRecord(DBConnectionString, Session["SectionID"].ToString(), Session["Board"].ToString());
                 if (hr.NorthSpades == "###")
                 {
                     ViewData["HandRecord"] = "FALSE";
                     if (Session["SectionID"].ToString() != "1")    // Try default Section 1 hand records
                     {
-                        hr = HandRecord.GetHandRecord(Session["DBConnectionString"].ToString(), "1", Session["Board"].ToString());
+                        hr = HandRecord.GetHandRecord(DBConnectionString, "1", Session["Board"].ToString());
                         if (hr.NorthSpades != "###")
                         {
                             ViewData["HandRecord"] = "TRUE";
@@ -38,9 +44,9 @@ namespace TabScore.Controllers
                 ViewData["HandRecord"] = "FALSE";
             }
 
-            List<TravellerResultClass> resList = Traveller.GetResults(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Board"].ToString());
+            List<TravellerResultClass> resList = Traveller.GetResults(DBConnectionString, Session["SectionID"].ToString(), Session["Board"].ToString());
             resList.Sort((x, y) => y.Score.CompareTo(x.Score));
-            if (Settings.ShowPercentage(Session["DBConnectionString"].ToString()))
+            if (Settings.ShowPercentage(DBConnectionString))
             {
                 int numEqual = 0;
                 int numBelow = 0;

@@ -7,7 +7,12 @@ namespace TabScore.Controllers
     {
         public ActionResult Index(string secondPass)
         {
-            if (!Settings.EnterLeadCard(Session["DBConnectionString"].ToString()))
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+            if (!Settings.EnterLeadCard(DBConnectionString))
             {
                 Session["LeadCard"] = "SKIP";
                 return RedirectToAction("Index", "EnterTricksTaken");
@@ -41,14 +46,19 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(string card, string secondPass)
         {
-            if (!Settings.ValidateLeadCard(Session["DBConnectionString"].ToString()) || secondPass == "TRUE")
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+            if (!Settings.ValidateLeadCard(DBConnectionString) || secondPass == "TRUE")
             {
                 Session["LeadCard"] = card;
                 return RedirectToAction("Index", "EnterTricksTaken");
             }
             else
             {
-                if (HandRecord.ValidateLead(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Board"].ToString(), card, Session["NSEW"].ToString()))
+                if (HandRecord.ValidateLead(DBConnectionString, Session["SectionID"].ToString(), Session["Board"].ToString(), card, Session["NSEW"].ToString()))
                 {
                     Session["LeadCard"] = card;
                     return RedirectToAction("Index", "EnterTricksTaken");

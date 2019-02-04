@@ -9,6 +9,12 @@ namespace TabScore.Controllers
     {
        public ActionResult Index()
         {
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+
             Session["ContractLevel"] = "";
             Session["ContractSuit"] = "";
             Session["ContractX"] = "NONE";
@@ -32,7 +38,7 @@ namespace TabScore.Controllers
                 };
                 res.Board = i.ToString();
                 res.ContractLevel = null;
-                res.GetDBResult(Session["DBConnectionString"].ToString());
+                res.GetDBResult(DBConnectionString);
                 resList.Add(res);
                 if (res.ContractLevel != null) resCount++;
             }

@@ -7,8 +7,13 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
 
-            RoundClass round = Round.GetRoundInfo(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString());
+            RoundClass round = Round.GetRoundInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString());
             ViewData["PairNS"] = round.PairNS.ToString();
             ViewData["PairEW"] = round.PairEW.ToString();
 
@@ -17,22 +22,22 @@ namespace TabScore.Controllers
 
             if (round.PairNS == 0 || round.PairNS.ToString() == Session["MissingPair"].ToString())
             {
-                ViewData["PlayerNameEast"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "E", false);
-                ViewData["PlayerNameWest"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "W", false);
+                ViewData["PlayerNameEast"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "E", false);
+                ViewData["PlayerNameWest"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "W", false);
                 return View("NSMissing");
             }
             else if (round.PairEW == 0 || round.PairEW.ToString() == Session["MissingPair"].ToString())
             {
-                ViewData["PlayerNameNorth"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "N", false);
-                ViewData["PlayerNameSouth"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "S", false);
+                ViewData["PlayerNameNorth"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "N", false);
+                ViewData["PlayerNameSouth"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "S", false);
                 return View("EWMissing");
             }
             else
             {
-                ViewData["PlayerNameNorth"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "N", false);
-                ViewData["PlayerNameSouth"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "S", false);
-                ViewData["PlayerNameEast"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "E", false);
-                ViewData["PlayerNameWest"] = Player.GetName(Session["DBConnectionString"].ToString(), Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "W", false);
+                ViewData["PlayerNameNorth"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "N", false);
+                ViewData["PlayerNameSouth"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "S", false);
+                ViewData["PlayerNameEast"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "E", false);
+                ViewData["PlayerNameWest"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "W", false);
                 return View();
             }
         }
