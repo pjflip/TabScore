@@ -42,8 +42,8 @@ namespace TabScore.Models
                         throw e;
                     }
                 }
-                return rList;
             }
+            return rList;
         }
     }
 

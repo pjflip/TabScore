@@ -96,6 +96,7 @@ namespace TabScoreStarter
                     SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
                     cmd = new OdbcCommand(SQLString, connection);
                     reader = cmd.ExecuteReader();
+                    OdbcCommand cmd2 = new OdbcCommand();
                     while (reader.Read())
                     {
                         int section = reader.GetInt32(0);
@@ -109,13 +110,14 @@ namespace TabScoreStarter
                         {
                             SQLString = $"SELECT EWPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
                         }
-                        cmd = new OdbcCommand(SQLString, connection);
-                        object queryResult = cmd.ExecuteScalar();
+                        cmd2 = new OdbcCommand(SQLString, connection);
+                        object queryResult = cmd2.ExecuteScalar();
                         string pairNo = queryResult.ToString();
                         SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={pairNo} WHERE Section={section.ToString()} AND [Table]={table.ToString()} AND Direction='{direction}'";
-                        cmd = new OdbcCommand(SQLString, connection);
-                        cmd.ExecuteNonQuery();
+                        cmd2 = new OdbcCommand(SQLString, connection);
+                        cmd2.ExecuteNonQuery();
                     }
+                    cmd2.Dispose();
 
                     // Check if any previous results in database
                     object Result;

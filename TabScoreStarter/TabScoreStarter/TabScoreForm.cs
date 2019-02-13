@@ -117,6 +117,7 @@ namespace TabScoreStarter
             cs.Driver = "Microsoft Access Driver (*.mdb)";
             cs.Add("Dbq", pathToDB);
             cs.Add("Uid", "Admin");
+            cs.Add("Pwd", "");
             return cs.ToString();
         }
 
