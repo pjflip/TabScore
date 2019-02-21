@@ -74,19 +74,19 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="sNT" class="btn btn-info btn-lg m-1" style="width:3em; height:3em" ontouchstart="setSuit('NT')">
+        <button id="sNT" class="btn btn-suit btn-lg m-1" style="width:3em; height:3em" ontouchstart="setSuit('NT')">
             NT
         </button>
-        <button id="sS" class="btn btn-info btn-lg m-1" style="color:black; width:3em; height:3em" ontouchstart="setSuit('S')">
+        <button id="sS" class="btn btn-suit btn-lg m-1" style="color:black; width:3em; height:3em" ontouchstart="setSuit('S')">
             <p style="font-size:larger; margin-bottom:0">&spades;</p>
         </button>
-        <button id="sH" class="btn btn-info btn-lg m-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('H')">
+        <button id="sH" class="btn btn-suit btn-lg m-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('H')">
             <p style="font-size:larger; margin-bottom:0">&hearts;</p>
         </button>
-        <button id="sD" class="btn btn-info btn-lg m-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('D')">
+        <button id="sD" class="btn btn-suit btn-lg m-1" style="color:orangered; width:3em; height:3em" ontouchstart="setSuit('D')">
             <p style="font-size:larger; margin-bottom:0">&diams;</p>
         </button>
-        <button id="sC" class="btn btn-info btn-lg m-1" style="color:black; width:3em; height:3em" ontouchstart="setSuit('C')">
+        <button id="sC" class="btn btn-suit btn-lg m-1" style="color:darkslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
             <p style="font-size:larger; margin-bottom:0">&clubs;</p>
         </button>
     </div>
@@ -172,11 +172,11 @@
     }
 
     function clearSuits() {
-        document.getElementById('sNT').className = "btn btn-info btn-lg m-1";
-        document.getElementById('sS').className = "btn btn-info btn-lg m-1";
-        document.getElementById('sH').className = "btn btn-info btn-lg m-1";
-        document.getElementById('sD').className = "btn btn-info btn-lg m-1";
-        document.getElementById('sC').className = "btn btn-info btn-lg m-1";
+        document.getElementById('sNT').className = "btn btn-suit btn-lg m-1";
+        document.getElementById('sS').className = "btn btn-suit btn-lg m-1";
+        document.getElementById('sH').className = "btn btn-suit btn-lg m-1";
+        document.getElementById('sD').className = "btn btn-suit btn-lg m-1";
+        document.getElementById('sC').className = "btn btn-suit btn-lg m-1";
     }
 
     function clearNSEWs() {

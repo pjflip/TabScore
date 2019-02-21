@@ -28,16 +28,16 @@ namespace TabScore.Models
             switch (LeadCard.Substring(0,1))
             {
                 case "S":
-                    s.Append("<a>&spades;</a>");
+                    s.Append("<a style=\"color:black\">&spades;</a>");
                     break;
                 case "H":
                     s.Append("<a style=\"color:red\">&hearts;</a>");
                     break;
                 case "D":
-                    s.Append("<a style=\"color:red\">&diams;</a>");
+                    s.Append("<a style=\"color:orangered\">&diams;</a>");
                     break;
                 case "C":
-                    s.Append("<a>&clubs;</a>");
+                    s.Append("<a style=\"color:darkslategrey\">&clubs;</a>");
                     break;
             }
             if (LeadCard.Substring(1,1) == "1")
@@ -130,16 +130,16 @@ namespace TabScore.Models
                     s.Append("NT");
                     break;
                 case "S":
-                    s.Append("<a>&spades;</a>");
+                    s.Append("<a style=\"color:black\">&spades;</a>");
                     break;
                 case "H":
                     s.Append("<a style=\"color:red\">&hearts;</a>");
                     break;
                 case "D":
-                    s.Append("<a style=\"color:red\">&diams;</a>");
+                    s.Append("<a style=\"color:orangered\">&diams;</a>");
                     break;
                 case "C":
-                    s.Append("<a>&clubs;</a>");
+                    s.Append("<a style=\"color:darkslategrey\">&clubs;</a>");
                     break;
             }
             if (ContractX != "NONE")

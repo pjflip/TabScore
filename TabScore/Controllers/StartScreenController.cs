@@ -28,11 +28,12 @@ namespace TabScore.Controllers
             }
             else
             {
-                // Check that we can open the DB
+                // Check that we can open the DB and set connection string for session
                 OdbcConnectionStringBuilder cs = new OdbcConnectionStringBuilder();
                 cs.Driver = "Microsoft Access Driver (*.mdb)";
                 cs.Add("Dbq", pathToDB);
                 cs.Add("Uid", "Admin");
+                cs.Add("Mode", "Share Deny None");   // Can afford to use optimistic database locking
                 using (OdbcConnection connection = new OdbcConnection(cs.ToString()))
                 {
                     try
