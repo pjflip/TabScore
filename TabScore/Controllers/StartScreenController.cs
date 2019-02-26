@@ -33,7 +33,6 @@ namespace TabScore.Controllers
                 cs.Driver = "Microsoft Access Driver (*.mdb)";
                 cs.Add("Dbq", pathToDB);
                 cs.Add("Uid", "Admin");
-                cs.Add("Mode", "Share Deny None");   // Can afford to use optimistic database locking
                 using (OdbcConnection connection = new OdbcConnection(cs.ToString()))
                 {
                     try
