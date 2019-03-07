@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace TabScore.Models
+﻿namespace TabScore.Models
 {
     public class TravellerResultClass
     {
+        public string Board;
         public string PairNS;
         public string PairEW;
         public string NSEW;
@@ -16,5 +12,8 @@ namespace TabScore.Models
         public int Score;
         public string ScoreNS;
         public string ScoreEW;
+        public int MPNS;
+        public int MPEW;
+        public int MPMax;
     }
 }

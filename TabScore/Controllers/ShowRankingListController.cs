@@ -21,7 +21,7 @@ namespace TabScore.Controllers
                 if (showRankingSetting == 1 || (showRankingSetting == 2 && finalRound == "Yes"))
                 {
                     List<RankingListClass> rankingList = RankingList.GetRankingList(DBConnectionString, Session["SectionID"].ToString());
-                    if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0")
+                    if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0" && rankingList[0].Score != "50")
                     {
                         ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
                         ViewData["BackButton"] = "FALSE";

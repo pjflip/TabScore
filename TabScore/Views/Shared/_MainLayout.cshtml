@@ -15,37 +15,41 @@
         }
     </style>
     <script>
-        window.onload = navigator.getBattery().then(function (battery) {
-            var batteryLevel = battery.level * 100;
-            if (batteryLevel > 87.5) {
-                document.getElementById('bl').className = "fa fa-battery-full";
-            }
-            else if (batteryLevel > 62.5) {
-                document.getElementById('bl').className = "fa fa-battery-three-quarters";
-            }
-            else if (batteryLevel > 37.5) {
-                document.getElementById('bl').className = "fa fa-battery-half";
-            }
-            else if (batteryLevel > 12.5) {
-                document.getElementById('bl').className = "fa fa-battery-quarter";
-            }
-            else {
-                document.getElementById('bl').className = "fa fa-battery-empty";
-            }
-        });
+        if ("getBattery" in navigator) {
+            window.onload = navigator.getBattery().then(function (battery) {
+                var batteryLevel = battery.level * 100;
+                if (batteryLevel > 87.5) {
+                    document.getElementById('bl').className = "fa fa-battery-full";
+                }
+                else if (batteryLevel > 62.5) {
+                    document.getElementById('bl').className = "fa fa-battery-three-quarters";
+                }
+                else if (batteryLevel > 37.5) {
+                    document.getElementById('bl').className = "fa fa-battery-half";
+                }
+                else if (batteryLevel > 12.5) {
+                    document.getElementById('bl').className = "fa fa-battery-quarter";
+                }
+                else {
+                    document.getElementById('bl').className = "fa fa-battery-empty";
+                }
+            })
+        }
+        else {
+            document.getElementById(battery).style.display = "none";
+            document.getElementById(header).className = "col-12 my-auto";
+        }
     </script>
 </head>
 
-<body style="background-color: ivory; padding-top: 90px; padding-bottom: 75px">
+<body style="background-color: ivory; padding-top: 90px; padding-bottom: 110px">
     <div class="container-fluid fixed-top" style="min-height: 51px; background-color: bisque; border-bottom-style: solid">
         <div class="row my-2">
-            <div class="col-10 my-auto">
+            <div id="header" class="col-10 my-auto pr-0">
                 <h5>@Html.Raw(ViewBag.Header)</h5>
             </div>
-            <div class="col-2 my-auto text-right">
-                <h3>
-                    <span id="bl" class="fa fa-battery-empty"></span>
-                </h3>
+            <div id="battery" class="col-2 my-auto text-right">
+                <h3><span id="bl"></span></h3>
             </div>
         </div>
     </div>

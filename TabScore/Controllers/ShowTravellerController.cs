@@ -48,14 +48,6 @@ namespace TabScore.Controllers
             resList.Sort((x, y) => y.Score.CompareTo(x.Score));
             if (Settings.ShowPercentage(DBConnectionString))
             {
-                int numEqual = 0;
-                int numBelow = 0;
-                int thisScore = Convert.ToInt32(Session["Score"]);
-                foreach (TravellerResultClass tr in resList)
-                {
-                    if (tr.Score == thisScore) numEqual++;
-                    if (tr.Score < thisScore) numBelow++;
-                }
                 int percentageNS;
                 if (resList.Count == 1)
                 {
@@ -63,7 +55,9 @@ namespace TabScore.Controllers
                 }
                 else
                 {
-                    percentageNS = Convert.ToInt32(100.0 * (numBelow + 0.5 * (numEqual - 1)) / (resList.Count - 1));
+                    int currentScore = Convert.ToInt32(Session["Score"]);
+                    int currentMP = 2 * resList.FindAll((x) => x.Score < currentScore).Count + resList.FindAll((x) => x.Score == currentScore).Count - 1;
+                    percentageNS = Convert.ToInt32(50.0 * currentMP / (resList.Count - 1));
                 }
                 ViewData["PercentageNS"] = percentageNS.ToString();
                 ViewData["PercentageEW"] = (100 - percentageNS).ToString();
