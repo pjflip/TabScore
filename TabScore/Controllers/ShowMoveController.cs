@@ -15,9 +15,7 @@ namespace TabScore.Controllers
             }
 
             // Go to the next round
-            int x = Convert.ToInt32(Session["Round"]);
-            x++;
-            Session["Round"] = x.ToString();
+            Session["Round"] = (Convert.ToInt32(Session["Round"]) + 1).ToString();
 
             MoveClass m = new MoveClass();
             if (Session["PairNS"].ToString() != "0")
