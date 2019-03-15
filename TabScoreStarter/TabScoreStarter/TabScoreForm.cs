@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Data.Odbc;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -28,7 +27,7 @@ namespace TabScoreStarter
             {
                 if (s.StartsWith("f:[")) pathToDB = s.Split(new char[] { '[', ']' })[1];
             }
-            if (pathToDB == "" || !ScoringDatabase.Setup(SetDBConnectionString(pathToDB)))
+            if (pathToDB == "" || !ScoringDatabase.InitializeDB(ScoringDatabase.SetDBConnectionString(pathToDB)))
             {
                 btnAddSDBFile.Visible = true;   // No valid database in arguments
             }
@@ -37,8 +36,9 @@ namespace TabScoreStarter
                 SetDBFilePath(pathToDB);
                 lblSessionStatus.Text = "Session Running";
                 lblSessionStatus.ForeColor = Color.Green;
+                btnOptions.Visible = true;
 
-                if (ScoringDatabase.InitializeHandRecords(SetDBConnectionString(pathToDB)))
+                if (ScoringDatabase.InitializeHandRecords(ScoringDatabase.SetDBConnectionString(pathToDB)))
                 {
                     btnAddHandRecordFile.Visible = true;    // No hand records in database, so let user add them
                 }
@@ -58,13 +58,14 @@ namespace TabScoreStarter
             if (fdSDBFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string pathToDB = fdSDBFileDialog.FileName;
-                string DBConnection = SetDBConnectionString(pathToDB);
-                if (ScoringDatabase.Setup(DBConnection))
+                string DBConnection = ScoringDatabase.SetDBConnectionString(pathToDB);
+                if (ScoringDatabase.InitializeDB(DBConnection))
                 {
                     btnAddSDBFile.Enabled = false;
                     SetDBFilePath(pathToDB);
                     lblSessionStatus.Text = "Session Running";
                     lblSessionStatus.ForeColor = Color.Green;
+                    btnOptions.Visible = true;
 
                     if (ScoringDatabase.InitializeHandRecords(DBConnection))
                     {
@@ -95,7 +96,7 @@ namespace TabScoreStarter
                 }
                 else
                 {
-                    string DBConnection = SetDBConnectionString(lblPathToDB.Text);
+                    string DBConnection = ScoringDatabase.SetDBConnectionString(lblPathToDB.Text);
                     handsList.WriteToDB(DBConnection);
                     btnAddHandRecordFile.Enabled = false;
                     lblDDAnalysing.Text = "Analysing...";
@@ -109,16 +110,6 @@ namespace TabScoreStarter
         private void TabScoreForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             ClearDBFilePath();
-        }
-
-        private string SetDBConnectionString(string pathToDB)
-        {
-            OdbcConnectionStringBuilder cs = new OdbcConnectionStringBuilder();
-            cs.Driver = "Microsoft Access Driver (*.mdb)";
-            cs.Add("Dbq", pathToDB);
-            cs.Add("Uid", "Admin");
-            cs.Add("Pwd", "");
-            return cs.ToString();
         }
 
         public void SetDBFilePath(string pathToDB)
@@ -139,7 +130,7 @@ namespace TabScoreStarter
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             HandsList handsList = new HandsList();
-            string DBConnection = SetDBConnectionString(lblPathToDB.Text);
+            string DBConnection = ScoringDatabase.SetDBConnectionString(lblPathToDB.Text);
             handsList.ReadFromDB(DBConnection);
             ScoringDatabase.InitializeHandEvaluations(DBConnection);
             HandEvaluationsList handEvaluationList = new HandEvaluationsList();
@@ -164,6 +155,13 @@ namespace TabScoreStarter
         {
             pbDDAnalysing.Value = 100;
             lblDDAnalysing.Text = "Analysis Complete";
+        }
+
+        private void btnOptions_Click(object sender, EventArgs e)
+        {
+            OptionsForm frmOptions = new OptionsForm();
+            frmOptions.Tag = lblPathToDB.Text;
+            frmOptions.ShowDialog();
         }
     }
 }

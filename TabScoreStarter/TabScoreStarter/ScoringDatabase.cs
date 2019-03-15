@@ -6,7 +6,17 @@ namespace TabScoreStarter
 {
     public static class ScoringDatabase
     {
-        public static bool Setup(string DB)
+        public static string SetDBConnectionString(string pathToDB)
+        {
+            OdbcConnectionStringBuilder cs = new OdbcConnectionStringBuilder();
+            cs.Driver = "Microsoft Access Driver (*.mdb)";
+            cs.Add("Dbq", pathToDB);
+            cs.Add("Uid", "Admin");
+            cs.Add("Pwd", "");
+            return cs.ToString();
+        }
+
+        public static bool InitializeDB(string DB)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
@@ -78,7 +88,6 @@ namespace TabScoreStarter
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
 
-
                     // Add a new column 'TabScorePairNo' to table 'PlayerNumbers' if it doesn't exist and populate it if possible
                     SQLString = "ALTER TABLE PlayerNumbers ADD TabScorePairNo SHORT";
                     cmd = new OdbcCommand(SQLString, connection);
@@ -118,6 +127,136 @@ namespace TabScoreStarter
                         cmd2.ExecuteNonQuery();
                     }
                     cmd2.Dispose();
+
+                    // Add various columns to table 'Settings' if they don't already exist and set defaults
+                    SQLString = "ALTER TABLE Settings ADD ShowResults YESNO";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        SQLString = "UPDATE Settings SET ShowResults=YES";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "ALTER TABLE Settings ADD ShowPercentage YESNO";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        SQLString = "UPDATE Settings SET ShowPercentage=YES";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "ALTER TABLE Settings ADD LeadCard YESNO";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        SQLString = "UPDATE Settings SET LeadCard=YES";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "ALTER TABLE Settings ADD BM2ValidateLeadCard YESNO";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        SQLString = "UPDATE Settings SET BM2ValidateLeadCard=YES";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "ALTER TABLE Settings ADD BM2NumberEntryEachRound YESNO";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        SQLString = "UPDATE Settings SET BM2NumberEntryEachRound=NO";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "ALTER TABLE Settings ADD BM2ViewHandRecord YESNO";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        SQLString = "UPDATE Settings SET BM2ViewHandRecord=YES";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "ALTER TABLE Settings ADD BM2Ranking SHORT";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        SQLString = "UPDATE Settings SET BM2Ranking=1";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "ALTER TABLE Settings ADD BM2NameSource SHORT";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        SQLString = "UPDATE Settings SET ShowResults=0";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
 
                     // Check if any previous results in database
                     object Result;

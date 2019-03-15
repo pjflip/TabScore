@@ -41,6 +41,7 @@
             this.pbDDAnalysing = new System.Windows.Forms.ProgressBar();
             this.fdHRFFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.bwAnalysisCalculation = new System.ComponentModel.BackgroundWorker();
+            this.btnOptions = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblScoringDatabase
@@ -50,7 +51,7 @@
             this.lblScoringDatabase.Location = new System.Drawing.Point(15, 17);
             this.lblScoringDatabase.Name = "lblScoringDatabase";
             this.lblScoringDatabase.Size = new System.Drawing.Size(137, 16);
-            this.lblScoringDatabase.TabIndex = 100;
+            this.lblScoringDatabase.TabIndex = 0;
             this.lblScoringDatabase.Text = "Scoring Database:";
             // 
             // lblPathToDB
@@ -60,7 +61,7 @@
             this.lblPathToDB.Location = new System.Drawing.Point(16, 39);
             this.lblPathToDB.Name = "lblPathToDB";
             this.lblPathToDB.Size = new System.Drawing.Size(477, 21);
-            this.lblPathToDB.TabIndex = 101;
+            this.lblPathToDB.TabIndex = 0;
             this.lblPathToDB.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnAddHandRecordFile
@@ -81,7 +82,7 @@
             this.lblHandRecordFile.Location = new System.Drawing.Point(15, 93);
             this.lblHandRecordFile.Name = "lblHandRecordFile";
             this.lblHandRecordFile.Size = new System.Drawing.Size(134, 16);
-            this.lblHandRecordFile.TabIndex = 102;
+            this.lblHandRecordFile.TabIndex = 0;
             this.lblHandRecordFile.Text = "Hand Record File:";
             // 
             // lblPathToHandRecordFile
@@ -91,7 +92,7 @@
             this.lblPathToHandRecordFile.Location = new System.Drawing.Point(18, 114);
             this.lblPathToHandRecordFile.Name = "lblPathToHandRecordFile";
             this.lblPathToHandRecordFile.Size = new System.Drawing.Size(475, 21);
-            this.lblPathToHandRecordFile.TabIndex = 104;
+            this.lblPathToHandRecordFile.TabIndex = 0;
             this.lblPathToHandRecordFile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnAddSDBFile
@@ -117,7 +118,7 @@
             this.lblSessionStatus.Location = new System.Drawing.Point(150, 194);
             this.lblSessionStatus.Name = "lblSessionStatus";
             this.lblSessionStatus.Size = new System.Drawing.Size(203, 23);
-            this.lblSessionStatus.TabIndex = 107;
+            this.lblSessionStatus.TabIndex = 0;
             this.lblSessionStatus.Text = "Session Not Started";
             this.lblSessionStatus.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
@@ -129,7 +130,7 @@
             this.lblDDAnalysing.Location = new System.Drawing.Point(15, 151);
             this.lblDDAnalysing.Name = "lblDDAnalysing";
             this.lblDDAnalysing.Size = new System.Drawing.Size(120, 16);
-            this.lblDDAnalysing.TabIndex = 105;
+            this.lblDDAnalysing.TabIndex = 0;
             this.lblDDAnalysing.Text = "Analysis Complete";
             this.lblDDAnalysing.Visible = false;
             // 
@@ -140,7 +141,7 @@
             this.pbDDAnalysing.Name = "pbDDAnalysing";
             this.pbDDAnalysing.Size = new System.Drawing.Size(352, 23);
             this.pbDDAnalysing.Step = 1;
-            this.pbDDAnalysing.TabIndex = 106;
+            this.pbDDAnalysing.TabIndex = 0;
             this.pbDDAnalysing.Visible = false;
             // 
             // fdHRFFileDialog
@@ -155,10 +156,23 @@
             this.bwAnalysisCalculation.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bwAnalysisCalculation_ProgressChanged);
             this.bwAnalysisCalculation.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bwAnalysisCalculation_RunWorkerCompleted);
             // 
+            // btnOptions
+            // 
+            this.btnOptions.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOptions.Location = new System.Drawing.Point(12, 189);
+            this.btnOptions.Name = "btnOptions";
+            this.btnOptions.Size = new System.Drawing.Size(84, 34);
+            this.btnOptions.TabIndex = 3;
+            this.btnOptions.Text = "Options";
+            this.btnOptions.UseVisualStyleBackColor = true;
+            this.btnOptions.Visible = false;
+            this.btnOptions.Click += new System.EventHandler(this.btnOptions_Click);
+            // 
             // TabScoreForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(505, 235);
+            this.ClientSize = new System.Drawing.Size(505, 234);
+            this.Controls.Add(this.btnOptions);
             this.Controls.Add(this.pbDDAnalysing);
             this.Controls.Add(this.lblDDAnalysing);
             this.Controls.Add(this.lblSessionStatus);
@@ -194,5 +208,6 @@
         private System.Windows.Forms.ProgressBar pbDDAnalysing;
         private System.Windows.Forms.OpenFileDialog fdHRFFileDialog;
         private System.ComponentModel.BackgroundWorker bwAnalysisCalculation;
+        private System.Windows.Forms.Button btnOptions;
     }
 }
