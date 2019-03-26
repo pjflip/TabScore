@@ -36,13 +36,15 @@
             })
         }
         else {
-            document.getElementById(battery).style.display = "none";
-            document.getElementById(header).className = "col-12 my-auto";
+            window.onload = function () {
+                document.getElementById('battery').style.display = "none";
+                document.getElementById('header').className = "col-12 my-auto";
+            }
         }
     </script>
 </head>
 
-<body style="background-color: ivory; padding-top: 90px; padding-bottom: 110px">
+<body style="background-color: ivory; padding-top: 110px; padding-bottom: 110px">
     <div class="container-fluid fixed-top" style="min-height: 51px; background-color: bisque; border-bottom-style: solid">
         <div class="row my-2">
             <div id="header" class="col-10 my-auto pr-0">

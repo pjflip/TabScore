@@ -70,6 +70,7 @@
             this.btnAddHandRecordFile.Name = "btnAddHandRecordFile";
             this.btnAddHandRecordFile.Size = new System.Drawing.Size(191, 23);
             this.btnAddHandRecordFile.TabIndex = 2;
+            this.btnAddHandRecordFile.TabStop = false;
             this.btnAddHandRecordFile.Text = "Add hand record file...";
             this.btnAddHandRecordFile.UseVisualStyleBackColor = true;
             this.btnAddHandRecordFile.Visible = false;
@@ -101,6 +102,7 @@
             this.btnAddSDBFile.Name = "btnAddSDBFile";
             this.btnAddSDBFile.Size = new System.Drawing.Size(191, 23);
             this.btnAddSDBFile.TabIndex = 1;
+            this.btnAddSDBFile.TabStop = false;
             this.btnAddSDBFile.Text = "Add scoring database file...";
             this.btnAddSDBFile.UseVisualStyleBackColor = true;
             this.btnAddSDBFile.Visible = false;
@@ -163,6 +165,7 @@
             this.btnOptions.Name = "btnOptions";
             this.btnOptions.Size = new System.Drawing.Size(84, 34);
             this.btnOptions.TabIndex = 3;
+            this.btnOptions.TabStop = false;
             this.btnOptions.Text = "Options";
             this.btnOptions.UseVisualStyleBackColor = true;
             this.btnOptions.Visible = false;

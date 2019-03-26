@@ -11,7 +11,7 @@ in mind.
 
 TabScore is designed for use on a PC with Windows 10 (which includes Internet
 Information Services (IIS) 10), .NET Framework 4.6.1 and ASP.NET 4.7.  It has
-been installed and run successfully on Windows 7, but this is not recommended.
+been installed and run successfully (but not fully tested) on Windows 7.
 
 IMPORTANT: Please ensure you have completed all the intallation steps in the 
 'TabScore User Guide' document before attempting to run TabScore.
@@ -26,4 +26,4 @@ details.
 
 TabScoreStarter uses Bo Haglund's double dummy solver to analyse hand records.
 
-See the NOTICE an LICENSE files.
+See the NOTICE and LICENSE files.

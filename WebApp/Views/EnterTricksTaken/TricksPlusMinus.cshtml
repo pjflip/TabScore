@@ -1,0 +1,175 @@
+﻿@{
+    ViewBag.Title = "Enter Tricks Taken Plus Or Minus";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var contractLevel = Convert.ToInt32(ViewData["ContractLevel"]);
+}
+
+<style>
+    .btn-plus { background-color:lightgreen; }
+    .btn-minus { background-color:lightcoral; }
+</style>
+
+<div id="noTricksModal" class="modal modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header text-primary">
+            <p class="modal-title text-center">
+                <h3>Warning</h3>
+            </p>
+        </div>
+        <div class="modal-body">
+            <p>Please select result</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-lg btn-success" data-dismiss="modal">
+                OK <span class="fa fa-check-circle"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Board @ViewData["Board"]: @Html.Raw(ViewData["DisplayContract"])
+        </h3>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12 text-center">
+        <h3>
+            Enter result:
+        </h3>
+    </div>
+</div>
+
+@if (contractLevel > 4)
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            @for (int i = contractLevel + 6; i > 10; i--)
+            {
+                <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width: 3em" ontouchstart="setMinusTricks(@i)">
+                    -@i
+                </button>
+            }
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12 text-center">
+        @for (int i = ((contractLevel > 3) ? 10 : (contractLevel + 6)); i > 5; i--)
+        {
+            <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width: 3em" ontouchstart="setMinusTricks(@i)">
+                -@i
+            </button>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @for (int i = 5; i > 0; i--)
+        {
+            <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width: 3em" ontouchstart="setMinusTricks(@i)">
+                -@i
+            </button>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="equals" class="btn btn-primary btn-lg m-1" style="width: 8em" ontouchstart="setEqualsTricks()">
+            =
+        </button>
+    </div>
+</div>
+
+@if (contractLevel < 7)
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            @for (int i = 1; i < ((contractLevel < 3) ? 6 : (8 - contractLevel)); i++)
+            {
+                <button id="plus@(i)" class="btn btn-plus btn-lg m-1" style="width: 3em" ontouchstart="setPlusTricks(@i)">
+                    +@i
+                </button>
+            }
+        </div>
+    </div>
+}
+
+@if (contractLevel == 1)
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            <button id="plus6" class="btn btn-plus btn-lg m-1" style="width: 3em" ontouchstart="setPlusTricks(6)">
+                +6
+            </button>
+        </div>
+    </div>
+}
+
+<script>
+    var numTricks = @ViewData["TricksTakenNumber"];
+    window.onload = setCurrentSelection();
+
+    function setCurrentSelection() {
+        if (numTricks != -1) {
+            var diffTricks = numTricks - @contractLevel - 6;
+            if (diffTricks < 0) {
+                document.getElementById('minus' + (-diffTricks).toString()).className = "btn btn-warning btn-lg m-1";
+            }
+            else if (diffTricks == 0) {
+                document.getElementById('equals').className = "btn btn-warning btn-lg m-1";
+            }
+            else {
+                document.getElementById('plus' + diffTricks.toString()).className = "btn btn-warning btn-lg m-1";
+            }
+        }
+    }
+
+    function resetButtons() {
+        for (var i = 1; i < @contractLevel + 7; i++) {
+            document.getElementById('minus' + i.toString()).className = "btn btn-minus btn-lg m-1";
+        }
+        document.getElementById('equals').className = "btn btn-primary btn-lg m-1";
+        for (var i = 1; i < 8 - @contractLevel; i++) {
+            document.getElementById('plus' + i.toString()).className = "btn btn-plus btn-lg m-1";
+        }
+    }
+
+    function setMinusTricks(n) {
+        numTricks = @contractLevel + 6 - n;
+        resetButtons();
+        document.getElementById('minus' + n.toString()).className = "btn btn-warning btn-lg m-1";
+    }
+
+    function setPlusTricks(n) {
+        numTricks = @contractLevel + 6 + n;
+        resetButtons();
+        document.getElementById('plus' + n.toString()).className = "btn btn-warning btn-lg m-1";
+    }
+
+    function setEqualsTricks() {
+        numTricks = @contractLevel + 6;
+        resetButtons();
+        document.getElementById('equals').className = "btn btn-warning btn-lg m-1";
+    }
+
+    function validateOK() {
+        if (numTricks == "-1") {
+            $("#noTricksModal").modal();
+        }
+        else {
+            location.href = '@Url.Action("OKButtonClick", "EnterTricksTaken")?numTricks=' + numTricks.toString();
+        }
+    }
+
+    function backClick() {
+        location.href = '@Url.Action("BackButtonClick", "EnterTricksTaken")';
+    }
+</script>
+

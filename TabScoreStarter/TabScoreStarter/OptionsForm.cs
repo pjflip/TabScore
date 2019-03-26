@@ -33,6 +33,8 @@ namespace TabScoreStarter
             cbValidateLeadCard.Checked = opt.validateLeadCard;
             cbNameSource.SelectedIndex = opt.nameSource;
             cbNumberEntryEachRound.Checked = opt.numberEntryEachRound;
+            cbEnterResultsMethod.SelectedIndex = opt.enterResultsMethod;
+
             cbShowPercentage.Enabled = cbShowTraveller.Checked;
             cbShowHandRecord.Enabled = cbShowTraveller.Checked;
             cbValidateLeadCard.Enabled = cbEnterLeadCard.Checked;
@@ -55,7 +57,8 @@ namespace TabScoreStarter
                 enterLeadCard = cbEnterLeadCard.Checked,
                 validateLeadCard = cbValidateLeadCard.Checked,
                 nameSource = cbNameSource.SelectedIndex,
-                numberEntryEachRound = cbNumberEntryEachRound.Checked
+                numberEntryEachRound = cbNumberEntryEachRound.Checked,
+                enterResultsMethod = cbEnterResultsMethod.SelectedIndex
             };
             opt.SetOptions(DBConnection);
             Close();

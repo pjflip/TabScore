@@ -125,6 +125,30 @@ namespace TabScore.Models
             return showRanking;
         }
 
+        public static int EnterResultsMethod(string DB)
+        {
+            int enterResultsMethod = 1;
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                string SQLString = $"SELECT EnterResultsMethod FROM Settings";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                try
+                {
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult != null)
+                    {
+                        enterResultsMethod = Convert.ToInt32(queryResult);
+                    }
+                }
+                catch
+                {
+                }
+                cmd.Dispose();
+            }
+            return enterResultsMethod;
+        }
+
         public static bool ShowHandRecord(string DB)
         {
             bool showHandRecord = true;

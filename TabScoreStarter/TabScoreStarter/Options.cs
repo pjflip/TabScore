@@ -15,12 +15,13 @@ namespace TabScoreStarter
         public bool showHandRecord;
         public bool numberEntryEachRound;
         public int nameSource;
+        public int enterResultsMethod;
 
         public void GetOptions(string DB)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource FROM Settings";
+                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
                 OdbcDataReader reader = cmd.ExecuteReader();
@@ -33,6 +34,8 @@ namespace TabScoreStarter
                 showHandRecord = reader.GetBoolean(5);
                 numberEntryEachRound = reader.GetBoolean(6);
                 nameSource = reader.GetInt32(7);
+                enterResultsMethod = reader.GetInt32(8);
+                if (enterResultsMethod != 1) enterResultsMethod = 0;
                 reader.Close();
                 cmd.Dispose();
             }
@@ -93,7 +96,8 @@ namespace TabScoreStarter
                 {
                     SQLString.Append(" BM2NumberEntryEachRound=NO,");
                 }
-                SQLString.Append($" BM2NameSource={nameSource.ToString()}");
+                SQLString.Append($" BM2NameSource={nameSource.ToString()},");
+                SQLString.Append($" EnterResultsMethod={enterResultsMethod.ToString()}");
                 OdbcCommand cmd = new OdbcCommand(SQLString.ToString(), connection);
                 connection.Open();
                 cmd.ExecuteNonQuery();

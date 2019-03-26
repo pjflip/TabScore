@@ -7,6 +7,12 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "")
+            {
+                return RedirectToAction("Index", "StartScreen");
+            }
+
             ResultClass res = new ResultClass()
             {
                 ContractLevel = Session["ContractLevel"].ToString(),
@@ -20,7 +26,16 @@ namespace TabScore.Controllers
             ViewData["Board"] = Session["Board"];
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "TRUE";
-            return View();
+
+            if (Settings.EnterResultsMethod(DBConnectionString) == 1)
+            {
+                return View("TotalTricks");
+            }
+            else
+            {
+                ViewData["ContractLevel"] = Session["ContractLevel"];
+                return View("TricksPlusMinus");
+            }
         }
 
         public ActionResult OKButtonClick(string numTricks)

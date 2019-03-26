@@ -224,7 +224,7 @@
     <Content Include="Views\EndScreen\Index.cshtml" />
     <Content Include="Views\EnterContract\Index.cshtml" />
     <Content Include="Views\EnterLead\Index.cshtml" />
-    <Content Include="Views\EnterTricksTaken\Index.cshtml" />
+    <Content Include="Views\EnterTricksTaken\TotalTricks.cshtml" />
     <Content Include="Views\ShowBoards\Index.cshtml" />
     <Content Include="Views\ShowMove\Index.cshtml" />
     <Content Include="Views\ShowRoundInfo\Index.cshtml" />
@@ -244,6 +244,7 @@
     <Content Include="Views\ShowPlayerNumbers\Index.cshtml" />
     <Content Include="Views\ShowPlayerNumbers\NSMissing.cshtml" />
     <Content Include="Views\EnterPlayerNumber\Index.cshtml" />
+    <Content Include="Views\EnterTricksTaken\TricksPlusMinus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
