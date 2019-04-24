@@ -27,7 +27,10 @@ namespace TabScore.Models
                         LeadCard = reader.GetString(4),
                         TricksTakenSymbol = reader.GetString(5)
                     };
-                    trList.Add(tr);
+                    if (tr.Contract.Length > 2)  // Testing for corrupt ReceivedData table
+                    {
+                        trList.Add(tr);
+                    }
                 }
                 reader.Close();
                 cmd.Dispose();
