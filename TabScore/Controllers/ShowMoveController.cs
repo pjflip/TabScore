@@ -72,6 +72,10 @@ namespace TabScore.Controllers
                 }
             }
 
+            ViewData["BoardsNewTable"] = Move.GetBoardMoveInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Round"].ToString(), Session["LowBoard"].ToString());
+            ViewData["LowBoard"] = Session["LowBoard"];
+            ViewData["HighBoard"] = Session["HighBoard"];
+            
             ViewData["Round"] = Session["Round"].ToString();
             ViewData["PairNS"] = Session["PairNS"];
             ViewData["PairEW"] = Session["PairEW"];

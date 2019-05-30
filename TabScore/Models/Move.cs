@@ -63,5 +63,26 @@ namespace TabScore.Models
             }
             return move;
         }
+
+        public static string GetBoardMoveInfo(string DB, string sectionID, string round, string lowBoard)
+        {
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                object queryResult;
+                string SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND LowBoard={lowBoard}";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                queryResult = cmd.ExecuteScalar();
+                cmd.Dispose();
+                if (queryResult != null)
+                {
+                    return queryResult.ToString();
+                }
+                else
+                {
+                    return "0";
+                }
+            }
+        }
     }
 }

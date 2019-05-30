@@ -4,6 +4,12 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
+<style>
+    .btn-suit {
+        background-color: paleturquoise;
+    }
+</style>
+
 <div id="leadNoMatchModal" class="modal modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header text-primary">
@@ -154,7 +160,7 @@
             document.getElementById('c' + card).className = "btn btn-warning btn-lg m-1";
         }
     }
-    
+
     function setCard(c) {
         card = c;
         if (suit == "SKIP") suit = "";

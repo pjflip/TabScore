@@ -4,6 +4,28 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
+<style>
+    .btn-suit {
+        background-color:paleturquoise;
+    }
+    .btn-pass {
+        background-color:darkgreen;
+        color:white;
+    }
+    .btn-double {
+        background-color:crimson;
+        color:white;
+    }
+    .btn-redouble {
+        background-color:darkblue;
+        color:white;
+    }
+    .btn-declarer {
+        background-color:darkslategrey;
+        color:white;
+    }
+</style>
+
 <div id="noContractModal" class="modal modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header text-primary">
@@ -40,7 +62,7 @@
 
 <div class="row mt-4">
     <div class="col-12 text-center">
-        <button id="pass" class="btn btn-primary btn-lg m-1" ontouchstart="setPass()">
+        <button id="pass" class="btn btn-pass btn-lg m-1" ontouchstart="setPass()">
             PASS Out
         </button>
         <button id="n1" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumber('1')">
@@ -94,10 +116,10 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="X" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setX()">
+        <button id="X" class="btn btn-double btn-lg m-1" style="width:3em" ontouchstart="setX()">
             X
         </button>
-        <button id="XX" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setXX()">
+        <button id="XX" class="btn btn-redouble btn-lg m-1" style="width:3em" ontouchstart="setXX()">
             XX
         </button>
     </div>
@@ -113,16 +135,16 @@
 
 <div class="row mt-2">
     <div class="col-12 text-center">
-        <button id="dN" class="btn btn-primary btn-lg m-1" ontouchstart="setNSEW('N')">
+        <button id="dN" class="btn btn-declarer btn-lg m-1" ontouchstart="setNSEW('N')">
             North
         </button>
-        <button id="dS" class="btn btn-primary btn-lg m-1" ontouchstart="setNSEW('S')">
+        <button id="dS" class="btn btn-declarer btn-lg m-1" ontouchstart="setNSEW('S')">
             South
         </button>
-        <button id="dE" class="btn btn-primary btn-lg m-1" ontouchstart="setNSEW('E')">
+        <button id="dE" class="btn btn-declarer btn-lg m-1" ontouchstart="setNSEW('E')">
             East
         </button>
-        <button id="dW" class="btn btn-primary btn-lg m-1" ontouchstart="setNSEW('W')">
+        <button id="dW" class="btn btn-declarer btn-lg m-1" ontouchstart="setNSEW('W')">
             West
         </button>
     </div>
@@ -157,11 +179,11 @@
 
     function clearPass() {
         number = "";
-        document.getElementById('pass').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
     }
 
     function clearNumbers() {
-        document.getElementById('pass').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
         document.getElementById('n1').className = "btn btn-primary btn-lg m-1";
         document.getElementById('n2').className = "btn btn-primary btn-lg m-1";
         document.getElementById('n3').className = "btn btn-primary btn-lg m-1";
@@ -180,10 +202,10 @@
     }
 
     function clearNSEWs() {
-        document.getElementById('dN').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('dS').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('dE').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('dW').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('dN').className = "btn btn-declarer btn-lg m-1";
+        document.getElementById('dS').className = "btn btn-declarer btn-lg m-1";
+        document.getElementById('dE').className = "btn btn-declarer btn-lg m-1";
+        document.getElementById('dW').className = "btn btn-declarer btn-lg m-1";
     }
 
     function setNumber(n) {
@@ -200,8 +222,8 @@
         clearNumbers();
         clearSuits();
         clearNSEWs();
-        document.getElementById('X').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('XX').className = "btn btn-primary btn-lg m-1";
+        document.getElementById('X').className = "btn btn-double btn-lg m-1";
+        document.getElementById('XX').className = "btn btn-redouble btn-lg m-1";
         document.getElementById('pass').className = "btn btn-warning btn-lg m-1";
     }
 
@@ -217,11 +239,11 @@
             double = "x";
             if (number == "PASS") clearPass();
             document.getElementById('X').className = "btn btn-warning btn-lg m-1";
-            document.getElementById('XX').className = "btn btn-primary btn-lg m-1";
+            document.getElementById('XX').className = "btn btn-redouble btn-lg m-1";
         }
         else {
             double = "NONE";
-            document.getElementById('X').className = "btn btn-primary btn-lg m-1";
+            document.getElementById('X').className = "btn btn-double btn-lg m-1";
         }
     }
 
@@ -230,11 +252,11 @@
             double = "xx";
             if (number == "PASS") clearPass();
             document.getElementById('XX').className = "btn btn-warning btn-lg m-1";
-            document.getElementById('X').className = "btn btn-primary btn-lg m-1";
+            document.getElementById('X').className = "btn btn-double btn-lg m-1";
         }
         else {
             double = "NONE";
-            document.getElementById('XX').className = "btn btn-primary btn-lg m-1";
+            document.getElementById('XX').className = "btn btn-redouble btn-lg m-1";
         }
     }
 

@@ -35,6 +35,31 @@
     </div>
 </div>
 
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3 style="color:green">
+            Boards @ViewData["LowBoard"] to @ViewData["HighBoard"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @if (ViewData["BoardsNewTable"].ToString() == "0")
+        {
+            <h3>
+                Move to Relay Table
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Move to Table @ViewData["BoardsNewTable"]
+            </h3>
+        }
+    </div>
+</div>
+
 <script>
     function validateOK() {
         location.href = '@Url.Action("OKButtonClick", "ShowMove")';
