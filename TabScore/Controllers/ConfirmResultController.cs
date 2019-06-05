@@ -8,8 +8,6 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            ViewData["Board"] = Session["Board"];
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             if (Session["ContractLevel"].ToString() == "PASS")
             {
                 ViewData["DisplayContract"] = "PASSed Out";
@@ -43,6 +41,7 @@ namespace TabScore.Controllers
                 }
             }
 
+            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "TRUE";
             return View();
         }

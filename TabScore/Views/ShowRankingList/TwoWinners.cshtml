@@ -27,7 +27,7 @@
                 {
                     if (Result.Orientation == "N")
                     {
-                        if (ViewData["PairNS"].ToString() == Result.PairNo.ToString())
+                        if (Session["PairNS"].ToString() == Result.PairNo.ToString())
                         {
                             <tr class="table-success">
                                 <td>@Result.Rank</td>
@@ -63,7 +63,7 @@
                 {
                     if (Result.Orientation == "E")
                     {
-                        if (ViewData["PairEW"].ToString() == Result.PairNo.ToString())
+                        if (Session["PairEW"].ToString() == Result.PairNo.ToString())
                         {
                             <tr class="table-warning">
                                 <td>@Result.Rank</td>
@@ -88,6 +88,6 @@
 
 <script>
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")';
+        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?round=@ViewData["Round"]';
     }
 </script>

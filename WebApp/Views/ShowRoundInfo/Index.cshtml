@@ -6,15 +6,15 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Round: @ViewData["Round"]
+            Round: @Session["Round"]
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        <h3>
-            Boards: @ViewData["LowBoard"] to @ViewData["HighBoard"]
+        <h3 style="color:green">
+            Boards: @Session["LowBoard"] to @Session["HighBoard"]
         </h3>
     </div>
 </div>
@@ -22,7 +22,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            North/South: Pair @ViewData["PairNS"]
+            North/South: Pair @Session["PairNS"]
         </h3>
     </div>
 </div>
@@ -38,7 +38,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            East/West: Pair @ViewData["PairEW"]
+            East/West: Pair @Session["PairEW"]
         </h3>
     </div>
 </div>
@@ -54,5 +54,9 @@
 <script>
     function validateOK() {
         location.href = '@Url.Action("OKButtonClick", "ShowRoundInfo")';
+    }
+    
+    function backClick() {
+        location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")';
     }
 </script>

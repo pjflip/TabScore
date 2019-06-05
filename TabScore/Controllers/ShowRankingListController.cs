@@ -7,7 +7,7 @@ namespace TabScore.Controllers
 {
     public class ShowRankingListController : Controller
     {
-        public ActionResult Index(string finalRound)
+        public ActionResult Index(string round, string finalRound)
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
@@ -15,7 +15,7 @@ namespace TabScore.Controllers
                 return RedirectToAction("Index", "StartScreen");
             }
 
-            if (Convert.ToInt32(Session["Round"]) > 1)
+            if (Convert.ToInt32(round) > 1)
             {
                 int showRankingSetting = Settings.ShowRanking(DBConnectionString);
                 if (showRankingSetting == 1 || (showRankingSetting == 2 && finalRound == "Yes"))
@@ -23,10 +23,9 @@ namespace TabScore.Controllers
                     List<RankingListClass> rankingList = RankingList.GetRankingList(DBConnectionString, Session["SectionID"].ToString());
                     if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0" && rankingList[0].Score != "50")
                     {
-                        ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
+                        ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
                         ViewData["BackButton"] = "FALSE";
-                        ViewData["PairNS"] = Session["PairNS"];
-                        ViewData["PairEW"] = Session["PairEW"];
+                        ViewData["Round"] = round;
                         bool twoWinners = rankingList.Exists(x => x.Orientation == "E");
                         if (twoWinners)
                         {
@@ -45,11 +44,11 @@ namespace TabScore.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "ShowMove");
+                return RedirectToAction("Index", "ShowMove", new { newRound = (Convert.ToInt32(round) + 1).ToString() });
             }
         }
 
-        public ActionResult OKButtonClick()
+        public ActionResult OKButtonClick(string round)   // Pass back round to ensure it is not incremented twice by a double bounce
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
@@ -63,7 +62,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "ShowMove");
+                return RedirectToAction("Index", "ShowMove", new { newRound = (Convert.ToInt32(round) + 1).ToString() });
             }
         }
     }

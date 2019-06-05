@@ -39,12 +39,7 @@ namespace TabScore.Controllers
                 Session["LeadCard"] = res.LeadCard;
 
             }
-            ViewData["ContractLevel"] = Session["ContractLevel"];
-            ViewData["ContractSuit"] = Session["ContractSuit"];
-            ViewData["ContractX"] = Session["ContractX"];
-            ViewData["NSEW"] = Session["NSEW"];
-            
-            ViewData["Board"] = board;
+
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "TRUE";
             return View();

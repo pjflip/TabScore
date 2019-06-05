@@ -28,9 +28,7 @@ namespace TabScore.Controllers
                 return RedirectToAction("Index", "EndScreen");
             }
 
-            // Revert to previous round to pick up move 
-            Session["Round"] = (Convert.ToInt32(Session["Round"]) - 1).ToString();
-            return RedirectToAction("Index", "ShowMove");
+            return RedirectToAction("Index", "ShowMove", new { newRound = Session["Round"].ToString() });
         }
     }
 }

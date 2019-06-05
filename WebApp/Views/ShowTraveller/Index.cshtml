@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-12 text-center">
                     <h4>
-                        Board @ViewData["Board"]
+                        Board @Session["Board"]
                     </h4>
                 </div>
             </div>
@@ -42,7 +42,7 @@
     {
         <div class="col-12 text-center">
             <h4>
-                Board @ViewData["Board"]
+                Board @Session["Board"]
             </h4>
         </div>
         <div class="col-12 text-center">
@@ -80,7 +80,7 @@
             <tbody>
                 @foreach (var Result in Model)
                 {
-                    if (ViewData["PairNS"].ToString() == Result.PairNS)
+                    if (Session["PairNS"].ToString() == Result.PairNS)
                     {
                         <tr class="table-success">
                             <td>@Result.PairNS</td>

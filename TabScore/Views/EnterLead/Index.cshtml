@@ -49,7 +49,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @ViewData["Board"]: @Html.Raw(ViewData["DisplayContract"])
+            Board @Session["Board"]: @Html.Raw(ViewData["DisplayContract"])
         </h3>
     </div>
 </div>

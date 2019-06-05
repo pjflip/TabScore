@@ -13,19 +13,20 @@ namespace TabScore.Controllers
                 return RedirectToAction("Index", "StartScreen");
             }
 
-            ViewData["Round"] = Session["Round"];
-
             RoundClass round = Round.GetRoundInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString());
             Session["LowBoard"] = round.LowBoard;
             Session["HighBoard"] = round.HighBoard;
             Session["PairNS"] = round.PairNS;
             Session["PairEW"] = round.PairEW;
-            ViewData["LowBoard"] = round.LowBoard;
-            ViewData["HighBoard"] = round.HighBoard;
-            ViewData["PairNS"] = round.PairNS;
-            ViewData["PairEW"] = round.PairEW;
 
-            ViewData["BackButton"] = "FALSE";
+            if (Session["Round"].ToString() == "1")
+            {
+                ViewData["BackButton"] = "FALSE";
+            }
+            else 
+            {
+                ViewData["BackButton"] = "TRUE";
+            }
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]}";
 
             if (round.PairNS == 0 || round.PairNS.ToString() == Session["MissingPair"].ToString())
@@ -57,7 +58,12 @@ namespace TabScore.Controllers
 
         public ActionResult OKSitOutButtonClick()
         {
-            return RedirectToAction("Index", "ShowRankingList", new { finalRound = "No" });
+            return RedirectToAction("Index", "ShowRankingList", new { round = Session["Round"].ToString(), finalRound = "No" });
+        }
+
+        public ActionResult BackButtonClick()
+        {
+            return RedirectToAction("Index", "ShowMove", new { newRound = Session["Round"].ToString() });
         }
     }
 }

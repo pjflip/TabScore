@@ -1,12 +1,11 @@
 ﻿using TabScore.Models;
-using System;
 using System.Web.Mvc;
 
 namespace TabScore.Controllers
 {
     public class ShowMoveController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(string newRound)
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
@@ -14,19 +13,17 @@ namespace TabScore.Controllers
                 return RedirectToAction("Index", "StartScreen");
             }
 
-            // Go to the next round
-            Session["Round"] = (Convert.ToInt32(Session["Round"]) + 1).ToString();
-
             MoveClass m = new MoveClass();
+            Session["Round"] = newRound;
             if (Session["PairNS"].ToString() != "0")
             {
-                m = Move.GetMoveInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Round"].ToString(), Session["PairNS"].ToString(), "NS");
+                m = Move.GetMoveInfo(DBConnectionString, Session["SectionID"].ToString(), newRound, Session["PairNS"].ToString(), "NS");
                 if (m.Table == "0")
                 {
                     // No move possible, so session complete
                     if (Settings.ShowRanking(DBConnectionString) == 2)
                     {
-                        return RedirectToAction("Index", "ShowRankingList", new { finalRound = "Yes" });
+                        return RedirectToAction("Index", "ShowRankingList", new { round = newRound, finalRound = "Yes" });
                     }
                     else
                     {
@@ -47,7 +44,7 @@ namespace TabScore.Controllers
 
             if (Session["PairEW"].ToString() != "0")
             {
-                m = Move.GetMoveInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Round"].ToString(), Session["PairEW"].ToString(), "EW");
+                m = Move.GetMoveInfo(DBConnectionString, Session["SectionID"].ToString(), newRound, Session["PairEW"].ToString(), "EW");
                 if (m.Table == "0")
                 {
                     // No move possible, so session complete
@@ -72,13 +69,7 @@ namespace TabScore.Controllers
                 }
             }
 
-            ViewData["BoardsNewTable"] = Move.GetBoardMoveInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Round"].ToString(), Session["LowBoard"].ToString());
-            ViewData["LowBoard"] = Session["LowBoard"];
-            ViewData["HighBoard"] = Session["HighBoard"];
-            
-            ViewData["Round"] = Session["Round"].ToString();
-            ViewData["PairNS"] = Session["PairNS"];
-            ViewData["PairEW"] = Session["PairEW"];
+            ViewData["BoardsNewTable"] = Move.GetBoardMoveInfo(DBConnectionString, Session["SectionID"].ToString(), newRound, Session["LowBoard"].ToString());
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]}";
             ViewData["BackButton"] = "FALSE";
 

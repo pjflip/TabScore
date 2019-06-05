@@ -25,7 +25,7 @@
             <tbody>
                 @foreach (var Result in Model)
                 {
-                    if (ViewData["PairNS"].ToString() == Result.PairNo.ToString())
+                    if (Session["PairNS"].ToString() == Result.PairNo.ToString())
                     {
                         <tr class="table-success">
                             <td>@Result.Rank</td>
@@ -33,7 +33,7 @@
                             <td>@Result.Score%</td>
                         </tr>
                     }
-                    else if (ViewData["PairEW"].ToString() == Result.PairNo.ToString())
+                    else if (Session["PairEW"].ToString() == Result.PairNo.ToString())
                     {
                         <tr class="table-warning">
                             <td>@Result.Rank</td>
@@ -57,6 +57,6 @@
 
 <script>
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")';
+        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?round=@ViewData["Round"]';
     }
 </script>

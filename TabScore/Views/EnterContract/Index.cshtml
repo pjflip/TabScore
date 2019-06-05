@@ -47,7 +47,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @ViewData["Board"]
+            Board @Session["Board"]
         </h3>
     </div>
 </div>
@@ -151,10 +151,10 @@
 </div>
 
 <script>
-    var number = '@ViewData["ContractLevel"].ToString()';
-    var suit = '@ViewData["ContractSuit"].ToString()';
-    var double = '@ViewData["ContractX"].ToString()';
-    var NSEW = '@ViewData["NSEW"].ToString()';
+    var number = '@Session["ContractLevel"].ToString()';
+    var suit = '@Session["ContractSuit"].ToString()';
+    var double = '@Session["ContractX"].ToString()';
+    var NSEW = '@Session["NSEW"].ToString()';
 
     window.onload = setCurrentSelections();
 

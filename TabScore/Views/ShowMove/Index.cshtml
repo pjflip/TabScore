@@ -5,7 +5,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Move for Round @ViewData["Round"]
+            Move for Round @Session["Round"]
         </h3>
     </div>
 </div>
@@ -13,7 +13,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            North/South: Pair @ViewData["PairNS"]
+            North/South: Pair @Session["PairNS"]
         </h3>
     </div>
 </div>
@@ -38,7 +38,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            East/West: Pair @ViewData["PairEW"]
+            East/West: Pair @Session["PairEW"]
         </h3>
     </div>
 </div>
@@ -63,7 +63,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:green">
-            Boards @ViewData["LowBoard"] to @ViewData["HighBoard"]
+            Boards: @Session["LowBoard"] to @Session["HighBoard"]
         </h3>
     </div>
 </div>

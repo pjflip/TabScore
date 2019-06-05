@@ -56,9 +56,9 @@ namespace TabScore.Controllers
             return View(resList);
         }
 
-        public ActionResult OKButtonClick()
+        public ActionResult OKButtonClick(string round)  // Gets and passes round as a parameter to avoid double bounce
         {
-            return RedirectToAction("Index", "ShowRankingList", new { finalRound = "No" });
+            return RedirectToAction("Index", "ShowRankingList", new { round, finalRound = "No" });
         }
     }
 }

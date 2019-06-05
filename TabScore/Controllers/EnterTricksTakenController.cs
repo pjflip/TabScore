@@ -22,8 +22,6 @@ namespace TabScore.Controllers
             };
             ViewData["DisplayContract"] = res.DisplayContract(2);
 
-            ViewData["TricksTakenNumber"] = Session["TricksTakenNumber"];
-            ViewData["Board"] = Session["Board"];
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "TRUE";
 

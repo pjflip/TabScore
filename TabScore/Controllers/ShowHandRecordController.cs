@@ -22,7 +22,6 @@ namespace TabScore.Controllers
 
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "FALSE";
-            ViewData["Board"] = Session["Board"];
             ViewData["Dealer"] = Dealer.GetDealerForBoard(Session["Board"].ToString());
             return View(hr);
         }
