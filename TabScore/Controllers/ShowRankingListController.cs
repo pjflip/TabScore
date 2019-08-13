@@ -12,7 +12,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
             {
-                return RedirectToAction("Index", "StartScreen");
+                return RedirectToAction("Index", "ErrorScreen");
             }
 
             if (Convert.ToInt32(round) > 1)
@@ -53,7 +53,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
             {
-                return RedirectToAction("Index", "StartScreen");
+                return RedirectToAction("Index", "ErrorScreen");
             }
 
             if (Settings.ShowRanking(DBConnectionString) == 2)   // Can only get here if finalRound = "Yes"

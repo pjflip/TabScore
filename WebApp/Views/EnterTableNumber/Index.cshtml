@@ -12,7 +12,7 @@
             </p>
         </div>
         <div class="modal-body">
-            <p>Table @TempData["LoggedOnTable"] is already logged on.  Do not press Log On unless the TD has told you to do so</p>
+            <p>Table @TempData["LoggedOnTable"] is already logged on.  Do not press Log On unless you intend to log back on to your current table</p>
         </div>
         <div class="modal-footer" style="justify-content:space-between">
             <button class="btn btn-lg btn-danger" ontouchstart="location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?tableNumber=@TempData["LoggedOnTable"]&confirm=TRUE'">

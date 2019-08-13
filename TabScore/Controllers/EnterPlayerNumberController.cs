@@ -20,7 +20,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
             {
-                return RedirectToAction("Index", "StartScreen");
+                return RedirectToAction("Index", "ErrorScreen");
             }
             Player.UpdateDatabase(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), direction, playerNumber);
             return RedirectToAction("Index", "ShowPlayerNumbers");

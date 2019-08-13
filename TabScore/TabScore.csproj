@@ -110,6 +110,7 @@
     <Compile Include="Controllers\EnterContractController.cs" />
     <Compile Include="Controllers\EnterLeadController.cs" />
     <Compile Include="Controllers\EnterPlayerNumberController.cs" />
+    <Compile Include="Controllers\ErrorScreenController.cs" />
     <Compile Include="Controllers\ShowHandRecordController.cs" />
     <Compile Include="Controllers\ShowPlayerNumbersController.cs" />
     <Compile Include="Controllers\EnterSectionController.cs" />
@@ -245,6 +246,7 @@
     <Content Include="Views\ShowPlayerNumbers\NSMissing.cshtml" />
     <Content Include="Views\EnterPlayerNumber\Index.cshtml" />
     <Content Include="Views\EnterTricksTaken\TricksPlusMinus.cshtml" />
+    <Content Include="Views\ErrorScreen\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

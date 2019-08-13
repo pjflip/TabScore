@@ -10,7 +10,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
             {
-                return RedirectToAction("Index", "StartScreen");
+                return RedirectToAction("Index", "ErrorScreen");
             }
 
             ResultClass res = new ResultClass()
@@ -47,7 +47,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
             {
-                return RedirectToAction("Index", "StartScreen");
+                return RedirectToAction("Index", "ErrorScreen");
             }
 
             if (Settings.EnterLeadCard(DBConnectionString))

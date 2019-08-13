@@ -11,7 +11,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
             {
-                return RedirectToAction("Index", "StartScreen");
+                return RedirectToAction("Index", "ErrorScreen");
             }
 
             List<SectionClass> sectionsList = new List<SectionClass>();
@@ -40,7 +40,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
             {
-                return RedirectToAction("Index", "StartScreen");
+                return RedirectToAction("Index", "ErrorScreen");
             }
 
             List<SectionClass> sectionsList = Sections.GetSections(DBConnectionString);

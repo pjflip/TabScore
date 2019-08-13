@@ -18,7 +18,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "")
             {
-                return RedirectToAction("Index", "StartScreen");
+                return RedirectToAction("Index", "ErrorScreen");
             }
 
             if (confirm == "TRUE" || !Tables.IsLoggedOn(DBConnectionString, Session["SectionID"].ToString(), tableNumber))
