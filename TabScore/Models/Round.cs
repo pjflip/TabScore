@@ -9,19 +9,33 @@ namespace TabScore.Models
             RoundClass rd = new RoundClass();
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
+                connection.Open();
                 string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={round}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                OdbcDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                OdbcDataReader reader = null;
+                try
                 {
-                    rd.PairNS = reader.GetInt32(0);
-                    rd.PairEW = reader.GetInt32(1);
-                    rd.LowBoard = reader.GetInt32(2);
-                    rd.HighBoard = reader.GetInt32(3);
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            rd.PairNS = reader.GetInt32(0);
+                            rd.PairEW = reader.GetInt32(1);
+                            rd.LowBoard = reader.GetInt32(2);
+                            rd.HighBoard = reader.GetInt32(3);
+                        }
+                    });
                 }
-                reader.Close();
-                cmd.Dispose();
+                catch (OdbcException)
+                {
+                    return null;
+                }
+                finally
+                {
+                    reader.Close();
+                    cmd.Dispose();
+                }
             }
             return rd;
         }
@@ -31,20 +45,34 @@ namespace TabScore.Models
             int maxRound = 1;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
+                connection.Open();
                 string SQLString = $"SELECT Round FROM ReceivedData WHERE Section={sectionID} AND [Table]={table}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                OdbcDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                OdbcDataReader reader = null;
+                try
                 {
-                    int thisRound = reader.GetInt32(0);
-                    if (thisRound > maxRound)
+                    ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        maxRound = thisRound;
-                    }
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            int thisRound = reader.GetInt32(0);
+                            if (thisRound > maxRound)
+                            {
+                                maxRound = thisRound;
+                            }
+                        }
+                    });
                 }
-                reader.Close();
-                cmd.Dispose();
+                catch (OdbcException)
+                {
+                    return -1;
+                }
+                finally
+                {
+                    reader.Close();
+                    cmd.Dispose();
+                }
             }
             return maxRound;
         }

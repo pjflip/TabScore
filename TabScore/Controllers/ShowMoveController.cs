@@ -8,20 +8,18 @@ namespace TabScore.Controllers
         public ActionResult Index(string newRound)
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             MoveClass m = new MoveClass();
             Session["Round"] = newRound;
             if (Session["PairNS"].ToString() != "0")
             {
                 m = Move.GetMoveInfo(DBConnectionString, Session["SectionID"].ToString(), newRound, Session["PairNS"].ToString(), "NS");
+                if (m.Table == "Error") return RedirectToAction("Index", "ErrorScreen");
                 if (m.Table == "0")
                 {
                     // No move possible, so session complete
-                    if (Settings.ShowRanking(DBConnectionString) == 2)
+                    if (Settings.GetSetting<int>(DBConnectionString, SettingName.ShowRanking) == 2)
                     {
                         return RedirectToAction("Index", "ShowRankingList", new { round = newRound, finalRound = "Yes" });
                     }
@@ -45,10 +43,11 @@ namespace TabScore.Controllers
             if (Session["PairEW"].ToString() != "0")
             {
                 m = Move.GetMoveInfo(DBConnectionString, Session["SectionID"].ToString(), newRound, Session["PairEW"].ToString(), "EW");
+                if (m.Table == "Error") return RedirectToAction("Index", "ErrorScreen");
                 if (m.Table == "0")
                 {
                     // No move possible, so session complete
-                    if (Settings.ShowRanking(DBConnectionString) == 2)
+                    if (Settings.GetSetting<int>(DBConnectionString, SettingName.ShowRanking) == 2)
                     {
                         return RedirectToAction("Index", "ShowRanking", new { finalRound = "Yes" });
                     }
@@ -69,7 +68,9 @@ namespace TabScore.Controllers
                 }
             }
 
-            ViewData["BoardsNewTable"] = Move.GetBoardMoveInfo(DBConnectionString, Session["SectionID"].ToString(), newRound, Session["LowBoard"].ToString());
+            string boardsNewTable = Move.GetBoardMoveInfo(DBConnectionString, Session["SectionID"].ToString(), newRound, Session["LowBoard"].ToString());
+            if (boardsNewTable == "Error") return RedirectToAction("Index", "ErrorScreen");
+            ViewData["BoardsNewTable"] = boardsNewTable;
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]}";
             ViewData["BackButton"] = "FALSE";
 
@@ -90,12 +91,9 @@ namespace TabScore.Controllers
         public ActionResult OKButtonClick()
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (Settings.NumberEntryEachRound(DBConnectionString))
+            if (Settings.GetSetting<bool>(DBConnectionString, SettingName.NumberEntryEachRound))
             {
                 return RedirectToAction("Index", "ShowPlayerNumbers");
             }

@@ -125,6 +125,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ODBCRetryHelper.cs" />
     <Compile Include="Models\Dealer.cs" />
     <Compile Include="Models\HandRecord.cs" />
     <Compile Include="Models\HandRecordClass.cs" />

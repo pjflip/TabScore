@@ -11,23 +11,37 @@ namespace TabScore.Models
 
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
+                connection.Open();
                 string SQLString = "SELECT ID, Letter, Tables, MissingPair FROM Section";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                OdbcDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                OdbcDataReader reader = null;
+                try
                 {
-                    SectionClass s = new SectionClass
+                    ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        ID = reader.GetInt32(0),
-                        Letter = reader.GetString(1),
-                        Tables = reader.GetInt32(2),
-                        MissingPair = reader.GetInt32(3)
-                    };
-                    sList.Add(s);
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            SectionClass s = new SectionClass
+                            {
+                                ID = reader.GetInt32(0),
+                                Letter = reader.GetString(1),
+                                Tables = reader.GetInt32(2),
+                                MissingPair = reader.GetInt32(3)
+                            };
+                            sList.Add(s);
+                        }
+                    });
                 }
-                reader.Close();
-                cmd.Dispose();
+                catch (OdbcException)
+                {
+                    return null;
+                }
+                finally
+                {
+                    reader.Close();
+                    cmd.Dispose();
+                }
             }
             return sList;
         }

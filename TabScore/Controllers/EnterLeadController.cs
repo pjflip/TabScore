@@ -8,11 +8,9 @@ namespace TabScore.Controllers
         public ActionResult Index(string secondPass)
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
-            if (!Settings.EnterLeadCard(DBConnectionString))
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
+
+            if (!Settings.GetSetting<bool>(DBConnectionString, SettingName.EnterLeadCard))
             {
                 Session["LeadCard"] = "SKIP";
                 return RedirectToAction("Index", "EnterTricksTaken");
@@ -47,11 +45,9 @@ namespace TabScore.Controllers
         public ActionResult OKButtonClick(string card, string secondPass)
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
-            if (!Settings.ValidateLeadCard(DBConnectionString) || secondPass == "TRUE")
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
+
+            if (!Settings.GetSetting<bool>(DBConnectionString, SettingName.ValidateLeadCard) || secondPass == "TRUE")
             {
                 Session["LeadCard"] = card;
                 return RedirectToAction("Index", "EnterTricksTaken");

@@ -356,7 +356,7 @@ namespace TabScore.Models
             }
         }
 
-        public void UpdateDB(string DB)
+        public string UpdateDB(string DB)
         {
             string contract;
             string declarer;
@@ -394,17 +394,45 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 // Delete any previous result
+                connection.Open();
                 string SQLString = $"DELETE FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={Round} AND Board={Board}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        cmd.ExecuteNonQuery(); 
+                    });
+                }
+                catch (OdbcException)
+                {
+                    return "Error";
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
 
                 // Add new result
                 SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
-                cmd = new OdbcCommand(SQLString, connection);
-                cmd.ExecuteNonQuery();
-                cmd.Dispose();
+                OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        cmd2.ExecuteNonQuery();
+                    });
+                }
+                catch (OdbcException)
+                {
+                    return "Error";
+                }
+                finally
+                {
+                    cmd2.Dispose();
+                }
             }
+            return "";
         }
         
         public void GetDBResult(string DB)

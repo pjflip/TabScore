@@ -12,28 +12,42 @@ namespace TabScore.Models
 
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
+                connection.Open();
                 string SQLString = $"SELECT PairNS, PairEW, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={sectionID} AND Board={board}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                OdbcDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                OdbcDataReader reader = null;
+                try
                 {
-                    TravellerResultClass tr = new TravellerResultClass()
+                    ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        PairNS = reader.GetInt32(0).ToString(),
-                        PairEW = reader.GetInt32(1).ToString(),
-                        NSEW = reader.GetString(2),
-                        Contract = reader.GetString(3),
-                        LeadCard = reader.GetString(4),
-                        TricksTakenSymbol = reader.GetString(5)
-                    };
-                    if (tr.Contract.Length > 2)  // Testing for corrupt ReceivedData table
-                    {
-                        trList.Add(tr);
-                    }
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            TravellerResultClass tr = new TravellerResultClass()
+                            {
+                                PairNS = reader.GetInt32(0).ToString(),
+                                PairEW = reader.GetInt32(1).ToString(),
+                                NSEW = reader.GetString(2),
+                                Contract = reader.GetString(3),
+                                LeadCard = reader.GetString(4),
+                                TricksTakenSymbol = reader.GetString(5)
+                            };
+                            if (tr.Contract.Length > 2)  // Testing for corrupt ReceivedData table
+                            {
+                                trList.Add(tr);
+                            }
+                        }
+                    });
                 }
-                reader.Close();
-                cmd.Dispose();
+                catch (OdbcException)
+                {
+                    return null;
+                }
+                finally
+                {
+                    reader.Close();
+                    cmd.Dispose();
+                }
             };
 
             foreach(TravellerResultClass tr in trList)

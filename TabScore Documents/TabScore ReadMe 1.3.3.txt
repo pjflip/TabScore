@@ -16,12 +16,15 @@ been installed and run successfully (but not fully tested) on Windows 7.
 IMPORTANT: Please ensure you have completed all the intallation steps in the 
 'TabScore User Guide' document before attempting to run TabScore.
 
+To upgrade TabScore from a previous installation, please read the section in
+the User Guide on Upgrading TabScore.
+
 TabScore is currently limited to 4 sections (A, B, C and D in that order) and 
 30 tables per section.  It can be used for pairs, teams, individual or Swiss
 events.
 
-TabScore implements a limited range of display options which can be set by 
-the scoring program, or from TabScoreStarter.  See the User Guide for more
+TabScore implements a range of display options which can be set by the
+scoring program, or from TabScoreStarter.  See the User Guide for more
 details.
 
 TabScoreStarter uses Bo Haglund's double dummy solver to analyse hand records.

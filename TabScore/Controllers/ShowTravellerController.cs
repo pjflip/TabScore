@@ -10,16 +10,13 @@ namespace TabScore.Controllers
         public ActionResult Index()
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (!Settings.ShowResults(DBConnectionString))
+            if (!Settings.GetSetting<bool>(DBConnectionString, SettingName.ShowResults))
             {
                 return RedirectToAction("Index", "ShowBoards");
             }
-            if (Settings.ShowHandRecord(DBConnectionString))
+            if (Settings.GetSetting<bool>(DBConnectionString, SettingName.ShowHandRecord))
             {
                 HandRecordClass hr = HandRecord.GetHandRecord(DBConnectionString, Session["SectionID"].ToString(), Session["Board"].ToString());
                 if (hr.NorthSpades == "###")
@@ -45,8 +42,9 @@ namespace TabScore.Controllers
             }
 
             List<TravellerResultClass> resList = Traveller.GetResults(DBConnectionString, Session["SectionID"].ToString(), Session["Board"].ToString());
+            if (resList == null) return RedirectToAction("Index", "ErrorScreen");    // Always at least this table's result unless an error has occurred
             resList.Sort((x, y) => y.Score.CompareTo(x.Score));
-            if (Settings.ShowPercentage(DBConnectionString))
+            if (Settings.GetSetting<bool>(DBConnectionString, SettingName.ShowPercentage))
             {
                 int percentageNS;
                 if (resList.Count == 1)

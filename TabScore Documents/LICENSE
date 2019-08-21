@@ -187,8 +187,14 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2006-2014 by Bo Haglund,
-   Copyright 2014 by Bo Haglund / Soren Hein as of version 2.8.0.
+   [Your identifying information]
+   
+   TabScore, a wireless bridge scoring program
+   Copyright (C) 2018-2019 by Peter Flippant
+   
+   DDS, a bridge double dummy solver.
+   Copyright (C) 2006-2014 by Bo Haglund /
+   2014-2018 by Bo Haglund & Soren Hein.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

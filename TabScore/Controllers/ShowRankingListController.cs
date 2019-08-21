@@ -10,14 +10,11 @@ namespace TabScore.Controllers
         public ActionResult Index(string round, string finalRound)
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             if (Convert.ToInt32(round) > 1)
             {
-                int showRankingSetting = Settings.ShowRanking(DBConnectionString);
+                int showRankingSetting = Settings.GetSetting<int>(DBConnectionString, SettingName.ShowRanking);
                 if (showRankingSetting == 1 || (showRankingSetting == 2 && finalRound == "Yes"))
                 {
                     List<RankingListClass> rankingList = RankingList.GetRankingList(DBConnectionString, Session["SectionID"].ToString());
@@ -51,12 +48,9 @@ namespace TabScore.Controllers
         public ActionResult OKButtonClick(string round)   // Pass back round to ensure it is not incremented twice by a double bounce
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (Settings.ShowRanking(DBConnectionString) == 2)   // Can only get here if finalRound = "Yes"
+            if (Settings.GetSetting<int>(DBConnectionString, SettingName.ShowRanking) == 2)   // Can only get here if finalRound = "Yes"
             {
                 return RedirectToAction("Index", "EndScreen");
             }

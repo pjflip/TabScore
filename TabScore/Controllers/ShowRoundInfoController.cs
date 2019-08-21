@@ -8,12 +8,10 @@ namespace TabScore.Controllers
         public ActionResult Index()
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             RoundClass round = Round.GetRoundInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString());
+            if (round == null) return RedirectToAction("Index", "ErrorScreen");
             Session["LowBoard"] = round.LowBoard;
             Session["HighBoard"] = round.HighBoard;
             Session["PairNS"] = round.PairNS;
@@ -29,24 +27,41 @@ namespace TabScore.Controllers
             }
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]}";
 
+            string tempName;
             if (round.PairNS == 0 || round.PairNS.ToString() == Session["MissingPair"].ToString())
             {
-                ViewData["PlayerNameEast"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "E", true);
-                ViewData["PlayerNameWest"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "W", true);
+                tempName = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "E", false);
+                if (tempName == "Error") return RedirectToAction("Index", "ErrorScreen");
+                ViewData["PlayerNameEast"] = tempName;
+                tempName = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "W", false);
+                if (tempName == "Error") return RedirectToAction("Index", "ErrorScreen");
+                ViewData["PlayerNameWest"] = tempName;
                 return View("NSMissing");
             }
             else if (round.PairEW == 0 || round.PairEW.ToString() == Session["MissingPair"].ToString())
             {
-                ViewData["PlayerNameNorth"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "N", true);
-                ViewData["PlayerNameSouth"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "S", true);
+                tempName = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "N", false);
+                if (tempName == "Error") return RedirectToAction("Index", "ErrorScreen");
+                ViewData["PlayerNameNorth"] = tempName;
+                tempName = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "S", false);
+                if (tempName == "Error") return RedirectToAction("Index", "ErrorScreen");
+                ViewData["PlayerNameSouth"] = tempName;
                 return View("EWMissing");
             }
             else
             {
-                ViewData["PlayerNameNorth"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "N", true);
-                ViewData["PlayerNameSouth"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "S", true);
-                ViewData["PlayerNameEast"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "E", true);
-                ViewData["PlayerNameWest"] = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "W", true);
+                tempName = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "N", false);
+                if (tempName == "Error") return RedirectToAction("Index", "ErrorScreen");
+                ViewData["PlayerNameNorth"] = tempName;
+                tempName = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairNS.ToString(), "S", false);
+                if (tempName == "Error") return RedirectToAction("Index", "ErrorScreen");
+                ViewData["PlayerNameSouth"] = tempName;
+                tempName = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "E", false);
+                if (tempName == "Error") return RedirectToAction("Index", "ErrorScreen");
+                ViewData["PlayerNameEast"] = tempName;
+                tempName = Player.GetName(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), round.PairEW.ToString(), "W", false);
+                if (tempName == "Error") return RedirectToAction("Index", "ErrorScreen");
+                ViewData["PlayerNameWest"] = tempName;
                 return View();
             }
         }

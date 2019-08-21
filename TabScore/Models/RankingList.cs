@@ -9,89 +9,123 @@ namespace TabScore.Models
         public static List<RankingListClass> GetRankingList(string DB, string sectionID)
         {
             List<RankingListClass> rList = new List<RankingListClass>();
-            List<TravellerResultClass> trList = new List<TravellerResultClass>();
             int Winners = 0;
 
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
+                connection.Open();
                 string SQLString = $"SELECT Orientation, Number, Score, Rank FROM Results WHERE Section={sectionID}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+
+                OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader1 = null;
                 try
                 {
-                    connection.Open();
-                    OdbcDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        RankingListClass rl = new RankingListClass();
-                        rl.Orientation = reader.GetString(0);
-                        rl.PairNo = reader.GetInt32(1).ToString();
-                        rl.Score = reader.GetString(2);
-                        rl.Rank = reader.GetString(3);
+                        reader1 = cmd1.ExecuteReader();
+                        while (reader1.Read())
+                        {
+                            RankingListClass rl = new RankingListClass();
+                            rl.Orientation = reader1.GetString(0);
+                            rl.PairNo = reader1.GetInt32(1).ToString();
+                            rl.Score = reader1.GetString(2);
+                            rl.Rank = reader1.GetString(3);
 
-                        rList.Add(rl);
-                    }
-                    reader.Close();
-                    cmd.Dispose();
-                    return rList;
+                            rList.Add(rl);
+                        }
+                    });
                 }
                 catch (OdbcException e)
                 {
                     if (e.Errors.Count == 1 && e.Errors[0].SQLState == "42S02")
                     {
                         // Results table doesn't exist, so check Winners
+                        object queryResult = null;
                         SQLString = $"SELECT Winners FROM Section WHERE ID={sectionID}";
-                        cmd = new OdbcCommand(SQLString, connection);
+                        OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
                         try
                         {
-                            object queryResult = cmd.ExecuteScalar();
+                            ODBCRetryHelper.ODBCRetry(() =>
+                            {
+                                queryResult = cmd2.ExecuteScalar();
+                            });
                             Winners = Convert.ToInt32(queryResult);
                             if (Winners == 0)
                             {
                                 // Winners not set, so no chance of calculating ranking
-                                cmd.Dispose();
-                                return null;
-                            }
-                        }
-                        catch (OdbcException e2)
-                        {
-                            if (e.Errors.Count == 1 && e2.Errors[0].SQLState == "42S22")
-                            {
-                                // Winners column does not exist, so no chance of calculating ranking
-                                cmd.Dispose();
                                 return null;
                             }
                             else
                             {
-                                throw e2;
+                                // No Results table and Winners = 1 or 2, so use ReceivedData to calculate ranking
+                                return CalculateRankingFromReceivedData(DB, sectionID, Winners);
                             }
+                        }
+                        catch (OdbcException)
+                        {
+                            // If Winners column doesn't exist, or any other error, can't calculate ranking
+                            return null;
+                        }
+                        finally
+                        {
+                            cmd2.Dispose();
                         }
                     }
                 }
-
-                // No Results table and Winners = 1 or 2, so use ReceivedData to calculate ranking
-
-                SQLString = $"SELECT Board, PairNS, PairEW, [NS/EW], Contract, Result FROM ReceivedData WHERE Section={sectionID}";
-                cmd = new OdbcCommand(SQLString, connection);
-                OdbcDataReader reader2 = cmd.ExecuteReader();
-                while (reader2.Read())
+                finally
                 {
-                    TravellerResultClass tr = new TravellerResultClass()
-                    {
-                        Board = reader2.GetInt32(0).ToString(),
-                        PairNS = reader2.GetInt32(1).ToString(),
-                        PairEW = reader2.GetInt32(2).ToString(),
-                        NSEW = reader2.GetString(3),
-                        Contract = reader2.GetString(4),
-                        TricksTakenSymbol = reader2.GetString(5)
-                    };
-                    if (tr.Contract.Length > 2)  // Testing for corrupt ReceivedData table
-                    {
-                        trList.Add(tr);
-                    }
+                    reader1.Close();
+                    cmd1.Dispose();
                 }
-                reader2.Close();
-                cmd.Dispose();
-            }  // End using; close connection
+                return rList;
+            }
+        }
+
+        private static List<RankingListClass> CalculateRankingFromReceivedData(string DB, string sectionID, int Winners)
+        {
+            List<RankingListClass> rList = new List<RankingListClass>();
+            List<TravellerResultClass> trList = new List<TravellerResultClass>();
+
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                connection.Open();
+                string SQLString = $"SELECT Board, PairNS, PairEW, [NS/EW], Contract, Result FROM ReceivedData WHERE Section={sectionID}";
+
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader = null;
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            TravellerResultClass tr = new TravellerResultClass()
+                            {
+                                Board = reader.GetInt32(0).ToString(),
+                                PairNS = reader.GetInt32(1).ToString(),
+                                PairEW = reader.GetInt32(2).ToString(),
+                                NSEW = reader.GetString(3),
+                                Contract = reader.GetString(4),
+                                TricksTakenSymbol = reader.GetString(5)
+                            };
+                            if (tr.Contract.Length > 2)  // Testing for corrupt ReceivedData table
+                            {
+                                trList.Add(tr);
+                            }
+                        }
+                    });
+                }
+                catch (OdbcException)
+                {
+                    return null;
+                }
+                finally
+                {
+                    reader.Close();
+                    cmd.Dispose();
+                }
+            }
 
             foreach (TravellerResultClass tr in trList)
             {

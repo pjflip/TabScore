@@ -1,224 +1,104 @@
 ﻿using System;
 using System.Data.Odbc;
+using System.Collections.Generic;
 
 namespace TabScore.Models
 {
-    public class Settings
+    public enum SettingName
     {
-        public static bool ShowResults(string DB)
+        ShowResults,
+        ShowPercentage,
+        EnterLeadCard,
+        ValidateLeadCard,
+        ShowRanking,
+        EnterResultsMethod,
+        ShowHandRecord,
+        NumberEntryEachRound,
+        NameSource
+    }
+
+    public class SettingType
+    {
+        public readonly SettingName name;
+        public readonly string databaseName;
+        public readonly bool defaultValueBool;
+        public readonly int defaultValueInt;
+
+        public SettingType(SettingName name, string DbName, bool defaultValue)
         {
-            bool showResults = true;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                string SQLString = $"SELECT ShowResults FROM Settings";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                try
-                {
-                    object queryResult = cmd.ExecuteScalar();
-                    if (queryResult != null)
-                    {
-                        showResults = Convert.ToBoolean(queryResult);
-                    }
-                }
-                catch
-                {
-                }
-                cmd.Dispose();
-            }
-            return showResults;
+            this.name = name;
+            this.databaseName = DbName;
+            this.defaultValueBool = defaultValue;
         }
 
-        public static bool ShowPercentage(string DB)
+        public SettingType(SettingName name, string DbName, int defaultValue)
         {
-            bool showPercentage = true;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                string SQLString = $"SELECT ShowPercentage FROM Settings";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                try
-                {
-                    object queryResult = cmd.ExecuteScalar();
-                    if (queryResult != null)
-                    {
-                        showPercentage = Convert.ToBoolean(queryResult);
-                    }
-                }
-                catch
-                {
-                }
-                cmd.Dispose();
-            }
-            return showPercentage;
+            this.name = name;
+            this.databaseName = DbName;
+            this.defaultValueInt = defaultValue;
         }
+    }
 
-        public static bool EnterLeadCard(string DB)
+public class Settings
+    {
+        public static readonly List<SettingType> settingsList = new List<SettingType>()
         {
-            bool enterLeadCard = true;
+            new SettingType(SettingName.ShowResults,          "ShowResults",              true),
+            new SettingType(SettingName.ShowPercentage,       "ShowPercentage",           true),
+            new SettingType(SettingName.EnterLeadCard,        "LeadCard",                 true),
+            new SettingType(SettingName.ValidateLeadCard,     "BM2ValidateLeadCard",      true),
+            new SettingType(SettingName.ShowRanking,          "BM2Ranking",               1),
+            new SettingType(SettingName.EnterResultsMethod,   "EnterResultsMethod",       1),
+            new SettingType(SettingName.ShowHandRecord,       "BM2ViewHandRecord",        true),
+            new SettingType(SettingName.NumberEntryEachRound, "BM2NumberEntryEachRound",  true),
+            new SettingType(SettingName.NameSource,           "BM2NameSource",            0)
+        };
+
+        public static T GetSetting<T>(string DB, SettingName settingName)
+        {
+            T settingValue = default(T);
+            SettingType setting = settingsList.Find(x => x.name.Equals(settingName));
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                string SQLString = $"SELECT LeadCard FROM Settings";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
+                object queryResult = null;
+                string SQLString = $"SELECT {setting.databaseName} FROM Settings";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
-                    object queryResult = cmd.ExecuteScalar();
-                    if (queryResult != null)
+                    ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        enterLeadCard = Convert.ToBoolean(queryResult);
+                        queryResult = cmd.ExecuteScalar();
+                    });
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+                if (settingValue is bool)
+                {
+                    if (queryResult == null)
+                    {
+                        settingValue = (T)(object)setting.defaultValueBool;
+                    }
+                    else
+                    {
+                        settingValue = (T)(object)Convert.ToBoolean(queryResult);
                     }
                 }
-                catch
+                else
                 {
-                }
-                cmd.Dispose();
-            }
-            return enterLeadCard;
-        }
-
-        public static bool ValidateLeadCard(string DB)
-        {
-            bool validateLeadCard = true;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                string SQLString = $"SELECT BM2ValidateLeadCard FROM Settings";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                try
-                {
-                    object queryResult = cmd.ExecuteScalar();
-                    if (queryResult != null)
+                    if (queryResult == null)
                     {
-                        validateLeadCard = Convert.ToBoolean(queryResult);
+                        settingValue = (T)(object)setting.defaultValueInt;
+                    }
+                    else
+                    {
+                        settingValue = (T)(object)Convert.ToInt32(queryResult);
                     }
                 }
-                catch
-                {
-                }
-                cmd.Dispose();
             }
-            return validateLeadCard;
-        }
-
-        public static int ShowRanking(string DB)
-        {
-            int showRanking = 1;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                string SQLString = $"SELECT BM2Ranking FROM Settings";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                try
-                {
-                    object queryResult = cmd.ExecuteScalar();
-                    if (queryResult != null)
-                    {
-                        showRanking = Convert.ToInt32(queryResult);
-                    }
-                }
-                catch
-                {
-                }
-                cmd.Dispose();
-            }
-            return showRanking;
-        }
-
-        public static int EnterResultsMethod(string DB)
-        {
-            int enterResultsMethod = 1;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                string SQLString = $"SELECT EnterResultsMethod FROM Settings";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                try
-                {
-                    object queryResult = cmd.ExecuteScalar();
-                    if (queryResult != null)
-                    {
-                        enterResultsMethod = Convert.ToInt32(queryResult);
-                    }
-                }
-                catch
-                {
-                }
-                cmd.Dispose();
-            }
-            return enterResultsMethod;
-        }
-
-        public static bool ShowHandRecord(string DB)
-        {
-            bool showHandRecord = true;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                string SQLString = $"SELECT BM2ViewHandRecord FROM Settings";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                try
-                {
-                    object queryResult = cmd.ExecuteScalar();
-                    if (queryResult != null)
-                    {
-                        showHandRecord = Convert.ToBoolean(queryResult);
-                    }
-                }
-                catch
-                {
-                }
-                cmd.Dispose();
-            }
-            return showHandRecord;
-        }
-
-        public static bool NumberEntryEachRound(string DB)
-        {
-            bool numberEntryEachRound = false;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                string SQLString = $"SELECT BM2NumberEntryEachRound FROM Settings";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                try
-                {
-                    object queryResult = cmd.ExecuteScalar();
-                    if (queryResult != null)
-                    {
-                        numberEntryEachRound = Convert.ToBoolean(queryResult);
-                    }
-                }
-                catch
-                {
-                }
-                cmd.Dispose();
-            }
-            return numberEntryEachRound;
-        }
-
-        public static int NameSource(string DB)
-        {
-            int nameSource = 0;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                string SQLString = $"SELECT BM2NameSource FROM Settings";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                try
-                {
-                    object queryResult = cmd.ExecuteScalar();
-                    if (queryResult != null)
-                    {
-                        nameSource = Convert.ToInt32(queryResult);
-                    }
-                }
-                catch
-                {
-                }
-                cmd.Dispose();
-            }
-            return nameSource;
+            return settingValue;
         }
     }
 }

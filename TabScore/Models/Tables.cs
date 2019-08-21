@@ -1,39 +1,61 @@
-﻿using System.Data.Odbc;
+﻿using System;
+using System.Data.Odbc;
 
 namespace TabScore.Models
 {
     public static class Tables
     {
-        public static bool IsLoggedOn(string DB, string sectionID, string table)
+        public static int IsLoggedOn(string DB, string sectionID, string table)
         {
+            object queryResult = null;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
+                connection.Open();
                 string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section={sectionID} AND [Table]={table}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                object queryResult = cmd.ExecuteScalar();
-                cmd.Dispose();
-                if (queryResult.ToString() == "1")
+                try
                 {
-                    return true;
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        queryResult = cmd.ExecuteScalar();
+                    });
                 }
-                else
+                catch (OdbcException)
                 {
-                    return false;
+                    return -1;
+                }
+                finally
+                {
+                    cmd.Dispose();
                 }
             }
+            return Convert.ToInt32(queryResult);
         }
 
-        public static void Logon(string DB, string sectionID, string table)
+        public static int Logon(string DB, string sectionID, string table)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
+                connection.Open();
                 string SQLString = $"UPDATE Tables SET LogOnOff=1 WHERE Section={sectionID} AND [Table]={table}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                cmd.ExecuteNonQuery();
-                cmd.Dispose();
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        cmd.ExecuteNonQuery();
+                    });
+                }
+                catch (OdbcException)
+                {
+                   return -1;
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
             }
+            return 0;
         }
     }
 }

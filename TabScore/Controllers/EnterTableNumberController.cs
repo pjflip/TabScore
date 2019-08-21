@@ -16,20 +16,21 @@ namespace TabScore.Controllers
         public ActionResult OKButtonClick(string tableNumber, string confirm)
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (confirm == "TRUE" || !Tables.IsLoggedOn(DBConnectionString, Session["SectionID"].ToString(), tableNumber))
+            int logonStatus = Tables.IsLoggedOn(DBConnectionString, Session["SectionID"].ToString(), tableNumber);
+            if (logonStatus == -1) return RedirectToAction("Index", "ErrorScreen");
+            if (confirm == "TRUE" || (logonStatus == 2))     // Status=2 means table not logged on
             {
                 Session["Table"] = tableNumber;
-                Tables.Logon(DBConnectionString, Session["SectionID"].ToString(), tableNumber);
+                if (Tables.Logon(DBConnectionString, Session["SectionID"].ToString(), tableNumber) == -1) return RedirectToAction("Index", "ErrorScreen");
 
                 // Check if results data exist - set round number accordingly
                 int round = Round.GetLastEnteredRound(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString());
+                if (round == -1) return RedirectToAction("Index", "ErrorScreen");
+
                 Session["Round"] = round.ToString();
-                if (round == 1 || Settings.NumberEntryEachRound(DBConnectionString))
+                if (round == 1 || Settings.GetSetting<bool>(DBConnectionString, SettingName.NumberEntryEachRound))
                 {
                     return RedirectToAction("Index", "ShowPlayerNumbers");
                 }

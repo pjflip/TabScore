@@ -11,7 +11,7 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 string SQLString;
-                object queryResult;
+                object queryResult = null;
                 if (dir == "NS")
                 {
                     SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND NSPair={pair}";
@@ -20,9 +20,26 @@ namespace TabScore.Models
                 {
                     SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND EWPair={pair}";
                 }
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
-                queryResult = cmd.ExecuteScalar();
+
+                OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        queryResult = cmd1.ExecuteScalar();
+                    });
+                }
+                catch (OdbcException)
+                {
+                    move.Table = "Error";
+                    return move;
+                }
+                finally
+                {
+                    cmd1.Dispose();
+                }
+
                 if (queryResult != null)
                 {
                     move.Table = queryResult.ToString();
@@ -39,8 +56,25 @@ namespace TabScore.Models
                     {
                         SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND NSPair={pair}";
                     }
-                    cmd = new OdbcCommand(SQLString, connection);
-                    queryResult = cmd.ExecuteScalar();
+
+                    OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            queryResult = cmd2.ExecuteScalar();
+                        });
+                    }
+                    catch (OdbcException)
+                    {
+                        move.Table = "Error";
+                        return move;
+                    }
+                    finally
+                    {
+                        cmd2.Dispose();
+                    }
+
                     if (queryResult != null)
                     {
                         move.Table = queryResult.ToString();
@@ -59,7 +93,6 @@ namespace TabScore.Models
                         move.Direction = "";
                     }
                 }
-                cmd.Dispose();
             }
             return move;
         }
@@ -68,12 +101,27 @@ namespace TabScore.Models
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                object queryResult;
+                object queryResult = null;
                 string SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND LowBoard={lowBoard}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
-                queryResult = cmd.ExecuteScalar();
-                cmd.Dispose();
+
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        queryResult = cmd.ExecuteScalar();
+                    });
+                }
+                catch (OdbcException)
+                {
+                    return "Error";
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+
                 if (queryResult != null)
                 {
                     return queryResult.ToString();

@@ -15,17 +15,12 @@ namespace TabScore.Controllers
         public ActionResult OKButtonClick()
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "")return RedirectToAction("Index", "ErrorScreen");
 
             // Check if new round has been added
             RoundClass round = Round.GetRoundInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString());
-            if(round.PairNS == 0)
-            {
-                return RedirectToAction("Index", "EndScreen");
-            }
+            if (round == null) return RedirectToAction("Index", "ErrorScreen");
+            if (round.PairNS == 0) return RedirectToAction("Index", "EndScreen");
 
             return RedirectToAction("Index", "ShowMove", new { newRound = Session["Round"].ToString() });
         }

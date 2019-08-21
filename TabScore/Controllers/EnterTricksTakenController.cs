@@ -8,10 +8,7 @@ namespace TabScore.Controllers
         public ActionResult Index()
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             ResultClass res = new ResultClass()
             {
@@ -25,7 +22,7 @@ namespace TabScore.Controllers
             ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "TRUE";
 
-            if (Settings.EnterResultsMethod(DBConnectionString) == 1)
+            if (Settings.GetSetting<int>(DBConnectionString, SettingName.EnterResultsMethod) == 1)
             {
                 return View("TotalTricks");
             }
@@ -45,12 +42,9 @@ namespace TabScore.Controllers
         public ActionResult BackButtonClick()
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (Settings.EnterLeadCard(DBConnectionString))
+            if (Settings.GetSetting<bool>(DBConnectionString, SettingName.EnterLeadCard))
             {
                 return RedirectToAction("Index", "EnterLead", new { secondPass = "FALSE" });
             }

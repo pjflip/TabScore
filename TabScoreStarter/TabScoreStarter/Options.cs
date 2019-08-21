@@ -1,7 +1,5 @@
-﻿using System;
-using System.Data.Odbc;
+﻿using System.Data.Odbc;
 using System.Text;
-using System.Windows.Forms;
 
 namespace TabScoreStarter
 {

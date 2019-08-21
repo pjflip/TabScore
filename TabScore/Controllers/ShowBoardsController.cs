@@ -10,10 +10,7 @@ namespace TabScore.Controllers
        public ActionResult Index()
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Session["ContractLevel"] = "";
             Session["ContractSuit"] = "";

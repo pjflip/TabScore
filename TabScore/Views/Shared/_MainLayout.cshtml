@@ -32,7 +32,8 @@
         }
         else {
             window.onload = function () {
-                document.getElementById('battery').style.display = "none";
+                var batteryElement = document.getElementById('battery');
+                batteryElement.parentNode.removeChild(batteryElement);
                 document.getElementById('header').className = "col-12 my-auto";
             }
         }

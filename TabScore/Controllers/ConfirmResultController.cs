@@ -65,12 +65,9 @@ namespace TabScore.Controllers
             };
 
             string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            }
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            res.UpdateDB(DBConnectionString);
+            if (res.UpdateDB(DBConnectionString) == "Error") return RedirectToAction("Index", "ErrorScreen");
             Session["Score"] = res.Score().ToString();
 
             return RedirectToAction("Index", "ShowTraveller");
