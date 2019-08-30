@@ -159,6 +159,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
+    <Content Include="hearts.svg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />

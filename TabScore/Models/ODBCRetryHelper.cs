@@ -8,7 +8,7 @@ namespace TabScore.Models
         public static void ODBCRetry(Action cmd)
         {
             int attempts = 3;
-            do
+            while (true)
             {
                 try
                 {
@@ -20,10 +20,10 @@ namespace TabScore.Models
                 {
                     if (e.Errors.Count == 1 && (e.Errors[0].SQLState != "42S02" || e.Errors[0].SQLState != "42S22"))  throw e;   // Table or column does not exist
                     if (attempts <= 0) throw e;
-                    System.Threading.Thread.Sleep(700);
+                    Random r = new Random();
+                    System.Threading.Thread.Sleep(r.Next(300, 700));
                 }
-            } while (true);
+            }
         }
     }
-
 }

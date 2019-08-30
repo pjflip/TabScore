@@ -35,7 +35,7 @@ namespace TabScore.Controllers
                 };
                 res.Board = i.ToString();
                 res.ContractLevel = null;
-                res.GetDBResult(DBConnectionString);
+                if (!res.GetDBResult(DBConnectionString)) return RedirectToAction("Index", "ErrorScreen");
                 resList.Add(res);
                 if (res.ContractLevel != null) resCount++;
             }

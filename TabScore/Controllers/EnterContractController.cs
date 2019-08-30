@@ -28,7 +28,7 @@ namespace TabScore.Controllers
                     TricksTakenNumber = -1,
                     LeadCard = ""
                 };
-                res.GetDBResult(DBConnectionString);
+                if(!res.GetDBResult(DBConnectionString)) return RedirectToAction("Index", "ErrorScreen"); 
                 Session["ContractLevel"] = res.ContractLevel;
                 Session["ContractSuit"] = res.ContractSuit;
                 Session["ContractX"] = res.ContractX;

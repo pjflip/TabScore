@@ -435,42 +435,55 @@ namespace TabScore.Models
             return "";
         }
         
-        public void GetDBResult(string DB)
+        public bool GetDBResult(string DB)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                string SQLString;
-                SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={Round} AND Board={Board}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
-                OdbcDataReader reader = cmd.ExecuteReader();
-
-                if (reader.Read())
+                string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={Round} AND Board={Board}";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader = null;
+                try
                 {
-                    string contract = reader.GetString(1);
-                    if (contract == "PASS")
+                    ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        ContractLevel = "PASS";
-                        ContractSuit = "";
-                        ContractX = "";
-                        NSEW = "";
-                        TricksTakenNumber = -1;
-                        LeadCard = "";
-                    }
-                    else
-                    {
-                        string[] temp = contract.Split(' ');
-                        ContractLevel = temp[0];
-                        ContractSuit = temp[1];
-                        if (temp.Length > 2) ContractX = temp[2];
-                        else ContractX = "NONE";
-                        NSEW = reader.GetString(0);
-                        TricksTakenSymbol = reader.GetString(2);
-                        LeadCard = reader.GetString(3);
-                    }
+                        reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            string contract = reader.GetString(1);
+                            if (contract == "PASS")
+                            {
+                                ContractLevel = "PASS";
+                                ContractSuit = "";
+                                ContractX = "";
+                                NSEW = "";
+                                TricksTakenNumber = -1;
+                                LeadCard = "";
+                            }
+                            else
+                            {
+                                string[] temp = contract.Split(' ');
+                                ContractLevel = temp[0];
+                                ContractSuit = temp[1];
+                                if (temp.Length > 2) ContractX = temp[2];
+                                else ContractX = "NONE";
+                                NSEW = reader.GetString(0);
+                                TricksTakenSymbol = reader.GetString(2);
+                                LeadCard = reader.GetString(3);
+                            }
+                        }
+                    });
                 }
-                reader.Close();
-                cmd.Dispose();
+                catch (OdbcException)
+                {
+                    return false;
+                }
+                finally
+                {
+                    reader.Close();
+                    cmd.Dispose();
+                }
+                return true;
             }
         }
     }

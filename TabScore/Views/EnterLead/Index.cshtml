@@ -115,20 +115,20 @@
         </button>
     </div>
 </div>
-
+ 
 <div class="row mt-2">
     <div class="col-12 text-center">
-        <button id="sS" class="btn btn-suit btn-lg m-1" style="color:black; width:3em; height:3em" ontouchstart="setSuit('S')">
-            <p style="font-size:larger; margin-bottom:0">&spades;</p>
+        <button id="sS" class="btn btn-suit btn-lg m-1 p-1" style="color:black; width:3em; height:3em" ontouchstart="setSuit('S')">
+            <div style="font-size:xx-large; line-height:1em">&spades;</div>
         </button>
-        <button id="sH" class="btn btn-suit btn-lg m-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('H')">
-            <p style="font-size:larger; margin-bottom:0">&hearts;</p>
+        <button id="sH" class="btn btn-suit btn-lg m-1 p-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('H')">
+            <div style="font-size:xx-large; line-height:1em">&hearts;</div>
         </button>
-        <button id="sD" class="btn btn-suit btn-lg m-1" style="color:orangered; width:3em; height:3em" ontouchstart="setSuit('D')">
-            <p style="font-size:larger; margin-bottom:0">&diams;</p>
+        <button id="sD" class="btn btn-suit btn-lg m-1 p-1" style="color:orangered; width:3em; height:3em" ontouchstart="setSuit('D')">
+            <div style="font-size:xx-large; line-height:1em">&diams;</div>
         </button>
-        <button id="sC" class="btn btn-suit btn-lg m-1" style="color:darkslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
-            <p style="font-size:larger; margin-bottom:0">&clubs;</p>
+        <button id="sC" class="btn btn-suit btn-lg m-1 p-1" style="color:darkslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
+            <div style="font-size:xx-large; line-height:1em">&clubs;</div>
         </button>
     </div>
 </div>
@@ -156,7 +156,7 @@
 
     function setCurrentSelections() {
         if (suit != "") {
-            document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1";
+            document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
             document.getElementById('c' + card).className = "btn btn-warning btn-lg m-1";
         }
     }
@@ -185,14 +185,14 @@
 
     function setSuit(s) {
         suit = s;
-        document.getElementById('sS').className = "btn btn-suit btn-lg m-1";
-        document.getElementById('sH').className = "btn btn-suit btn-lg m-1";
-        document.getElementById('sD').className = "btn btn-suit btn-lg m-1";
-        document.getElementById('sC').className = "btn btn-suit btn-lg m-1";
+        document.getElementById('sS').className = "btn btn-suit btn-lg m-1 p-1";
+        document.getElementById('sH').className = "btn btn-suit btn-lg m-1 p-1";
+        document.getElementById('sD').className = "btn btn-suit btn-lg m-1 p-1";
+        document.getElementById('sC').className = "btn btn-suit btn-lg m-1 p-1";
         if (document.getElementById('skip')) {
             document.getElementById('skip').className = "btn btn-danger btn-lg m-1";
         }
-        document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1";
+        document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
     }
 
     function setSkip() {
@@ -211,10 +211,10 @@
         document.getElementById('c4').className = "btn btn-primary btn-lg m-1";
         document.getElementById('c3').className = "btn btn-primary btn-lg m-1";
         document.getElementById('c2').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('sS').className = "btn btn-suit btn-lg m-1";
-        document.getElementById('sH').className = "btn btn-suit btn-lg m-1";
-        document.getElementById('sD').className = "btn btn-suit btn-lg m-1";
-        document.getElementById('sC').className = "btn btn-suit btn-lg m-1";
+        document.getElementById('sS').className = "btn btn-suit btn-lg m-1 p-1";
+        document.getElementById('sH').className = "btn btn-suit btn-lg m-1 p-1";
+        document.getElementById('sD').className = "btn btn-suit btn-lg m-1 p-1";
+        document.getElementById('sC').className = "btn btn-suit btn-lg m-1 p-1";
         document.getElementById('skip').className = "btn btn-warning btn-lg m-1";
     }
 

@@ -96,20 +96,20 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="sNT" class="btn btn-suit btn-lg m-1" style="width:3em; height:3em" ontouchstart="setSuit('NT')">
+        <button id="sNT" class="btn btn-suit btn-lg m-1 p-1" style="width:3em; height:3em" ontouchstart="setSuit('NT')">
             NT
         </button>
-        <button id="sS" class="btn btn-suit btn-lg m-1" style="color:black; width:3em; height:3em" ontouchstart="setSuit('S')">
-            <p style="font-size:larger; margin-bottom:0">&spades;</p>
+        <button id="sS" class="btn btn-suit btn-lg m-1 p-1" style="color:black; width:3em; height:3em" ontouchstart="setSuit('S')">
+            <div style="font-size:xx-large; line-height:1em">&spades;</div>
         </button>
-        <button id="sH" class="btn btn-suit btn-lg m-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('H')">
-            <p style="font-size:larger; margin-bottom:0">&hearts;</p>
+        <button id="sH" class="btn btn-suit btn-lg m-1 p-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('H')">
+            <div style="font-size:xx-large; line-height:1em">&hearts;</div>
         </button>
-        <button id="sD" class="btn btn-suit btn-lg m-1" style="color:orangered; width:3em; height:3em" ontouchstart="setSuit('D')">
-            <p style="font-size:larger; margin-bottom:0">&diams;</p>
+        <button id="sD" class="btn btn-suit btn-lg m-1 p-1" style="color:orangered; width:3em; height:3em" ontouchstart="setSuit('D')">
+            <div style="font-size:xx-large; line-height:1em">&diams;</div>
         </button>
-        <button id="sC" class="btn btn-suit btn-lg m-1" style="color:darkslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
-            <p style="font-size:larger; margin-bottom:0">&clubs;</p>
+        <button id="sC" class="btn btn-suit btn-lg m-1 p-1" style="color:darkslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
+            <div style="font-size:xx-large; line-height:1em">&clubs;</div>
         </button>
     </div>
 </div>
@@ -165,7 +165,7 @@
             }
             else {
                 document.getElementById('n' + number).className = "btn btn-warning btn-lg m-1";
-                document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1";
+                document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
                 document.getElementById('d' + NSEW).className = "btn btn-warning btn-lg m-1";
                 if (double == 'x') {
                     document.getElementById('X').className = "btn btn-warning btn-lg m-1";
@@ -194,11 +194,11 @@
     }
 
     function clearSuits() {
-        document.getElementById('sNT').className = "btn btn-suit btn-lg m-1";
-        document.getElementById('sS').className = "btn btn-suit btn-lg m-1";
-        document.getElementById('sH').className = "btn btn-suit btn-lg m-1";
-        document.getElementById('sD').className = "btn btn-suit btn-lg m-1";
-        document.getElementById('sC').className = "btn btn-suit btn-lg m-1";
+        document.getElementById('sNT').className = "btn btn-suit btn-lg m-1 p-1";
+        document.getElementById('sS').className = "btn btn-suit btn-lg m-1 p-1";
+        document.getElementById('sH').className = "btn btn-suit btn-lg m-1 p-1";
+        document.getElementById('sD').className = "btn btn-suit btn-lg m-1 p-1";
+        document.getElementById('sC').className = "btn btn-suit btn-lg m-1 p-1";
     }
 
     function clearNSEWs() {
@@ -231,7 +231,7 @@
         suit = s;
         clearSuits();
         if (number == "PASS") clearPass();
-        document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1";
+        document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
     }
 
     function setX() {
