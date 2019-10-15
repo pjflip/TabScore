@@ -3,15 +3,17 @@
 
 <head>
     <title>@ViewBag.Title</title>
-    <link rel="shortcut icon" href="~/TabScoreIcon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link rel="preload" as="font" href="/fonts/fontawesome-webfont.woff2?v=4.7.0" type="font/woff2" crossorigin="anonymous">
     <script>
         if ("getBattery" in navigator) {
             window.onload = navigator.getBattery().then(function (battery) {
+                document.getElementById('battery').style.display = "block";
+                document.getElementById('header').className = "col-10 my-auto pr-0";
                 var batteryLevel = battery.level * 100;
                 if (batteryLevel > 87.5) {
                     document.getElementById('bl').className = "fa fa-battery-full";
@@ -30,23 +32,16 @@
                 }
             })
         }
-        else {
-            window.onload = function () {
-                var batteryElement = document.getElementById('battery');
-                batteryElement.parentNode.removeChild(batteryElement);
-                document.getElementById('header').className = "col-12 my-auto";
-            }
-        }
     </script>
 </head>
 
 <body style="background-color: ivory; padding-top: 110px; padding-bottom: 110px">
     <div class="container-fluid fixed-top" style="min-height: 51px; background-color: bisque; border-bottom-style: solid">
         <div class="row my-2">
-            <div id="header" class="col-10 my-auto pr-0">
+            <div id="header" class="col-12 my-auto">
                 <h5>@Html.Raw(ViewBag.Header)</h5>
             </div>
-            <div id="battery" class="col-2 my-auto text-right">
+            <div id="battery" class="col-2 my-auto text-right" style="display:none">
                 <h3><span id="bl"></span></h3>
             </div>
         </div>
@@ -63,6 +58,12 @@
                 {
                     <button class="btn btn-danger btn-xl ml-2 my-2 float-left" style="font-size: 1.5rem" ontouchstart="backClick()">
                         <span class="fa fa-chevron-circle-left"></span> Back
+                    </button>
+                }
+                else if (ViewData["BackButton"].ToString() == "REFRESH")
+                {
+                    <button class="btn btn-secondary btn-xl ml-2 my-2 float-left" style="font-size: 1.5rem" ontouchstart="refreshClick()">
+                        <span class="fa fa-refresh"></span> Refresh
                     </button>
                 }
             </div>

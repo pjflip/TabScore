@@ -21,10 +21,10 @@ namespace TabScore.Controllers
                     if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0" && rankingList[0].Score != "50")
                     {
                         ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
-                        ViewData["BackButton"] = "FALSE";
+                        ViewData["BackButton"] = "REFRESH";
                         ViewData["Round"] = round;
-                        bool twoWinners = rankingList.Exists(x => x.Orientation == "E");
-                        if (twoWinners)
+                        ViewData["FinalRound"] = finalRound;
+                        if (rankingList.Exists(x => x.Orientation == "E"))
                         {
                             return View("TwoWinners", rankingList);
                         }
@@ -58,6 +58,10 @@ namespace TabScore.Controllers
             {
                 return RedirectToAction("Index", "ShowMove", new { newRound = (Convert.ToInt32(round) + 1).ToString() });
             }
+        }
+        public ActionResult RefreshButtonClick(string round, string finalRound)
+        {
+            return RedirectToAction("Index", "ShowRankingList", new { round, finalRound });
         }
     }
 }

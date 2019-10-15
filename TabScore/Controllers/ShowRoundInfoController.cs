@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -78,6 +79,18 @@ namespace TabScore.Controllers
 
         public ActionResult BackButtonClick()
         {
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
+
+            // Need to reset pair and board numbers
+            string previousRound = (Convert.ToInt32(Session["Round"]) - 1).ToString();      // Round > 1 else no Back button 
+            RoundClass round = Round.GetRoundInfo(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), previousRound);
+            if (round == null) return RedirectToAction("Index", "ErrorScreen");
+            Session["LowBoard"] = round.LowBoard;
+            Session["HighBoard"] = round.HighBoard;
+            Session["PairNS"] = round.PairNS;
+            Session["PairEW"] = round.PairEW;
+
             return RedirectToAction("Index", "ShowMove", new { newRound = Session["Round"].ToString() });
         }
     }

@@ -59,4 +59,8 @@
     function validateOK() {
         location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?round=@ViewData["Round"]';
     }
+
+    function refreshClick() {
+        location.href = '@Url.Action("RefreshButtonClick", "ShowRankingList")?round=@ViewData["Round"]&finalRound=@ViewData["FinalRound"]';
+    }
 </script>
