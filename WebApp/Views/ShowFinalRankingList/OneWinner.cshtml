@@ -1,6 +1,6 @@
 ﻿@model List<TabScore.Models.RankingListClass>
 @{
-    ViewBag.Title = "Show Ranking List - One Winner";
+    ViewBag.Title = "Show Final Ranking List - One Winner";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -57,10 +57,10 @@
 
 <script>
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?round=@Session["Round"]';
+        location.href = '@Url.Action("OKButtonClick", "ShowFinalRankingList")';
     }
 
     function refreshClick() {
-        location.href = '@Url.Action("RefreshButtonClick", "ShowRankingList")';
+        location.href = '@Url.Action("RefreshButtonClick", "ShowFinalRankingList")';
     }
 </script>

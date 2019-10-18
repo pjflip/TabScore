@@ -21,7 +21,7 @@ namespace TabScore.Controllers
                     // No move possible, so session complete
                     if (Settings.GetSetting<int>(DBConnectionString, SettingName.ShowRanking) == 2)
                     {
-                        return RedirectToAction("Index", "ShowRankingList", new { round = newRound, finalRound = "Yes" });
+                        return RedirectToAction("Index", "ShowFinalRankingList");
                     }
                     else
                     {
@@ -49,7 +49,7 @@ namespace TabScore.Controllers
                     // No move possible, so session complete
                     if (Settings.GetSetting<int>(DBConnectionString, SettingName.ShowRanking) == 2)
                     {
-                        return RedirectToAction("Index", "ShowRankingList", new { round = newRound, finalRound = "Yes" });
+                        return RedirectToAction("Index", "ShowFinalRankingList");
                     }
                     else
                     {
