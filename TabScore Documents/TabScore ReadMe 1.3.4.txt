@@ -27,6 +27,8 @@ TabScore implements a range of display options which can be set by the
 scoring program, or from TabScoreStarter.  See the User Guide for more
 details.
 
-TabScoreStarter uses Bo Haglund's double dummy solver to analyse hand records.
+TabScoreStarter uses Bo Haglund's Double Dummy Solver (DDS) to analyse 
+hand records.  DDS requires the Microsoft Visual C++ Redistributable (x86) 
+2015 (or later) to be installed on the PC.
 
 See the NOTICE and LICENSE files.
