@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Show Round Info";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Round: @Session["CurrentRound"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h3 style="color:green">
+            Boards: @Session["LowBoard"] to @Session["HighBoard"]
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3 style="color:blue">
+            North/South: Pair @Session["PairNS"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h4>
+            @ViewData["PlayerNameNorth"] & @ViewData["PlayerNameSouth"]
+        </h4>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3 style="color:blue">
+            East/West: Pair @Session["PairEW"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h4>
+            @ViewData["PlayerNameEast"] & @ViewData["PlayerNameWest"]
+        </h4>
+    </div>
+</div>
+
+<script>
+    function validateOK() {
+        location.href = '@Url.Action("OKButtonClick", "ShowRoundInfo")';
+    }
+    
+    function backClick() {
+        location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")';
+    }
+</script>

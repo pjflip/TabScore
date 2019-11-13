@@ -18,13 +18,13 @@ namespace TabScore.Controllers
             }
             if (Settings.GetSetting<bool>(DBConnectionString, SettingName.ShowHandRecord))
             {
-                HandRecordClass hr = HandRecord.GetHandRecord(DBConnectionString, Session["SectionID"].ToString(), Session["Board"].ToString());
+                HandRecord hr = new HandRecord(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Board"]));
                 if (hr.NorthSpades == "###")
                 {
                     ViewData["HandRecord"] = "FALSE";
-                    if (Session["SectionID"].ToString() != "1")    // Try default Section 1 hand records
+                    if (Convert.ToInt32(Session["SectionID"]) != 1)    // Try default Section 1 hand records
                     {
-                        hr = HandRecord.GetHandRecord(DBConnectionString, "1", Session["Board"].ToString());
+                        hr = new HandRecord(DBConnectionString, 1, Convert.ToInt32(Session["SectionID"]));
                         if (hr.NorthSpades != "###")
                         {
                             ViewData["HandRecord"] = "TRUE";
@@ -41,7 +41,7 @@ namespace TabScore.Controllers
                 ViewData["HandRecord"] = "FALSE";
             }
 
-            List<TravellerResultClass> resList = Traveller.GetResults(DBConnectionString, Session["SectionID"].ToString(), Session["Board"].ToString());
+            List<Result> resList = Traveller.GetResults(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Board"]), Session["IndividualEvent"].ToString()=="YES");
             if (resList == null) return RedirectToAction("Index", "ErrorScreen");    // Always at least this table's result unless an error has occurred
             resList.Sort((x, y) => y.Score.CompareTo(x.Score));
             if (Settings.GetSetting<bool>(DBConnectionString, SettingName.ShowPercentage))
@@ -65,7 +65,6 @@ namespace TabScore.Controllers
                 ViewData["PercentageNS"] = "###";   // Don't show percentage
             }
 
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "TRUE";
             return View(resList);
         }

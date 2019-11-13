@@ -5,7 +5,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Move for Round @Session["Round"]
+            Move for Round @Session["CurrentRound"]
         </h3>
     </div>
 </div>
@@ -13,26 +13,35 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            North/South: Pair @Session["PairNS"]
+            North/South: @Session["PairNS"]
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (ViewData["StayMoveNS"].ToString() == "Move")
+        @if (Convert.ToInt32(ViewData["NSNewTable"]) == 0)
         {
-            <h3>
-                Move to Table @ViewData["NSNewTable"] @ViewData["NSNewDirection"]
-            </h3>
+            <h4>
+                Move to Sit Out
+            </h4>
         }
         else
         {
-            <h3>
-                Stay at Table @ViewData["NSNewTable"] @ViewData["NSNewDirection"]
-            </h3>
+            if (ViewData["NSStayMove"].ToString() == "Move")
+            {
+                <h4>
+                    Move to Table @ViewData["NSNewTable"] @ViewData["NSNewDirection"]
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    Stay at Table @ViewData["NSNewTable"] @ViewData["NSNewDirection"]
+                </h4>
+            }
         }
-    </div>
+        </div>
 </div>
 
 <div class="row mt-4">
@@ -47,15 +56,15 @@
     <div class="col-12 text-center">
         @if (ViewData["BoardsNewTable"].ToString() == "0")
         {
-            <h3>
-                Move to Relay Table
-            </h3>
+            <h4>
+                Pass to Relay Table
+            </h4>
         }
         else
         {
-            <h3>
-                Move to Table @ViewData["BoardsNewTable"]
-            </h3>
+            <h4>
+                Pass to Table @ViewData["BoardsNewTable"]
+            </h4>
         }
     </div>
 </div>

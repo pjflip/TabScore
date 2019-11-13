@@ -5,23 +5,47 @@ namespace TabScore.Models
 {
     public static class Player
     {
-        public static string UpdateDatabase(string DB, string sectionID, string table, string round, string direction, string playerNumber) 
+        public static string UpdateDatabase(string DB, int sectionID, int table, int round, string direction, string playerNumber, bool individual) 
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 string dir = direction.Substring(0, 1);    // Need just N, S, E or W
-                string SQLString;
+                string SQLString = null;
                 object queryResult = null;
 
                 connection.Open();
                 // Get pair number for this player to set TabScorePairNo field
-                if (dir == "N" || dir == "S")
+                if (individual)
                 {
-                    SQLString = $"SELECT NSPair FROM RoundData WHERE Section={sectionID} AND [Table]={table} AND ROUND={round}";
+                    switch (dir)
+                    {
+                        case "N":
+                            SQLString = $"SELECT NSPair FROM RoundData WHERE Section={sectionID} AND [Table]={table} AND ROUND={round}";
+                            break;
+                        case "S":
+                            SQLString = $"SELECT South FROM RoundData WHERE Section={sectionID} AND [Table]={table} AND ROUND={round}";
+                            break;
+                        case "E":
+                            SQLString = $"SELECT EWPair FROM RoundData WHERE Section={sectionID} AND [Table]={table} AND ROUND={round}";
+                            break;
+                        case "W":
+                            SQLString = $"SELECT West FROM RoundData WHERE Section={sectionID} AND [Table]={table} AND ROUND={round}";
+                            break;
+                    }
                 }
                 else
                 {
-                    SQLString = $"SELECT EWPair FROM RoundData WHERE Section={sectionID} AND [Table]={table} AND ROUND={round}";
+                    switch (dir)
+                    {
+                        case "N":
+                        case "S":
+                            SQLString = $"SELECT NSPair FROM RoundData WHERE Section={sectionID} AND [Table]={table} AND ROUND={round}";
+                            break;
+                        case "E":
+                        case "W":
+                            SQLString = $"SELECT EWPair FROM RoundData WHERE Section={sectionID} AND [Table]={table} AND ROUND={round}";
+                            break;
+                    }
                 }
 
                 OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
@@ -40,12 +64,12 @@ namespace TabScore.Models
                 {
                     cmd1.Dispose();
                 }
-                string pairNo = queryResult.ToString();
+                string pairNo = queryResult.ToString();   // Doubles as player number for individual events
 
                 // Numbers entered at the start (when round = 1) need to be set as round 0
-                if (round == "1")
+                if (round == 1)
                 {
-                    round = "0";
+                    round = 0;
                 }
 
                 // Check if PlayerNumbers record exists; if it does update it, if not create it
@@ -252,7 +276,7 @@ namespace TabScore.Models
             return name;
         }
 
-        public static string GetName(string DB, string sectionID, string table, string round, string pairNo, string direction, bool formatUnknown)
+        public static string GetName(string DB, int sectionID, int round, int pairNo, string direction, bool formatUnknown)
         {
             string number = "###";
             string name = "";
@@ -442,6 +466,156 @@ namespace TabScore.Models
                 cmd1.Dispose();
 
                 if (number == "###")  // Nothing found in either direction!!
+                {
+                    number = "";
+                }
+            }
+            return FormatName(name, number, formatUnknown);
+        }
+
+        public static string GetNameIndividual(string DB, int sectionID, int round, int playerNo, bool formatUnknown)
+        {
+            string number = "###";
+            string name = "";
+            string errorString = "";
+
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                object queryResult = null;
+                connection.Open();
+
+                // Check to see if TabScorePairNo exists (it may get overwritten), and if not recreate it
+                string SQLString = $"SELECT 1 FROM PlayerNumbers WHERE TabScorePairNo IS NULL";
+                OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        queryResult = cmd1.ExecuteScalar();
+                    });
+                }
+                catch (OdbcException)
+                {
+                    return "Error";
+                }
+                finally
+                {
+                    cmd1.Dispose();
+                }
+
+                if (queryResult != null)
+                {
+                    // This duplicates the code in TabScoreStarter
+                    OdbcDataReader reader2;
+                    SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
+                    OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            reader2 = cmd2.ExecuteReader();
+                            while (reader2.Read())
+                            {
+                                int tempSectionID = reader2.GetInt32(0);
+                                int tempTable = reader2.GetInt32(1);
+                                string tempDirection = reader2.GetString(2);
+                                switch (tempDirection)
+                                {
+                                    case "N":
+                                        SQLString = $"SELECT NSPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                        break;
+                                    case "S":
+                                        SQLString = $"SELECT South FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                        break;
+                                    case "E":
+                                        SQLString = $"SELECT EWPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                        break;
+                                    case "W":
+                                        SQLString = $"SELECT West FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                        break;
+                                }
+
+                                OdbcCommand cmd3 = new OdbcCommand(SQLString, connection);
+                                try
+                                {
+                                    ODBCRetryHelper.ODBCRetry(() =>
+                                    {
+                                        queryResult = cmd3.ExecuteScalar();
+                                    });
+                                }
+                                catch (OdbcException)
+                                {
+                                    errorString = "Error";
+                                }
+                                cmd3.Dispose();
+                                if (errorString != "Error")
+                                {
+                                    string TSpairNo = queryResult.ToString();
+                                    SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID.ToString()} AND [Table]={tempTable.ToString()} AND Direction='{tempDirection}'";
+                                    OdbcCommand cmd4 = new OdbcCommand(SQLString, connection);
+                                    try
+                                    {
+                                        ODBCRetryHelper.ODBCRetry(() =>
+                                        {
+                                            cmd4.ExecuteNonQuery();
+                                        });
+                                    }
+                                    catch (OdbcException)
+                                    {
+                                        errorString = "Error";
+                                    }
+                                    cmd4.Dispose();
+                                }
+                            }
+                            reader2.Close();
+                        });
+                    }
+                    catch (OdbcException)
+                    {
+                        errorString = "Error";
+                    }
+                    cmd2.Dispose();
+                    if (errorString == "Error") return "Error";  // An error somewhere in all of this ...
+                }
+
+                // Now find name from TabScorePairNo
+                SQLString = $"SELECT Number, Name, Round FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={playerNo}";
+                OdbcCommand cmd5 = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader5 = null;
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        reader5 = cmd5.ExecuteReader();
+                        int biggestRoundSoFar = -1;
+                        int roundAsInt = Convert.ToInt32(round);
+                        while (reader5.Read())
+                        {
+                            int readerRound = Convert.ToInt32(reader5.GetValue(2));
+                            if (readerRound <= roundAsInt && readerRound > biggestRoundSoFar)
+                            {
+                                if (!reader5.IsDBNull(0))
+                                {
+                                    number = reader5.GetString(0);
+                                }
+                                if (!reader5.IsDBNull(1))
+                                {
+                                    name = reader5.GetString(1);
+                                }
+                                biggestRoundSoFar = readerRound;
+                            }
+                        }
+                    });
+                }
+                catch (OdbcException)
+                {
+                    errorString = "Error";
+                }
+                cmd5.Dispose();
+                reader5.Close();
+                if (errorString == "Error") return "Error";
+
+                if (number == "###")  // Nothing found
                 {
                     number = "";
                 }

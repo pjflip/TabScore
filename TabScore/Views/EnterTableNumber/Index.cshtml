@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Enter Table Number";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
-    var numTables = Convert.ToInt32(ViewData["NumTables"]);
+    var numTables = Convert.ToInt32(Session["NumTables"]);
 }
 
 <div id="tableLoggedOnModal" class="modal modal-dialog modal-lg">

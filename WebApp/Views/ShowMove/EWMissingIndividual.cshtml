@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Show Move";
+    ViewBag.Title = "Show Move EW Missing Individual";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 <div class="row mt-5">
@@ -13,48 +13,48 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            North/South: Pair @Session["PairNS"]
+            North: Number @Session["PairNS"]
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (ViewData["StayMoveNS"].ToString() == "Move")
+        @if (ViewData["StayMoveNorth"].ToString() == "Move")
         {
             <h3>
-                Move to Table @ViewData["NSNewTable"] @ViewData["NSNewDirection"]
+                Move to Table @ViewData["NorthNewTable"] @ViewData["NorthNewDirection"]
             </h3>
         }
         else
         {
             <h3>
-                Stay at Table @ViewData["NSNewTable"] @ViewData["NSNewDirection"]
+                Stay at Table @ViewData["NorthNewTable"] @ViewData["NorthNewDirection"]
             </h3>
         }
     </div>
 </div>
 
-<div class="row mt-4">
+<div class="row mt-3">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            East/West: Pair @Session["PairEW"]
+            South: Number @Session["South"]
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (ViewData["StayMoveEW"].ToString() == "Move")
+        @if (ViewData["StayMoveSouth"].ToString() == "Move")
         {
             <h3>
-                Move to Table @ViewData["EWNewTable"] @ViewData["EWNewDirection"]
+                Move to Table @ViewData["SouthNewTable"] @ViewData["SouthNewDirection"]
             </h3>
         }
         else
         {
             <h3>
-                Stay at Table @ViewData["EWNewTable"] @ViewData["EWNewDirection"]
+                Stay at Table @ViewData["SouthNewTable"] @ViewData["SouthNewDirection"]
             </h3>
         }
     </div>

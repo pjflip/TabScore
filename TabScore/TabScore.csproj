@@ -126,24 +126,24 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DBInfo.cs" />
     <Compile Include="Models\ODBCRetryHelper.cs" />
     <Compile Include="Models\Dealer.cs" />
+    <Compile Include="Models\Lead.cs" />
     <Compile Include="Models\HandRecord.cs" />
-    <Compile Include="Models\HandRecordClass.cs" />
+    <Compile Include="Models\BoardMove.cs" />
     <Compile Include="Models\Move.cs" />
-    <Compile Include="Models\MoveClass.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\RankingList.cs" />
-    <Compile Include="Models\RankingListClass.cs" />
-    <Compile Include="Models\RoundClass.cs" />
-    <Compile Include="Models\ResultClass.cs" />
+    <Compile Include="Models\Ranking.cs" />
     <Compile Include="Models\Round.cs" />
-    <Compile Include="Models\SectionClass.cs" />
-    <Compile Include="Models\Sections.cs" />
+    <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\LastRoundEntered.cs" />
+    <Compile Include="Models\Section.cs" />
+    <Compile Include="Models\SectionsList.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Tables.cs" />
     <Compile Include="Models\Traveller.cs" />
-    <Compile Include="Models\TravellerResultClass.cs" />
     <Compile Include="Models\Vulnerability.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -185,6 +185,7 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include=".editorconfig" />
     <None Include="Properties\PublishProfiles\TabScoreWebAppFolder.pubxml" />
     <Content Include="Scripts\bootstrap.min.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />
@@ -230,8 +231,8 @@
     <Content Include="Views\EnterLead\Index.cshtml" />
     <Content Include="Views\EnterTricksTaken\TotalTricks.cshtml" />
     <Content Include="Views\ShowBoards\Index.cshtml" />
-    <Content Include="Views\ShowMove\Index.cshtml" />
-    <Content Include="Views\ShowRoundInfo\Index.cshtml" />
+    <Content Include="Views\ShowMove\Pair.cshtml" />
+    <Content Include="Views\ShowRoundInfo\Pair.cshtml" />
     <Content Include="Views\StartScreen\Index.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\EnterTableNumber\Index.cshtml" />
@@ -245,11 +246,22 @@
     <Content Include="Views\ShowRankingList\OneWinner.cshtml" />
     <Content Include="Views\ShowRankingList\TwoWinners.cshtml" />
     <Content Include="Views\ShowPlayerNumbers\EWMissing.cshtml" />
-    <Content Include="Views\ShowPlayerNumbers\Index.cshtml" />
+    <Content Include="Views\ShowPlayerNumbers\Pair.cshtml" />
     <Content Include="Views\ShowPlayerNumbers\NSMissing.cshtml" />
     <Content Include="Views\EnterPlayerNumber\Index.cshtml" />
     <Content Include="Views\EnterTricksTaken\TricksPlusMinus.cshtml" />
     <Content Include="Views\ErrorScreen\Index.cshtml" />
+    <Content Include="Views\ShowPlayerNumbers\Individual.cshtml" />
+    <Content Include="Views\ShowPlayerNumbers\EWMissingIndividual.cshtml" />
+    <Content Include="Views\ShowPlayerNumbers\NSMissingIndividual.cshtml" />
+    <Content Include="Views\ShowRoundInfo\EWMissingIndividual.cshtml" />
+    <Content Include="Views\ShowRoundInfo\NSMissingIndividual.cshtml" />
+    <Content Include="Views\ShowRoundInfo\Individual.cshtml" />
+    <Content Include="Views\ShowMove\EWMissingIndividual.cshtml" />
+    <Content Include="Views\ShowMove\NSMissingIndividual.cshtml" />
+    <Content Include="Views\ShowMove\Individual.cshtml" />
+    <Content Include="Views\ShowRankingList\Individual.cshtml" />
+    <Content Include="Views\ShowFinalRankingList\Individual.cshtml" />
     <Content Include="Views\ShowFinalRankingList\OneWinner.cshtml" />
     <Content Include="Views\ShowFinalRankingList\TwoWinners.cshtml" />
   </ItemGroup>

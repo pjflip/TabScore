@@ -1,6 +1,5 @@
-﻿
-@{
-    ViewBag.Title = "ConfirmResult";
+﻿@{
+    ViewBag.Title = "Confirm Result";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -20,16 +19,26 @@
     </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-12 text-center">
-        <h3>
-            @Html.Raw(ViewData["DisplayContract"])
-        </h3>
-    </div>
-</div>
-
-@if (ViewData["DisplayContract"].ToString() != "PASSed Out")
+@if (ViewData["DisplayContract"].ToString() == "PASS")
 {
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h3>
+                <a style="color:darkgreen">PASSed Out</a>
+            </h3>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h3>
+                @Html.Raw(ViewData["DisplayContract"])
+            </h3>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12 text-center">
             <h3>
@@ -39,7 +48,7 @@
     </div>
 }
 
-    <script>
+<script>
     function validateOK() {
         location.href = '@Url.Action("OKButtonClick", "ConfirmResult")';
     }
@@ -47,4 +56,4 @@
     function backClick() {
         location.href = '@Url.Action("BackButtonClick", "ConfirmResult")';
     }
-    </script>
+</script>

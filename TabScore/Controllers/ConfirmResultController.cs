@@ -10,15 +10,13 @@ namespace TabScore.Controllers
         {
             if (Session["ContractLevel"].ToString() == "PASS")
             {
-                ViewData["DisplayContract"] = "PASSed Out";
+                ViewData["DisplayContract"] = "PASS";
             }
             else
             {
-                ResultClass res = new ResultClass
+                Result res = new Result
                 {
-                    Board = Session["Board"].ToString(),
-                    PairNS = Session["PairNS"].ToString(),
-                    PairEW = Session["PairEW"].ToString(),
+                    Board = Convert.ToInt32(Session["Board"]),
                     ContractLevel = Session["ContractLevel"].ToString(),
                     ContractSuit = Session["ContractSuit"].ToString(),
                     ContractX = Session["ContractX"].ToString(),
@@ -26,36 +24,34 @@ namespace TabScore.Controllers
                     TricksTakenNumber = Convert.ToInt32(Session["TricksTakenNumber"]),
                     LeadCard = Session["LeadCard"].ToString()
                 };
-                ViewData["DisplayContract"] = res.DisplayContract(2);
-
-                int score = res.Score();
-                if (score > 0)
+                ViewData["DisplayContract"] = res.DisplayContract();
+                res.CalculateScore();
+                if (res.Score > 0)
                 {
                     ViewData["Direction"] = "NS";
-                    ViewData["Score"] = score.ToString();
+                    ViewData["Score"] = res.ScoreNS;
                 }
                 else
                 {
                     ViewData["Direction"] = "EW";
-                    ViewData["Score"] = Convert.ToString(-score);
+                    ViewData["Score"] = res.ScoreEW;
                 }
             }
 
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "TRUE";
             return View();
         }
 
         public ActionResult OKButtonClick()
         {
-            ResultClass res = new ResultClass
+            Result res = new Result
             {
-                SectionID = Session["SectionID"].ToString(),
-                Table = Session["Table"].ToString(),
-                Round = Session["Round"].ToString(),
-                Board = Session["Board"].ToString(),
-                PairNS = Session["PairNS"].ToString(),
-                PairEW = Session["PairEW"].ToString(),
+                SectionID = Convert.ToInt32(Session["SectionID"]),
+                Table = Convert.ToInt32(Session["Table"]),
+                Round = Convert.ToInt32(Session["CurrentRound"]),
+                Board = Convert.ToInt32(Session["Board"]),
+                PairNS = Convert.ToInt32(Session["PairNS"]),
+                PairEW = Convert.ToInt32(Session["PairEW"]),
                 ContractLevel = Session["ContractLevel"].ToString(),
                 ContractSuit = Session["ContractSuit"].ToString(),
                 ContractX = Session["ContractX"].ToString(),
@@ -63,12 +59,21 @@ namespace TabScore.Controllers
                 TricksTakenNumber = Convert.ToInt32(Session["TricksTakenNumber"]),
                 LeadCard = Session["LeadCard"].ToString()
             };
+            res.CalculateScore();
+            Session["Score"] = res.Score;
 
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
-            if (res.UpdateDB(DBConnectionString) == "Error") return RedirectToAction("Index", "ErrorScreen");
-            Session["Score"] = res.Score().ToString();
+            if (Session["IndividualEvent"].ToString() == "YES")
+            {
+                res.South = Convert.ToInt32(Session["South"]);
+                res.West = Convert.ToInt32(Session["West"]);
+                if (res.WriteToDB(DBConnectionString, true) == "Error") return RedirectToAction("Index", "ErrorScreen");
+            }
+            else
+            {
+                if (res.WriteToDB(DBConnectionString, false) == "Error") return RedirectToAction("Index", "ErrorScreen");
+            }
 
             return RedirectToAction("Index", "ShowTraveller");
         }

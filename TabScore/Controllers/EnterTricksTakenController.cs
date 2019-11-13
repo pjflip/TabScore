@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -10,18 +11,16 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            ResultClass res = new ResultClass()
+            Result res = new Result()
             {
                 ContractLevel = Session["ContractLevel"].ToString(),
                 ContractSuit = Session["ContractSuit"].ToString(),
                 ContractX = Session["ContractX"].ToString(),
                 NSEW = Session["NSEW"].ToString()
             };
-            ViewData["DisplayContract"] = res.DisplayContract(2);
+            ViewData["DisplayContract"] = res.DisplayContract();
 
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "TRUE";
-
             if (Settings.GetSetting<int>(DBConnectionString, SettingName.EnterResultsMethod) == 1)
             {
                 return View("TotalTricks");
@@ -35,7 +34,7 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(string numTricks)
         {
-            Session["TricksTakenNumber"] = numTricks;
+            Session["TricksTakenNumber"] = Convert.ToInt32(numTricks);
             return RedirectToAction("Index", "ConfirmResult");
         }
 
@@ -50,7 +49,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "EnterContract", new { board = Session["Board"].ToString() } );
+                return RedirectToAction("Index", "EnterContract", new { board = Convert.ToInt32(Session["Board"]) } );
             }
         }
     }

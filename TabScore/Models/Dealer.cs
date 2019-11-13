@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace TabScore.Models
 {
     public static class Dealer
     {
-        public static string GetDealerForBoard(string boardNo)
+        public static string GetDealerForBoard(int board)
         {
-            int board = Convert.ToInt32(boardNo);
             switch ((board - 1) % 4)
             {
                 case 0:
@@ -22,7 +18,6 @@ namespace TabScore.Models
                     return "W";
                 default:
                     return "#";
-
             }
         }
     }

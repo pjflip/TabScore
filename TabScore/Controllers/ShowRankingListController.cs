@@ -12,17 +12,21 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (Convert.ToInt32(Session["Round"]) > 1)
+            if (Convert.ToInt32(Session["CurrentRound"]) > 1)
             {
                 int showRankingSetting = Settings.GetSetting<int>(DBConnectionString, SettingName.ShowRanking);
                 if (showRankingSetting == 1)
                 {
-                    List<RankingListClass> rankingList = RankingList.GetRankingList(DBConnectionString, Session["SectionID"].ToString());
+                    bool individual = Session["IndividualEvent"].ToString() == "YES";
+                    List<Ranking> rankingList = RankingList.GetRankingList(DBConnectionString, Convert.ToInt32(Session["SectionID"]), individual);
                     if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0" && rankingList[0].Score != "50")
                     {
-                        ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
                         ViewData["BackButton"] = "REFRESH";
-                        if (rankingList.Exists(x => x.Orientation == "E"))
+                        if (individual)
+                        {
+                            return View("Individual", rankingList);
+                        }
+                        else if (rankingList.Exists(x => x.Orientation == "E"))
                         {
                             return View("TwoWinners", rankingList);
                         }
@@ -33,7 +37,7 @@ namespace TabScore.Controllers
                     }
                 }
             }
-            return RedirectToAction("Index", "ShowMove", new { newRound = (Convert.ToInt32(Session["Round"]) + 1).ToString() });
+            return RedirectToAction("Index", "ShowMove", new { newRound = (Convert.ToInt32(Session["CurrentRound"]) + 1).ToString() });
         }
 
         public ActionResult OKButtonClick(string round)   // Pass back round to ensure it is not incremented twice by a double bounce

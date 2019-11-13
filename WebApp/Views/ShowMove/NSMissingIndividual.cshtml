@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "Show Move NS Missing Individual";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Move for Round @Session["Round"]
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3 style="color:blue">
+            East: Number @Session["PairEW"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @if (ViewData["StayMoveEast"].ToString() == "Move")
+        {
+            <h3>
+                Move to Table @ViewData["EastNewTable"] @ViewData["EastNewDirection"]
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Stay at Table @ViewData["EastNewTable"] @ViewData["EastNewDirection"]
+            </h3>
+        }
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12 text-center">
+        <h3 style="color:blue">
+            West: Number @Session["West"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @if (ViewData["StayMoveWest"].ToString() == "Move")
+        {
+            <h3>
+                Move to Table @ViewData["WestNewTable"] @ViewData["WestNewDirection"]
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Stay at Table @ViewData["WestNewTable"] @ViewData["WestNewDirection"]
+            </h3>
+        }
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3 style="color:green">
+            Boards: @Session["LowBoard"] to @Session["HighBoard"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @if (ViewData["BoardsNewTable"].ToString() == "0")
+        {
+            <h3>
+                Move to Relay Table
+            </h3>
+        }
+        else
+        {
+            <h3>
+                Move to Table @ViewData["BoardsNewTable"]
+            </h3>
+        }
+    </div>
+</div>
+
+<script>
+    function validateOK() {
+        location.href = '@Url.Action("OKButtonClick", "ShowMove")';
+    }
+</script>

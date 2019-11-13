@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Data.Odbc;
+﻿using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public static class Sections
+    public class LastRoundEntered
     {
-        public static List<SectionClass> GetSections(string DB)
+        public static int Get(string DB, int sectionID, int table)
         {
-            List<SectionClass> sList = new List<SectionClass>();
-
+            int maxRound = 1;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
-                string SQLString = "SELECT ID, Letter, Tables, MissingPair FROM Section";
+                string SQLString = $"SELECT Round FROM ReceivedData WHERE Section={sectionID} AND [Table]={table}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
                 try
@@ -22,20 +20,17 @@ namespace TabScore.Models
                         reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            SectionClass s = new SectionClass
+                            int thisRound = reader.GetInt32(0);
+                            if (thisRound > maxRound)
                             {
-                                ID = reader.GetInt32(0),
-                                Letter = reader.GetString(1),
-                                Tables = reader.GetInt32(2),
-                                MissingPair = reader.GetInt32(3)
-                            };
-                            sList.Add(s);
+                                maxRound = thisRound;
+                            }
                         }
                     });
                 }
                 catch (OdbcException)
                 {
-                    return null;
+                    return -1;
                 }
                 finally
                 {
@@ -43,7 +38,7 @@ namespace TabScore.Models
                     cmd.Dispose();
                 }
             }
-            return sList;
+            return maxRound;
         }
     }
 }

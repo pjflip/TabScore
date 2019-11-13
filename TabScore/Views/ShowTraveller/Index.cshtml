@@ -1,4 +1,4 @@
-﻿@model List<TabScore.Models.TravellerResultClass>
+﻿@model List<TabScore.Models.Result>
 @{
     ViewBag.Title = "Show Traveller";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -80,14 +80,22 @@
             <tbody>
                 @foreach (var Result in Model)
                 {
-                    if (Session["PairNS"].ToString() == Result.PairNS)
+                    if (Convert.ToInt32(Session["PairNS"]) == Result.PairNS)
                     {
                         <tr class="table-success">
-                            <td>@Result.PairNS</td>
-                            <td>@Result.PairEW</td>
-                            <td>@Html.Raw(Result.Contract)</td>
+                            @if (Session["IndividualEvent"].ToString() == "YES")
+                            {
+                                <td>@Result.PairNS+@Result.South</td>
+                                <td>@Result.PairEW+@Result.West</td>
+                            }
+                            else
+                            {
+                                <td>@Result.PairNS</td>
+                                <td>@Result.PairEW</td>
+                            }
+                            <td>@Html.Raw(Result.DisplayTravellerContract())</td>
                             <td>@Result.NSEW</td>
-                            <td>@Html.Raw(Result.LeadCard)</td>
+                            <td>@Html.Raw(Result.DisplayLeadCard())</td>
                             <td>@Result.TricksTakenSymbol</td>
                             <td>@Result.ScoreNS</td>
                             <td>@Result.ScoreEW</td>
@@ -96,11 +104,19 @@
                     else
                     {
                         <tr>
-                            <td>@Result.PairNS</td>
-                            <td>@Result.PairEW</td>
-                            <td>@Html.Raw(Result.Contract)</td>
+                            @if (Session["IndividualEvent"].ToString() == "YES")
+                            {
+                                <td>@Result.PairNS+@Result.South</td>
+                                <td>@Result.PairEW+@Result.West</td>
+                            }
+                            else
+                            {
+                                <td>@Result.PairNS</td>
+                                <td>@Result.PairEW</td>
+                            }
+                            <td>@Html.Raw(Result.DisplayTravellerContract())</td>
                             <td>@Result.NSEW</td>
-                            <td>@Html.Raw(Result.LeadCard)</td>
+                            <td>@Html.Raw(Result.DisplayLeadCard())</td>
                             <td>@Result.TricksTakenSymbol</td>
                             <td>@Result.ScoreNS</td>
                             <td>@Result.ScoreEW</td>

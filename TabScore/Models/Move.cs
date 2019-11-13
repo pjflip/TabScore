@@ -1,134 +1,208 @@
-﻿using System.Data.Odbc;
+﻿using System;
+using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public static class Move
+    public class Move
     {
-        public static MoveClass GetMoveInfo(string DB, string sectionID, string round, string pair, string dir)
-        {
-            MoveClass move = new MoveClass();
+        public int Table { get; }
 
+        public string Direction { get; }
+
+        public Move(string DB, int sectionID, int round, int pairOrPlayerNumber, bool individual, string dir = "")
+        {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                string SQLString;
                 object queryResult = null;
-                if (dir == "NS")
-                {
-                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND NSPair={pair}";
-                }
-                else
-                {
-                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND EWPair={pair}";
-                }
                 connection.Open();
+                string SQLString;
+                if (individual)
+                {
 
-                OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        queryResult = cmd1.ExecuteScalar();
-                    });
-                }
-                catch (OdbcException)
-                {
-                    move.Table = "Error";
-                    return move;
-                }
-                finally
-                {
-                    cmd1.Dispose();
-                }
-
-                if (queryResult != null)
-                {
-                    move.Table = queryResult.ToString();
-                    move.Direction = dir;
-                }
-                else
-                {
-                    // Pair changes direction
-                    if (dir == "NS")
-                    {
-                        SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND EWPair={pair}";
-                    }
-                    else
-                    {
-                        SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND NSPair={pair}";
-                    }
-
-                    OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                    // Try Direction = North
+                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND NSPair={pairOrPlayerNumber}";
+                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     try
                     {
                         ODBCRetryHelper.ODBCRetry(() =>
                         {
-                            queryResult = cmd2.ExecuteScalar();
+                            queryResult = cmd.ExecuteScalar();
                         });
                     }
                     catch (OdbcException)
                     {
-                        move.Table = "Error";
-                        return move;
+                        Table = -1;
+                        cmd.Dispose();
+                        return;
+                    }
+                    if (queryResult != null)
+                    {
+                        Table = Convert.ToInt32(queryResult);
+                        Direction = "North";
+                        cmd.Dispose();
+                        return;
+                    }
+
+                    // Try Direction = South
+                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND South={pairOrPlayerNumber}";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            queryResult = cmd.ExecuteScalar();
+                        });
+                    }
+                    catch (OdbcException)
+                    {
+                        Table = -1;
+                        cmd.Dispose();
+                        return;
+                    }
+                    if (queryResult != null)
+                    {
+                        Table = Convert.ToInt32(queryResult);
+                        Direction = "South";
+                        cmd.Dispose();
+                        return;
+                    }
+
+                    // Try Direction = East
+                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND EWPair={pairOrPlayerNumber}";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            queryResult = cmd.ExecuteScalar();
+                        });
+                    }
+                    catch (OdbcException)
+                    {
+                        Table = -1;
+                        cmd.Dispose();
+                        return;
+                    }
+                    if (queryResult != null)
+                    {
+                        Table = Convert.ToInt32(queryResult);
+                        Direction = "East";
+                        cmd.Dispose();
+                        return;
+                    }
+
+                    // Try Direction = West
+                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND West={pairOrPlayerNumber}";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            queryResult = cmd.ExecuteScalar();
+                        });
+                    }
+                    catch (OdbcException)
+                    {
+                        Table = -1;
+                        cmd.Dispose();
+                        return;
+                    }
+                    if (queryResult != null)
+                    {
+                        Table = Convert.ToInt32(queryResult);
+                        Direction = "West";
+                        cmd.Dispose();
+                        return;
+                    }
+                    else   // No move info found - move to sit out
+                    {
+                        Table = 0;
+                        Direction = "";
+                        return;
+                    }
+                }
+
+                else  // Not individual event
+                {
+                    if (dir == "NS")
+                    {
+                        SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND NSPair={pairOrPlayerNumber}";
+                    }
+                    else
+                    {
+                        SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND EWPair={pairOrPlayerNumber}";
+                    }
+
+                    OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            queryResult = cmd1.ExecuteScalar();
+                        });
+                    }
+                    catch (OdbcException)
+                    {
+                        Table = -1;
                     }
                     finally
                     {
-                        cmd2.Dispose();
+                        cmd1.Dispose();
                     }
 
                     if (queryResult != null)
                     {
-                        move.Table = queryResult.ToString();
+                        Table = Convert.ToInt32(queryResult);
+                        Direction = dir;
+                        return;
+                    }
+                    else
+                    {
+                        // Pair changes Direction
                         if (dir == "NS")
                         {
-                            move.Direction = "EW";
+                            SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND EWPair={pairOrPlayerNumber}";
                         }
                         else
                         {
-                            move.Direction = "NS";
+                            SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND NSPair={pairOrPlayerNumber}";
+                        }
+
+                        OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                        try
+                        {
+                            ODBCRetryHelper.ODBCRetry(() =>
+                            {
+                                queryResult = cmd2.ExecuteScalar();
+                            });
+                        }
+                        catch (OdbcException)
+                        {
+                            Table = -1;
+                        }
+                        finally
+                        {
+                            cmd2.Dispose();
+                        }
+
+                        if (queryResult != null)
+                        {
+                            Table = Convert.ToInt32(queryResult);
+                            if (dir == "NS")
+                            {
+                                Direction = "EW";
+                            }
+                            else
+                            {
+                                Direction = "NS";
+                            }
+                        }
+                        else   // No move info found - move to sit out
+                        {
+                            Table = 0;
+                            Direction = "";
                         }
                     }
-                    else   // No move info found - session complete
-                    {
-                        move.Table = "0";
-                        move.Direction = "";
-                    }
-                }
-            }
-            return move;
-        }
-
-        public static string GetBoardMoveInfo(string DB, string sectionID, string round, string lowBoard)
-        {
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                object queryResult = null;
-                string SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND LowBoard={lowBoard}";
-                connection.Open();
-
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        queryResult = cmd.ExecuteScalar();
-                    });
-                }
-                catch (OdbcException)
-                {
-                    return "Error";
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-
-                if (queryResult != null)
-                {
-                    return queryResult.ToString();
-                }
-                else
-                {
-                    return "0";
                 }
             }
         }

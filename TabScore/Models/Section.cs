@@ -1,6 +1,6 @@
 ﻿namespace TabScore.Models
 {
-    public class SectionClass
+    public class Section
     {
         public int ID;
         public string Letter;

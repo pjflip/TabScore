@@ -5,7 +5,7 @@ namespace TabScore.Models
 {
     public static class Tables
     {
-        public static int IsLoggedOn(string DB, string sectionID, string table)
+        public static int IsLoggedOn(string DB, int sectionID, string table)
         {
             object queryResult = null;
             using (OdbcConnection connection = new OdbcConnection(DB))
@@ -32,7 +32,7 @@ namespace TabScore.Models
             return Convert.ToInt32(queryResult);
         }
 
-        public static int Logon(string DB, string sectionID, string table)
+        public static int Logon(string DB, int sectionID, string table)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {

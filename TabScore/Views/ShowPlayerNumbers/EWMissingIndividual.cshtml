@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "Show Player Numbers EW Missing";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div id="notAllNamesModal" class="modal modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header text-primary">
+            <p class="modal-title text-center">
+                <h3>Warning</h3>
+            </p>
+        </div>
+        <div class="modal-body">
+            <p>Please select a name for both North and South</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-lg btn-success" data-dismiss="modal">
+                OK <span class="fa fa-check-circle"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3>
+            Enter/Edit Players:
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3 style="color:blue">
+            North: @ViewData["North"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1">
+    </div>
+    <div class="col-3">
+        @if (ViewData["PlayerNameNorth"].ToString() == "")
+        {
+            <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?dir=North'">
+                Enter
+            </button>
+        }
+        else
+        {
+            <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?dir=North'">
+                Edit
+            </button>
+        }
+    </div>
+    <div class="col-8 align-self-center">
+        <h4>
+            @ViewData["PlayerNameNorth"]
+        </h4>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12 text-center">
+        <h3 style="color:blue">
+            South: @ViewData["South"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1">
+    </div>
+    <div class="col-3">
+        @if (ViewData["PlayerNameSouth"].ToString() == "")
+        {
+            <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?dir=South'">
+                Enter
+            </button>
+        }
+        else
+        {
+            <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?dir=South'">
+                Edit
+            </button>
+        }
+    </div>
+    <div class="col-8 align-self-center">
+        <h4>
+            @ViewData["PlayerNameSouth"]
+        </h4>
+    </div>
+</div>
+
+<script>
+    function validateOK() {
+        if ("@ViewData["PlayerNameNorth"]" == "" || "@ViewData["PlayerNameSouth"]" == "") {
+            $("#notAllNamesModal").modal();
+        }
+        else {
+            location.href = '@Url.Action("OKButtonClick", "ShowPlayerNumbers")';
+        }
+    }
+</script>

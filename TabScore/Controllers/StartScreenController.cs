@@ -1,5 +1,6 @@
 ﻿using System.Data.Odbc;
 using System.Web.Mvc;
+using TabScore.Models;
 
 namespace TabScore.Controllers
 {
@@ -7,7 +8,7 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Header = "";
+            Session["Header"] = "";
             ViewData["BackButton"] = "FALSE";
             return View();
         }
@@ -28,7 +29,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                // Check that we can open the DB and set connection string for session
+                // Check that we can open the DB
                 OdbcConnectionStringBuilder cs = new OdbcConnectionStringBuilder();
                 cs.Driver = "Microsoft Access Driver (*.mdb)";
                 cs.Add("Dbq", pathToDB);
@@ -45,7 +46,12 @@ namespace TabScore.Controllers
                         return RedirectToAction("Index", "StartScreen");
                     }
                 }
+                
+                // Set connection string for the session.  This is used to check if the session is interrupted
                 Session["DBConnectionString"] = cs.ToString();
+
+                // Check if session is for an individual event
+                Session["IndividualEvent"] = DBInfo.IsIndividual(Session["DBConnectionString"].ToString());
 
                 return RedirectToAction("Index", "EnterSection");
             }

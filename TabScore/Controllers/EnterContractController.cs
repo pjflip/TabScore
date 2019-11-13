@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -15,12 +16,12 @@ namespace TabScore.Controllers
             if (Session["ContractLevel"].ToString() == "")
             {
                 /* No session data, so check database */
-                ResultClass res = new ResultClass
+                Result res = new Result
                 {
-                    SectionID = Session["SectionID"].ToString(),
-                    Table = Session["Table"].ToString(),
-                    Round = Session["Round"].ToString(),
-                    Board = board,
+                    SectionID = Convert.ToInt32(Session["SectionID"]),
+                    Table = Convert.ToInt32(Session["Table"]),
+                    Round = Convert.ToInt32(Session["CurrentRound"]),
+                    Board = Convert.ToInt32(board),
                     ContractLevel = "",
                     ContractSuit = "",
                     ContractX = "NONE",
@@ -28,17 +29,24 @@ namespace TabScore.Controllers
                     TricksTakenNumber = -1,
                     LeadCard = ""
                 };
-                if(!res.GetDBResult(DBConnectionString)) return RedirectToAction("Index", "ErrorScreen"); 
+                if(!res.ReadFromDB(DBConnectionString)) return RedirectToAction("Index", "ErrorScreen"); 
                 Session["ContractLevel"] = res.ContractLevel;
                 Session["ContractSuit"] = res.ContractSuit;
                 Session["ContractX"] = res.ContractX;
                 Session["NSEW"] = res.NSEW;
-                Session["TricksTakenNumber"] = res.TricksTakenNumber.ToString();
+                Session["TricksTakenNumber"] = res.TricksTakenNumber;
                 Session["LeadCard"] = res.LeadCard;
 
             }
 
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
+            if (Session["IndividualEvent"].ToString() == "YES")
+            {
+                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["CurrentRound"]} - {Vulnerability.SetPairString("NS", Convert.ToInt32(Session["Board"]), $"{Session["PairNS"]}+{Session["South"]}")} v {Vulnerability.SetPairString("EW", Convert.ToInt32(Session["Board"]), $"{Session["PairEW"]}+{Session["West"]}")}";
+            }
+            else
+            {
+                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["CurrentRound"]} - {Vulnerability.SetPairString("NS", Convert.ToInt32(Session["Board"]), $"NS {Session["PairNS"]}")} v {Vulnerability.SetPairString("EW", Convert.ToInt32(Session["Board"]), $"EW {Session["PairEW"]}")}";
+            }
             ViewData["BackButton"] = "TRUE";
             return View();
         }
@@ -59,7 +67,7 @@ namespace TabScore.Controllers
             Session["ContractX"] = "";
             Session["NSEW"] = "";
             Session["LeadCard"] = "";
-            Session["TricksTakenNumber"] = "-1";
+            Session["TricksTakenNumber"] = -1;
             return RedirectToAction("Index", "ConfirmResult");
         }
 

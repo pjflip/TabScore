@@ -4,77 +4,87 @@ namespace TabScore.Models
 {
     public class Round
     {
-        public static RoundClass GetRoundInfo(string DB, string sectionID, string table, string round)
+        public int Table;
+        public int RoundNumber;
+        public int PairNS;   // Doubles as North player number for individuals
+        public int PairEW;   // Doubles as East player number for individuals
+        public int LowBoard;
+        public int HighBoard;
+        public int South;
+        public int West;
+
+        public Round()   // Default constructor
         {
-            RoundClass rd = new RoundClass();
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                connection.Open();
-                string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={round}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                OdbcDataReader reader = null;
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        reader = cmd.ExecuteReader();
-                        if (reader.Read())
-                        {
-                            rd.PairNS = reader.GetInt32(0);
-                            rd.PairEW = reader.GetInt32(1);
-                            rd.LowBoard = reader.GetInt32(2);
-                            rd.HighBoard = reader.GetInt32(3);
-                        }
-                    });
-                }
-                catch (OdbcException)
-                {
-                    return null;
-                }
-                finally
-                {
-                    reader.Close();
-                    cmd.Dispose();
-                }
-            }
-            return rd;
         }
 
-        public static int GetLastEnteredRound(string DB, string sectionID, string table)
+        public Round(string DB, int sectionID, int table, int round, bool individual)
         {
-            int maxRound = 1;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
+                PairNS = 0;
                 connection.Open();
-                string SQLString = $"SELECT Round FROM ReceivedData WHERE Section={sectionID} AND [Table]={table}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                OdbcDataReader reader = null;
-                try
+                if (individual)
                 {
-                    ODBCRetryHelper.ODBCRetry(() =>
+                    string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={round}";
+                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                    OdbcDataReader reader = null;
+                    try
                     {
-                        reader = cmd.ExecuteReader();
-                        while (reader.Read())
+                        ODBCRetryHelper.ODBCRetry(() =>
                         {
-                            int thisRound = reader.GetInt32(0);
-                            if (thisRound > maxRound)
+                            reader = cmd.ExecuteReader();
+                            if (reader.Read())
                             {
-                                maxRound = thisRound;
+                                PairNS = reader.GetInt32(0);
+                                PairEW = reader.GetInt32(1);
+                                South = reader.GetInt32(2);
+                                West = reader.GetInt32(3);
+                                LowBoard = reader.GetInt32(4);
+                                HighBoard = reader.GetInt32(5);
                             }
-                        }
-                    });
+                        });
+                    }
+                    catch (OdbcException)
+                    {
+                        PairNS = -1;
+                    }
+                    finally
+                    {
+                        reader.Close();
+                        cmd.Dispose();
+                    }
                 }
-                catch (OdbcException)
+                else  // Not individual
                 {
-                    return -1;
-                }
-                finally
-                {
-                    reader.Close();
-                    cmd.Dispose();
+                    string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={round}";
+                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                    OdbcDataReader reader = null;
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            reader = cmd.ExecuteReader();
+                            if (reader.Read())
+                            {
+                                PairNS = reader.GetInt32(0);
+                                PairEW = reader.GetInt32(1);
+                                LowBoard = reader.GetInt32(2);
+                                HighBoard = reader.GetInt32(3);
+                            }
+                        });
+                    }
+                    catch (OdbcException)
+                    {
+                        PairNS = -1;
+                    }
+                    finally
+                    {
+                        reader.Close();
+                        cmd.Dispose();
+                    }
                 }
             }
-            return maxRound;
+            return;
         }
     }
 }

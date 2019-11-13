@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "Show Move EW Missing Individual";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            Move for Round @Session["CurrentRound"]
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3 style="color:blue">
+            North: @Session["PairNS"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @if (Convert.ToInt32(ViewData["NorthNewTable"]) == 0)
+        {
+            <h4>
+                Move to Sit Out
+            </h4>
+        }
+        else
+        {
+            if (ViewData["NorthStayMove"].ToString() == "Move")
+            {
+                <h4>
+                    Move to Table @ViewData["NorthNewTable"] @ViewData["NorthNewDirection"]
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    Stay at Table @ViewData["NorthNewTable"] @ViewData["NorthNewDirection"]
+                </h4>
+            }
+        }
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12 text-center">
+        <h3 style="color:blue">
+            South: @Session["South"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @if (Convert.ToInt32(ViewData["SouthNewTable"]) == 0)
+        {
+            <h4>
+                Move to Sit Out
+            </h4>
+        }
+        else
+        {
+            if (ViewData["SouthStayMove"].ToString() == "Move")
+            {
+                <h4>
+                    Move to Table @ViewData["SouthNewTable"] @ViewData["SouthNewDirection"]
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    Stay at Table @ViewData["SouthNewTable"] @ViewData["SouthNewDirection"]
+                </h4>
+            }
+        }
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h3 style="color:green">
+            Boards: @Session["LowBoard"] to @Session["HighBoard"]
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @if (ViewData["BoardsNewTable"].ToString() == "0")
+        {
+            <h4>
+                Pass to Relay Table
+            </h4>
+        }
+        else
+        {
+            <h4>
+                Pass to Table @ViewData["BoardsNewTable"]
+            </h4>
+        }
+    </div>
+</div>
+
+<script>
+    function validateOK() {
+        location.href = '@Url.Action("OKButtonClick", "ShowMove")';
+    }
+</script>

@@ -1,18 +1,56 @@
-﻿using System;
-using System.Data.Odbc;
-using System.Text;
+﻿using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public static class HandRecord
+    public class HandRecord
     {
-        public static HandRecordClass GetHandRecord(string DB, string sectionID, string board)
+        public string NorthSpades;
+        public string NorthHearts;
+        public string NorthDiamonds;
+        public string NorthClubs;
+        public string EastSpades;
+        public string EastHearts;
+        public string EastDiamonds;
+        public string EastClubs;
+        public string SouthSpades;
+        public string SouthHearts;
+        public string SouthDiamonds;
+        public string SouthClubs;
+        public string WestSpades;
+        public string WestHearts;
+        public string WestDiamonds;
+        public string WestClubs;
+
+        public string EvalNorthNT;
+        public string EvalNorthSpades;
+        public string EvalNorthHearts;
+        public string EvalNorthDiamonds;
+        public string EvalNorthClubs;
+        public string EvalEastNT;
+        public string EvalEastSpades;
+        public string EvalEastHearts;
+        public string EvalEastDiamonds;
+        public string EvalEastClubs;
+        public string EvalSouthNT;
+        public string EvalSouthSpades;
+        public string EvalSouthHearts;
+        public string EvalSouthDiamonds;
+        public string EvalSouthClubs;
+        public string EvalWestSpades;
+        public string EvalWestNT;
+        public string EvalWestHearts;
+        public string EvalWestDiamonds;
+        public string EvalWestClubs;
+
+        public string HCPNorth;
+        public string HCPSouth;
+        public string HCPEast;
+        public string HCPWest;
+
+        public HandRecord(string DB, int sectionID, int board)
         {
-            HandRecordClass hr = new HandRecordClass()
-            {
-                NorthSpades = "###",
-                EvalNorthSpades = "###"
-            };
+            NorthSpades = "###";
+            EvalNorthSpades = "###";
 
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
@@ -26,22 +64,22 @@ namespace TabScore.Models
                         OdbcDataReader reader = cmd.ExecuteReader();
                         if (reader.Read())
                         {
-                            hr.NorthSpades = reader.GetString(0);
-                            hr.NorthHearts = reader.GetString(1);
-                            hr.NorthDiamonds = reader.GetString(2);
-                            hr.NorthClubs = reader.GetString(3);
-                            hr.EastSpades = reader.GetString(4);
-                            hr.EastHearts = reader.GetString(5);
-                            hr.EastDiamonds = reader.GetString(6);
-                            hr.EastClubs = reader.GetString(7);
-                            hr.SouthSpades = reader.GetString(8);
-                            hr.SouthHearts = reader.GetString(9);
-                            hr.SouthDiamonds = reader.GetString(10);
-                            hr.SouthClubs = reader.GetString(11);
-                            hr.WestSpades = reader.GetString(12);
-                            hr.WestHearts = reader.GetString(13);
-                            hr.WestDiamonds = reader.GetString(14);
-                            hr.WestClubs = reader.GetString(15);
+                            NorthSpades = reader.GetString(0);
+                            NorthHearts = reader.GetString(1);
+                            NorthDiamonds = reader.GetString(2);
+                            NorthClubs = reader.GetString(3);
+                            EastSpades = reader.GetString(4);
+                            EastHearts = reader.GetString(5);
+                            EastDiamonds = reader.GetString(6);
+                            EastClubs = reader.GetString(7);
+                            SouthSpades = reader.GetString(8);
+                            SouthHearts = reader.GetString(9);
+                            SouthDiamonds = reader.GetString(10);
+                            SouthClubs = reader.GetString(11);
+                            WestSpades = reader.GetString(12);
+                            WestHearts = reader.GetString(13);
+                            WestDiamonds = reader.GetString(14);
+                            WestClubs = reader.GetString(15);
                         }
                         reader.Close();
                     });
@@ -50,12 +88,12 @@ namespace TabScore.Models
                 {
                     if (e.Errors.Count == 1 && e.Errors[0].SQLState != "42S02")  // HandRecord table does not exist
                     {
-                        return hr;
+                        return;
                     }
                     else
                     {
-                        hr.NorthSpades = "Error";
-                        return hr;
+                        NorthSpades = "Error";
+                        return;
                     }
                 }
                 finally
@@ -72,31 +110,31 @@ namespace TabScore.Models
                         OdbcDataReader reader = cmd.ExecuteReader();
                         if (reader.Read())
                         {
-                            if (reader.GetInt16(0) > 6) hr.EvalNorthSpades = (reader.GetInt16(0) - 6).ToString(); else hr.EvalNorthSpades = "";
-                            if (reader.GetInt16(1) > 6) hr.EvalNorthHearts = (reader.GetInt16(1) - 6).ToString(); else hr.EvalNorthHearts = "";
-                            if (reader.GetInt16(2) > 6) hr.EvalNorthDiamonds = (reader.GetInt16(2) - 6).ToString(); else hr.EvalNorthDiamonds = "";
-                            if (reader.GetInt16(3) > 6) hr.EvalNorthClubs = (reader.GetInt16(3) - 6).ToString(); else hr.EvalNorthClubs = "";
-                            if (reader.GetInt16(4) > 6) hr.EvalNorthNT = (reader.GetInt16(4) - 6).ToString(); else hr.EvalNorthNT = "";
-                            if (reader.GetInt16(5) > 6) hr.EvalEastSpades = (reader.GetInt16(5) - 6).ToString(); else hr.EvalEastSpades = "";
-                            if (reader.GetInt16(6) > 6) hr.EvalEastHearts = (reader.GetInt16(6) - 6).ToString(); else hr.EvalEastHearts = "";
-                            if (reader.GetInt16(7) > 6) hr.EvalEastDiamonds = (reader.GetInt16(7) - 6).ToString(); else hr.EvalEastDiamonds = "";
-                            if (reader.GetInt16(8) > 6) hr.EvalEastClubs = (reader.GetInt16(8) - 6).ToString(); else hr.EvalEastClubs = "";
-                            if (reader.GetInt16(9) > 6) hr.EvalEastNT = (reader.GetInt16(9) - 6).ToString(); else hr.EvalEastNT = "";
-                            if (reader.GetInt16(10) > 6) hr.EvalSouthSpades = (reader.GetInt16(10) - 6).ToString(); else hr.EvalSouthSpades = "";
-                            if (reader.GetInt16(11) > 6) hr.EvalSouthHearts = (reader.GetInt16(11) - 6).ToString(); else hr.EvalSouthHearts = "";
-                            if (reader.GetInt16(12) > 6) hr.EvalSouthDiamonds = (reader.GetInt16(12) - 6).ToString(); else hr.EvalSouthDiamonds = "";
-                            if (reader.GetInt16(13) > 6) hr.EvalSouthClubs = (reader.GetInt16(13) - 6).ToString(); else hr.EvalSouthClubs = "";
-                            if (reader.GetInt16(14) > 6) hr.EvalSouthNT = (reader.GetInt16(14) - 6).ToString(); else hr.EvalSouthNT = "";
-                            if (reader.GetInt16(15) > 6) hr.EvalWestSpades = (reader.GetInt16(15) - 6).ToString(); else hr.EvalWestSpades = "";
-                            if (reader.GetInt16(16) > 6) hr.EvalWestHearts = (reader.GetInt16(16) - 6).ToString(); else hr.EvalWestHearts = "";
-                            if (reader.GetInt16(17) > 6) hr.EvalWestDiamonds = (reader.GetInt16(17) - 6).ToString(); else hr.EvalWestDiamonds = "";
-                            if (reader.GetInt16(18) > 6) hr.EvalWestClubs = (reader.GetInt16(18) - 6).ToString(); else hr.EvalWestClubs = "";
-                            if (reader.GetInt16(19) > 6) hr.EvalWestNT = (reader.GetInt16(19) - 6).ToString(); else hr.EvalWestNT = "";
+                            if (reader.GetInt16(0) > 6) EvalNorthSpades = (reader.GetInt16(0) - 6).ToString(); else EvalNorthSpades = "";
+                            if (reader.GetInt16(1) > 6) EvalNorthHearts = (reader.GetInt16(1) - 6).ToString(); else EvalNorthHearts = "";
+                            if (reader.GetInt16(2) > 6) EvalNorthDiamonds = (reader.GetInt16(2) - 6).ToString(); else EvalNorthDiamonds = "";
+                            if (reader.GetInt16(3) > 6) EvalNorthClubs = (reader.GetInt16(3) - 6).ToString(); else EvalNorthClubs = "";
+                            if (reader.GetInt16(4) > 6) EvalNorthNT = (reader.GetInt16(4) - 6).ToString(); else EvalNorthNT = "";
+                            if (reader.GetInt16(5) > 6) EvalEastSpades = (reader.GetInt16(5) - 6).ToString(); else EvalEastSpades = "";
+                            if (reader.GetInt16(6) > 6) EvalEastHearts = (reader.GetInt16(6) - 6).ToString(); else EvalEastHearts = "";
+                            if (reader.GetInt16(7) > 6) EvalEastDiamonds = (reader.GetInt16(7) - 6).ToString(); else EvalEastDiamonds = "";
+                            if (reader.GetInt16(8) > 6) EvalEastClubs = (reader.GetInt16(8) - 6).ToString(); else EvalEastClubs = "";
+                            if (reader.GetInt16(9) > 6) EvalEastNT = (reader.GetInt16(9) - 6).ToString(); else EvalEastNT = "";
+                            if (reader.GetInt16(10) > 6) EvalSouthSpades = (reader.GetInt16(10) - 6).ToString(); else EvalSouthSpades = "";
+                            if (reader.GetInt16(11) > 6) EvalSouthHearts = (reader.GetInt16(11) - 6).ToString(); else EvalSouthHearts = "";
+                            if (reader.GetInt16(12) > 6) EvalSouthDiamonds = (reader.GetInt16(12) - 6).ToString(); else EvalSouthDiamonds = "";
+                            if (reader.GetInt16(13) > 6) EvalSouthClubs = (reader.GetInt16(13) - 6).ToString(); else EvalSouthClubs = "";
+                            if (reader.GetInt16(14) > 6) EvalSouthNT = (reader.GetInt16(14) - 6).ToString(); else EvalSouthNT = "";
+                            if (reader.GetInt16(15) > 6) EvalWestSpades = (reader.GetInt16(15) - 6).ToString(); else EvalWestSpades = "";
+                            if (reader.GetInt16(16) > 6) EvalWestHearts = (reader.GetInt16(16) - 6).ToString(); else EvalWestHearts = "";
+                            if (reader.GetInt16(17) > 6) EvalWestDiamonds = (reader.GetInt16(17) - 6).ToString(); else EvalWestDiamonds = "";
+                            if (reader.GetInt16(18) > 6) EvalWestClubs = (reader.GetInt16(18) - 6).ToString(); else EvalWestClubs = "";
+                            if (reader.GetInt16(19) > 6) EvalWestNT = (reader.GetInt16(19) - 6).ToString(); else EvalWestNT = "";
 
-                            hr.HCPNorth = reader.GetInt16(20).ToString();
-                            hr.HCPEast = reader.GetInt16(21).ToString();
-                            hr.HCPSouth = reader.GetInt16(22).ToString();
-                            hr.HCPWest = reader.GetInt16(23).ToString();
+                            HCPNorth = reader.GetInt16(20).ToString();
+                            HCPEast = reader.GetInt16(21).ToString();
+                            HCPSouth = reader.GetInt16(22).ToString();
+                            HCPWest = reader.GetInt16(23).ToString();
                         }
                         reader.Close();
                     });
@@ -105,8 +143,8 @@ namespace TabScore.Models
                 {
                     if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Error other than HandEvaluation table does not exist
                     {
-                        hr.NorthSpades = "Error";
-                        return hr;
+                        NorthSpades = "Error";
+                        return;
                     }
                 }
                 finally
@@ -114,88 +152,7 @@ namespace TabScore.Models
                     cmd.Dispose();
                 }
             }
-            return hr;
-        }
-
-        public static bool ValidateLead(string DB, string sectionID, string board, string card, string NSEW)
-        {
-            if (card == "SKIP") return true;
-            if (card.Substring(1,1) == "1")    // Account for different representations of '10'
-            {
-                card = card.Substring(0, 1) + "T";
-            }
-            StringBuilder SQLString = new StringBuilder();
-            SQLString.Append("SELECT ");
-            switch (NSEW)
-            {
-                case "N":
-                    SQLString.Append("East");
-                    break;
-                case "S":
-                    SQLString.Append("West");
-                    break;
-                case "E":
-                    SQLString.Append("South");
-                    break;
-                case "W":
-                    SQLString.Append("North");
-                    break;
-            }
-            switch (card.Substring(0, 1))
-            {
-                case "S":
-                    SQLString.Append("Spades");
-                    break;
-                case "H":
-                    SQLString.Append("Hearts");
-                    break;
-                case "D":
-                    SQLString.Append("Diamonds");
-                    break;
-                case "C":
-                    SQLString.Append("Clubs");
-                    break;
-            }
-            SQLString.Append($" FROM HandRecord WHERE Section={sectionID} AND Board={board}");
-
-            bool validateOk = true;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                OdbcCommand cmd = new OdbcCommand(SQLString.ToString(), connection);
-                connection.Open();
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        object queryResult = cmd.ExecuteScalar();
-                        if (queryResult == null)
-                        {
-                            validateOk = true;
-                        }
-                        else
-                        {
-                            string suitString = queryResult.ToString();
-                            if (suitString.Contains(card.Substring(1, 1)))
-                            {
-                                validateOk = true;
-                            }
-                            else
-                            {
-                                validateOk = false;
-                            }
-                        }
-                    });
-                }
-                catch (OdbcException)  // An error occurred, even after retries, so no validation possible 
-                {
-                    return true;
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-            }
-            return validateOk;
+            return;
         }
     }
 }

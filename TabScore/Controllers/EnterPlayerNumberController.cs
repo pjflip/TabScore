@@ -1,5 +1,6 @@
 ﻿using TabScore.Models;
 using System.Web.Mvc;
+using System;
 
 namespace TabScore.Controllers
 {
@@ -10,8 +11,7 @@ namespace TabScore.Controllers
         {
             ViewData["Direction"] = dir;
             ViewData["BackButton"] = "FALSE";
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]}";
-
+            Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]}";
             return View();
         }
 
@@ -20,7 +20,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (Player.UpdateDatabase(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString(), Session["Round"].ToString(), direction, playerNumber) == "Error")
+            if (Player.UpdateDatabase(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]), Convert.ToInt32(Session["CurrentRound"]), direction, playerNumber, Session["IndividualEvent"].ToString() == "YES") == "Error")
             {
                 return RedirectToAction("Index", "ErrorScreen");
             };

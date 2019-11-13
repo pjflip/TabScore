@@ -6,90 +6,309 @@ namespace TabScore.Models
 {
     public static class RankingList
     {
-        public static List<RankingListClass> GetRankingList(string DB, string sectionID)
+        public static List<Ranking> GetRankingList(string DB, int sectionID, bool individual)
         {
-            List<RankingListClass> rList = new List<RankingListClass>();
-            int Winners = 0;
+            List<Ranking> rankingList = new List<Ranking>();
 
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
                 string SQLString = $"SELECT Orientation, Number, Score, Rank FROM Results WHERE Section={sectionID}";
 
-                OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader1 = null;
                 try
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        reader1 = cmd1.ExecuteReader();
+                        reader1 = cmd.ExecuteReader();
                         while (reader1.Read())
                         {
-                            RankingListClass rl = new RankingListClass();
-                            rl.Orientation = reader1.GetString(0);
-                            rl.PairNo = reader1.GetInt32(1).ToString();
-                            rl.Score = reader1.GetString(2);
-                            rl.Rank = reader1.GetString(3);
-
-                            rList.Add(rl);
+                            Ranking ranking = new Ranking
+                            {
+                                Orientation = reader1.GetString(0),
+                                PairNo = reader1.GetInt32(1),
+                                Score = reader1.GetString(2),
+                                Rank = reader1.GetString(3)
+                            };
+                            rankingList.Add(ranking);
                         }
                     });
-                }
-                catch (OdbcException e)
-                {
-                    if (e.Errors.Count == 1 && e.Errors[0].SQLState == "42S02")
+                    reader1.Close();
+                    cmd.Dispose();
+                    if (rankingList.Count == 0)  // Results table exists but is empty
                     {
-                        // Results table doesn't exist, so check Winners
-                        object queryResult = null;
-                        SQLString = $"SELECT Winners FROM Section WHERE ID={sectionID}";
-                        OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
-                        try
+                        if (individual)
                         {
-                            ODBCRetryHelper.ODBCRetry(() =>
-                            {
-                                queryResult = cmd2.ExecuteScalar();
-                            });
-                            Winners = Convert.ToInt32(queryResult);
-                            if (Winners == 0)
-                            {
-                                // Winners not set, so no chance of calculating ranking
-                                return null;
-                            }
-                            else
-                            {
-                                // No Results table and Winners = 1 or 2, so use ReceivedData to calculate ranking
-                                return CalculateRankingFromReceivedData(DB, sectionID, Winners);
-                            }
+                            return CalculateIndividualRankingFromReceivedData(DB, sectionID);
                         }
-                        catch (OdbcException)
+                        else
                         {
-                            // If Winners column doesn't exist, or any other error, can't calculate ranking
-                            return null;
-                        }
-                        finally
-                        {
-                            cmd2.Dispose();
+                            return CalculateRankingFromReceivedData(DB, sectionID);
                         }
                     }
                 }
-                finally
+                catch (OdbcException e)
                 {
                     reader1.Close();
-                    cmd1.Dispose();
+                    cmd.Dispose();
+                    if (e.Errors.Count == 1 && e.Errors[0].SQLState == "42S02")  // Results table doesn't exist
+                    {
+                        if (individual)
+                        {
+                            return CalculateIndividualRankingFromReceivedData(DB, sectionID);
+                        }
+                        else
+                        {
+                            return CalculateRankingFromReceivedData(DB, sectionID);
+                        }
+                    }
                 }
-                return rList;
+                return rankingList;
             }
         }
 
-        private static List<RankingListClass> CalculateRankingFromReceivedData(string DB, string sectionID, int Winners)
+        private static List<Ranking> CalculateRankingFromReceivedData(string DB, int sectionID)
         {
-            List<RankingListClass> rList = new List<RankingListClass>();
-            List<TravellerResultClass> trList = new List<TravellerResultClass>();
+            List<Ranking> rankingList = new List<Ranking>();
+            List<Result> resList = new List<Result>();
+
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                int Winners = 0;
+                connection.Open();
+
+                // Check Winners
+                object queryResult = null;
+                string SQLString = $"SELECT Winners FROM Section WHERE ID={sectionID}";
+                OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        queryResult = cmd1.ExecuteScalar();
+                    });
+                    Winners = Convert.ToInt32(queryResult);
+                }
+                catch (OdbcException)
+                {
+                    // If Winners column doesn't exist, or any other error, can't calculate ranking
+                    return null;
+                }
+                finally
+                {
+                    cmd1.Dispose();
+                }
+
+                if (Winners == 0)
+                {
+                    // Winners not set, so no chance of calculating ranking
+                    return null;
+                }
+
+                // No Results table and Winners = 1 or 2, so use ReceivedData to calculate ranking
+                SQLString = $"SELECT Board, PairNS, PairEW, [NS/EW], Contract, Result FROM ReceivedData WHERE Section={sectionID}";
+                OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader = null;
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        reader = cmd2.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Result res = new Result()
+                            {
+                                Board = reader.GetInt32(0),
+                                PairNS = reader.GetInt32(1),
+                                PairEW = reader.GetInt32(2),
+                                NSEW = reader.GetString(3),
+                                Contract = reader.GetString(4),
+                                TricksTakenSymbol = reader.GetString(5)
+                            };
+                            if (res.Contract.Length > 2)  // Testing for corrupt ReceivedData table
+                                {
+                                res.CalculateScore();
+                                resList.Add(res);
+                            }
+                        }
+                    });
+                }
+                catch (OdbcException)
+                {
+                    return null;
+                }
+                finally
+                {
+                    reader.Close();
+                    cmd2.Dispose();
+                }
+
+                // Calculate MPs 
+                List<Result> currentBoardResultList = new List<Result>();
+                int currentBoard;
+                int currentScore;
+                foreach (Result res in resList)
+                {
+                    currentScore = res.Score;
+                    currentBoard = res.Board;
+                    currentBoardResultList = resList.FindAll(x => x.Board == currentBoard);
+                    res.MPNS = 2 * currentBoardResultList.FindAll(x => x.Score < currentScore).Count + currentBoardResultList.FindAll(x => x.Score == currentScore).Count - 1;
+                    res.MPMax = 2 * currentBoardResultList.Count - 2;
+                    res.MPEW = res.MPMax - res.MPNS;
+                }
+
+                if (Winners == 1)
+                {
+                    // Add up MPs for each pair, creating Ranking List entries as we go
+                    foreach (Result res in resList)
+                    {
+                        Ranking rankingListFind = rankingList.Find(x => x.PairNo == res.PairNS);
+                        if (rankingListFind == null)
+                        {
+                            Ranking ranking = new Ranking()
+                            {
+                                PairNo = res.PairNS,
+                                Orientation = "0",
+                                MP = res.MPNS,
+                                MPMax = res.MPMax
+                            };
+                            rankingList.Add(ranking);
+                        }
+                        else
+                        {
+                            rankingListFind.MP += res.MPNS;
+                            rankingListFind.MPMax += res.MPMax;
+                        }
+                        rankingListFind = rankingList.Find(x => x.PairNo == res.PairEW);
+                        if (rankingListFind == null)
+                        {
+                            Ranking ranking = new Ranking()
+                            {
+                                PairNo = res.PairEW,
+                                Orientation = "0",
+                                MP = res.MPEW,
+                                MPMax = res.MPMax
+                            };
+                            rankingList.Add(ranking);
+                        }
+                        else
+                        {
+                            rankingListFind.MP += res.MPEW;
+                            rankingListFind.MPMax += res.MPMax;
+                        }
+                    }
+                    // Calculate percentages
+                    foreach (Ranking ranking in rankingList)
+                    {
+                        if (ranking.MPMax == 0)
+                        {
+                            ranking.ScoreDecimal = 50.0;
+                        }
+                        else
+                        {
+                            ranking.ScoreDecimal = 100.0 * ranking.MP / ranking.MPMax;
+                        }
+                        ranking.Score = ranking.ScoreDecimal.ToString("0.##");
+                    }
+                    // Calculate ranking
+                    rankingList.Sort((x, y) => y.ScoreDecimal.CompareTo(x.ScoreDecimal));
+                    foreach (Ranking ranking in rankingList)
+                    {
+                        double currentScoreDecimal = ranking.ScoreDecimal;
+                        int rank = rankingList.FindAll(x => x.ScoreDecimal > currentScoreDecimal).Count + 1;
+                        ranking.Rank = rank.ToString();
+                        if (rankingList.FindAll(x => x.ScoreDecimal == currentScoreDecimal).Count > 1)
+                        {
+                            ranking.Rank += "=";
+                        }
+                    }
+                }
+                else    // Winners = 2
+                {
+                    // Add up MPs for each pair, creating Ranking List entries as we go
+                    foreach (Result res in resList)
+                    {
+                        Ranking rankingListFind = rankingList.Find(x => x.PairNo == res.PairNS && x.Orientation == "N");
+                        if (rankingListFind == null)
+                        {
+                            Ranking ranking = new Ranking()
+                            {
+                                PairNo = res.PairNS,
+                                Orientation = "N",
+                                MP = res.MPNS,
+                                MPMax = res.MPMax
+                            };
+                            rankingList.Add(ranking);
+                        }
+                        else
+                        {
+                            rankingListFind.MP += res.MPNS;
+                            rankingListFind.MPMax += res.MPMax;
+                        }
+                        rankingListFind = rankingList.Find(x => x.PairNo == res.PairEW && x.Orientation == "E");
+                        if (rankingListFind == null)
+                        {
+                            Ranking ranking = new Ranking()
+                            {
+                                PairNo = res.PairEW,
+                                Orientation = "E",
+                                MP = res.MPEW,
+                                MPMax = res.MPMax
+                            };
+                            rankingList.Add(ranking);
+                        }
+                        else
+                        {
+                            rankingListFind.MP += res.MPEW;
+                            rankingListFind.MPMax += res.MPMax;
+                        }
+                    }
+                    // Calculate percentages
+                    foreach (Ranking ranking in rankingList)
+                    {
+                        if (ranking.MPMax == 0)
+                        {
+                            ranking.ScoreDecimal = 50.0;
+                        }
+                        else
+                        {
+                            ranking.ScoreDecimal = 100.0 * ranking.MP / ranking.MPMax;
+                        }
+                        ranking.Score = ranking.ScoreDecimal.ToString("0.##");
+                    }
+                    // Sort and calculate ranking within Orientation subsections
+                    rankingList.Sort((x, y) =>
+                    {
+                        var ret = y.Orientation.CompareTo(x.Orientation);    // N's first then E's
+                            if (ret == 0) ret = y.ScoreDecimal.CompareTo(x.ScoreDecimal);
+                        return ret;
+                    });
+                    foreach (Ranking ranking in rankingList)
+                    {
+                        double currentScoreDecimal = ranking.ScoreDecimal;
+                        string currentOrientation = ranking.Orientation;
+                        int rank = rankingList.FindAll(x => x.Orientation == currentOrientation && x.ScoreDecimal > currentScoreDecimal).Count + 1;
+                        ranking.Rank = rank.ToString();
+                        if (rankingList.FindAll(x => x.Orientation == currentOrientation && x.ScoreDecimal == currentScoreDecimal).Count > 1)
+                        {
+                            ranking.Rank += "=";
+                        }
+                    }
+                }
+                return rankingList;
+            }
+        }
+
+        private static List<Ranking> CalculateIndividualRankingFromReceivedData(string DB, int sectionID)
+        {
+            List<Ranking> rankingList = new List<Ranking>();
+            List<Result> resList = new List<Result>();
 
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
-                string SQLString = $"SELECT Board, PairNS, PairEW, [NS/EW], Contract, Result FROM ReceivedData WHERE Section={sectionID}";
+                string SQLString = $"SELECT Table, Round, Board, PairNS, PairEW, South, West, [NS/EW], Contract, Result FROM ReceivedData WHERE Section={sectionID}";
 
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
@@ -100,18 +319,23 @@ namespace TabScore.Models
                         reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            TravellerResultClass tr = new TravellerResultClass()
+                            Result res = new Result()
                             {
-                                Board = reader.GetInt32(0).ToString(),
-                                PairNS = reader.GetInt32(1).ToString(),
-                                PairEW = reader.GetInt32(2).ToString(),
-                                NSEW = reader.GetString(3),
-                                Contract = reader.GetString(4),
-                                TricksTakenSymbol = reader.GetString(5)
+                                Table = reader.GetInt32(0),
+                                Round = reader.GetInt32(1),
+                                Board = reader.GetInt32(2),
+                                PairNS = reader.GetInt32(3),
+                                PairEW = reader.GetInt32(4),
+                                South = reader.GetInt32(5),
+                                West = reader.GetInt32(6),
+                                NSEW = reader.GetString(7),
+                                Contract = reader.GetString(8),
+                                TricksTakenSymbol = reader.GetString(9)
                             };
-                            if (tr.Contract.Length > 2)  // Testing for corrupt ReceivedData table
+                            if (res.Contract.Length > 2)  // Testing for corrupt ReceivedData table
                             {
-                                trList.Add(tr);
+                                res.CalculateScore();
+                                resList.Add(res);
                             }
                         }
                     });
@@ -127,185 +351,119 @@ namespace TabScore.Models
                 }
             }
 
-            foreach (TravellerResultClass tr in trList)
+            // Calculate MPs 
+            List<Result> currentBoardResultList = new List<Result>();
+            int currentBoard;
+            int currentScore;
+            foreach (Result res in resList)
             {
-                // Use ResultClass Score method to calculate score
-                ResultClass res = new ResultClass()
+                currentScore = res.Score;
+                currentBoard = res.Board;
+                currentBoardResultList = resList.FindAll(x => x.Board == currentBoard);
+                res.MPNS = 2 * currentBoardResultList.FindAll(x => x.Score < currentScore).Count + currentBoardResultList.FindAll(x => x.Score == currentScore).Count - 1;
+                res.MPMax = 2 * currentBoardResultList.Count - 2;
+                res.MPEW = res.MPMax - res.MPNS;
+            }
+
+            // Add up MPs for each pair, creating Ranking List entries as we go
+            foreach (Result res in resList)
+            {
+                Ranking rankingListFind = rankingList.Find(x => x.PairNo == res.PairNS);
+                if (rankingListFind == null)
                 {
-                    SectionID = sectionID,
-                    Board = tr.Board,
-                };
-                if (tr.Contract == "PASS")
-                {
-                    res.ContractLevel = "PASS";
-                    res.NSEW = "";
-                    res.TricksTakenSymbol = "";
+                    Ranking ranking = new Ranking()
+                    {
+                        PairNo = res.PairNS,
+                        Orientation = "0",
+                        MP = res.MPNS,
+                        MPMax = res.MPMax
+                    };
+                    rankingList.Add(ranking);
                 }
                 else
                 {
-                    string[] temp = tr.Contract.Split(' ');
-                    res.ContractLevel = temp[0];
-                    res.ContractSuit = temp[1];
-                    if (temp.Length > 2) res.ContractX = temp[2];
-                    else res.ContractX = "NONE";
-                    res.NSEW = tr.NSEW;
-                    res.TricksTakenSymbol = tr.TricksTakenSymbol;
+                    rankingListFind.MP += res.MPNS;
+                    rankingListFind.MPMax += res.MPMax;
                 }
-                tr.Score = res.Score();
+                rankingListFind = rankingList.Find(x => x.PairNo == res.PairEW);
+                if (rankingListFind == null)
+                {
+                    Ranking ranking = new Ranking()
+                    {
+                        PairNo = res.PairEW,
+                        Orientation = "0",
+                        MP = res.MPEW,
+                        MPMax = res.MPMax
+                    };
+                    rankingList.Add(ranking);
+                }
+                else
+                {
+                    rankingListFind.MP += res.MPEW;
+                    rankingListFind.MPMax += res.MPMax;
+                }
+                rankingListFind = rankingList.Find(x => x.PairNo == res.South);
+                if (rankingListFind == null)
+                {
+                    Ranking ranking = new Ranking()
+                    {
+                        PairNo = res.South,
+                        Orientation = "0",
+                        MP = res.MPNS,
+                        MPMax = res.MPMax
+                    };
+                    rankingList.Add(ranking);
+                }
+                else
+                {
+                    rankingListFind.MP += res.MPNS;
+                    rankingListFind.MPMax += res.MPMax;
+                }
+                rankingListFind = rankingList.Find(x => x.PairNo == res.West);
+                if (rankingListFind == null)
+                {
+                    Ranking ranking = new Ranking()
+                    {
+                        PairNo = res.West,
+                        Orientation = "0",
+                        MP = res.MPEW,
+                        MPMax = res.MPMax
+                    };
+                    rankingList.Add(ranking);
+                }
+                else
+                {
+                    rankingListFind.MP += res.MPEW;
+                    rankingListFind.MPMax += res.MPMax;
+                }
+            }
+            // Calculate percentages
+            foreach (Ranking ranking in rankingList)
+            {
+                if (ranking.MPMax == 0)
+                {
+                    ranking.ScoreDecimal = 50.0;
+                }
+                else
+                {
+                    ranking.ScoreDecimal = 100.0 * ranking.MP / ranking.MPMax;
+                }
+                ranking.Score = ranking.ScoreDecimal.ToString("0.##");
+            }
+            // Calculate ranking
+            rankingList.Sort((x, y) => y.ScoreDecimal.CompareTo(x.ScoreDecimal));
+            foreach (Ranking ranking in rankingList)
+            {
+                double currentScoreDecimal = ranking.ScoreDecimal;
+                int rank = rankingList.FindAll(x => x.ScoreDecimal > currentScoreDecimal).Count + 1;
+                ranking.Rank = rank.ToString();
+                if (rankingList.FindAll(x => x.ScoreDecimal == currentScoreDecimal).Count > 1)
+                {
+                    ranking.Rank += "=";
+                }
             }
 
-            // Calculate MPs 
-            List<TravellerResultClass> currentBoardList = new List<TravellerResultClass>();
-            string currentBoard;
-            int currentScore;
-            foreach (TravellerResultClass tr in trList)
-            {
-                currentScore = tr.Score;
-                currentBoard = tr.Board;
-                currentBoardList = trList.FindAll(x => x.Board == currentBoard);
-                tr.MPNS = 2 * currentBoardList.FindAll(x => x.Score < currentScore).Count + currentBoardList.FindAll(x => x.Score == currentScore).Count - 1;
-                tr.MPMax = 2 * currentBoardList.Count - 2;
-                tr.MPEW = tr.MPMax - tr.MPNS;
-            }
-
-            if (Winners == 1)
-            {
-                // Add up MPs for each pair, creating Ranking List entries as we go
-                foreach (TravellerResultClass tr in trList)
-                {
-                    RankingListClass rListFind = rList.Find(x => x.PairNo == tr.PairNS);
-                    if (rListFind == null)
-                    {
-                        RankingListClass r = new RankingListClass()
-                        {
-                            PairNo = tr.PairNS,
-                            Orientation = "0",
-                            MP = tr.MPNS,
-                            MPMax = tr.MPMax
-                        };
-                        rList.Add(r);
-                    }
-                    else
-                    {
-                        rListFind.MP += tr.MPNS;
-                        rListFind.MPMax += tr.MPMax;
-                    }
-                    rListFind = rList.Find(x => x.PairNo == tr.PairEW);
-                    if (rListFind == null)
-                    {
-                        RankingListClass r = new RankingListClass()
-                        {
-                            PairNo = tr.PairEW,
-                            Orientation = "0",
-                            MP = tr.MPEW,
-                            MPMax = tr.MPMax
-                        };
-                        rList.Add(r);
-                    }
-                    else
-                    {
-                        rListFind.MP += tr.MPEW;
-                        rListFind.MPMax += tr.MPMax;
-                    }
-                }
-                // Calculate percentages
-                foreach (RankingListClass r in rList)
-                {
-                    if (r.MPMax == 0)
-                    {
-                        r.ScoreDecimal = 50.0;
-                    }
-                    else
-                    {
-                        r.ScoreDecimal = 100.0 * r.MP / r.MPMax;
-                    }
-                    r.Score = r.ScoreDecimal.ToString("0.##");
-                }
-                // Calculate ranking
-                rList.Sort((x, y) => y.ScoreDecimal.CompareTo(x.ScoreDecimal));
-                foreach (RankingListClass r in rList)
-                {
-                    double currentScoreDecimal = r.ScoreDecimal;
-                    int rank = rList.FindAll(x => x.ScoreDecimal > currentScoreDecimal).Count + 1;
-                    r.Rank = rank.ToString();
-                    if (rList.FindAll(x => x.ScoreDecimal == currentScoreDecimal).Count > 1)
-                    {
-                        r.Rank += "=";
-                    }
-                }
-            }
-            else    // Winners = 2
-            {
-                // Add up MPs for each pair, creating Ranking List entries as we go
-                foreach (TravellerResultClass tr in trList)
-                {
-                    RankingListClass rListFind = rList.Find(x => x.PairNo == tr.PairNS && x.Orientation == "N");
-                    if (rListFind == null)
-                    {
-                        RankingListClass r = new RankingListClass()
-                        {
-                            PairNo = tr.PairNS,
-                            Orientation = "N",
-                            MP = tr.MPNS,
-                            MPMax = tr.MPMax
-                        };
-                        rList.Add(r);
-                    }
-                    else
-                    {
-                        rListFind.MP += tr.MPNS;
-                        rListFind.MPMax += tr.MPMax;
-                    }
-                    rListFind = rList.Find(x => x.PairNo == tr.PairEW && x.Orientation == "E");
-                    if (rListFind == null)
-                    {
-                        RankingListClass r = new RankingListClass()
-                        {
-                            PairNo = tr.PairEW,
-                            Orientation = "E",
-                            MP = tr.MPEW,
-                            MPMax = tr.MPMax
-                        };
-                        rList.Add(r);
-                    }
-                    else
-                    {
-                        rListFind.MP += tr.MPEW;
-                        rListFind.MPMax += tr.MPMax;
-                    }
-                }
-                // Calculate percentages
-                foreach (RankingListClass r in rList)
-                {
-                    if (r.MPMax == 0)
-                    {
-                        r.ScoreDecimal = 50.0;
-                    }
-                    else
-                    {
-                        r.ScoreDecimal = 100.0 * r.MP / r.MPMax;
-                    }
-                    r.Score = r.ScoreDecimal.ToString("0.##");
-                }
-                // Sort and calculate ranking within Orientation subsections
-                rList.Sort((x, y) => {
-                    var ret = y.Orientation.CompareTo(x.Orientation);    // N's first then E's
-                    if (ret == 0) ret = y.ScoreDecimal.CompareTo(x.ScoreDecimal);
-                    return ret;
-                });
-                foreach (RankingListClass r in rList)
-                {
-                    double currentScoreDecimal = r.ScoreDecimal;
-                    string currentOrientation = r.Orientation;
-                    int rank = rList.FindAll(x => x.Orientation == currentOrientation && x.ScoreDecimal > currentScoreDecimal).Count + 1;
-                    r.Rank = rank.ToString();
-                    if (rList.FindAll(x => x.Orientation == currentOrientation && x.ScoreDecimal == currentScoreDecimal).Count > 1)
-                    {
-                        r.Rank += "=";
-                    }
-                }
-            }
-            return rList;
+            return rankingList;
         }
     }
 }

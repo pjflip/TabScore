@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Show Round Info";
+    ViewBag.Title = "Show Round Info Individual";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -22,7 +22,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            North/South: Pair @Session["PairNS"]
+            North: @Session["PairNS"] & South: @Session["South"]
         </h3>
     </div>
 </div>
@@ -38,7 +38,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            East/West: Pair @Session["PairEW"]
+            East: @Session["PairEW"] & West: @Session["West"]
         </h3>
     </div>
 </div>

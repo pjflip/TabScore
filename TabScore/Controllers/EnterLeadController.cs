@@ -1,5 +1,6 @@
 ﻿using TabScore.Models;
 using System.Web.Mvc;
+using System;
 
 namespace TabScore.Controllers
 {
@@ -16,14 +17,14 @@ namespace TabScore.Controllers
                 return RedirectToAction("Index", "EnterTricksTaken");
             }
 
-            ResultClass res = new ResultClass()
+            Result res = new Result()
             {
                 ContractLevel = Session["ContractLevel"].ToString(),
                 ContractSuit = Session["ContractSuit"].ToString(),
                 ContractX = Session["ContractX"].ToString(),
                 NSEW = Session["NSEW"].ToString()
             };
-            ViewData["DisplayContract"] = res.DisplayContract(2);
+            ViewData["DisplayContract"] = res.DisplayContract();
 
             if (Session["LeadCard"].ToString() == "")
             {
@@ -36,7 +37,6 @@ namespace TabScore.Controllers
                 ViewData["Card"] = Session["LeadCard"].ToString().Substring(1, 1);
             }
 
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "TRUE";
             ViewData["SecondPass"] = secondPass;
             return View();
@@ -54,7 +54,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                if (HandRecord.ValidateLead(DBConnectionString, Session["SectionID"].ToString(), Session["Board"].ToString(), card, Session["NSEW"].ToString()))
+                if (Lead.Validate(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Board"]), card, Session["NSEW"].ToString()))
                 {
                     Session["LeadCard"] = card;
                     return RedirectToAction("Index", "EnterTricksTaken");

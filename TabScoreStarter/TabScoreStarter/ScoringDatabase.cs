@@ -83,10 +83,55 @@ namespace TabScoreStarter
                             throw e;
                         }
                     }
+                    
                     // Ensure that all Round values are set to 0 to start with
                     SQLString = "UPDATE PlayerNumbers SET [Round]=0";
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
+
+                    // Check if this is an individual event, when RoundData will have a 'South' column
+                    bool individualEvent = true;
+                    SQLString = $"SELECT TOP 1 South FROM RoundData";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteScalar();
+                    }
+                    catch (OdbcException)
+                    {
+                        individualEvent = false;
+                    }
+
+                    // If this is an individual event, add extra columns South and West to ReceivedData if they dont exist
+                    if (individualEvent)
+                    {
+                        SQLString = "ALTER TABLE ReceivedData ADD South SHORT";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                        catch (OdbcException e)
+                        {
+                            if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                            {
+                                throw e;
+                            }
+                        }
+                        SQLString = "ALTER TABLE ReceivedData ADD West SHORT";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                        catch (OdbcException e)
+                        {
+                            if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                            {
+                                throw e;
+                            }
+                        }
+                    }
 
                     // Add a new column 'TabScorePairNo' to table 'PlayerNumbers' if it doesn't exist and populate it if possible
                     SQLString = "ALTER TABLE PlayerNumbers ADD TabScorePairNo SHORT";
@@ -111,13 +156,37 @@ namespace TabScoreStarter
                         int section = reader.GetInt32(0);
                         int table = reader.GetInt32(1);
                         string direction = reader.GetString(2);
-                        if (direction == "N" || direction == "S")
+                        if (individualEvent)
                         {
-                            SQLString = $"SELECT NSPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                            switch (direction)
+                            {
+                                case "N":
+                                    SQLString = $"SELECT NSPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                    break;
+                                case "S":
+                                    SQLString = $"SELECT South FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                    break;
+                                case "E":
+                                    SQLString = $"SELECT EWPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                    break;
+                                case "W":
+                                    SQLString = $"SELECT West FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                    break;
+                            }
                         }
                         else
                         {
-                            SQLString = $"SELECT EWPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                            switch (direction)
+                            {
+                                case "N":
+                                case "S":
+                                    SQLString = $"SELECT NSPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                    break;
+                                case "E":
+                                case "W":
+                                    SQLString = $"SELECT EWPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                    break;
+                            }
                         }
                         cmd2 = new OdbcCommand(SQLString, connection);
                         object queryResult = cmd2.ExecuteScalar();
@@ -277,7 +346,6 @@ namespace TabScoreStarter
                 
             }
             return true;
-
         }
 
         public static bool InitializeHandRecords(string DB)

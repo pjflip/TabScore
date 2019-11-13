@@ -35,11 +35,11 @@
     </script>
 </head>
 
-<body style="background-color: ivory; padding-top: 110px; padding-bottom: 110px">
+<body style="background-color: ivory; padding-top: 90px; padding-bottom: 90px">
     <div class="container-fluid fixed-top" style="min-height: 51px; background-color: bisque; border-bottom-style: solid">
         <div class="row my-2">
             <div id="header" class="col-12 my-auto">
-                <h5>@Html.Raw(ViewBag.Header)</h5>
+                <h5>@Html.Raw(Session["Header"])</h5>
             </div>
             <div id="battery" class="col-2 my-auto text-right" style="display:none">
                 <h3><span id="bl"></span></h3>

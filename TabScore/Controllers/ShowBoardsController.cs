@@ -16,10 +16,10 @@ namespace TabScore.Controllers
             Session["ContractSuit"] = "";
             Session["ContractX"] = "NONE";
             Session["NSEW"] = "";
-            Session["TricksTakenNumber"] = "-1";
+            Session["TricksTakenNumber"] = -1;
             Session["LeadCard"] = "";
             
-            List<ResultClass> resList = new List<ResultClass>();
+            List<Result> resList = new List<Result>();
             int iLowBoard = Convert.ToInt32(Session["LowBoard"]);
             int iHighBoard = Convert.ToInt32(Session["HighBoard"]);
             int numBoards = iHighBoard - iLowBoard + 1;
@@ -27,15 +27,15 @@ namespace TabScore.Controllers
             int resCount = 0;
             for (int i = iLowBoard; i <= iHighBoard; i++)
             {
-                ResultClass res = new ResultClass
+                Result res = new Result
                 {
-                    SectionID = Session["SectionID"].ToString(),
-                    Table = Session["Table"].ToString(),
-                    Round = Session["Round"].ToString(),
+                    SectionID = Convert.ToInt32(Session["SectionID"]),
+                    Table = Convert.ToInt32(Session["Table"]),
+                    Round = Convert.ToInt32(Session["CurrentRound"]),
+                    Board = i,
+                    ContractLevel = null
                 };
-                res.Board = i.ToString();
-                res.ContractLevel = null;
-                if (!res.GetDBResult(DBConnectionString)) return RedirectToAction("Index", "ErrorScreen");
+                if (!res.ReadFromDB(DBConnectionString)) return RedirectToAction("Index", "ErrorScreen");
                 resList.Add(res);
                 if (res.ContractLevel != null) resCount++;
             }
@@ -47,7 +47,14 @@ namespace TabScore.Controllers
             {
                 ViewData["GotAllResults"] = "FALSE";
             }
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
+            if (Session["IndividualEvent"].ToString() == "YES")
+            {
+                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["CurrentRound"]} - {Session["PairNS"]}+{Session["South"]} v {Session["PairEW"]}+{Session["West"]}";
+            }
+            else
+            {
+                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["CurrentRound"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
+            }
             ViewData["BackButton"] = "FALSE";
 
             return View(resList);

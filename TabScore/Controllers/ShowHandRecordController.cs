@@ -11,16 +11,15 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            HandRecordClass hr = HandRecord.GetHandRecord(DBConnectionString, Session["SectionID"].ToString(), Session["Board"].ToString());
+            HandRecord hr = new HandRecord(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Board"]));
             if (hr.NorthSpades == "Error") return RedirectToAction("Index", "ErrorScreen");
-            if (hr.NorthSpades == "###" && Session["SectionID"].ToString() != "1")    // Use default Section 1 hand records)
+            if (hr.NorthSpades == "###" && Convert.ToInt32(Session["SectionID"]) != 1)    // Use default Section 1 hand records)
             {
-                hr = HandRecord.GetHandRecord(DBConnectionString, "1", Session["Board"].ToString());
+                hr = new HandRecord(DBConnectionString, 1, Convert.ToInt32(Session["SectionID"]));
             }
 
-            ViewBag.Header = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["Round"]} - {Vulnerability.SetPairString("NS", Session["Board"].ToString(), Session["PairNS"].ToString())} v {Vulnerability.SetPairString("EW", Session["Board"].ToString(), Session["PairEW"].ToString())}";
             ViewData["BackButton"] = "FALSE";
-            ViewData["Dealer"] = Dealer.GetDealerForBoard(Session["Board"].ToString());
+            ViewData["Dealer"] = Dealer.GetDealerForBoard(Convert.ToInt32(Session["Board"]));
             return View(hr);
         }
 

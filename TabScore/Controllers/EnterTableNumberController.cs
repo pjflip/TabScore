@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -7,9 +8,8 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Header = $"Section {Session["SectionLetter"]}";
+            Session["Header"] = $"Section {Session["SectionLetter"]}";
             ViewData["BackButton"] = "FALSE";
-            ViewData["NumTables"] = Session["NumTables"];
             return View();
         }
 
@@ -18,18 +18,18 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            int logonStatus = Tables.IsLoggedOn(DBConnectionString, Session["SectionID"].ToString(), tableNumber);
+            int logonStatus = Tables.IsLoggedOn(DBConnectionString, Convert.ToInt32(Session["SectionID"]), tableNumber);
             if (logonStatus == -1) return RedirectToAction("Index", "ErrorScreen");
             if (confirm == "TRUE" || (logonStatus == 2))     // Status=2 means table not logged on
             {
                 Session["Table"] = tableNumber;
-                if (Tables.Logon(DBConnectionString, Session["SectionID"].ToString(), tableNumber) == -1) return RedirectToAction("Index", "ErrorScreen");
+                if (Tables.Logon(DBConnectionString, Convert.ToInt32(Session["SectionID"]), tableNumber) == -1) return RedirectToAction("Index", "ErrorScreen");
 
                 // Check if results data exist - set round number accordingly
-                int round = Round.GetLastEnteredRound(DBConnectionString, Session["SectionID"].ToString(), Session["Table"].ToString());
+                int round = LastRoundEntered.Get(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]));
                 if (round == -1) return RedirectToAction("Index", "ErrorScreen");
 
-                Session["Round"] = round.ToString();
+                Session["CurrentRound"] = round.ToString();
                 if (round == 1 || Settings.GetSetting<bool>(DBConnectionString, SettingName.NumberEntryEachRound))
                 {
                     return RedirectToAction("Index", "ShowPlayerNumbers");
