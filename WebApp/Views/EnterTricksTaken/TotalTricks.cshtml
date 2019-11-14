@@ -101,7 +101,7 @@
     window.onload = setCurrentSelection();
 
     function setCurrentSelection() {
-        if (numTricks != "-1") {
+        if (numTricks != '-1') {
             document.getElementById('n' + numTricks).className = "btn btn-warning btn-lg m-1";
         }
     }
@@ -126,7 +126,7 @@
     }
 
     function validateOK() {
-        if (numTricks == "-1") {
+        if (numTricks == '-1') {
             $("#noTricksModal").modal();
         }
         else {

@@ -5,7 +5,7 @@
 <div class="row mt-3">
     <div class="col-12 text-center">
         <h3>
-            Move for Round @Session["Round"]
+            Move for Round @Session["CurrentRound"]
         </h3>
     </div>
 </div>
@@ -13,24 +13,33 @@
 <div class="row mt-3">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            North: Number @Session["PairNS"]
+            North: @Session["PairNS"]
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (ViewData["StayMoveNorth"].ToString() == "Move")
+        @if (Convert.ToInt32(ViewData["NorthNewTable"]) == 0)
         {
-            <h3>
-                Move to Table @ViewData["NorthNewTable"] @ViewData["NorthNewDirection"]
-            </h3>
+            <h4>
+                Move to Sit Out
+            </h4>
         }
         else
         {
-            <h3>
-                Stay at Table @ViewData["NorthNewTable"] @ViewData["NorthNewDirection"]
-            </h3>
+            if (ViewData["NorthStayMove"].ToString() == "Move")
+            {
+                <h4>
+                    Move to Table @ViewData["NorthNewTable"] @ViewData["NorthNewDirection"]
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    Stay at Table @ViewData["NorthNewTable"] @ViewData["NorthNewDirection"]
+                </h4>
+            }
         }
     </div>
 </div>
@@ -38,24 +47,33 @@
 <div class="row mt-2">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            South: Number @Session["South"]
+            South: @Session["South"]
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (ViewData["StayMoveSouth"].ToString() == "Move")
+        @if (Convert.ToInt32(ViewData["SouthNewTable"]) == 0)
         {
-            <h3>
-                Move to Table @ViewData["SouthNewTable"] @ViewData["SouthNewDirection"]
-            </h3>
+            <h4>
+                Move to Sit Out
+            </h4>
         }
         else
         {
-            <h3>
-                Stay at Table @ViewData["SouthNewTable"] @ViewData["SouthNewDirection"]
-            </h3>
+            if (ViewData["SouthStayMove"].ToString() == "Move")
+            {
+                <h4>
+                    Move to Table @ViewData["SouthNewTable"] @ViewData["SouthNewDirection"]
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    Stay at Table @ViewData["SouthNewTable"] @ViewData["SouthNewDirection"]
+                </h4>
+            }
         }
     </div>
 </div>
@@ -63,24 +81,33 @@
 <div class="row mt-2">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            East: Number @Session["PairEW"]
+            East: @Session["PairEW"]
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (ViewData["StayMoveEast"].ToString() == "Move")
+        @if (Convert.ToInt32(ViewData["EastNewTable"]) == 0)
         {
-            <h3>
-                Move to Table @ViewData["EastNewTable"] @ViewData["EastNewDirection"]
-            </h3>
+            <h4>
+                Move to Sit Out
+            </h4>
         }
         else
         {
-            <h3>
-                Stay at Table @ViewData["EastNewTable"] @ViewData["EastNewDirection"]
-            </h3>
+            if (ViewData["EastStayMove"].ToString() == "Move")
+            {
+                <h4>
+                    Move to Table @ViewData["EastNewTable"] @ViewData["EastNewDirection"]
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    Stay at Table @ViewData["EastNewTable"] @ViewData["EastNewDirection"]
+                </h4>
+            }
         }
     </div>
 </div>
@@ -88,24 +115,33 @@
 <div class="row mt-2">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            West: Number @Session["West"]
+            West: @Session["West"]
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (ViewData["StayMoveWest"].ToString() == "Move")
+        @if (Convert.ToInt32(ViewData["WestNewTable"]) == 0)
         {
-            <h3>
-                Move to Table @ViewData["WestNewTable"] @ViewData["WestNewDirection"]
-            </h3>
+            <h4>
+                Move to Sit Out
+            </h4>
         }
         else
         {
-            <h3>
-                Stay at Table @ViewData["WestNewTable"] @ViewData["WestNewDirection"]
-            </h3>
+            if (ViewData["WestStayMove"].ToString() == "Move")
+            {
+                <h4>
+                    Move to Table @ViewData["WestNewTable"] @ViewData["WestNewDirection"]
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    Stay at Table @ViewData["WestNewTable"] @ViewData["WestNewDirection"]
+                </h4>
+            }
         }
     </div>
 </div>
@@ -122,15 +158,15 @@
     <div class="col-12 text-center">
         @if (ViewData["BoardsNewTable"].ToString() == "0")
         {
-            <h3>
-                Move to Relay Table
-            </h3>
+            <h4>
+                Pass to Relay Table
+            </h4>
         }
         else
         {
-            <h3>
-                Move to Table @ViewData["BoardsNewTable"]
-            </h3>
+            <h4>
+                Pass to Table @ViewData["BoardsNewTable"]
+            </h4>
         }
     </div>
 </div>

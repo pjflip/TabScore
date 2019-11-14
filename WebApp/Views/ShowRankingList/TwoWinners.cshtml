@@ -1,4 +1,4 @@
-﻿@model List<TabScore.Models.RankingListClass>
+﻿@model List<TabScore.Models.Ranking>
 @{
     ViewBag.Title = "Show Ranking List - Two Winners";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -23,24 +23,24 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var Result in Model)
+                @foreach (var Rank in Model)
                 {
-                    if (Result.Orientation == "N")
+                    if (Rank.Orientation == "N")
                     {
-                        if (Session["PairNS"].ToString() == Result.PairNo.ToString())
+                        if (Convert.ToInt32(Session["PairNS"]) == Rank.PairNo)
                         {
                             <tr class="table-success">
-                                <td>@Result.Rank</td>
-                                <td>@Result.PairNo</td>
-                                <td>@Result.Score%</td>
+                                <td>@Rank.Rank</td>
+                                <td>@Rank.PairNo</td>
+                                <td>@Rank.Score%</td>
                             </tr>
                         }
                         else
                         {
                             <tr>
-                                <td>@Result.Rank</td>
-                                <td>@Result.PairNo</td>
-                                <td>@Result.Score%</td>
+                                <td>@Rank.Rank</td>
+                                <td>@Rank.PairNo</td>
+                                <td>@Rank.Score%</td>
                             </tr>
                         }
                     }
@@ -59,24 +59,24 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var Result in Model)
+                @foreach (var Rank in Model)
                 {
-                    if (Result.Orientation == "E")
+                    if (Rank.Orientation == "E")
                     {
-                        if (Session["PairEW"].ToString() == Result.PairNo.ToString())
+                        if (Convert.ToInt32(Session["PairEW"]) == Rank.PairNo)
                         {
                             <tr class="table-warning">
-                                <td>@Result.Rank</td>
-                                <td>@Result.PairNo</td>
-                                <td>@Result.Score%</td>
+                                <td>@Rank.Rank</td>
+                                <td>@Rank.PairNo</td>
+                                <td>@Rank.Score%</td>
                             </tr>
                         }
                         else
                         {
                             <tr>
-                                <td>@Result.Rank</td>
-                                <td>@Result.PairNo</td>
-                                <td>@Result.Score%</td>
+                                <td>@Rank.Rank</td>
+                                <td>@Rank.PairNo</td>
+                                <td>@Rank.Score%</td>
                             </tr>
                         }
                     }
@@ -88,7 +88,7 @@
 
 <script>
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?round=@Session["Round"]';
+        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?round=@Session["CurrentRound"]';
     }
     
     function refreshClick() {
