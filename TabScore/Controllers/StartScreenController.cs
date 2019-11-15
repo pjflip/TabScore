@@ -1,4 +1,5 @@
 ﻿using System.Data.Odbc;
+using System.Reflection;
 using System.Web.Mvc;
 using TabScore.Models;
 
@@ -10,6 +11,7 @@ namespace TabScore.Controllers
         {
             Session["Header"] = "";
             ViewData["BackButton"] = "FALSE";
+            ViewData["Version"]= Assembly.GetExecutingAssembly().GetName().Version.ToString();
             return View();
         }
 

@@ -109,7 +109,7 @@ namespace TabScore.Controllers
 
                 if (Convert.ToInt32(Session["PairEW"]) != 0)
                 {
-                    Move m = new Move(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRound, Convert.ToInt32(Session["PairNS"]), false, "EW");
+                    Move m = new Move(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRound, Convert.ToInt32(Session["PairEW"]), false, "EW");
                     if (m.Table == -1) return RedirectToAction("Index", "ErrorScreen");
                     ViewData["EWNewTable"] = m.Table;
                     ViewData["EWNewDirection"] = m.Direction;

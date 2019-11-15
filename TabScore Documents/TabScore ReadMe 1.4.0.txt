@@ -20,8 +20,8 @@ To upgrade TabScore from a previous installation, please read the section in
 the User Guide on Upgrading TabScore.
 
 TabScore is currently limited to 4 sections (A, B, C and D in that order) and 
-30 tables per section.  It can be used for pairs, teams, individual or Swiss
-events.
+30 tables per section.  It can be used for pairs, teams, or Swiss events; it 
+can also be used for individual events with EBUScore.
 
 TabScore implements a range of display options which can be set by the
 scoring program, or from TabScoreStarter.  See the User Guide for more
