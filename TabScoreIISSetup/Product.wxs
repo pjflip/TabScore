@@ -6,7 +6,7 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
      xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
 
-  <Product Id="{643D7B67-B9DD-4744-A3CD-F824B8C0ED5A}" Name="TabScoreIISSetup" Language="1033" Version="1.3.4" Manufacturer="TabScore" UpgradeCode="{048361FA-F1E0-40B7-BA0A-11FFF5F2F988}">
+  <Product Id="{643D7B67-B9DD-4744-A3CD-F824B8C0ED5A}" Name="TabScoreIISSetup" Language="1033" Version="1.4.0" Manufacturer="TabScore" UpgradeCode="{048361FA-F1E0-40B7-BA0A-11FFF5F2F988}">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MediaTemplate EmbedCab="yes"/>
