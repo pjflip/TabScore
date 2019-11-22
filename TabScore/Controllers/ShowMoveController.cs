@@ -124,9 +124,9 @@ namespace TabScore.Controllers
                 }
             }
 
-            string boardsNewTable = BoardMove.GetBoardMoveInfo(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRound, Convert.ToInt32(Session["LowBoard"]));
-            if (boardsNewTable == "Error") return RedirectToAction("Index", "ErrorScreen");
-            ViewData["BoardsNewTable"] = boardsNewTable;
+            BoardMove boardMove = new BoardMove(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRound, Convert.ToInt32(Session["Table"]), Convert.ToInt32(Session["LowBoard"]));
+            if (boardMove.Table == -1) return RedirectToAction("Index", "ErrorScreen");
+            ViewData["BoardsNewTable"] = boardMove.Table.ToString();
             Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]}";
             ViewData["BackButton"] = "FALSE";
 

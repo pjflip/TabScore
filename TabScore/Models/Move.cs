@@ -32,14 +32,16 @@ namespace TabScore.Models
                     catch (OdbcException)
                     {
                         Table = -1;
-                        cmd.Dispose();
                         return;
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
                     }
                     if (queryResult != null)
                     {
                         Table = Convert.ToInt32(queryResult);
                         Direction = "North";
-                        cmd.Dispose();
                         return;
                     }
 
@@ -56,14 +58,16 @@ namespace TabScore.Models
                     catch (OdbcException)
                     {
                         Table = -1;
-                        cmd.Dispose();
                         return;
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
                     }
                     if (queryResult != null)
                     {
                         Table = Convert.ToInt32(queryResult);
                         Direction = "South";
-                        cmd.Dispose();
                         return;
                     }
 
@@ -80,14 +84,16 @@ namespace TabScore.Models
                     catch (OdbcException)
                     {
                         Table = -1;
-                        cmd.Dispose();
                         return;
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
                     }
                     if (queryResult != null)
                     {
                         Table = Convert.ToInt32(queryResult);
                         Direction = "East";
-                        cmd.Dispose();
                         return;
                     }
 
@@ -104,14 +110,16 @@ namespace TabScore.Models
                     catch (OdbcException)
                     {
                         Table = -1;
-                        cmd.Dispose();
                         return;
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
                     }
                     if (queryResult != null)
                     {
                         Table = Convert.ToInt32(queryResult);
                         Direction = "West";
-                        cmd.Dispose();
                         return;
                     }
                     else   // No move info found - move to sit out

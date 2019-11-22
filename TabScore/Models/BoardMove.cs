@@ -1,41 +1,71 @@
-﻿using System.Data.Odbc;
+﻿using System.Collections.Generic;
+using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public static class BoardMove
+    public class BoardMove
     {
-        public static string GetBoardMoveInfo(string DB, int sectionID, int round, int lowBoard)
+        public int Table { get; }
+
+        public BoardMove(string DB, int sectionID, int round, int table, int lowBoard)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                object queryResult = null;
+                // Get a list of all possible tables to which boards could move
+                List<int> tableList = new List<int>();
                 string SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND LowBoard={lowBoard}";
                 connection.Open();
-
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader = null;
                 try
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        queryResult = cmd.ExecuteScalar();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            int t = reader.GetInt32(0);
+                            tableList.Add(t);
+                        }
                     });
                 }
                 catch (OdbcException)
                 {
-                    return "Error";
+                    Table = -1;
+                    return;
                 }
                 finally
                 {
+                    reader.Close();
                     cmd.Dispose();
                 }
 
-                if (queryResult != null)
+                if (tableList.Count == 0)
                 {
-                    return queryResult.ToString();
+                    // No table, so move to relay table
+                    Table = 0;
+                }
+                else if (tableList.Count == 1)
+                {
+                    // Just one table, so use it
+                    Table = tableList[0];
                 }
                 else
                 {
-                    return "0";
+                    // Find the next table down to which the boards could move
+                    Table = 0;
+                    tableList.Sort();
+                    foreach (int t in tableList)
+                    {
+                        if (t <= table)
+                        {
+                            Table = t;
+                        }
+                        else if (Table == 0)  // t > Table, so only update if no Table yet set
+                        {
+                            Table = t;
+                        }
+                    }
                 }
             }
         }
