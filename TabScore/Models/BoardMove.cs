@@ -53,18 +53,18 @@ namespace TabScore.Models
                 else
                 {
                     // Find the next table down to which the boards could move
-                    Table = 0;
-                    tableList.Sort();
-                    foreach (int t in tableList)
+                    for (int t = table; t > 0; t--)
                     {
-                        if (t <= table)
+                        if (tableList.Contains(t))
                         {
                             Table = t;
+                            return;
                         }
-                        else if (Table == 0)  // t > Table, so only update if no Table yet set
-                        {
-                            Table = t;
-                        }
+                    }
+                    Table = 0;
+                    foreach (int t in tableList)  // Next table down must be highest table number in the list
+                    {
+                        if (t > Table) Table = t;
                     }
                 }
             }
