@@ -4,51 +4,55 @@ namespace TabScore.Models
 {
     public class HandRecord
     {
-        public string NorthSpades;
-        public string NorthHearts;
-        public string NorthDiamonds;
-        public string NorthClubs;
-        public string EastSpades;
-        public string EastHearts;
-        public string EastDiamonds;
-        public string EastClubs;
-        public string SouthSpades;
-        public string SouthHearts;
-        public string SouthDiamonds;
-        public string SouthClubs;
-        public string WestSpades;
-        public string WestHearts;
-        public string WestDiamonds;
-        public string WestClubs;
+        public int Board { get; private set; }
+        public string Dealer { get; private set; }
+        public string NorthSpades { get; private set; }
+        public string NorthHearts {get; private set;}
+        public string NorthDiamonds {get; private set;}
+        public string NorthClubs {get; private set;}
+        public string EastSpades {get; private set;}
+        public string EastHearts {get; private set;}
+        public string EastDiamonds {get; private set;}
+        public string EastClubs {get; private set;}
+        public string SouthSpades {get; private set;}
+        public string SouthHearts {get; private set;}
+        public string SouthDiamonds {get; private set;}
+        public string SouthClubs {get; private set;}
+        public string WestSpades {get; private set;}
+        public string WestHearts {get; private set;}
+        public string WestDiamonds {get; private set;}
+        public string WestClubs {get; private set;}
 
-        public string EvalNorthNT;
-        public string EvalNorthSpades;
-        public string EvalNorthHearts;
-        public string EvalNorthDiamonds;
-        public string EvalNorthClubs;
-        public string EvalEastNT;
-        public string EvalEastSpades;
-        public string EvalEastHearts;
-        public string EvalEastDiamonds;
-        public string EvalEastClubs;
-        public string EvalSouthNT;
-        public string EvalSouthSpades;
-        public string EvalSouthHearts;
-        public string EvalSouthDiamonds;
-        public string EvalSouthClubs;
-        public string EvalWestSpades;
-        public string EvalWestNT;
-        public string EvalWestHearts;
-        public string EvalWestDiamonds;
-        public string EvalWestClubs;
+        public string EvalNorthNT {get; private set;}
+        public string EvalNorthSpades {get; private set;}
+        public string EvalNorthHearts {get; private set;}
+        public string EvalNorthDiamonds {get; private set;}
+        public string EvalNorthClubs {get; private set;}
+        public string EvalEastNT {get; private set;}
+        public string EvalEastSpades {get; private set;}
+        public string EvalEastHearts {get; private set;}
+        public string EvalEastDiamonds {get; private set;}
+        public string EvalEastClubs {get; private set;}
+        public string EvalSouthNT {get; private set;}
+        public string EvalSouthSpades {get; private set;}
+        public string EvalSouthHearts {get; private set;}
+        public string EvalSouthDiamonds {get; private set;}
+        public string EvalSouthClubs {get; private set;}
+        public string EvalWestSpades {get; private set;}
+        public string EvalWestNT {get; private set;}
+        public string EvalWestHearts {get; private set;}
+        public string EvalWestDiamonds {get; private set;}
+        public string EvalWestClubs {get; private set;}
 
-        public string HCPNorth;
-        public string HCPSouth;
-        public string HCPEast;
-        public string HCPWest;
+        public string HCPNorth {get; private set;}
+        public string HCPSouth {get; private set;}
+        public string HCPEast {get; private set;}
+        public string HCPWest {get; private set;}
 
         public HandRecord(string DB, int sectionID, int board)
         {
+            Board = board;
+            Dealer = UtilityFunctions.GetDealerForBoard(Board);
             NorthSpades = "###";
             EvalNorthSpades = "###";
 
@@ -56,12 +60,13 @@ namespace TabScore.Models
             {
                 string SQLString = $"SELECT NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs FROM HandRecord WHERE Section={sectionID} AND Board={board}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader = null;
                 connection.Open();
                 try
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        OdbcDataReader reader = cmd.ExecuteReader();
+                        reader = cmd.ExecuteReader();
                         if (reader.Read())
                         {
                             NorthSpades = reader.GetString(0);
@@ -81,23 +86,18 @@ namespace TabScore.Models
                             WestDiamonds = reader.GetString(14);
                             WestClubs = reader.GetString(15);
                         }
-                        reader.Close();
                     });
                 }
                 catch (OdbcException e)
                 {
-                    if (e.Errors.Count == 1 && e.Errors[0].SQLState != "42S02")  // HandRecord table does not exist
+                    if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Error other than HandRecord table does not exist
                     {
-                        return;
-                    }
-                    else
-                    {
-                        NorthSpades = "Error";
-                        return;
+                        throw (e);
                     }
                 }
                 finally
                 {
+                    reader.Close();
                     cmd.Dispose();
                 }
 
@@ -107,7 +107,7 @@ namespace TabScore.Models
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        OdbcDataReader reader = cmd.ExecuteReader();
+                        reader = cmd.ExecuteReader();
                         if (reader.Read())
                         {
                             if (reader.GetInt16(0) > 6) EvalNorthSpades = (reader.GetInt16(0) - 6).ToString(); else EvalNorthSpades = "";
@@ -136,19 +136,18 @@ namespace TabScore.Models
                             HCPSouth = reader.GetInt16(22).ToString();
                             HCPWest = reader.GetInt16(23).ToString();
                         }
-                        reader.Close();
                     });
                 }
                 catch (OdbcException e)
                 {
                     if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Error other than HandEvaluation table does not exist
                     {
-                        NorthSpades = "Error";
-                        return;
+                        throw (e);
                     }
                 }
                 finally
                 {
+                    reader.Close();
                     cmd.Dispose();
                 }
             }

@@ -27,19 +27,19 @@ namespace TabScore.Models
         public SettingType(SettingName name, string DbName, bool defaultValue)
         {
             this.name = name;
-            this.databaseName = DbName;
-            this.defaultValueBool = defaultValue;
+            databaseName = DbName;
+            defaultValueBool = defaultValue;
         }
 
         public SettingType(SettingName name, string DbName, int defaultValue)
         {
             this.name = name;
-            this.databaseName = DbName;
-            this.defaultValueInt = defaultValue;
+            databaseName = DbName;
+            defaultValueInt = defaultValue;
         }
     }
 
-public class Settings
+    public static class Settings
     {
         public static readonly List<SettingType> settingsList = new List<SettingType>()
         {

@@ -12,57 +12,28 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Session["ContractLevel"] = "";
-            Session["ContractSuit"] = "";
-            Session["ContractX"] = "NONE";
-            Session["NSEW"] = "";
-            Session["TricksTakenNumber"] = -1;
-            Session["LeadCard"] = "";
-            
-            List<Result> resList = new List<Result>();
-            int iLowBoard = Convert.ToInt32(Session["LowBoard"]);
-            int iHighBoard = Convert.ToInt32(Session["HighBoard"]);
-            int numBoards = iHighBoard - iLowBoard + 1;
+            // Reset default session value as no board has yet been selected
+            Session["Result"] = null;
 
-            int resCount = 0;
-            for (int i = iLowBoard; i <= iHighBoard; i++)
+            Round round = Session["Round"] as Round;
+            ResultsList resultsList = new ResultsList(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]), round.RoundNumber, round.LowBoard, round.HighBoard);
+
+            if (Convert.ToBoolean(Session["IndividualEvent"]))
             {
-                Result res = new Result
-                {
-                    SectionID = Convert.ToInt32(Session["SectionID"]),
-                    Table = Convert.ToInt32(Session["Table"]),
-                    Round = Convert.ToInt32(Session["CurrentRound"]),
-                    Board = i,
-                    ContractLevel = null
-                };
-                if (!res.ReadFromDB(DBConnectionString)) return RedirectToAction("Index", "ErrorScreen");
-                resList.Add(res);
-                if (res.ContractLevel != null) resCount++;
-            }
-            if (resCount == numBoards)
-            {
-                ViewData["GotAllResults"] = "TRUE";
+                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round.RoundNumber} - {round.PairNS}+{round.South} v {round.PairEW}+{round.West}";
             }
             else
             {
-                ViewData["GotAllResults"] = "FALSE";
-            }
-            if (Session["IndividualEvent"].ToString() == "YES")
-            {
-                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["CurrentRound"]} - {Session["PairNS"]}+{Session["South"]} v {Session["PairEW"]}+{Session["West"]}";
-            }
-            else
-            {
-                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["CurrentRound"]} - NS {Session["PairNS"]} v EW {Session["PairEW"]}";
+                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round.RoundNumber} - NS {round.PairNS} v EW {round.PairEW}";
             }
             ViewData["BackButton"] = "FALSE";
 
-            return View(resList);
+            return View(resultsList);
         }
 
-        public ActionResult OKButtonClick(string round)  // Gets and passes round as a parameter to avoid double bounce
+        public ActionResult OKButtonClick(string roundNumber)  // Gets and passes round as a parameter to avoid double bounce
         {
-            return RedirectToAction("Index", "ShowRankingList", new { round, finalRound = "No" });
+            return RedirectToAction("Index", "ShowRankingList", new { roundNumber, finalRound = "No" });
         }
     }
 }

@@ -3,16 +3,17 @@ using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public static class Player
+    public static class PlayerFunctions
     {
-        public static string UpdateDatabase(string DB, int sectionID, int table, int round, string direction, string playerNumber, bool individual) 
+        public static void UpdateDatabase(string DB, int sectionID, int table, int round, string direction, string playerNumber, bool individual) 
         {
+            string dir = direction.Substring(0, 1);    // Need just N, S, E or W
+            string SQLString = null;
+            object queryResult = null;
+            string pairNo = null;
+
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                string dir = direction.Substring(0, 1);    // Need just N, S, E or W
-                string SQLString = null;
-                object queryResult = null;
-
                 connection.Open();
                 // Get pair number for this player to set TabScorePairNo field
                 if (individual)
@@ -56,23 +57,44 @@ namespace TabScore.Models
                         queryResult = cmd1.ExecuteScalar();
                     });
                 }
-                catch (OdbcException)
-                {
-                    return "Error";
-                }
                 finally
                 {
                     cmd1.Dispose();
                 }
-                string pairNo = queryResult.ToString();   // Doubles as player number for individual events
+                pairNo = queryResult.ToString();   // Doubles as player number for individual events
+            }
 
-                // Numbers entered at the start (when round = 1) need to be set as round 0
-                if (round == 1)
+            // Numbers entered at the start (when round = 1) need to be set as round 0
+            if (round == 1)
+            {
+                round = 0;
+            }
+
+            // Set the name for this number
+            string name;
+            if (playerNumber == "Unknown" || playerNumber == "0" || playerNumber == "")
+            {
+                playerNumber = "0";
+                name = "";
+            }
+            else
+            {
+                name = PlayerFunctions.GetNameFromNumber(DB, playerNumber);
+                if (name.Substring(0, 1) == "#")    // PlayerNames table doesn't exist, so let scoring software set the name 
                 {
-                    round = 0;
+                    name = "";
                 }
+                else
+                {
+                    name = name.Replace("'", "''");    // Deal with apostrophes in names, eg O'Connor
+                }
+            }
 
-                // Check if PlayerNumbers record exists; if it does update it, if not create it
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                connection.Open();
+
+                // Check if PlayerNumbers entry exists already; if it does update it, if not create it
                 SQLString = $"SELECT [Number] FROM PlayerNumbers WHERE Section={sectionID} AND [Table]={table} AND ROUND={round} AND Direction='{dir}'";
                 OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
                 try
@@ -82,58 +104,18 @@ namespace TabScore.Models
                         queryResult = cmd2.ExecuteScalar();
                     });
                 }
-                catch (OdbcException)
-                {
-                    return "Error";
-                }
                 finally
                 {
                     cmd2.Dispose();
                 }
-
                 if (queryResult == null)
                 {
-                    if (playerNumber == "Unknown" || playerNumber == "0" || playerNumber == "")
-                    {
-                        SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Round, Processed, TimeLog, TabScorePairNo) VALUES ({sectionID}, {table}, '{dir}', '0', {round}, False, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, {pairNo})";
-                    }
-                    else
-                    {
-                        string name = Player.GetNameFromNumber(DB, playerNumber);
-                        if (name == "Error") return "Error";
-                        if (name.Substring(0, 1) == "#")    // PlayerNames table doesn't exist, so let scoring software set the name 
-                        {
-                            SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Round, Processed, TimeLog, TabScorePairNo) VALUES ({sectionID}, {table}, '{dir}', '{playerNumber}', {round}, False, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, {pairNo})";
-                        }
-                        else
-                        {
-                            name = name.Replace("'", "''");    // Deal with apostrophes in names, eg O'Connor
-                            SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({sectionID}, {table}, '{dir}', '{playerNumber}', '{name}', {round}, False, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, {pairNo})";
-                        }
-                    }
+                    SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({sectionID}, {table}, '{dir}', '{playerNumber}', '{name}', {round}, False, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, {pairNo})";
                 }
                 else
                 {
-                    if (playerNumber == "Unknown" || playerNumber == "0" || playerNumber == "")
-                    {
-                        SQLString = $"UPDATE PlayerNumbers SET [Number]='0', Processed=False, TimeLog=#{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, TabScorePairNo={pairNo} WHERE Section={sectionID} AND [Table]={table} AND Round={round} AND Direction='{dir}'";
-                    }
-                    else
-                    {
-                        string name = Player.GetNameFromNumber(DB, playerNumber);
-                        if (name == "Error") return "Error";
-                        if (name.Substring(0, 1) == "#")    // PlayerNames table doesn't exist, so let scoring software set the name 
-                        {
-                            SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerNumber}', Processed=False, TimeLog=#{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, TabScorePairNo={pairNo} WHERE Section={sectionID} AND [Table]={table} AND Round={round} AND Direction='{dir}'";
-                        }
-                        else
-                        {
-                            name = name.Replace("'", "''");    // Deal with apostrophes in names, eg O'Connor
-                            SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerNumber}', [Name]='{name}', Processed=False, TimeLog=#{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, TabScorePairNo={pairNo} WHERE Section={sectionID} AND [Table]={table} AND Round={round} AND Direction='{dir}'";
-                        }
-                    }
+                    SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerNumber}', [Name]='{name}', Processed=False, TimeLog=#{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, TabScorePairNo={pairNo} WHERE Section={sectionID} AND [Table]={table} AND Round={round} AND Direction='{dir}'";
                 }
-
                 OdbcCommand cmd3 = new OdbcCommand(SQLString, connection);
                 try
                 {
@@ -142,28 +124,15 @@ namespace TabScore.Models
                         queryResult = cmd3.ExecuteNonQuery();
                     });
                 }
-                catch (OdbcException)
-                {
-                    return "Error";
-                }
                 finally
                 {
                     cmd3.Dispose();
                 }
             }
-            return "";
         }
 
         public static string GetNameFromNumber(string DB, string playerNumber)
         {
-            if (playerNumber == "0")
-            {
-                return "Unknown";
-            }
-            else if (playerNumber == "")
-            {
-                return "";
-            }
             int nameSource = Settings.GetSetting<int>(DB, SettingName.NameSource);
             switch (nameSource)
             {
@@ -176,7 +145,6 @@ namespace TabScore.Models
                 case 3:
                     string name;
                     name = GetNameFromPlayerNamesTable(DB, playerNumber);
-                    if (name == "Error") return "Error";
                     if (name == "" || name.Substring(0,1) == "#" || (name.Length >= 7 && name.Substring(0,7) == "Unknown"))
                     {
                         return GetNameFromExternalDatabase(playerNumber);
@@ -216,7 +184,7 @@ namespace TabScore.Models
                     }
                     else
                     {
-                        return "Error";
+                        throw (e);
                     }
                 }
                 finally
@@ -239,8 +207,7 @@ namespace TabScore.Models
         private static string GetNameFromExternalDatabase(string playerNumber)
         {
             string name = "";
-            OdbcConnectionStringBuilder externalDB = new OdbcConnectionStringBuilder();
-            externalDB.Driver = "Microsoft Access Driver (*.mdb)";
+            OdbcConnectionStringBuilder externalDB = new OdbcConnectionStringBuilder { Driver = "Microsoft Access Driver (*.mdb)" };
             externalDB.Add("Dbq", @"C:\Bridgemate\BMPlayerDB.mdb");
             externalDB.Add("Uid", "Admin");
             using (OdbcConnection connection = new OdbcConnection(externalDB.ToString()))
@@ -276,11 +243,10 @@ namespace TabScore.Models
             return name;
         }
 
-        public static string GetName(string DB, int sectionID, int round, int pairNo, string direction, bool formatUnknown)
+        public static string GetName(string DB, int sectionID, int round, int pairNo, string direction)
         {
             string number = "###";
             string name = "";
-            string errorString = "";
 
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
@@ -297,10 +263,6 @@ namespace TabScore.Models
                         queryResult = cmd1.ExecuteScalar();
                     });
                 }
-                catch (OdbcException)
-                {
-                    return "Error";
-                }
                 finally
                 {
                     cmd1.Dispose();
@@ -309,9 +271,9 @@ namespace TabScore.Models
                 if (queryResult != null)
                 {
                     // This duplicates the code in TabScoreStarter
-                    OdbcDataReader reader2;
                     SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
                     OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                    OdbcDataReader reader2 = null;
                     try
                     {
                         ODBCRetryHelper.ODBCRetry(() =>
@@ -339,39 +301,32 @@ namespace TabScore.Models
                                         queryResult = cmd3.ExecuteScalar();
                                     });
                                 }
-                                catch (OdbcException)
+                                finally
                                 {
-                                    errorString = "Error";
+                                    cmd3.Dispose();
                                 }
-                                cmd3.Dispose();
-                                if (errorString != "Error")
+                                string TSpairNo = queryResult.ToString();
+                                SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID.ToString()} AND [Table]={tempTable.ToString()} AND Direction='{tempDirection}'";
+                                OdbcCommand cmd4 = new OdbcCommand(SQLString, connection);
+                                try
                                 {
-                                    string TSpairNo = queryResult.ToString();
-                                    SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID.ToString()} AND [Table]={tempTable.ToString()} AND Direction='{tempDirection}'";
-                                    OdbcCommand cmd4 = new OdbcCommand(SQLString, connection);
-                                    try
+                                    ODBCRetryHelper.ODBCRetry(() =>
                                     {
-                                        ODBCRetryHelper.ODBCRetry(() =>
-                                        {
-                                            cmd4.ExecuteNonQuery();
-                                        });
-                                    }
-                                    catch (OdbcException)
-                                    {
-                                        errorString = "Error";
-                                    }
+                                        cmd4.ExecuteNonQuery();
+                                    });
+                                }
+                                finally
+                                {
                                     cmd4.Dispose();
                                 }
                             }
-                            reader2.Close();
                         });
                     }
-                    catch (OdbcException)
+                    finally 
                     {
-                        errorString = "Error";
+                        reader2.Close();
+                        cmd2.Dispose();
                     }
-                    cmd2.Dispose();
-                    if (errorString == "Error") return "Error";  // An error somewhere in all of this ...
                 }
 
                 // First look for entries in the same direction
@@ -384,11 +339,10 @@ namespace TabScore.Models
                     {
                         reader5 = cmd5.ExecuteReader();
                         int biggestRoundSoFar = -1;
-                        int roundAsInt = Convert.ToInt32(round);
                         while (reader5.Read())
                         {
                             int readerRound = Convert.ToInt32(reader5.GetValue(2));
-                            if (readerRound <= roundAsInt && readerRound > biggestRoundSoFar)
+                            if (readerRound <= round && readerRound > biggestRoundSoFar)
                             {
                                 if (!reader5.IsDBNull(0))
                                 {
@@ -403,13 +357,11 @@ namespace TabScore.Models
                         }
                     });
                 }
-                catch (OdbcException)
+                finally
                 {
-                    errorString = "Error";
+                    reader5.Close();
+                    cmd5.Dispose();
                 }
-                cmd5.Dispose();
-                reader5.Close();
-                if (errorString == "Error") return "Error";
 
                 if (number == "###")  // Nothing found so try Round 0 entries in the other direction (for Howell type pairs movement)
                 {
@@ -453,31 +405,25 @@ namespace TabScore.Models
                             }
                         });
                     }
-                    catch (OdbcException)
-                    {
-                        return "Error";
-                    }
                     finally
                     {
                         reader6.Close();
                         cmd6.Dispose();
                     }
                 }
-                cmd1.Dispose();
 
                 if (number == "###")  // Nothing found in either direction!!
                 {
                     number = "";
                 }
             }
-            return FormatName(name, number, formatUnknown);
+            return FormatName(name, number);
         }
 
-        public static string GetNameIndividual(string DB, int sectionID, int round, int playerNo, bool formatUnknown)
+        public static string GetNameIndividual(string DB, int sectionID, int round, int playerNo)
         {
             string number = "###";
             string name = "";
-            string errorString = "";
 
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
@@ -494,10 +440,6 @@ namespace TabScore.Models
                         queryResult = cmd1.ExecuteScalar();
                     });
                 }
-                catch (OdbcException)
-                {
-                    return "Error";
-                }
                 finally
                 {
                     cmd1.Dispose();
@@ -506,9 +448,9 @@ namespace TabScore.Models
                 if (queryResult != null)
                 {
                     // This duplicates the code in TabScoreStarter
-                    OdbcDataReader reader2;
                     SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
                     OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                    OdbcDataReader reader2 = null;
                     try
                     {
                         ODBCRetryHelper.ODBCRetry(() =>
@@ -543,39 +485,32 @@ namespace TabScore.Models
                                         queryResult = cmd3.ExecuteScalar();
                                     });
                                 }
-                                catch (OdbcException)
+                                finally
                                 {
-                                    errorString = "Error";
+                                    cmd3.Dispose();
                                 }
-                                cmd3.Dispose();
-                                if (errorString != "Error")
+                                string TSpairNo = queryResult.ToString();
+                                SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID.ToString()} AND [Table]={tempTable.ToString()} AND Direction='{tempDirection}'";
+                                OdbcCommand cmd4 = new OdbcCommand(SQLString, connection);
+                                try
                                 {
-                                    string TSpairNo = queryResult.ToString();
-                                    SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID.ToString()} AND [Table]={tempTable.ToString()} AND Direction='{tempDirection}'";
-                                    OdbcCommand cmd4 = new OdbcCommand(SQLString, connection);
-                                    try
+                                    ODBCRetryHelper.ODBCRetry(() =>
                                     {
-                                        ODBCRetryHelper.ODBCRetry(() =>
-                                        {
-                                            cmd4.ExecuteNonQuery();
-                                        });
-                                    }
-                                    catch (OdbcException)
-                                    {
-                                        errorString = "Error";
-                                    }
+                                        cmd4.ExecuteNonQuery();
+                                    });
+                                }
+                                finally
+                                {
                                     cmd4.Dispose();
                                 }
                             }
-                            reader2.Close();
                         });
                     }
-                    catch (OdbcException)
+                    finally
                     {
-                        errorString = "Error";
+                        reader2.Close();
+                        cmd2.Dispose();
                     }
-                    cmd2.Dispose();
-                    if (errorString == "Error") return "Error";  // An error somewhere in all of this ...
                 }
 
                 // Now find name from TabScorePairNo
@@ -588,11 +523,10 @@ namespace TabScore.Models
                     {
                         reader5 = cmd5.ExecuteReader();
                         int biggestRoundSoFar = -1;
-                        int roundAsInt = Convert.ToInt32(round);
                         while (reader5.Read())
                         {
                             int readerRound = Convert.ToInt32(reader5.GetValue(2));
-                            if (readerRound <= roundAsInt && readerRound > biggestRoundSoFar)
+                            if (readerRound <= round && readerRound > biggestRoundSoFar)
                             {
                                 if (!reader5.IsDBNull(0))
                                 {
@@ -607,64 +541,41 @@ namespace TabScore.Models
                         }
                     });
                 }
-                catch (OdbcException)
+                finally 
                 {
-                    errorString = "Error";
+                    cmd5.Dispose();
+                    reader5.Close();
                 }
-                cmd5.Dispose();
-                reader5.Close();
-                if (errorString == "Error") return "Error";
 
                 if (number == "###")  // Nothing found
                 {
                     number = "";
                 }
             }
-            return FormatName(name, number, formatUnknown);
+            return FormatName(name, number);
         }
 
         // Function to deal with different display format options for blank and unknown names
-        private static string FormatName(string name, string number, bool formatUnknown)
+        private static string FormatName(string name, string number)
         {
-            if (formatUnknown)
+            if (name == "" || name == "Unknown")
             {
-                if (name == "" || name == "Unknown")
+                if (number == "")
                 {
-                    if (number == "" || number == "0")
-                    {
-                        return "Unknown";
-                    }
-                    else
-                    {
-                        return "Unknown #" + number;
-                    }
+                    return "";
+                }
+                else if (number == "0")
+                {
+                    return "Unknown";
                 }
                 else
                 {
-                    return name;
+                    return "Unknown #" + number;
                 }
             }
             else
             {
-                if (name == "" || name == "Unknown")
-                {
-                    if (number == "")
-                    {
-                        return "";
-                    }
-                    else if (number == "0")
-                    {
-                        return "Unknown";
-                    }
-                    else
-                    {
-                        return "Unknown #" + number;
-                    }
-                }
-                else
-                {
-                    return name;
-                }
+                return name;
             }
         }
     }

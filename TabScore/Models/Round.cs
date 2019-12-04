@@ -4,28 +4,32 @@ namespace TabScore.Models
 {
     public class Round
     {
-        public int Table;
-        public int RoundNumber;
-        public int PairNS;   // Doubles as North player number for individuals
-        public int PairEW;   // Doubles as East player number for individuals
-        public int LowBoard;
-        public int HighBoard;
-        public int South;
-        public int West;
+        private readonly string DB;
+        private readonly int SectionID;
+        private readonly bool Individual;
+        
+        public int RoundNumber { get; private set; }
+        public int PairNS { get; private set; }   // Doubles as North player number for individuals
+        public int PairEW { get; private set; }   // Doubles as East player number for individuals
+        public int LowBoard { get; private set; }
+        public int HighBoard { get; private set; }
+        public int South { get; private set; }
+        public int West { get; private set; }
 
-        public Round()   // Default constructor
+        public Round(string dB, int sectionID, int table, int roundNumber, bool individual)
         {
-        }
+            DB = dB;
+            SectionID = sectionID;
+            RoundNumber = roundNumber;
+            Individual = individual;
 
-        public Round(string DB, int sectionID, int table, int round, bool individual)
-        {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 PairNS = 0;
                 connection.Open();
                 if (individual)
                 {
-                    string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={round}";
+                    string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={roundNumber}";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = null;
                     try
@@ -44,10 +48,6 @@ namespace TabScore.Models
                             }
                         });
                     }
-                    catch (OdbcException)
-                    {
-                        PairNS = -1;
-                    }
                     finally
                     {
                         reader.Close();
@@ -56,7 +56,7 @@ namespace TabScore.Models
                 }
                 else  // Not individual
                 {
-                    string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={round}";
+                    string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={roundNumber}";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = null;
                     try
@@ -73,10 +73,6 @@ namespace TabScore.Models
                             }
                         });
                     }
-                    catch (OdbcException)
-                    {
-                        PairNS = -1;
-                    }
                     finally
                     {
                         reader.Close();
@@ -85,6 +81,63 @@ namespace TabScore.Models
                 }
             }
             return;
+        }
+
+        public string NameNorth
+        {
+            get
+            {
+                if (Individual)
+                {
+                    return PlayerFunctions.GetNameIndividual(DB, SectionID, RoundNumber, PairNS);
+                }
+                else
+                {
+                    return PlayerFunctions.GetName(DB, SectionID, RoundNumber, PairNS, "N");
+                }
+            }
+        }
+        public string NameSouth
+        {
+            get
+            {
+                if (Individual)
+                {
+                    return PlayerFunctions.GetNameIndividual(DB, SectionID, RoundNumber, South);
+                }
+                else
+                {
+                    return PlayerFunctions.GetName(DB, SectionID, RoundNumber, PairNS, "S");
+                }
+            }
+        }
+        public string NameEast
+        {
+            get
+            {
+                if (Individual)
+                {
+                    return PlayerFunctions.GetNameIndividual(DB, SectionID, RoundNumber, PairEW);
+                }
+                else
+                {
+                    return PlayerFunctions.GetName(DB, SectionID, RoundNumber, PairEW, "E");
+                }
+            }
+        }
+        public string NameWest
+        {
+            get
+            {
+                if (Individual)
+                {
+                    return PlayerFunctions.GetNameIndividual(DB, SectionID, RoundNumber, West);
+                }
+                else
+                {
+                    return PlayerFunctions.GetName(DB, SectionID, RoundNumber, PairEW, "W");
+                }
+            }
         }
     }
 }

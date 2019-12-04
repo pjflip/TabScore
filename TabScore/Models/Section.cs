@@ -2,9 +2,9 @@
 {
     public class Section
     {
-        public int ID;
-        public string Letter;
-        public int Tables;
-        public int MissingPair;
+        public int ID {get; set;}
+        public string Letter {get; set;}
+        public int Tables {get; set;}
+        public int MissingPair {get; set;}
     }
 }

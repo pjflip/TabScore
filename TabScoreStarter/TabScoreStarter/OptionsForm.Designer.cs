@@ -29,240 +29,240 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsForm));
-            this.gbTraveller = new System.Windows.Forms.GroupBox();
-            this.cbShowPercentage = new System.Windows.Forms.CheckBox();
-            this.cbShowHandRecord = new System.Windows.Forms.CheckBox();
-            this.cbShowTraveller = new System.Windows.Forms.CheckBox();
-            this.gbPlayers = new System.Windows.Forms.GroupBox();
-            this.cbNameSource = new System.Windows.Forms.ComboBox();
-            this.cbNumberEntryEachRound = new System.Windows.Forms.CheckBox();
-            this.gbRankingList = new System.Windows.Forms.GroupBox();
-            this.cbShowRanking = new System.Windows.Forms.ComboBox();
-            this.gbLeadCard = new System.Windows.Forms.GroupBox();
-            this.cbValidateLeadCard = new System.Windows.Forms.CheckBox();
-            this.cbEnterLeadCard = new System.Windows.Forms.CheckBox();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.gbEnterResultsMethod = new System.Windows.Forms.GroupBox();
-            this.cbEnterResultsMethod = new System.Windows.Forms.ComboBox();
-            this.gbTraveller.SuspendLayout();
-            this.gbPlayers.SuspendLayout();
-            this.gbRankingList.SuspendLayout();
-            this.gbLeadCard.SuspendLayout();
-            this.gbEnterResultsMethod.SuspendLayout();
+            this.TravellerGroup = new System.Windows.Forms.GroupBox();
+            this.ShowPercentageCheckbox = new System.Windows.Forms.CheckBox();
+            this.ShowHandRecordCheckbox = new System.Windows.Forms.CheckBox();
+            this.ShowTravellerCheckbox = new System.Windows.Forms.CheckBox();
+            this.PlayersGroup = new System.Windows.Forms.GroupBox();
+            this.NameSourceCombobox = new System.Windows.Forms.ComboBox();
+            this.NumberEntryEachRoundCheckbox = new System.Windows.Forms.CheckBox();
+            this.RankingListGroup = new System.Windows.Forms.GroupBox();
+            this.ShowRankingCombobox = new System.Windows.Forms.ComboBox();
+            this.LeadCardGroup = new System.Windows.Forms.GroupBox();
+            this.ValidateLeadCardCheckbox = new System.Windows.Forms.CheckBox();
+            this.EnterLeadCardCheckbox = new System.Windows.Forms.CheckBox();
+            this.CancelButton = new System.Windows.Forms.Button();
+            this.OKButton = new System.Windows.Forms.Button();
+            this.EnterResultsMethodGroup = new System.Windows.Forms.GroupBox();
+            this.EnterResultsMethodCombobox = new System.Windows.Forms.ComboBox();
+            this.TravellerGroup.SuspendLayout();
+            this.PlayersGroup.SuspendLayout();
+            this.RankingListGroup.SuspendLayout();
+            this.LeadCardGroup.SuspendLayout();
+            this.EnterResultsMethodGroup.SuspendLayout();
             this.SuspendLayout();
             // 
-            // gbTraveller
+            // TravellerGroup
             // 
-            this.gbTraveller.Controls.Add(this.cbShowPercentage);
-            this.gbTraveller.Controls.Add(this.cbShowHandRecord);
-            this.gbTraveller.Controls.Add(this.cbShowTraveller);
-            this.gbTraveller.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbTraveller.Location = new System.Drawing.Point(12, 74);
-            this.gbTraveller.Name = "gbTraveller";
-            this.gbTraveller.Size = new System.Drawing.Size(220, 99);
-            this.gbTraveller.TabIndex = 0;
-            this.gbTraveller.TabStop = false;
-            this.gbTraveller.Text = "Traveller";
+            this.TravellerGroup.Controls.Add(this.ShowPercentageCheckbox);
+            this.TravellerGroup.Controls.Add(this.ShowHandRecordCheckbox);
+            this.TravellerGroup.Controls.Add(this.ShowTravellerCheckbox);
+            this.TravellerGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TravellerGroup.Location = new System.Drawing.Point(12, 74);
+            this.TravellerGroup.Name = "TravellerGroup";
+            this.TravellerGroup.Size = new System.Drawing.Size(220, 99);
+            this.TravellerGroup.TabIndex = 0;
+            this.TravellerGroup.TabStop = false;
+            this.TravellerGroup.Text = "Traveller";
             // 
-            // cbShowPercentage
+            // ShowPercentageCheckbox
             // 
-            this.cbShowPercentage.AutoSize = true;
-            this.cbShowPercentage.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbShowPercentage.Location = new System.Drawing.Point(6, 46);
-            this.cbShowPercentage.Name = "cbShowPercentage";
-            this.cbShowPercentage.Size = new System.Drawing.Size(190, 19);
-            this.cbShowPercentage.TabIndex = 3;
-            this.cbShowPercentage.TabStop = false;
-            this.cbShowPercentage.Text = "Show Percentage on Traveller";
-            this.cbShowPercentage.UseVisualStyleBackColor = true;
+            this.ShowPercentageCheckbox.AutoSize = true;
+            this.ShowPercentageCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShowPercentageCheckbox.Location = new System.Drawing.Point(6, 46);
+            this.ShowPercentageCheckbox.Name = "ShowPercentageCheckbox";
+            this.ShowPercentageCheckbox.Size = new System.Drawing.Size(190, 19);
+            this.ShowPercentageCheckbox.TabIndex = 3;
+            this.ShowPercentageCheckbox.TabStop = false;
+            this.ShowPercentageCheckbox.Text = "Show Percentage on Traveller";
+            this.ShowPercentageCheckbox.UseVisualStyleBackColor = true;
             // 
-            // cbShowHandRecord
+            // ShowHandRecordCheckbox
             // 
-            this.cbShowHandRecord.AutoSize = true;
-            this.cbShowHandRecord.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbShowHandRecord.Location = new System.Drawing.Point(6, 71);
-            this.cbShowHandRecord.Name = "cbShowHandRecord";
-            this.cbShowHandRecord.Size = new System.Drawing.Size(133, 19);
-            this.cbShowHandRecord.TabIndex = 4;
-            this.cbShowHandRecord.TabStop = false;
-            this.cbShowHandRecord.Text = "Show Hand Record";
-            this.cbShowHandRecord.UseVisualStyleBackColor = true;
+            this.ShowHandRecordCheckbox.AutoSize = true;
+            this.ShowHandRecordCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShowHandRecordCheckbox.Location = new System.Drawing.Point(6, 71);
+            this.ShowHandRecordCheckbox.Name = "ShowHandRecordCheckbox";
+            this.ShowHandRecordCheckbox.Size = new System.Drawing.Size(133, 19);
+            this.ShowHandRecordCheckbox.TabIndex = 4;
+            this.ShowHandRecordCheckbox.TabStop = false;
+            this.ShowHandRecordCheckbox.Text = "Show Hand Record";
+            this.ShowHandRecordCheckbox.UseVisualStyleBackColor = true;
             // 
-            // cbShowTraveller
+            // ShowTravellerCheckbox
             // 
-            this.cbShowTraveller.AutoSize = true;
-            this.cbShowTraveller.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbShowTraveller.Location = new System.Drawing.Point(6, 21);
-            this.cbShowTraveller.Name = "cbShowTraveller";
-            this.cbShowTraveller.Size = new System.Drawing.Size(107, 19);
-            this.cbShowTraveller.TabIndex = 2;
-            this.cbShowTraveller.TabStop = false;
-            this.cbShowTraveller.Text = "Show Traveller";
-            this.cbShowTraveller.UseVisualStyleBackColor = true;
-            this.cbShowTraveller.CheckedChanged += new System.EventHandler(this.cbShowTraveller_CheckedChanged);
+            this.ShowTravellerCheckbox.AutoSize = true;
+            this.ShowTravellerCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShowTravellerCheckbox.Location = new System.Drawing.Point(6, 21);
+            this.ShowTravellerCheckbox.Name = "ShowTravellerCheckbox";
+            this.ShowTravellerCheckbox.Size = new System.Drawing.Size(107, 19);
+            this.ShowTravellerCheckbox.TabIndex = 2;
+            this.ShowTravellerCheckbox.TabStop = false;
+            this.ShowTravellerCheckbox.Text = "Show Traveller";
+            this.ShowTravellerCheckbox.UseVisualStyleBackColor = true;
+            this.ShowTravellerCheckbox.CheckedChanged += new System.EventHandler(this.ShowTraveller_CheckedChanged);
             // 
-            // gbPlayers
+            // PlayersGroup
             // 
-            this.gbPlayers.Controls.Add(this.cbNameSource);
-            this.gbPlayers.Controls.Add(this.cbNumberEntryEachRound);
-            this.gbPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbPlayers.Location = new System.Drawing.Point(238, 91);
-            this.gbPlayers.Name = "gbPlayers";
-            this.gbPlayers.Size = new System.Drawing.Size(251, 82);
-            this.gbPlayers.TabIndex = 0;
-            this.gbPlayers.TabStop = false;
-            this.gbPlayers.Text = "Player Names/Numbers";
+            this.PlayersGroup.Controls.Add(this.NameSourceCombobox);
+            this.PlayersGroup.Controls.Add(this.NumberEntryEachRoundCheckbox);
+            this.PlayersGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PlayersGroup.Location = new System.Drawing.Point(238, 91);
+            this.PlayersGroup.Name = "PlayersGroup";
+            this.PlayersGroup.Size = new System.Drawing.Size(251, 82);
+            this.PlayersGroup.TabIndex = 0;
+            this.PlayersGroup.TabStop = false;
+            this.PlayersGroup.Text = "Player Names/Numbers";
             // 
-            // cbNameSource
+            // NameSourceCombobox
             // 
-            this.cbNameSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbNameSource.FormattingEnabled = true;
-            this.cbNameSource.Items.AddRange(new object[] {
+            this.NameSourceCombobox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NameSourceCombobox.FormattingEnabled = true;
+            this.NameSourceCombobox.Items.AddRange(new object[] {
             "Internal database",
             "External database",
             "No name source",
             "Internal database first, then external"});
-            this.cbNameSource.Location = new System.Drawing.Point(6, 20);
-            this.cbNameSource.Name = "cbNameSource";
-            this.cbNameSource.Size = new System.Drawing.Size(239, 23);
-            this.cbNameSource.TabIndex = 8;
-            this.cbNameSource.TabStop = false;
+            this.NameSourceCombobox.Location = new System.Drawing.Point(6, 20);
+            this.NameSourceCombobox.Name = "NameSourceCombobox";
+            this.NameSourceCombobox.Size = new System.Drawing.Size(239, 23);
+            this.NameSourceCombobox.TabIndex = 8;
+            this.NameSourceCombobox.TabStop = false;
             // 
-            // cbNumberEntryEachRound
+            // NumberEntryEachRoundCheckbox
             // 
-            this.cbNumberEntryEachRound.AutoSize = true;
-            this.cbNumberEntryEachRound.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbNumberEntryEachRound.Location = new System.Drawing.Point(6, 50);
-            this.cbNumberEntryEachRound.Name = "cbNumberEntryEachRound";
-            this.cbNumberEntryEachRound.Size = new System.Drawing.Size(209, 19);
-            this.cbNumberEntryEachRound.TabIndex = 9;
-            this.cbNumberEntryEachRound.TabStop = false;
-            this.cbNumberEntryEachRound.Text = "Player Number Entry Each Round";
-            this.cbNumberEntryEachRound.UseVisualStyleBackColor = true;
+            this.NumberEntryEachRoundCheckbox.AutoSize = true;
+            this.NumberEntryEachRoundCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NumberEntryEachRoundCheckbox.Location = new System.Drawing.Point(6, 50);
+            this.NumberEntryEachRoundCheckbox.Name = "NumberEntryEachRoundCheckbox";
+            this.NumberEntryEachRoundCheckbox.Size = new System.Drawing.Size(209, 19);
+            this.NumberEntryEachRoundCheckbox.TabIndex = 9;
+            this.NumberEntryEachRoundCheckbox.TabStop = false;
+            this.NumberEntryEachRoundCheckbox.Text = "Player Number Entry Each Round";
+            this.NumberEntryEachRoundCheckbox.UseVisualStyleBackColor = true;
             // 
-            // gbRankingList
+            // RankingListGroup
             // 
-            this.gbRankingList.Controls.Add(this.cbShowRanking);
-            this.gbRankingList.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbRankingList.Location = new System.Drawing.Point(12, 179);
-            this.gbRankingList.Name = "gbRankingList";
-            this.gbRankingList.Size = new System.Drawing.Size(220, 56);
-            this.gbRankingList.TabIndex = 0;
-            this.gbRankingList.TabStop = false;
-            this.gbRankingList.Text = "Ranking List";
+            this.RankingListGroup.Controls.Add(this.ShowRankingCombobox);
+            this.RankingListGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RankingListGroup.Location = new System.Drawing.Point(12, 179);
+            this.RankingListGroup.Name = "RankingListGroup";
+            this.RankingListGroup.Size = new System.Drawing.Size(220, 56);
+            this.RankingListGroup.TabIndex = 0;
+            this.RankingListGroup.TabStop = false;
+            this.RankingListGroup.Text = "Ranking List";
             // 
-            // cbShowRanking
+            // ShowRankingCombobox
             // 
-            this.cbShowRanking.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbShowRanking.FormattingEnabled = true;
-            this.cbShowRanking.Items.AddRange(new object[] {
+            this.ShowRankingCombobox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShowRankingCombobox.FormattingEnabled = true;
+            this.ShowRankingCombobox.Items.AddRange(new object[] {
             "Don\'t show",
             "Show after each round",
             "Show at end of session"});
-            this.cbShowRanking.Location = new System.Drawing.Point(7, 22);
-            this.cbShowRanking.Name = "cbShowRanking";
-            this.cbShowRanking.Size = new System.Drawing.Size(207, 23);
-            this.cbShowRanking.TabIndex = 5;
-            this.cbShowRanking.TabStop = false;
+            this.ShowRankingCombobox.Location = new System.Drawing.Point(7, 22);
+            this.ShowRankingCombobox.Name = "ShowRankingCombobox";
+            this.ShowRankingCombobox.Size = new System.Drawing.Size(207, 23);
+            this.ShowRankingCombobox.TabIndex = 5;
+            this.ShowRankingCombobox.TabStop = false;
             // 
-            // gbLeadCard
+            // LeadCardGroup
             // 
-            this.gbLeadCard.Controls.Add(this.cbValidateLeadCard);
-            this.gbLeadCard.Controls.Add(this.cbEnterLeadCard);
-            this.gbLeadCard.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbLeadCard.Location = new System.Drawing.Point(238, 12);
-            this.gbLeadCard.Name = "gbLeadCard";
-            this.gbLeadCard.Size = new System.Drawing.Size(251, 73);
-            this.gbLeadCard.TabIndex = 0;
-            this.gbLeadCard.TabStop = false;
-            this.gbLeadCard.Text = "Lead Card";
+            this.LeadCardGroup.Controls.Add(this.ValidateLeadCardCheckbox);
+            this.LeadCardGroup.Controls.Add(this.EnterLeadCardCheckbox);
+            this.LeadCardGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LeadCardGroup.Location = new System.Drawing.Point(238, 12);
+            this.LeadCardGroup.Name = "LeadCardGroup";
+            this.LeadCardGroup.Size = new System.Drawing.Size(251, 73);
+            this.LeadCardGroup.TabIndex = 0;
+            this.LeadCardGroup.TabStop = false;
+            this.LeadCardGroup.Text = "Lead Card";
             // 
-            // cbValidateLeadCard
+            // ValidateLeadCardCheckbox
             // 
-            this.cbValidateLeadCard.AutoSize = true;
-            this.cbValidateLeadCard.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbValidateLeadCard.Location = new System.Drawing.Point(6, 46);
-            this.cbValidateLeadCard.Name = "cbValidateLeadCard";
-            this.cbValidateLeadCard.Size = new System.Drawing.Size(130, 19);
-            this.cbValidateLeadCard.TabIndex = 7;
-            this.cbValidateLeadCard.TabStop = false;
-            this.cbValidateLeadCard.Text = "Validate Lead Card";
-            this.cbValidateLeadCard.UseVisualStyleBackColor = true;
+            this.ValidateLeadCardCheckbox.AutoSize = true;
+            this.ValidateLeadCardCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ValidateLeadCardCheckbox.Location = new System.Drawing.Point(6, 46);
+            this.ValidateLeadCardCheckbox.Name = "ValidateLeadCardCheckbox";
+            this.ValidateLeadCardCheckbox.Size = new System.Drawing.Size(130, 19);
+            this.ValidateLeadCardCheckbox.TabIndex = 7;
+            this.ValidateLeadCardCheckbox.TabStop = false;
+            this.ValidateLeadCardCheckbox.Text = "Validate Lead Card";
+            this.ValidateLeadCardCheckbox.UseVisualStyleBackColor = true;
             // 
-            // cbEnterLeadCard
+            // EnterLeadCardCheckbox
             // 
-            this.cbEnterLeadCard.AutoSize = true;
-            this.cbEnterLeadCard.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbEnterLeadCard.Location = new System.Drawing.Point(6, 21);
-            this.cbEnterLeadCard.Name = "cbEnterLeadCard";
-            this.cbEnterLeadCard.Size = new System.Drawing.Size(115, 19);
-            this.cbEnterLeadCard.TabIndex = 6;
-            this.cbEnterLeadCard.TabStop = false;
-            this.cbEnterLeadCard.Text = "Enter Lead Card";
-            this.cbEnterLeadCard.UseVisualStyleBackColor = true;
-            this.cbEnterLeadCard.CheckedChanged += new System.EventHandler(this.cbEnterLeadCard_CheckedChanged);
+            this.EnterLeadCardCheckbox.AutoSize = true;
+            this.EnterLeadCardCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EnterLeadCardCheckbox.Location = new System.Drawing.Point(6, 21);
+            this.EnterLeadCardCheckbox.Name = "EnterLeadCardCheckbox";
+            this.EnterLeadCardCheckbox.Size = new System.Drawing.Size(115, 19);
+            this.EnterLeadCardCheckbox.TabIndex = 6;
+            this.EnterLeadCardCheckbox.TabStop = false;
+            this.EnterLeadCardCheckbox.Text = "Enter Lead Card";
+            this.EnterLeadCardCheckbox.UseVisualStyleBackColor = true;
+            this.EnterLeadCardCheckbox.CheckedChanged += new System.EventHandler(this.EnterLeadCard_CheckedChanged);
             // 
-            // btnCancel
+            // CancelButton
             // 
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(284, 212);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 10;
-            this.btnCancel.TabStop = false;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CancelButton.Location = new System.Drawing.Point(284, 212);
+            this.CancelButton.Name = "CancelButton";
+            this.CancelButton.Size = new System.Drawing.Size(75, 23);
+            this.CancelButton.TabIndex = 10;
+            this.CancelButton.TabStop = false;
+            this.CancelButton.Text = "Cancel";
+            this.CancelButton.UseVisualStyleBackColor = true;
+            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
-            // btnOK
+            // OKButton
             // 
-            this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOK.Location = new System.Drawing.Point(408, 212);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 11;
-            this.btnOK.TabStop = false;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.OKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OKButton.Location = new System.Drawing.Point(408, 212);
+            this.OKButton.Name = "OKButton";
+            this.OKButton.Size = new System.Drawing.Size(75, 23);
+            this.OKButton.TabIndex = 11;
+            this.OKButton.TabStop = false;
+            this.OKButton.Text = "OK";
+            this.OKButton.UseVisualStyleBackColor = true;
+            this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
             // 
-            // gbEnterResultsMethod
+            // EnterResultsMethodGroup
             // 
-            this.gbEnterResultsMethod.Controls.Add(this.cbEnterResultsMethod);
-            this.gbEnterResultsMethod.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbEnterResultsMethod.Location = new System.Drawing.Point(12, 12);
-            this.gbEnterResultsMethod.Name = "gbEnterResultsMethod";
-            this.gbEnterResultsMethod.Size = new System.Drawing.Size(220, 56);
-            this.gbEnterResultsMethod.TabIndex = 5;
-            this.gbEnterResultsMethod.TabStop = false;
-            this.gbEnterResultsMethod.Text = "Enter Results Method";
+            this.EnterResultsMethodGroup.Controls.Add(this.EnterResultsMethodCombobox);
+            this.EnterResultsMethodGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EnterResultsMethodGroup.Location = new System.Drawing.Point(12, 12);
+            this.EnterResultsMethodGroup.Name = "EnterResultsMethodGroup";
+            this.EnterResultsMethodGroup.Size = new System.Drawing.Size(220, 56);
+            this.EnterResultsMethodGroup.TabIndex = 5;
+            this.EnterResultsMethodGroup.TabStop = false;
+            this.EnterResultsMethodGroup.Text = "Enter Results Method";
             // 
-            // cbEnterResultsMethod
+            // EnterResultsMethodCombobox
             // 
-            this.cbEnterResultsMethod.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbEnterResultsMethod.FormattingEnabled = true;
-            this.cbEnterResultsMethod.Items.AddRange(new object[] {
+            this.EnterResultsMethodCombobox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EnterResultsMethodCombobox.FormattingEnabled = true;
+            this.EnterResultsMethodCombobox.Items.AddRange(new object[] {
             "Tricks plus or minus",
             "Total tricks won"});
-            this.cbEnterResultsMethod.Location = new System.Drawing.Point(7, 22);
-            this.cbEnterResultsMethod.Name = "cbEnterResultsMethod";
-            this.cbEnterResultsMethod.Size = new System.Drawing.Size(207, 23);
-            this.cbEnterResultsMethod.TabIndex = 1;
-            this.cbEnterResultsMethod.TabStop = false;
+            this.EnterResultsMethodCombobox.Location = new System.Drawing.Point(7, 22);
+            this.EnterResultsMethodCombobox.Name = "EnterResultsMethodCombobox";
+            this.EnterResultsMethodCombobox.Size = new System.Drawing.Size(207, 23);
+            this.EnterResultsMethodCombobox.TabIndex = 1;
+            this.EnterResultsMethodCombobox.TabStop = false;
             // 
             // OptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(501, 249);
-            this.Controls.Add(this.gbEnterResultsMethod);
-            this.Controls.Add(this.btnOK);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.gbPlayers);
-            this.Controls.Add(this.gbRankingList);
-            this.Controls.Add(this.gbLeadCard);
-            this.Controls.Add(this.gbTraveller);
+            this.Controls.Add(this.EnterResultsMethodGroup);
+            this.Controls.Add(this.OKButton);
+            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.PlayersGroup);
+            this.Controls.Add(this.RankingListGroup);
+            this.Controls.Add(this.LeadCardGroup);
+            this.Controls.Add(this.TravellerGroup);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -270,34 +270,34 @@
             this.Name = "OptionsForm";
             this.Text = "TabScore Options";
             this.Load += new System.EventHandler(this.OptionsForm_Load);
-            this.gbTraveller.ResumeLayout(false);
-            this.gbTraveller.PerformLayout();
-            this.gbPlayers.ResumeLayout(false);
-            this.gbPlayers.PerformLayout();
-            this.gbRankingList.ResumeLayout(false);
-            this.gbLeadCard.ResumeLayout(false);
-            this.gbLeadCard.PerformLayout();
-            this.gbEnterResultsMethod.ResumeLayout(false);
+            this.TravellerGroup.ResumeLayout(false);
+            this.TravellerGroup.PerformLayout();
+            this.PlayersGroup.ResumeLayout(false);
+            this.PlayersGroup.PerformLayout();
+            this.RankingListGroup.ResumeLayout(false);
+            this.LeadCardGroup.ResumeLayout(false);
+            this.LeadCardGroup.PerformLayout();
+            this.EnterResultsMethodGroup.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.GroupBox gbTraveller;
-        private System.Windows.Forms.CheckBox cbShowPercentage;
-        private System.Windows.Forms.CheckBox cbShowHandRecord;
-        private System.Windows.Forms.CheckBox cbShowTraveller;
-        private System.Windows.Forms.GroupBox gbPlayers;
-        private System.Windows.Forms.ComboBox cbNameSource;
-        private System.Windows.Forms.CheckBox cbNumberEntryEachRound;
-        private System.Windows.Forms.GroupBox gbRankingList;
-        private System.Windows.Forms.ComboBox cbShowRanking;
-        private System.Windows.Forms.GroupBox gbLeadCard;
-        private System.Windows.Forms.CheckBox cbValidateLeadCard;
-        private System.Windows.Forms.CheckBox cbEnterLeadCard;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.GroupBox gbEnterResultsMethod;
-        private System.Windows.Forms.ComboBox cbEnterResultsMethod;
+        private System.Windows.Forms.GroupBox TravellerGroup;
+        private System.Windows.Forms.CheckBox ShowPercentageCheckbox;
+        private System.Windows.Forms.CheckBox ShowHandRecordCheckbox;
+        private System.Windows.Forms.CheckBox ShowTravellerCheckbox;
+        private System.Windows.Forms.GroupBox PlayersGroup;
+        private System.Windows.Forms.ComboBox NameSourceCombobox;
+        private System.Windows.Forms.CheckBox NumberEntryEachRoundCheckbox;
+        private System.Windows.Forms.GroupBox RankingListGroup;
+        private System.Windows.Forms.ComboBox ShowRankingCombobox;
+        private System.Windows.Forms.GroupBox LeadCardGroup;
+        private System.Windows.Forms.CheckBox ValidateLeadCardCheckbox;
+        private System.Windows.Forms.CheckBox EnterLeadCardCheckbox;
+        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button OKButton;
+        private System.Windows.Forms.GroupBox EnterResultsMethodGroup;
+        private System.Windows.Forms.ComboBox EnterResultsMethodCombobox;
     }
 }

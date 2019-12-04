@@ -4,25 +4,30 @@ namespace TabScoreStarter
 {
     public class Hand
     {
-        public int SectionID = 1;
-        public int Board;
+        public int SectionID { get; set; }
+        public int Board { get; set;}
 
-        public string NorthSpades;
-        public string NorthHearts;
-        public string NorthDiamonds;
-        public string NorthClubs;
-        public string EastSpades;
-        public string EastHearts;
-        public string EastDiamonds;
-        public string EastClubs;
-        public string SouthSpades;
-        public string SouthHearts;
-        public string SouthDiamonds;
-        public string SouthClubs;
-        public string WestSpades;
-        public string WestHearts;
-        public string WestDiamonds;
-        public string WestClubs;
+        public string NorthSpades { get; set;}
+        public string NorthHearts { get; set;}
+        public string NorthDiamonds { get; set;}
+        public string NorthClubs { get; set;}
+        public string EastSpades { get; set;}
+        public string EastHearts { get; set;}
+        public string EastDiamonds { get; set;}
+        public string EastClubs { get; set;}
+        public string SouthSpades { get; set;}
+        public string SouthHearts { get; set;}
+        public string SouthDiamonds { get; set;}
+        public string SouthClubs { get; set;}
+        public string WestSpades { get; set;}
+        public string WestHearts { get; set;}
+        public string WestDiamonds { get; set;}
+        public string WestClubs { get; set;}
+
+        public Hand()
+        {
+            SectionID = 1;
+        }
 
         public string PBN
         {

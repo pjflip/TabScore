@@ -11,30 +11,24 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Result res = new Result()
-            {
-                ContractLevel = Session["ContractLevel"].ToString(),
-                ContractSuit = Session["ContractSuit"].ToString(),
-                ContractX = Session["ContractX"].ToString(),
-                NSEW = Session["NSEW"].ToString()
-            };
-            ViewData["DisplayContract"] = res.DisplayContract();
+            Result result = Session["Result"] as Result;
 
             ViewData["BackButton"] = "TRUE";
             if (Settings.GetSetting<int>(DBConnectionString, SettingName.EnterResultsMethod) == 1)
             {
-                return View("TotalTricks");
+                return View("TotalTricks", result);
             }
             else
             {
-                ViewData["ContractLevel"] = Session["ContractLevel"];
-                return View("TricksPlusMinus");
+                return View("TricksPlusMinus", result);
             }
         }
 
         public ActionResult OKButtonClick(string numTricks)
         {
-            Session["TricksTakenNumber"] = Convert.ToInt32(numTricks);
+            Result result = Session["Result"] as Result;
+            result.TricksTakenNumber = Convert.ToInt32(numTricks);
+            Session["Result"] = result;
             return RedirectToAction("Index", "ConfirmResult");
         }
 
@@ -49,7 +43,8 @@ namespace TabScore.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "EnterContract", new { board = Convert.ToInt32(Session["Board"]) } );
+                Result result = Session["Result"] as Result;
+                return RedirectToAction("Index", "EnterContract", new { board = result.Board });
             }
         }
     }

@@ -3,12 +3,10 @@ using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public static class SectionsList
+    public class SectionsList : List<Section>
     {
-        public static List<Section> GetSections(string DB)
+        public SectionsList(string DB)
         {
-            List<Section> sList = new List<Section>();
-
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
@@ -29,13 +27,9 @@ namespace TabScore.Models
                                 Tables = reader.GetInt32(2),
                                 MissingPair = reader.GetInt32(3)
                             };
-                            sList.Add(s);
+                            Add(s);
                         }
                     });
-                }
-                catch (OdbcException)
-                {
-                    return null;
                 }
                 finally
                 {
@@ -43,7 +37,6 @@ namespace TabScore.Models
                     cmd.Dispose();
                 }
             }
-            return sList;
         }
     }
 }

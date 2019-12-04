@@ -11,15 +11,14 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            HandRecord hr = new HandRecord(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Board"]));
-            if (hr.NorthSpades == "Error") return RedirectToAction("Index", "ErrorScreen");
+            Result result = Session["Result"] as Result;
+            HandRecord hr = new HandRecord(DBConnectionString, Convert.ToInt32(Session["SectionID"]), result.Board);
             if (hr.NorthSpades == "###" && Convert.ToInt32(Session["SectionID"]) != 1)    // Use default Section 1 hand records)
             {
                 hr = new HandRecord(DBConnectionString, 1, Convert.ToInt32(Session["SectionID"]));
             }
 
             ViewData["BackButton"] = "FALSE";
-            ViewData["Dealer"] = Dealer.GetDealerForBoard(Convert.ToInt32(Session["Board"]));
             return View(hr);
         }
 

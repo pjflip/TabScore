@@ -5,19 +5,65 @@ using System.IO;
 
 namespace TabScoreStarter
 {
-    class HandsList
+    class HandsList : List<Hand>
     {
-        public List<Hand> Hands = new List<Hand>();
+        public HandsList(Database db)
+        {
+            using (OdbcConnection connection = new OdbcConnection(db.ConnectionString))
+            {
+                string SQLString = $"SELECT Section, Board, NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs FROM HandRecord";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                try
+                {
+                    OdbcDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Hand hand = new Hand
+                        {
+                            SectionID = reader.GetInt32(0),
+                            Board = reader.GetInt32(1),
+                            NorthSpades = reader.GetValue(2).ToString(),
+                            NorthHearts = reader.GetValue(3).ToString(),
+                            NorthDiamonds = reader.GetValue(4).ToString(),
+                            NorthClubs = reader.GetValue(5).ToString(),
+                            EastSpades = reader.GetValue(6).ToString(),
+                            EastHearts = reader.GetValue(7).ToString(),
+                            EastDiamonds = reader.GetValue(8).ToString(),
+                            EastClubs = reader.GetValue(9).ToString(),
+                            SouthSpades = reader.GetValue(10).ToString(),
+                            SouthHearts = reader.GetValue(11).ToString(),
+                            SouthDiamonds = reader.GetValue(12).ToString(),
+                            SouthClubs = reader.GetValue(13).ToString(),
+                            WestSpades = reader.GetValue(14).ToString(),
+                            WestHearts = reader.GetValue(15).ToString(),
+                            WestDiamonds = reader.GetValue(16).ToString(),
+                            WestClubs = reader.GetValue(17).ToString()
+                        };
+                        Add(hand);
+                    }
+                    reader.Close();
+                }
+                catch (OdbcException e)
+                {
+                    if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Error other than HandRecord table does not exist
+                    {
+                        throw e;
+                    }
+                }
+                cmd.Dispose();
+            }
+        }
 
-        public void ReadFromPBNFile(string pathToFile)
+        public HandsList(string pathToPbnFile)
         {
             bool newBoard = false;
             string line = null;
             char[] quoteDelimiter = { '"' };
 
-            Hands.Clear();
+            Clear();
 
-            StreamReader file = new StreamReader(pathToFile);
+            StreamReader file = new StreamReader(pathToPbnFile);
             if (!file.EndOfStream)
             {
                 line = file.ReadLine();
@@ -43,13 +89,13 @@ namespace TabScoreStarter
                         else if (line.Length > 7 && line.Substring(0, 7) == "[Board ")
                         {
                             newBoard = true;
-                            if (hand.NorthSpades != "###") Hands.Add(hand);
+                            if (hand.NorthSpades != "###") Add(hand);
                             break;
                         }
                     }
                     if (file.EndOfStream)
                     {
-                        if (hand.NorthSpades != "###") Hands.Add(hand);
+                        if (hand.NorthSpades != "###") Add(hand);
                     }
                 }
                 else if (!file.EndOfStream)
@@ -61,63 +107,16 @@ namespace TabScoreStarter
             file.Close();
         }
 
-        public void ReadFromDB(string DB)
+        public void WriteToDB(Database db)
         {
-            Hands.Clear();
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                string SQLString = $"SELECT Section, Board, NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs FROM HandRecord";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
-                try
-                {
-                    OdbcDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        Hand hr = new Hand();
-                        hr.SectionID = reader.GetInt32(0);
-                        hr.Board = reader.GetInt32(1);
-                        hr.NorthSpades = reader.GetValue(2).ToString();
-                        hr.NorthHearts = reader.GetValue(3).ToString();
-                        hr.NorthDiamonds = reader.GetValue(4).ToString();
-                        hr.NorthClubs = reader.GetValue(5).ToString();
-                        hr.EastSpades = reader.GetValue(6).ToString();
-                        hr.EastHearts = reader.GetValue(7).ToString();
-                        hr.EastDiamonds = reader.GetValue(8).ToString();
-                        hr.EastClubs = reader.GetValue(9).ToString();
-                        hr.SouthSpades = reader.GetValue(10).ToString();
-                        hr.SouthHearts = reader.GetValue(11).ToString();
-                        hr.SouthDiamonds = reader.GetValue(12).ToString();
-                        hr.SouthClubs = reader.GetValue(13).ToString();
-                        hr.WestSpades = reader.GetValue(14).ToString();
-                        hr.WestHearts = reader.GetValue(15).ToString();
-                        hr.WestDiamonds = reader.GetValue(16).ToString();
-                        hr.WestClubs = reader.GetValue(17).ToString();
-                        Hands.Add(hr);
-                    }
-                    reader.Close();
-                }
-                catch (OdbcException e)
-                {
-                    if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Error other than HandRecord table does not exist
-                    {
-                        throw e;
-                    }
-                }
-                cmd.Dispose();
-            }
-        }
-
-        public void WriteToDB(string DB)
-        {
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(db.ConnectionString))
             {
                 connection.Open();
                 string SQLString = "DELETE FROM HandRecord";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
 
-                foreach (Hand hc in Hands)
+                foreach (Hand hc in this)
                 {
                     if (hc.NorthSpades != "###")
                     {

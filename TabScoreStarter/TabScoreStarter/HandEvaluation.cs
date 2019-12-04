@@ -1,39 +1,37 @@
-﻿using System;
-
-namespace TabScoreStarter
+﻿namespace TabScoreStarter
 {
     public class HandEvaluation
     {
-        public int SectionID;
-        public int Board;
+        public int SectionID{ get; private set;}
+        public int Board{ get; private set;}
 
-        public int NorthSpades;
-        public int NorthHearts;
-        public int NorthDiamonds;
-        public int NorthClubs;
-        public int NorthNotrump;
-        public int EastSpades;
-        public int EastHearts;
-        public int EastDiamonds;
-        public int EastClubs;
-        public int EastNotrump;
-        public int SouthSpades;
-        public int SouthHearts;
-        public int SouthDiamonds;
-        public int SouthClubs;
-        public int SouthNotrump;
-        public int WestSpades;
-        public int WestHearts;
-        public int WestDiamonds;
-        public int WestClubs;
-        public int WestNotrump;
+        public int NorthSpades{ get; private set;}
+        public int NorthHearts{ get; private set;}
+        public int NorthDiamonds{ get; private set;}
+        public int NorthClubs{ get; private set;}
+        public int NorthNotrump{ get; private set;}
+        public int EastSpades{ get; private set;}
+        public int EastHearts{ get; private set;}
+        public int EastDiamonds{ get; private set;}
+        public int EastClubs{ get; private set;}
+        public int EastNotrump{ get; private set;}
+        public int SouthSpades{ get; private set;}
+        public int SouthHearts{ get; private set;}
+        public int SouthDiamonds{ get; private set;}
+        public int SouthClubs{ get; private set;}
+        public int SouthNotrump{ get; private set;}
+        public int WestSpades{ get; private set;}
+        public int WestHearts{ get; private set;}
+        public int WestDiamonds{ get; private set;}
+        public int WestClubs{ get; private set;}
+        public int WestNotrump{ get; private set;}
 
-        public int NorthHcp;
-        public int SouthHcp;
-        public int EastHcp;
-        public int WestHcp;
+        public int NorthHcp{ get; private set;}
+        public int SouthHcp{ get; private set;}
+        public int EastHcp{ get; private set;}
+        public int WestHcp{ get; private set;}
 
-        public void SetFromHand(Hand hand)
+        public HandEvaluation(Hand hand)
         {
             SectionID = hand.SectionID;
             Board = hand.Board;

@@ -53,7 +53,7 @@ namespace TabScore.Controllers
                 Session["DBConnectionString"] = cs.ToString();
 
                 // Check if session is for an individual event
-                Session["IndividualEvent"] = DBInfo.IsIndividual(Session["DBConnectionString"].ToString());
+                Session["IndividualEvent"] = UtilityFunctions.IsEventIndividual(Session["DBConnectionString"].ToString());
 
                 return RedirectToAction("Index", "EnterSection");
             }

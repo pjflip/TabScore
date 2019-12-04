@@ -3,10 +3,18 @@ using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public static class Tables
+    public class Table
     {
-        public static int IsLoggedOn(string DB, int sectionID, string table)
+        public int LogonStatus { get; private set; }
+
+        private readonly int TableNo;
+        private readonly int SectionID;
+
+        public Table(string DB, int sectionID, int table)
         {
+            TableNo = table;
+            SectionID = sectionID;
+
             object queryResult = null;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
@@ -20,24 +28,20 @@ namespace TabScore.Models
                         queryResult = cmd.ExecuteScalar();
                     });
                 }
-                catch (OdbcException)
-                {
-                    return -1;
-                }
                 finally
                 {
                     cmd.Dispose();
                 }
             }
-            return Convert.ToInt32(queryResult);
+            LogonStatus = Convert.ToInt32(queryResult);
         }
 
-        public static int Logon(string DB, int sectionID, string table)
+        public void Logon(string DB)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
-                string SQLString = $"UPDATE Tables SET LogOnOff=1 WHERE Section={sectionID} AND [Table]={table}";
+                string SQLString = $"UPDATE Tables SET LogOnOff=1 WHERE Section={SectionID} AND [Table]={TableNo}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
@@ -46,16 +50,12 @@ namespace TabScore.Models
                         cmd.ExecuteNonQuery();
                     });
                 }
-                catch (OdbcException)
-                {
-                   return -1;
-                }
                 finally
                 {
+                    LogonStatus = 1;
                     cmd.Dispose();
                 }
             }
-            return 0;
         }
     }
 }

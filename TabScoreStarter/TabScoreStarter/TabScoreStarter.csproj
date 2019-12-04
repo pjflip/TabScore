@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="OptionsForm.cs">
       <SubType>Form</SubType>
@@ -73,7 +74,6 @@
     <Compile Include="OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ScoringDatabase.cs" />
     <Compile Include="DoubleDummySolver.cs" />
     <Compile Include="Hand.cs" />
     <Compile Include="HandEvaluation.cs" />

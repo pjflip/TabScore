@@ -11,63 +11,68 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Session["Board"] = board;
-
-            if (Session["ContractLevel"].ToString() == "")
+            int boardNumber = Convert.ToInt32(board);
+            Round round = Session["Round"] as Round;
+            Result result = Session["Result"] as Result;
+            if (result == null || result.Board != boardNumber)   // No session result data for this board, so create new result object and check database
             {
-                /* No session data, so check database */
-                Result res = new Result
+                result = new Result
                 {
                     SectionID = Convert.ToInt32(Session["SectionID"]),
                     Table = Convert.ToInt32(Session["Table"]),
-                    Round = Convert.ToInt32(Session["CurrentRound"]),
-                    Board = Convert.ToInt32(board),
-                    ContractLevel = "",
+                    RoundNumber = round.RoundNumber,
+                    Board = boardNumber,
+                    PairNS = round.PairNS,
+                    PairEW = round.PairEW,
+                    ContractLevel = -1,
                     ContractSuit = "",
                     ContractX = "NONE",
                     NSEW = "",
                     TricksTakenNumber = -1,
                     LeadCard = ""
                 };
-                if(!res.ReadFromDB(DBConnectionString)) return RedirectToAction("Index", "ErrorScreen"); 
-                Session["ContractLevel"] = res.ContractLevel;
-                Session["ContractSuit"] = res.ContractSuit;
-                Session["ContractX"] = res.ContractX;
-                Session["NSEW"] = res.NSEW;
-                Session["TricksTakenNumber"] = res.TricksTakenNumber;
-                Session["LeadCard"] = res.LeadCard;
-
+                if (Convert.ToBoolean(Session["IndividualEvent"]))
+                {
+                    result.South = round.South;
+                    result.West = round.West;
+                }
+                result.ReadFromDB(DBConnectionString);
+                Session["Result"] = result;
             }
 
-            if (Session["IndividualEvent"].ToString() == "YES")
+            if (Convert.ToBoolean(Session["IndividualEvent"]))
             {
-                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["CurrentRound"]} - {Vulnerability.SetPairString("NS", Convert.ToInt32(Session["Board"]), $"{Session["PairNS"]}+{Session["South"]}")} v {Vulnerability.SetPairString("EW", Convert.ToInt32(Session["Board"]), $"{Session["PairEW"]}+{Session["West"]}")}";
+                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"{round.PairNS}+{round.South}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"{round.PairEW}+{round.West}")}";
             }
             else
             {
-                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {Session["CurrentRound"]} - {Vulnerability.SetPairString("NS", Convert.ToInt32(Session["Board"]), $"NS {Session["PairNS"]}")} v {Vulnerability.SetPairString("EW", Convert.ToInt32(Session["Board"]), $"EW {Session["PairEW"]}")}";
+                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"NS {round.PairNS}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"EW {round.PairEW}")}";
             }
             ViewData["BackButton"] = "TRUE";
-            return View();
+            return View(result);
         }
 
         public ActionResult OKButtonContract(string cLevel, string cSuit, string cX, string cNSEW)
         {
-            Session["ContractLevel"] = cLevel;
-            Session["ContractSuit"] = cSuit;
-            Session["ContractX"] = cX;
-            Session["NSEW"] = cNSEW;
+            Result result = Session["Result"] as Result;
+            result.ContractLevel = Convert.ToInt32(cLevel);
+            result.ContractSuit = cSuit;
+            result.ContractX = cX;
+            result.NSEW = cNSEW;
+            Session["Result"] = result;
             return RedirectToAction("Index", "EnterLead", new { secondPass = "FALSE" });
         }
 
         public ActionResult OKButtonPass()
         {
-            Session["ContractLevel"] = "PASS";
-            Session["ContractSuit"] = "";
-            Session["ContractX"] = "";
-            Session["NSEW"] = "";
-            Session["LeadCard"] = "";
-            Session["TricksTakenNumber"] = -1;
+            Result result = Session["Result"] as Result;
+            result.ContractLevel = 0;
+            result.ContractSuit = "";
+            result.ContractX = "";
+            result.NSEW = "";
+            result.LeadCard = "";
+            result.TricksTakenNumber = -1;
+            Session["Result"] = result;
             return RedirectToAction("Index", "ConfirmResult");
         }
 

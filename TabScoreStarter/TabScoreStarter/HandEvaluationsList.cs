@@ -3,20 +3,43 @@ using System.Data.Odbc;
 
 namespace TabScoreStarter
 {
-    class HandEvaluationsList
+    class HandEvaluationsList : List<HandEvaluation>
     {
-        public List<HandEvaluation> HandEvaluations = new List<HandEvaluation>();
+        private readonly string dbConnectionString;
 
-        public void WriteToDB(string DB)
+        public HandEvaluationsList(Database db)
         {
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            dbConnectionString = db.ConnectionString;
+            using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
+            {
+                connection.Open();
+                string SQLString = "CREATE TABLE HandEvaluation (Section SHORT, Board SHORT, NorthSpades SHORT, NorthHearts SHORT, NorthDiamonds SHORT, NorthClubs SHORT, NorthNoTrump SHORT, EastSpades SHORT, EastHearts SHORT, EastDiamonds SHORT, EastClubs SHORT, EastNoTrump SHORT, SouthSpades SHORT, SouthHearts SHORT, SouthDiamonds SHORT, SouthClubs SHORT, SouthNotrump SHORT, WestSpades SHORT, WestHearts SHORT, WestDiamonds SHORT, WestClubs SHORT, WestNoTrump SHORT, NorthHcp SHORT, EastHcp SHORT, SouthHcp SHORT, WestHcp SHORT)";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OdbcException e)
+                {
+                    if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S01")  // Error other than HandEvaluation table already exists
+                    {
+                        throw e;
+                    }
+                }
+                cmd.Dispose();
+            }
+        }
+
+        public void WriteToDB()
+        {
+            using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
             {
                 connection.Open();
                 string SQLString = "DELETE FROM HandEvaluation";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
 
-                foreach (HandEvaluation hev in HandEvaluations)
+                foreach (HandEvaluation hev in this)
                 {
                     if (hev.NorthSpades != -1)
                     {

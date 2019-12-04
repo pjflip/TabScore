@@ -27,82 +27,84 @@ namespace TabScoreStarter
             {
                 if (s.StartsWith("f:[")) pathToDB = s.Split(new char[] { '[', ']' })[1];
             }
-            if (pathToDB == "" || !ScoringDatabase.InitializeDB(ScoringDatabase.SetDBConnectionString(pathToDB)))
+
+            Database db = new Database(pathToDB);
+            if (pathToDB == "" || !db.Initialize())
             {
-                btnAddSDBFile.Visible = true;   // No valid database in arguments
+                AddDatabaseFileButton.Visible = true;   // No valid database in arguments
             }
             else
             {
                 SetDBFilePath(pathToDB);
-                lblSessionStatus.Text = "Session Running";
-                lblSessionStatus.ForeColor = Color.Green;
-                btnOptions.Visible = true;
+                SessionStatusLabel.Text = "Session Running";
+                SessionStatusLabel.ForeColor = Color.Green;
+                OptionsButton.Visible = true;
 
-                if (ScoringDatabase.InitializeHandRecords(ScoringDatabase.SetDBConnectionString(pathToDB)))
+                HandsList handsList = new HandsList(db);
+                if (handsList.Count == 0)
                 {
-                    btnAddHandRecordFile.Visible = true;    // No hand records in database, so let user add them
+                    AddHandRecordFileButton.Visible = true;    // No hand records in database, so let user add them
                 }
                 else
                 {
-                    lblPathToHandRecordFile.Text = "Included in Scoring Database";
-                    lblDDAnalysing.Text = "Analysing...";
-                    lblDDAnalysing.Visible = true;
-                    pbDDAnalysing.Visible = true;
-                    bwAnalysisCalculation.RunWorkerAsync();
+                    PathToHandRecordFileLabel.Text = "Included in Scoring Database";
+                    AnalysingLabel.Text = "Analysing...";
+                    AnalysingLabel.Visible = true;
+                    AnalysingProgressBar.Visible = true;
+                    AnalysisCalculationBackgroundWorker.RunWorkerAsync();
                 }
             }
         }
 
-        private void btnAddSDBFile_Click(object sender, EventArgs e)
+        private void AddDatabaseFileButton_Click(object sender, EventArgs e)
         {
-            if (fdSDBFileDialog.ShowDialog() == DialogResult.OK)
+            if (DatabaseFileDialog.ShowDialog() == DialogResult.OK)
             {
-                string pathToDB = fdSDBFileDialog.FileName;
-                string DBConnection = ScoringDatabase.SetDBConnectionString(pathToDB);
-                if (ScoringDatabase.InitializeDB(DBConnection))
+                string pathToDB = DatabaseFileDialog.FileName;
+                Database db = new Database(pathToDB);
+                if (db.Initialize())
                 {
-                    btnAddSDBFile.Enabled = false;
+                    AddDatabaseFileButton.Enabled = false;
                     SetDBFilePath(pathToDB);
-                    lblSessionStatus.Text = "Session Running";
-                    lblSessionStatus.ForeColor = Color.Green;
-                    btnOptions.Visible = true;
+                    SessionStatusLabel.Text = "Session Running";
+                    SessionStatusLabel.ForeColor = Color.Green;
+                    OptionsButton.Visible = true;
 
-                    if (ScoringDatabase.InitializeHandRecords(DBConnection))
+                    HandsList handsList = new HandsList(db);
+                    if (handsList.Count == 0)
                     {
-                        btnAddHandRecordFile.Visible = true;    // No hand records in database, so let user add them
+                        AddHandRecordFileButton.Visible = true;    // No hand records in database, so let user add them
                     }
                     else
                     {
-                        lblPathToHandRecordFile.Text = "Included in Scoring Database";
-                        lblDDAnalysing.Text = "Analysing...";
-                        lblDDAnalysing.Visible = true;
-                        pbDDAnalysing.Visible = true;
-                        bwAnalysisCalculation.RunWorkerAsync();
+                        PathToHandRecordFileLabel.Text = "Included in Scoring Database";
+                        AnalysingLabel.Text = "Analysing...";
+                        AnalysingLabel.Visible = true;
+                        AnalysingProgressBar.Visible = true;
+                        AnalysisCalculationBackgroundWorker.RunWorkerAsync();
                     }
                 }
             }
         }
 
-        private void btnAddHandRecordFile_Click(object sender, EventArgs e)
+        private void AddHandRecordFileButton_Click(object sender, EventArgs e)
         {
-            if (fdHRFFileDialog.ShowDialog() == DialogResult.OK)
+            if (HandRecordFileDialog.ShowDialog() == DialogResult.OK)
             {
-                lblPathToHandRecordFile.Text = fdHRFFileDialog.FileName;
-                HandsList handsList = new HandsList();
-                handsList.ReadFromPBNFile(fdHRFFileDialog.FileName);
-                if (handsList.Hands == null)
+                PathToHandRecordFileLabel.Text = HandRecordFileDialog.FileName;
+                HandsList handsList = new HandsList(HandRecordFileDialog.FileName);
+                if (handsList.Count == 0)
                 {
                     MessageBox.Show("File contains no hand records", "TabScoreStarter", MessageBoxButtons.OK);
                 }
                 else
                 {
-                    string DBConnection = ScoringDatabase.SetDBConnectionString(lblPathToDB.Text);
-                    handsList.WriteToDB(DBConnection);
-                    btnAddHandRecordFile.Enabled = false;
-                    lblDDAnalysing.Text = "Analysing...";
-                    lblDDAnalysing.Visible = true;
-                    pbDDAnalysing.Visible = true;
-                    bwAnalysisCalculation.RunWorkerAsync();
+                    handsList.WriteToDB(new Database(PathToDBLabel.Text));
+                    AddHandRecordFileButton.Enabled = false;
+                    AnalysingLabel.Text = "Analysing...";
+                    AnalysingLabel.Visible = true;
+                    AnalysingProgressBar.Visible = true;
+                    AnalysisCalculationBackgroundWorker.RunWorkerAsync();
                 }
             }
         }
@@ -114,53 +116,50 @@ namespace TabScoreStarter
 
         public void SetDBFilePath(string pathToDB)
         {
-            lblPathToDB.Text = pathToDB;
+            PathToDBLabel.Text = pathToDB;
             string pathToTabScoreDB = Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
             System.IO.File.WriteAllText(pathToTabScoreDB, pathToDB);
         }
 
         public void ClearDBFilePath()
         {
-            lblPathToDB.Text = "";
+            PathToDBLabel.Text = "";
             string pathToTabScoreDB = Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
             System.IO.File.WriteAllText(pathToTabScoreDB, "");
         }
 
-        private void bwAnalysisCalculation_DoWork(object sender, DoWorkEventArgs e)
+        private void AnalysisCalculation_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            HandsList handsList = new HandsList();
-            string DBConnection = ScoringDatabase.SetDBConnectionString(lblPathToDB.Text);
-            handsList.ReadFromDB(DBConnection);
-            ScoringDatabase.InitializeHandEvaluations(DBConnection);
-            HandEvaluationsList handEvaluationList = new HandEvaluationsList();
+            Database db = new Database(PathToDBLabel.Text);
+            HandsList handsList = new HandsList(db);
+            HandEvaluationsList handEvaluationsList = new HandEvaluationsList(db);
             int counter = 0;
-            foreach (Hand hand in handsList.Hands)
+            foreach (Hand hand in handsList)
             {
-                HandEvaluation handEvaluation = new HandEvaluation();
-                handEvaluation.SetFromHand(hand);
-                handEvaluationList.HandEvaluations.Add(handEvaluation);
+                HandEvaluation handEvaluation = new HandEvaluation(hand);
+                handEvaluationsList.Add(handEvaluation);
                 counter++;
-                worker.ReportProgress((int)((float)counter / (float)handsList.Hands.Count * 100.0));
+                worker.ReportProgress((int)((float)counter / (float)handsList.Count * 100.0));
             }
-            handEvaluationList.WriteToDB(DBConnection);
+            handEvaluationsList.WriteToDB();
         }
 
-        private void bwAnalysisCalculation_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void AnalysisCalculation_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            pbDDAnalysing.Value = e.ProgressPercentage;
+            AnalysingProgressBar.Value = e.ProgressPercentage;
         }
 
-        private void bwAnalysisCalculation_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void AnalysisCalculation_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            pbDDAnalysing.Value = 100;
-            lblDDAnalysing.Text = "Analysis Complete";
+            AnalysingProgressBar.Value = 100;
+            AnalysingLabel.Text = "Analysis Complete";
         }
 
-        private void btnOptions_Click(object sender, EventArgs e)
+        private void OptionsButton_Click(object sender, EventArgs e)
         {
             OptionsForm frmOptions = new OptionsForm();
-            frmOptions.Tag = lblPathToDB.Text;
+            frmOptions.Tag = PathToDBLabel.Text;
             frmOptions.ShowDialog();
         }
     }

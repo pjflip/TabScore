@@ -6,28 +6,32 @@ namespace TabScore.Models
 {
     public class Result
     {
-        public int SectionID;
-        public int Table;
-        public int Round;
-        public int Board;
-        public int PairNS;
-        public int South;
-        public int PairEW;
-        public int West;
-        public string NSEW;
-        public string ContractLevel;
-        public string ContractSuit;
-        public string ContractX;
-        public string LeadCard;
-        public int MPNS;
-        public int MPEW;
-        public int MPMax;
+        public int SectionID { get; set; }
+        public int Table { get; set; }
+        public int RoundNumber { get; set; }
+        public int Board { get; set; }
+        public int PairNS { get; set; }
+        public int South { get; set; }
+        public int PairEW { get; set; }
+        public int West { get; set; }
+        public string NSEW { get; set; }
+        public int ContractLevel { get; set; }
+        public string ContractSuit { get; set; }
+        public string ContractX { get; set; }
+        public string LeadCard { get; set; }
+        public int MPNS { get; set; }
+        public int MPEW { get; set; }
+        public int MPMax { get; set; }
 
         public string Contract
         {
             get
             {
-                if (ContractLevel == "PASS")
+                if (ContractLevel < 0)
+                {
+                    return "";
+                }
+                else if (ContractLevel == 0)
                 {
                     return "PASS";
                 }
@@ -45,14 +49,14 @@ namespace TabScore.Models
             {
                 if (value == "PASS")
                 {
-                    ContractLevel = "PASS";
+                    ContractLevel = 0;
                     ContractSuit = "";
                     ContractX = "";
                 }
                 else
                 {
                     string[] temp = value.Split(' ');
-                    ContractLevel = temp[0];
+                    ContractLevel = Convert.ToInt32(temp[0]);
                     ContractSuit = temp[1];
                     if (temp.Length > 2) ContractX = temp[2];
                     else ContractX = "NONE";
@@ -76,7 +80,7 @@ namespace TabScore.Models
                 }
                 else
                 {
-                    int tricksTakenLevel = tricksTakenNumber - Convert.ToInt32(ContractLevel) - 6;
+                    int tricksTakenLevel = tricksTakenNumber - ContractLevel - 6;
                     if (tricksTakenLevel == 0)
                     {
                         tricksTakenSymbol = "=";
@@ -105,22 +109,22 @@ namespace TabScore.Models
                 }
                 else if (tricksTakenSymbol == "=")
                 {
-                    tricksTakenNumber = Convert.ToInt32(ContractLevel) + 6;
+                    tricksTakenNumber = ContractLevel + 6;
                 }
                 else
                 {
-                    tricksTakenNumber = Convert.ToInt32(ContractLevel) + Convert.ToInt32(tricksTakenSymbol) + 6;
+                    tricksTakenNumber = ContractLevel + Convert.ToInt32(tricksTakenSymbol) + 6;
                 }
             }
         }
 
         public string DisplayContract()
         {
-            if (ContractLevel == null)
+            if (ContractLevel < 0)
             {
                 return "";
             }
-            if (ContractLevel == "PASS")
+            if (ContractLevel == 0)
             {
                 return "<a style=\"color:darkgreen\">PASSed Out</a>";
             }
@@ -138,10 +142,10 @@ namespace TabScore.Models
                     s.Append("<a style=\"color:red\">&hearts;</a>");
                     break;
                 case "D":
-                    s.Append("<a style=\"color:orangered\">&diams;</a>");
+                    s.Append("<a style=\"color:lightsalmon\">&diams;</a>");
                     break;
                 case "C":
-                    s.Append("<a style=\"color:darkslategrey\">&clubs;</a>");
+                    s.Append("<a style=\"color:lightslategrey\">&clubs;</a>");
                     break;
             }
             if (ContractX != "NONE")
@@ -173,17 +177,17 @@ namespace TabScore.Models
             if (s == null || s == "" || s == "SKIP") return "";
             s = s.Replace("S", "<a style=\"color:black\">&spades;</a>");
             s = s.Replace("H", "<a style=\"color:red\">&hearts;</a>");
-            s = s.Replace("D", "<a style=\"color:orangered\">&diams;</a>");
-            s = s.Replace("C", "<a style=\"color:darkslategrey\">&clubs;</a>");
+            s = s.Replace("D", "<a style=\"color:lightsalmon\">&diams;</a>");
+            s = s.Replace("C", "<a style=\"color:lightslategrey\">&clubs;</a>");
             s = s.Replace("10", "T");
             return s;
         }
 
         public string DisplayTravellerContract()
         {
-            if (ContractLevel == null) return "";
-            if (ContractLevel == "PASS") return "<a style=\"color:darkgreen\">PASS</a>";
-            StringBuilder s = new StringBuilder(ContractLevel);
+            if (ContractLevel < 0) return "";
+            if (ContractLevel == 0) return "<a style=\"color:darkgreen\">PASS</a>";
+            StringBuilder s = new StringBuilder(ContractLevel.ToString());
             switch (ContractSuit) {
                 case "S":
                     s.Append("<a style=\"color:black\">&spades;</a>");
@@ -192,10 +196,10 @@ namespace TabScore.Models
                     s.Append("<a style=\"color:red\">&hearts;</a>");
                     break;
                 case "D":
-                    s.Append("<a style=\"color:orangered\">&diams;</a>");
+                    s.Append("<a style=\"color:lightsalmon\">&diams;</a>");
                     break;
                 case "C":
-                    s.Append("<a style=\"color:darkslategrey\">&clubs;</a>");
+                    s.Append("<a style=\"color:lightslategrey\">&clubs;</a>");
                     break;
                 case "NT":
                     s.Append("NT");
@@ -209,100 +213,120 @@ namespace TabScore.Models
         }
 
         public int Score { get; private set; }
-        public string ScoreNS
-        {
-            get
-            {
-                if (Score > 0)
-                {
-                    return Score.ToString();
-                }
-                else
-                {
-                    return "";
-                }
-            }
-        }
-        public string ScoreEW
-        {
-            get
-            {
-                if (Score < 0)
-                {
-                    return Convert.ToString(-Score);
-                }
-                else
-                {
-                    return "";
-                }
-            }
-        }
 
         public void CalculateScore()
         {
             Score = 0;
-            if (ContractLevel != "PASS")
+            if (ContractLevel == 0) return;
+
+            bool vul;
+            if (NSEW == "N" || NSEW == "S")
             {
-                bool vul;
-                if (NSEW == "N" || NSEW == "S")
+                vul = UtilityFunctions.NSVulnerability[(Convert.ToInt32(Board) - 1) % 16];
+            }
+            else
+            {
+                vul = UtilityFunctions.EWVulnerability[(Convert.ToInt32(Board) - 1) % 16];
+            }
+            int diff = TricksTakenNumber - ContractLevel - 6;
+            if (diff < 0)      // Contract not made
+            {
+                if (ContractX == "NONE")
                 {
-                    vul = Vulnerability.NSVul[(Convert.ToInt32(Board) - 1) % 16];
+                    if (vul)
+                    {
+                        Score = 100 * diff;
+                    }
+                    else
+                    {
+                        Score = 50 * diff;
+                    }
                 }
-                else
+                else if (ContractX == "x")
                 {
-                    vul = Vulnerability.EWVul[(Convert.ToInt32(Board) - 1) % 16];
+                    if (vul)
+                    {
+                        Score = 300 * diff + 100;
+                    }
+                    else
+                    {
+                        Score = 300 * diff + 400;
+                        if (diff == -1) Score -= 200;
+                        if (diff == -2) Score -= 100;
+                    }
                 }
-                int level = Convert.ToInt32(ContractLevel);
-                int diff = TricksTakenNumber - level - 6;
-                if (diff < 0)      // Contract not made
+                else  // x = "xx"
+                {
+                    if (vul)
+                    {
+                        Score = 600 * diff + 200;
+                    }
+                    else
+                    {
+                        Score = 600 * diff + 800;
+                        if (diff == -1) Score -= 400;
+                        if (diff == -2) Score -= 200;
+                    }
+                }
+            }
+            else      // Contract made
+            {
+                // Basic score, game/part-score bonuses and making x/xx contract bonuses
+                if (ContractSuit == "C" || ContractSuit == "D")
                 {
                     if (ContractX == "NONE")
                     {
-                        if (vul)
+                        Score = 20 * (TricksTakenNumber - 6);
+                        if (ContractLevel <= 4)
                         {
-                            Score = 100 * diff;
+                            Score += 50;
                         }
                         else
                         {
-                            Score = 50 * diff;
+                            if (vul) Score += 500;
+                            else Score += 300;
                         }
                     }
                     else if (ContractX == "x")
                     {
-                        if (vul)
+                        Score = 40 * ContractLevel + 50;
+                        if (vul) Score += 200 * diff;
+                        else Score += 100 * diff;
+                        if (ContractLevel <= 2)
                         {
-                            Score = 300 * diff + 100;
+                            Score += 50;
                         }
                         else
                         {
-                            Score = 300 * diff + 400;
-                            if (diff == -1) Score -= 200;
-                            if (diff == -2) Score -= 100;
+                            if (vul) Score += 500;
+                            else Score += 300;
                         }
                     }
-                    else  // x = "xx"
+                    else    // x = "xx"
                     {
-                        if (vul)
+                        Score = 80 * ContractLevel + 100;
+                        if (vul) Score += 400 * diff;
+                        else Score += 200 * diff;
+                        if (ContractLevel == 1)
                         {
-                            Score = 600 * diff + 200;
+                            Score += 50;
                         }
                         else
                         {
-                            Score = 600 * diff + 800;
-                            if (diff == -1) Score -= 400;
-                            if (diff == -2) Score -= 200;
+                            if (vul) Score += 500;
+                            else Score += 300;
                         }
                     }
                 }
-                else      // Contract made
+                else   // Major suits and NT
                 {
-                    // Basic score, game/part-score bonuses and making x/xx contract bonuses
-                    if (ContractSuit == "C" || ContractSuit == "D")
+                    if (ContractX == "NONE")
                     {
-                        if (ContractX == "NONE")
+                        Score = 30 * (TricksTakenNumber - 6);
+                        if (ContractSuit == "NT")
                         {
-                            Score = 20 * (TricksTakenNumber - 6);
-                            if (level <= 4)
+                            Score += 10;
+                            if (ContractLevel <= 2)
                             {
                                 Score += 50;
                             }
@@ -312,27 +336,9 @@ namespace TabScore.Models
                                 else Score += 300;
                             }
                         }
-                        else if (ContractX == "x")
+                        else      // Major suit
                         {
-                            Score = 40 * level + 50;
-                            if (vul) Score += 200 * diff;
-                            else Score += 100 * diff;
-                            if (level <= 2)
-                            {
-                                Score += 50;
-                            }
-                            else
-                            {
-                                if (vul) Score += 500;
-                                else Score += 300;
-                            }
-                        }
-                        else    // x = "xx"
-                        {
-                            Score = 80 * level + 100;
-                            if (vul) Score += 400 * diff;
-                            else Score += 200 * diff;
-                            if (level == 1)
+                            if (ContractLevel <= 3)
                             {
                                 Score += 50;
                             }
@@ -343,81 +349,49 @@ namespace TabScore.Models
                             }
                         }
                     }
-                    else   // Major suits and NT
+                    else if (ContractX == "x")
                     {
-                        if (ContractX == "NONE")
+                        Score = 60 * ContractLevel + 50;
+                        if (ContractSuit == "NT") Score += 20;
+                        if (vul) Score += 200 * diff;
+                        else Score += 100 * diff;
+                        if (ContractLevel <= 1)
                         {
-                            Score = 30 * (TricksTakenNumber - 6);
-                            if (ContractSuit == "NT")
-                            {
-                                Score += 10;
-                                if (level <= 2)
-                                {
-                                    Score += 50;
-                                }
-                                else
-                                {
-                                    if (vul) Score += 500;
-                                    else Score += 300;
-                                }
-                            }
-                            else      // Major suit
-                            {
-                                if (level <= 3)
-                                {
-                                    Score += 50;
-                                }
-                                else
-                                {
-                                    if (vul) Score += 500;
-                                    else Score += 300;
-                                }
-                            }
+                            Score += 50;
                         }
-                        else if (ContractX == "x")
+                        else
                         {
-                            Score = 60 * level + 50;
-                            if (ContractSuit == "NT") Score += 20;
-                            if (vul) Score += 200 * diff;
-                            else Score += 100 * diff;
-                            if (level <= 1)
-                            {
-                                Score += 50;
-                            }
-                            else
-                            {
-                                if (vul) Score += 500;
-                                else Score += 300;
-                            }
-                        }
-                        else    // x = "xx"
-                        {
-                            Score = 120 * level + 100;
-                            if (ContractSuit == "NT") Score += 40;
-                            if (vul) Score += 400 * diff + 500;
-                            else Score += 200 * diff + 300;
+                            if (vul) Score += 500;
+                            else Score += 300;
                         }
                     }
-                    // Slam bonuses
-                    if (level == 6)
+                    else    // x = "xx"
                     {
-                        if (vul) Score += 750;
-                        else Score += 500;
-                    }
-                    else if (level == 7)
-                    {
-                        if (vul) Score += 1500;
-                        else Score += 1000;
+                        Score = 120 * ContractLevel + 100;
+                        if (ContractSuit == "NT") Score += 40;
+                        if (vul) Score += 400 * diff + 500;
+                        else Score += 200 * diff + 300;
                     }
                 }
-                if (NSEW == "E" || NSEW == "W") Score = -Score;
+                // Slam bonuses
+                if (ContractLevel == 6)
+                {
+                    if (vul) Score += 750;
+                    else Score += 500;
+                }
+                else if (ContractLevel == 7)
+                {
+                    if (vul) Score += 1500;
+                    else Score += 1000;
+                }
             }
+            if (NSEW == "E" || NSEW == "W") Score = -Score;
         }
 
-        public string WriteToDB(string DB, bool individual)
+        public void WriteToDB(string DB, bool individual)
         {
             int declarer;
-            if (ContractLevel == "PASS")
+            if (ContractLevel == 0)
             {
                 declarer = 0;
             }
@@ -446,7 +420,7 @@ namespace TabScore.Models
             {
                 // Delete any previous result
                 connection.Open();
-                string SQLString = $"DELETE FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={Round} AND Board={Board}";
+                string SQLString = $"DELETE FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={RoundNumber} AND Board={Board}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
@@ -454,10 +428,6 @@ namespace TabScore.Models
                     {
                         cmd.ExecuteNonQuery(); 
                     });
-                }
-                catch (OdbcException)
-                {
-                    return "Error";
                 }
                 finally
                 {
@@ -467,11 +437,11 @@ namespace TabScore.Models
                 // Add new result
                 if (individual)
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {RoundNumber}, {Board}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
                 }
                 else
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {RoundNumber}, {Board}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
                 }
                 OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
                 try
@@ -481,24 +451,19 @@ namespace TabScore.Models
                         cmd2.ExecuteNonQuery();
                     });
                 }
-                catch (OdbcException)
-                {
-                    return "Error";
-                }
                 finally
                 {
                     cmd2.Dispose();
                 }
             }
-            return "";
         }
         
-        public bool ReadFromDB(string DB)
+        public void ReadFromDB(string DB)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
-                string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={Round} AND Board={Board}";
+                string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={RoundNumber} AND Board={Board}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
                 try
@@ -510,7 +475,7 @@ namespace TabScore.Models
                         {
                             string temp = reader.GetString(1);
                             Contract = temp;
-                            if (ContractLevel == "PASS")
+                            if (ContractLevel == 0)
                             {
                                 NSEW = "";
                                 TricksTakenNumber = -1;
@@ -525,16 +490,11 @@ namespace TabScore.Models
                         }
                     });
                 }
-                catch (OdbcException)
-                {
-                    return false;
-                }
                 finally
                 {
                     reader.Close();
                     cmd.Dispose();
                 }
-                return true;
             }
         }
     }

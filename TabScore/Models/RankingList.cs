@@ -4,12 +4,16 @@ using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public static class RankingList
+    public class RankingList : List<Ranking>
     {
-        public static List<Ranking> GetRankingList(string DB, int sectionID, bool individual)
+        public int RoundNumber { get; set; }
+        public int PairNS { get; set; }   // Doubles as North player number for individuals
+        public int PairEW { get; set; }   // Doubles as East player number for individuals
+        public int South { get; set; }
+        public int West { get; set; }
+        
+        public RankingList(string DB, int sectionID, bool individual)
         {
-            List<Ranking> rankingList = new List<Ranking>();
-
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
@@ -31,20 +35,20 @@ namespace TabScore.Models
                                 Score = reader1.GetString(2),
                                 Rank = reader1.GetString(3)
                             };
-                            rankingList.Add(ranking);
+                            Add(ranking);
                         }
                     });
                     reader1.Close();
                     cmd.Dispose();
-                    if (rankingList.Count == 0)  // Results table exists but is empty
+                    if (Count == 0)  // Results table exists but is empty
                     {
                         if (individual)
                         {
-                            return CalculateIndividualRankingFromReceivedData(DB, sectionID);
+                            InsertRange(0, CalculateIndividualRankingFromReceivedData(DB, sectionID));
                         }
                         else
                         {
-                            return CalculateRankingFromReceivedData(DB, sectionID);
+                            InsertRange(0, CalculateRankingFromReceivedData(DB, sectionID));
                         }
                     }
                 }
@@ -56,15 +60,18 @@ namespace TabScore.Models
                     {
                         if (individual)
                         {
-                            return CalculateIndividualRankingFromReceivedData(DB, sectionID);
+                            InsertRange(0, CalculateIndividualRankingFromReceivedData(DB, sectionID));
                         }
                         else
                         {
-                            return CalculateRankingFromReceivedData(DB, sectionID);
+                            InsertRange(0, CalculateRankingFromReceivedData(DB, sectionID));
                         }
                     }
+                    else
+                    {
+                        throw (e);
+                    }
                 }
-                return rankingList;
             }
         }
 
@@ -322,7 +329,7 @@ namespace TabScore.Models
                             Result res = new Result()
                             {
                                 Table = reader.GetInt32(0),
-                                Round = reader.GetInt32(1),
+                                RoundNumber = reader.GetInt32(1),
                                 Board = reader.GetInt32(2),
                                 PairNS = reader.GetInt32(3),
                                 PairEW = reader.GetInt32(4),

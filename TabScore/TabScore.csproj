@@ -126,25 +126,23 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DBInfo.cs" />
+    <Compile Include="Models\MoveView.cs" />
+    <Compile Include="Models\ResultsList.cs" />
+    <Compile Include="Models\UtilityFunctions.cs" />
     <Compile Include="Models\ODBCRetryHelper.cs" />
-    <Compile Include="Models\Dealer.cs" />
-    <Compile Include="Models\Lead.cs" />
     <Compile Include="Models\HandRecord.cs" />
     <Compile Include="Models\BoardMove.cs" />
     <Compile Include="Models\Move.cs" />
-    <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\PlayerFunctions.cs" />
     <Compile Include="Models\RankingList.cs" />
     <Compile Include="Models\Ranking.cs" />
     <Compile Include="Models\Round.cs" />
     <Compile Include="Models\Result.cs" />
-    <Compile Include="Models\LastRoundEntered.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\SectionsList.cs" />
     <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\Tables.cs" />
+    <Compile Include="Models\Table.cs" />
     <Compile Include="Models\Traveller.cs" />
-    <Compile Include="Models\Vulnerability.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +156,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="hearts.svg" />
@@ -165,7 +164,6 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="TabScoreIcon.ico" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -240,8 +238,6 @@
     <Content Include="Views\ShowRoundInfo\NSMissing.cshtml" />
     <Content Include="Views\ShowRoundInfo\EWMissing.cshtml" />
     <Content Include="Views\ShowTraveller\Index.cshtml" />
-    <Content Include="Views\ShowMove\NSMissing.cshtml" />
-    <Content Include="Views\ShowMove\EWMissing.cshtml" />
     <Content Include="Views\ShowHandRecord\Index.cshtml" />
     <Content Include="Views\ShowRankingList\OneWinner.cshtml" />
     <Content Include="Views\ShowRankingList\TwoWinners.cshtml" />
@@ -257,8 +253,6 @@
     <Content Include="Views\ShowRoundInfo\EWMissingIndividual.cshtml" />
     <Content Include="Views\ShowRoundInfo\NSMissingIndividual.cshtml" />
     <Content Include="Views\ShowRoundInfo\Individual.cshtml" />
-    <Content Include="Views\ShowMove\EWMissingIndividual.cshtml" />
-    <Content Include="Views\ShowMove\NSMissingIndividual.cshtml" />
     <Content Include="Views\ShowMove\Individual.cshtml" />
     <Content Include="Views\ShowRankingList\Individual.cshtml" />
     <Content Include="Views\ShowFinalRankingList\Individual.cshtml" />
@@ -284,7 +278,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>TabScoreIcon.ico</ApplicationIcon>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />

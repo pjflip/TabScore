@@ -18,19 +18,17 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            int logonStatus = Tables.IsLoggedOn(DBConnectionString, Convert.ToInt32(Session["SectionID"]), tableNumber);
-            if (logonStatus == -1) return RedirectToAction("Index", "ErrorScreen");
-            if (confirm == "TRUE" || (logonStatus == 2))     // Status=2 means table not logged on
+            Table table = new Table(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(tableNumber));
+            if (confirm == "TRUE" || (table.LogonStatus == 2))     // Status=2 means table not logged on
             {
                 Session["Table"] = tableNumber;
-                if (Tables.Logon(DBConnectionString, Convert.ToInt32(Session["SectionID"]), tableNumber) == -1) return RedirectToAction("Index", "ErrorScreen");
+                table.Logon(DBConnectionString);
 
-                // Check if results data exist - set round number accordingly
-                int round = LastRoundEntered.Get(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]));
-                if (round == -1) return RedirectToAction("Index", "ErrorScreen");
+                // Check if results data exist - set round number accordingly and create round infp
+                int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]));
+                Session["Round"] = new Round(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]), lastRoundWithResults, Convert.ToBoolean(Session["IndividualEvent"]));
 
-                Session["CurrentRound"] = round.ToString();
-                if (round == 1 || Settings.GetSetting<bool>(DBConnectionString, SettingName.NumberEntryEachRound))
+                if (lastRoundWithResults == 1 || Settings.GetSetting<bool>(DBConnectionString, SettingName.NumberEntryEachRound))
                 {
                     return RedirectToAction("Index", "ShowPlayerNumbers");
                 }

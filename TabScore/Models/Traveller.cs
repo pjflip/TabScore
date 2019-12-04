@@ -1,14 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public static class Traveller
+    public class Traveller : List<Result>
     {
-        public static List<Result> GetResults(string DB, int sectionID, int board, bool individual)
-        {
-            List<Result> resList = new List<Result>();
+        public bool HandRecord { get; private set; }
+        public int PairNS { get; private set; }
+        public int PercentageNS { get; private set; }
+        public int Board { get; private set; }
 
+        private int currentScore;
+
+        public Traveller(string DB, int sectionID, int board, int pairNS, bool individual)
+        {
+            Board = board;
+            PairNS = pairNS;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
@@ -31,10 +39,10 @@ namespace TabScore.Models
                         reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            Result res = null;
+                            Result result = null;
                             if (individual)
                             {
-                                res = new Result()
+                                result = new Result()
                                 {
                                     Board = board,
                                     PairNS = reader.GetInt32(0),
@@ -49,7 +57,7 @@ namespace TabScore.Models
                             }
                             else
                             {
-                                res = new Result()
+                                result = new Result()
                                 {
                                     Board = board,
                                     PairNS = reader.GetInt32(0),
@@ -60,17 +68,17 @@ namespace TabScore.Models
                                     TricksTakenSymbol = reader.GetString(5)
                                 };
                             }
-                            if (res.Contract.Length > 2)  // Testing for corrupt ReceivedData table
+                            if (result.Contract.Length > 2)  // Testing for corrupt ReceivedData table
                             {
-                                res.CalculateScore();
-                                resList.Add(res);
+                                result.CalculateScore();
+                                Add(result);
+                                if (result.PairNS == pairNS)  // Get score for current result for calculating percentages
+                                {
+                                    currentScore = result.Score;
+                                }
                             }
                         }
                     });
-                }
-                catch (OdbcException)
-                {
-                    return null;
                 }
                 finally
                 {
@@ -79,7 +87,48 @@ namespace TabScore.Models
                 }
             };
 
-            return resList;
+            Sort((x, y) => y.Score.CompareTo(x.Score));
+            if (Settings.GetSetting<bool>(DB, SettingName.ShowPercentage))
+            {
+                if (Count == 1)
+                {
+                    PercentageNS = 50;
+                }
+                else
+                {
+                    int currentMP = 2 * FindAll((x) => x.Score < currentScore).Count + FindAll((x) => x.Score == currentScore).Count - 1;
+                    PercentageNS = Convert.ToInt32(50.0 * currentMP / (Count - 1));
+                }
+            }
+            else
+            {
+                PercentageNS = -1;   // Don't show percentage
+            }
+
+            if (Settings.GetSetting<bool>(DB, SettingName.ShowHandRecord))
+            {
+                HandRecord hr = new HandRecord(DB, sectionID, board);
+                if (hr.NorthSpades == "###")
+                {
+                    HandRecord = false;
+                    if (sectionID != 1)    // Try default Section 1 hand records
+                    {
+                        hr = new HandRecord(DB, 1, sectionID);
+                        if (hr.NorthSpades != "###")
+                        {
+                            HandRecord = true;
+                        }
+                    }
+                }
+                else
+                {
+                    HandRecord = true;
+                }
+            }
+            else
+            {
+                HandRecord = false;
+            }
         }
     }
 }

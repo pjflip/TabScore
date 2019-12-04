@@ -1,66 +1,67 @@
-﻿@model List<TabScore.Models.Result>
+﻿@model TabScore.Models.Traveller
+
 @{
     ViewBag.Title = "Show Traveller";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<div class="row my-1">
-    @if (ViewData["HandRecord"].ToString() == "TRUE")
-    {
-        <div class="col-9">
-            <div class="row">
-                <div class="col-12 text-center">
+    <div class="row my-1">
+        @if (Model.HandRecord)
+        {
+            <div class="col-9">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h4>
+                            Board @Model.Board
+                        </h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        @if (Model.PercentageNS == -1)
+                        {
+                            <h4>
+                                Traveller
+                            </h4>
+                        }
+                        else
+                        {
+                            <h4>
+                                NS: @Model.PercentageNS% - EW: @(100 - Model.PercentageNS)%
+                            </h4>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-outline-light btn-lg mr-2 my-2 float-right" ontouchstart="handRecordClick()">
+                    <img src="~/Cards Logo.png" />
+                </button>
+            </div>
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <h4>
+                    Board @Model.Board
+                </h4>
+            </div>
+            <div class="col-12 text-center">
+                @if (Model.PercentageNS == -1)
+                {
                     <h4>
-                        Board @Session["Board"]
+                        Traveller
                     </h4>
-                </div>
+                }
+                else
+                {
+                    <h4>
+                        NS: @Model.PercentageNS% - EW: @(100 - Model.PercentageNS)%
+                    </h4>
+                }
             </div>
-            <div class="row">
-                <div class="col-12 text-center">
-                    @if (ViewData["PercentageNS"].ToString() == "###")
-                    {
-                        <h4>
-                            Traveller
-                        </h4>
-                    }
-                    else
-                    {
-                        <h4>
-                            NS: @ViewData["PercentageNS"]% - EW: @ViewData["PercentageEW"]%
-                        </h4>
-                    }
-                </div>
-            </div>
-        </div>
-        <div class="col-3">
-            <button class="btn btn-outline-light btn-lg mr-2 my-2 float-right" ontouchstart="handRecordClick()">
-                <img src="~/Cards Logo.png" />
-            </button>
-        </div>
-    }
-    else
-    {
-        <div class="col-12 text-center">
-            <h4>
-                Board @Session["Board"]
-            </h4>
-        </div>
-        <div class="col-12 text-center">
-            @if (ViewData["PercentageNS"].ToString() == "###")
-            {
-                <h4>
-                    Traveller
-                </h4>
-            }
-            else
-            {
-                <h4>
-                    NS: @ViewData["PercentageNS"]% - EW: @ViewData["PercentageEW"]%
-                </h4>
-            }
-        </div>
-    }
-</div>
+        }
+    </div>
 
 <div class="row">
     <div class="col-12">
@@ -80,10 +81,20 @@
             <tbody>
                 @foreach (var Result in Model)
                 {
-                    if (Convert.ToInt32(Session["PairNS"]) == Result.PairNS)
+                    string ScoreNS = "";
+                    string ScoreEW = "";
+                    if (Result.Score > 0)
+                    {
+                        ScoreNS = Result.Score.ToString();
+                    }
+                    else if (Result.Score < 0)
+                    {
+                        ScoreEW = (-Result.Score).ToString();
+                    }
+                    if (Model.PairNS == Result.PairNS)
                     {
                         <tr class="table-success">
-                            @if (Session["IndividualEvent"].ToString() == "YES")
+                            @if (Convert.ToBoolean(Session["IndividualEvent"]))
                             {
                                 <td>@Result.PairNS+@Result.South</td>
                                 <td>@Result.PairEW+@Result.West</td>
@@ -97,14 +108,14 @@
                             <td>@Result.NSEW</td>
                             <td>@Html.Raw(Result.DisplayLeadCard())</td>
                             <td>@Result.TricksTakenSymbol</td>
-                            <td>@Result.ScoreNS</td>
-                            <td>@Result.ScoreEW</td>
+                            <td>@ScoreNS</td>
+                            <td>@ScoreEW</td>
                         </tr>
                     }
                     else
                     {
                         <tr>
-                            @if (Session["IndividualEvent"].ToString() == "YES")
+                            @if (Convert.ToBoolean(Session["IndividualEvent"]))
                             {
                                 <td>@Result.PairNS+@Result.South</td>
                                 <td>@Result.PairEW+@Result.West</td>
@@ -118,8 +129,8 @@
                             <td>@Result.NSEW</td>
                             <td>@Html.Raw(Result.DisplayLeadCard())</td>
                             <td>@Result.TricksTakenSymbol</td>
-                            <td>@Result.ScoreNS</td>
-                            <td>@Result.ScoreEW</td>
+                            <td>@ScoreNS</td>
+                            <td>@ScoreEW</td>
                         </tr>
                     }
                 }

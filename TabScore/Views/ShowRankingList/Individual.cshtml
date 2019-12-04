@@ -1,4 +1,5 @@
-﻿@model List<TabScore.Models.Ranking>
+﻿@model TabScore.Models.RankingList
+
 @{
     ViewBag.Title = "Show Ranking List - Individual";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -25,7 +26,7 @@
             <tbody>
                 @foreach (var Result in Model)
                 {
-                    if (Convert.ToInt32(Session["PairNS"]) == Result.PairNo)
+                    if (Model.PairNS == Result.PairNo)
                     {
                         <tr class="table-success">
                             <td>@Result.Rank</td>
@@ -33,7 +34,7 @@
                             <td>@Result.Score%</td>
                         </tr>
                     }
-                    else if (Convert.ToInt32(Session["South"]) == Result.PairNo)
+                    else if (Model.South == Result.PairNo)
                     {
                         <tr class="table-warning">
                             <td>@Result.Rank</td>
@@ -41,7 +42,7 @@
                             <td>@Result.Score%</td>
                         </tr>
                     }
-                    else if (Convert.ToInt32(Session["PairEW"]) == Result.PairNo)
+                    else if (Model.PairEW == Result.PairNo)
                     {
                         <tr class="table-danger">
                             <td>@Result.Rank</td>
@@ -49,7 +50,7 @@
                             <td>@Result.Score%</td>
                         </tr>
                     }
-                    else if (Convert.ToInt32(Session["West"]) == Result.PairNo)
+                    else if (Model.West == Result.PairNo)
                     {
                         <tr class="table-info">
                             <td>@Result.Rank</td>
@@ -73,7 +74,7 @@
 
 <script>
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?round=@Session["CurrentRound"]';
+        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?roundNumber=@Model.RoundNumber';
     }
 
     function refreshClick() {

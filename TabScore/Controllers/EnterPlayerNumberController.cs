@@ -6,7 +6,6 @@ namespace TabScore.Controllers
 {
     public class EnterPlayerNumberController : Controller
     {
-       
         public ActionResult Index(string dir)
         {
             ViewData["Direction"] = dir;
@@ -20,10 +19,8 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (Player.UpdateDatabase(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]), Convert.ToInt32(Session["CurrentRound"]), direction, playerNumber, Session["IndividualEvent"].ToString() == "YES") == "Error")
-            {
-                return RedirectToAction("Index", "ErrorScreen");
-            };
+            Round round = Session["Round"] as Round;
+            PlayerFunctions.UpdateDatabase(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]), round.RoundNumber, direction, playerNumber, Convert.ToBoolean(Session["IndividualEvent"]));
             return RedirectToAction("Index", "ShowPlayerNumbers");
         }
     }

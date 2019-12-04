@@ -1,4 +1,6 @@
-﻿@{
+﻿@model TabScore.Models.Round
+
+@{
     ViewBag.Title = "Show Round NS Missing Individual";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
@@ -6,7 +8,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Round: @Session["CurrentRound"]
+            Round: @Model.RoundNumber
         </h3>
     </div>
 </div>
@@ -14,7 +16,7 @@
 <div class="row">
     <div class="col-12 text-center">
         <h3 style="color:green">
-            Boards: @Session["LowBoard"] to @Session["HighBoard"]
+            Boards: @Model.LowBoard to @Model.HighBoard
         </h3>
     </div>
 </div>
@@ -22,7 +24,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            East @Session["PairEW"] & West @Session["West"]
+            East: @Model.PairEW & West: @Model.West]
         </h3>
     </div>
 </div>
@@ -30,7 +32,7 @@
 <div class="row">
     <div class="col-12 text-center">
         <h4>
-            @ViewData["PlayerNameEast"] & @ViewData["PlayerNameWest"]
+            @Model.NameEast & @Model.NameWest
         </h4>
     </div>
 </div>

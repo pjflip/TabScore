@@ -3,21 +3,24 @@ using System.Text;
 
 namespace TabScoreStarter
 {
-    public class Options
+    class Options
     {
-        public bool showTraveller;
-        public bool showPercentage;
-        public bool enterLeadCard;
-        public bool validateLeadCard;
-        public int showRanking;
-        public bool showHandRecord;
-        public bool numberEntryEachRound;
-        public int nameSource;
-        public int enterResultsMethod;
+        public bool showTraveller {get; set;}
+        public bool showPercentage {get; set;}
+        public bool enterLeadCard {get; set;}
+        public bool validateLeadCard {get; set;}
+        public int showRanking {get; set;}
+        public bool showHandRecord {get; set;}
+        public bool numberEntryEachRound {get; set;}
+        public int nameSource {get; set;}
+        public int enterResultsMethod {get; set;}
 
-        public void GetOptions(string DB)
+        private string dbConnectionString;
+
+        public Options(Database db)
         {
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            dbConnectionString = db.ConnectionString;
+            using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
             {
                 string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
@@ -39,9 +42,9 @@ namespace TabScoreStarter
             }
         }
 
-        public void SetOptions(string DB)
+        public void UpdateDB()
         {
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
             {
                 StringBuilder SQLString = new StringBuilder();
                 SQLString.Append($"UPDATE Settings SET");

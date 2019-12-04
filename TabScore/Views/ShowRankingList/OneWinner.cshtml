@@ -1,4 +1,5 @@
-﻿@model List<TabScore.Models.Ranking>
+﻿@model TabScore.Models.RankingList
+
 @{
     ViewBag.Title = "Show Ranking List - One Winner";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -25,7 +26,7 @@
             <tbody>
                 @foreach (var Rank in Model)
                 {
-                    if (Convert.ToInt32(Session["PairNS"]) == Rank.PairNo)
+                    if (Model.PairNS == Rank.PairNo)
                     {
                         <tr class="table-success">
                             <td>@Rank.Rank</td>
@@ -33,7 +34,7 @@
                             <td>@Rank.Score%</td>
                         </tr>
                     }
-                    else if (Convert.ToInt32(Session["PairEW"]) == Rank.PairNo)
+                    else if (Model.PairEW == Rank.PairNo)
                     {
                         <tr class="table-warning">
                             <td>@Rank.Rank</td>
@@ -57,7 +58,7 @@
 
 <script>
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?round=@Session["CurrentRound"]';
+        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?roundNumber=@Model.RoundNumber';
     }
 
     function refreshClick() {

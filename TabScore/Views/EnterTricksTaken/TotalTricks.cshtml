@@ -1,4 +1,5 @@
-﻿
+﻿@model TabScore.Models.Result
+
 @{
     ViewBag.Title = "Enter Total Tricks Taken";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -25,7 +26,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Session["Board"]: @Html.Raw(ViewData["DisplayContract"])
+            Board @Model.Board: @Html.Raw(Model.DisplayContract())
         </h3>
     </div>
 </div>
@@ -96,7 +97,7 @@
 </div>
 
 <script>
-    var numTricks = '@Session["TricksTakenNumber"]';
+    var numTricks = '@Model.TricksTakenNumber';
 
     window.onload = setCurrentSelection();
 

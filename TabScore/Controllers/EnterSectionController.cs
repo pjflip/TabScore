@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Web.Mvc;
 using TabScore.Models;
 
@@ -11,7 +11,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            List<Section> sectionsList = SectionsList.GetSections(DBConnectionString);
+            SectionsList sectionsList = new SectionsList(DBConnectionString);
             if (sectionsList == null) return RedirectToAction("Index", "ErrorScreen");
 
             // Check if only one section - if so use it
@@ -21,6 +21,7 @@ namespace TabScore.Controllers
                 Session["SectionID"] = sectionsList[0].ID;
                 Session["NumTables"] = sectionsList[0].Tables;
                 Session["MissingPair"] = sectionsList[0].MissingPair;
+                Session["MaxRounds"] = UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, sectionsList[0].ID);
                 return RedirectToAction("Index", "EnterTableNumber");
             }
             else
@@ -36,7 +37,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            List<Section> sectionsList = SectionsList.GetSections(DBConnectionString);
+            SectionsList sectionsList = new SectionsList(DBConnectionString);
             if (sectionsList == null) return RedirectToAction("Index", "ErrorScreen");
 
             Session["SectionLetter"] = sectionLetter;
@@ -44,6 +45,8 @@ namespace TabScore.Controllers
             Session["SectionID"] = section.ID;
             Session["NumTables"] = section.Tables;
             Session["MissingPair"] = section.MissingPair;
+            Session["MaxRounds"] = UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, section.ID);
+
             return RedirectToAction("Index", "EnterTableNumber");
         }
     }

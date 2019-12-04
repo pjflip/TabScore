@@ -5,7 +5,7 @@ namespace TabScore.Models
 {
     public class BoardMove
     {
-        public int Table { get; }
+        public int Table { get; private set; }
 
         public BoardMove(string DB, int sectionID, int round, int table, int lowBoard)
         {
@@ -28,11 +28,6 @@ namespace TabScore.Models
                             tableList.Add(t);
                         }
                     });
-                }
-                catch (OdbcException)
-                {
-                    Table = -1;
-                    return;
                 }
                 finally
                 {
