@@ -1,6 +1,10 @@
-﻿@{
+﻿@model TabScore.Models.Round
+
+@{
     ViewBag.Title = "Show Player Numbers EW Missing Individual";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var PlayerNameNorth = Model.NameNorth;
+    var PlayerNameSouth = Model.NameSouth;
 }
 
 <div id="notAllNamesModal" class="modal modal-dialog modal-lg">
@@ -32,7 +36,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            North/South: @ViewData["PairNS"]
+            North/South: @Model.PairNS
         </h3>
     </div>
 </div>
@@ -44,7 +48,7 @@
         </h4>
     </div>
     <div class="col-3">
-        @if (ViewData["PlayerNameNorth"].ToString() == "")
+        @if (PlayerNameNorth == "")
         {
             <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?dir=North'">
                 Enter
@@ -59,7 +63,7 @@
     </div>
     <div class="col-7 align-self-center">
         <h4>
-            @ViewData["PlayerNameNorth"]
+            @PlayerNameNorth
         </h4>
     </div>
 </div>
@@ -71,7 +75,7 @@
         </h4>
     </div>
     <div class="col-3">
-        @if (ViewData["PlayerNameSouth"].ToString() == "")
+        @if (PlayerNameSouth == "")
         {
             <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?dir=South'">
                 Enter
@@ -86,14 +90,14 @@
     </div>
     <div class="col-7 align-self-center">
         <h4>
-            @ViewData["PlayerNameSouth"]
+            @PlayerNameSouth
         </h4>
     </div>
 </div>
 
 <script>
     function validateOK() {
-        if ("@ViewData["PlayerNameNorth"]" == "" || "@ViewData["PlayerNameSouth"]" == "") {
+        if ("@PlayerNameNorth" == "" || "@PlayerNameSouth" == "") {
             $("#notAllNamesModal").modal();
         }
         else {

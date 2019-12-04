@@ -1,4 +1,5 @@
-﻿
+﻿@model TabScore.Models.Result
+
 @{
     ViewBag.Title = "Enter Contract";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -21,7 +22,7 @@
         color:white;
     }
     .btn-declarer {
-        background-color:darkslategrey;
+        background-color:lightslategrey;
         color:white;
     }
 </style>
@@ -47,7 +48,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Session["Board"]
+            Board @Model.Board
         </h3>
     </div>
 </div>
@@ -105,10 +106,10 @@
         <button id="sH" class="btn btn-suit btn-lg m-1 p-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('H')">
             <div style="font-size:xx-large; line-height:1em">&hearts;</div>
         </button>
-        <button id="sD" class="btn btn-suit btn-lg m-1 p-1" style="color:orangered; width:3em; height:3em" ontouchstart="setSuit('D')">
+        <button id="sD" class="btn btn-suit btn-lg m-1 p-1" style="color:lightsalmon; width:3em; height:3em" ontouchstart="setSuit('D')">
             <div style="font-size:xx-large; line-height:1em">&diams;</div>
         </button>
-        <button id="sC" class="btn btn-suit btn-lg m-1 p-1" style="color:darkslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
+        <button id="sC" class="btn btn-suit btn-lg m-1 p-1" style="color:lightslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
             <div style="font-size:xx-large; line-height:1em">&clubs;</div>
         </button>
     </div>
@@ -151,18 +152,18 @@
 </div>
 
 <script>
-    var number = '@Session["ContractLevel"].ToString()';
-    var suit = '@Session["ContractSuit"].ToString()';
-    var double = '@Session["ContractX"].ToString()';
-    var NSEW = '@Session["NSEW"].ToString()';
+    var number = '@Model.ContractLevel';
+    var suit = '@Model.ContractSuit';
+    var double = '@Model.ContractX';
+    var NSEW = '@Model.NSEW';
 
     window.onload = setCurrentSelections();
 
     function setCurrentSelections() {
-        if (number != "") {
-            if (number == "PASS") {
+        if (number != "-1") {
+            if (number == "0") {
                 setPass()
-            }
+            } 
             else {
                 document.getElementById('n' + number).className = "btn btn-warning btn-lg m-1";
                 document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";

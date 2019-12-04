@@ -1,94 +1,102 @@
-﻿@{
+﻿@model TabScore.Models.MoveView
+
+@{
     ViewBag.Title = "Show Move";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Move for Round @Session["CurrentRound"]
+            Move for Round @Model.RoundNumber
         </h3>
     </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-12 text-center">
-        <h3 style="color:blue">
-            North/South: @Session["PairNS"]
-        </h3>
+@if (!Model.NSMissing)
+{
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h3 style="color:blue">
+                North/South: @Model.PairNS
+            </h3>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-12 text-center">
-        @if (Convert.ToInt32(ViewData["NSNewTable"]) == 0)
-        {
-            <h4>
-                Move to Sit Out
-            </h4>
-        }
-        else
-        {
-            if (ViewData["NSStayMove"].ToString() == "Move")
+    <div class="row">
+        <div class="col-12 text-center">
+            @if (Model.NorthNewTable == 0)
             {
                 <h4>
-                    Move to Table @ViewData["NSNewTable"] @ViewData["NSNewDirection"]
+                    Move to Sit Out
                 </h4>
             }
             else
             {
-                <h4>
-                    Stay at Table @ViewData["NSNewTable"] @ViewData["NSNewDirection"]
-                </h4>
+                if (Model.NorthStay)
+                {
+                    <h4>
+                        Stay at Table @Model.NorthNewTable @Model.NorthNewDirection
+                    </h4>
+                }
+                else
+                {
+                    <h4>
+                        Move to Table @Model.NorthNewTable @Model.NorthNewDirection
+                    </h4>
+                }
             }
-        }
+        </div>
     </div>
-</div>
+}
 
-<div class="row mt-3">
-    <div class="col-12 text-center">
-        <h3 style="color:blue">
-            East/West: @Session["PairEW"]
-        </h3>
+@if (!Model.EWMissing)
+{
+    <div class="row mt-3">
+        <div class="col-12 text-center">
+            <h3 style="color:blue">
+                East/West: @Model.PairEW
+            </h3>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-12 text-center">
-        @if (Convert.ToInt32(ViewData["EWNewTable"]) == 0)
-        {
-            <h4>
-                Move to Sit Out
-            </h4>
-        }
-        else
-        {
-            if (ViewData["EWStayMove"].ToString() == "Move")
+    <div class="row">
+        <div class="col-12 text-center">
+            @if (Model.EastNewTable == 0)
             {
                 <h4>
-                    Move to Table @ViewData["EWNewTable"] @ViewData["EWNewDirection"]
+                    Move to Sit Out
                 </h4>
             }
             else
             {
-                <h4>
-                    Stay at Table @ViewData["EWNewTable"] @ViewData["EWNewDirection"]
-                </h4>
+                if (Model.EastStay)
+                {
+                    <h4>
+                        Stay at Table @Model.EastNewTable @Model.EastNewDirection
+                    </h4>
+                }
+                else
+                {
+                    <h4>
+                        Move to Table @Model.EastNewTable @Model.EastNewDirection
+                    </h4>
+                }
             }
-        }
+        </div>
     </div>
-</div>
+}
 
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:green">
-            Boards: @Session["LowBoard"] to @Session["HighBoard"]
+            Boards: @Model.LowBoard to @Model.HighBoard
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (ViewData["BoardsNewTable"].ToString() == "0")
+        @if (Model.BoardsNewTable == 0)
         {
             <h4>
                 Pass to Relay Table
@@ -97,7 +105,7 @@
         else
         {
             <h4>
-                Pass to Table @ViewData["BoardsNewTable"]
+                Pass to Table @Model.BoardsNewTable
             </h4>
         }
     </div>

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model TabScore.Models.Result
+
+@{
     ViewBag.Title = "Confirm Result";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
@@ -6,7 +8,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Session["Board"]
+            Board @Model.Board
         </h3>
     </div>
 </div>
@@ -19,7 +21,7 @@
     </div>
 </div>
 
-@if (ViewData["DisplayContract"].ToString() == "PASS")
+@if (Model.ContractLevel == 0)
 {
     <div class="row mt-4">
         <div class="col-12 text-center">
@@ -34,18 +36,31 @@ else
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3>
-                @Html.Raw(ViewData["DisplayContract"])
+                @Html.Raw(Model.DisplayContract())
             </h3>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12 text-center">
-            <h3>
-                @ViewData["Score"] to @ViewData["Direction"]
-            </h3>
+    if (Model.Score > 0)
+    {
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3>
+                    @Model.Score to NS
+                </h3>
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3>
+                    @(-Model.Score) to EW
+                </h3>
+            </div>
+        </div>
+    }
 }
 
 <script>

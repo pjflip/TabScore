@@ -1,4 +1,5 @@
-﻿@model List<TabScore.Models.Result>
+﻿@model TabScore.Models.ResultsList
+
 @{
     ViewBag.Title = "Show Boards";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -15,7 +16,7 @@
             <p>Some boards do not have a result entered.  Has the Tournament Director told you to skip these boards and move to the next round?</p>
         </div>
         <div class="modal-footer" style="justify-content:space-between">
-            <button class="btn btn-lg btn-danger" ontouchstart="location.href = '@Url.Action("OKButtonClick", "ShowBoards")?round=@Session["CurrentRound"]'">
+            <button class="btn btn-lg btn-danger" ontouchstart="location.href = '@Url.Action("OKButtonClick", "ShowBoards")?roundNumber=@Model.RoundNumber'">
                 Skip Boards
             </button>
             <button class="btn btn-lg btn-success" data-dismiss="modal">
@@ -42,7 +43,7 @@
             </h4>
         </div>
         <div class="col-3">
-            @if (Result.ContractLevel == null)
+            @if (Result.ContractLevel == -1)
             {
                 <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterContract")?board=' + @Result.Board">
                     Enter
@@ -65,8 +66,8 @@
 
 <script>
     function validateOK() {
-        if ("@ViewData["GotAllResults"]" == "TRUE") {
-            location.href = '@Url.Action("OKButtonClick", "ShowBoards")?round=@Session["CurrentRound"]';
+        if (@Model.GotAllResults.ToString().ToLower()) {
+            location.href = '@Url.Action("OKButtonClick", "ShowBoards")?roundNumber=@Model.RoundNumber';
         }
         else {
             $("#notAllResultsModal").modal()

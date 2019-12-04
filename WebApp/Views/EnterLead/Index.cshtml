@@ -1,7 +1,15 @@
-﻿
+﻿@model TabScore.Models.Result
+
 @{
     ViewBag.Title = "Enter Lead";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var suitRazor = "";
+    var cardRazor = "";
+    if (Model.LeadCard != "")
+    {
+        suitRazor = Model.LeadCard.Substring(0, 1);
+        cardRazor = Model.LeadCard.Substring(1, 1);
+    }
 }
 
 <style>
@@ -49,7 +57,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Session["Board"]: @Html.Raw(ViewData["DisplayContract"])
+            Board @Model.Board: @Html.Raw(Model.DisplayContract())
         </h3>
     </div>
 </div>
@@ -115,7 +123,7 @@
         </button>
     </div>
 </div>
- 
+
 <div class="row mt-2">
     <div class="col-12 text-center">
         <button id="sS" class="btn btn-suit btn-lg m-1 p-1" style="color:black; width:3em; height:3em" ontouchstart="setSuit('S')">
@@ -124,10 +132,10 @@
         <button id="sH" class="btn btn-suit btn-lg m-1 p-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('H')">
             <div style="font-size:xx-large; line-height:1em">&hearts;</div>
         </button>
-        <button id="sD" class="btn btn-suit btn-lg m-1 p-1" style="color:orangered; width:3em; height:3em" ontouchstart="setSuit('D')">
+        <button id="sD" class="btn btn-suit btn-lg m-1 p-1" style="color:lightsalmon; width:3em; height:3em" ontouchstart="setSuit('D')">
             <div style="font-size:xx-large; line-height:1em">&diams;</div>
         </button>
-        <button id="sC" class="btn btn-suit btn-lg m-1 p-1" style="color:darkslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
+        <button id="sC" class="btn btn-suit btn-lg m-1 p-1" style="color:lightslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
             <div style="font-size:xx-large; line-height:1em">&clubs;</div>
         </button>
     </div>
@@ -149,13 +157,13 @@
 }
 
 <script>
-    var suit = '@ViewData["Suit"].ToString()';
-    var card = '@ViewData["Card"].ToString()';
+    var suit = "@suitRazor";
+    var card = "@cardRazor";
 
     window.onload = setCurrentSelections();
 
     function setCurrentSelections() {
-        if (suit != "") {
+        if (suit != "" && card != "") {
             document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
             document.getElementById('c' + card).className = "btn btn-warning btn-lg m-1";
         }
@@ -220,7 +228,7 @@
 
     function validateOK() {
         if (suit != "SKIP" && (card == "" || suit == "")) {
-            $("#noCardSuitModal").modal();
+        $("#noCardSuitModal").modal();
         }
         else {
             location.href = '@Url.Action("OKButtonClick", "EnterLead")?card=' + suit + card + '&secondPass=' + '@ViewData["SecondPass"].ToString()';
