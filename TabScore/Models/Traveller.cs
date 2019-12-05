@@ -9,13 +9,13 @@ namespace TabScore.Models
         public bool HandRecord { get; private set; }
         public int PairNS { get; private set; }
         public int PercentageNS { get; private set; }
-        public int Board { get; private set; }
+        public int BoardNumber { get; private set; }
 
         private int currentScore;
 
-        public Traveller(string DB, int sectionID, int board, int pairNS, bool individual)
+        public Traveller(string DB, int sectionID, int boardNumber, int pairNS, bool individual)
         {
-            Board = board;
+            BoardNumber = boardNumber;
             PairNS = pairNS;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
@@ -27,11 +27,11 @@ namespace TabScore.Models
                 {
                     if (individual)
                     {
-                        SQLString = $"SELECT PairNS, PairEW, South, West, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={sectionID} AND Board={board}";
+                        SQLString = $"SELECT PairNS, PairEW, South, West, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={sectionID} AND Board={boardNumber}";
                     }
                     else
                     {
-                        SQLString = $"SELECT PairNS, PairEW, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={sectionID} AND Board={board}";
+                        SQLString = $"SELECT PairNS, PairEW, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={sectionID} AND Board={boardNumber}";
                     }
                     cmd = new OdbcCommand(SQLString, connection);
                     ODBCRetryHelper.ODBCRetry(() =>
@@ -44,7 +44,7 @@ namespace TabScore.Models
                             {
                                 result = new Result()
                                 {
-                                    Board = board,
+                                    BoardNumber = boardNumber,
                                     PairNS = reader.GetInt32(0),
                                     PairEW = reader.GetInt32(1),
                                     South = reader.GetInt32(2),
@@ -59,7 +59,7 @@ namespace TabScore.Models
                             {
                                 result = new Result()
                                 {
-                                    Board = board,
+                                    BoardNumber = boardNumber,
                                     PairNS = reader.GetInt32(0),
                                     PairEW = reader.GetInt32(1),
                                     NSEW = reader.GetString(2),
@@ -107,7 +107,7 @@ namespace TabScore.Models
 
             if (Settings.GetSetting<bool>(DB, SettingName.ShowHandRecord))
             {
-                HandRecord hr = new HandRecord(DB, sectionID, board);
+                HandRecord hr = new HandRecord(DB, sectionID, boardNumber);
                 if (hr.NorthSpades == "###")
                 {
                     HandRecord = false;

@@ -23,10 +23,10 @@ namespace TabScore
             Session.Add("SectionLetter", "");
             Session.Add("SectionID", 0);
             Session.Add("NumTables", 0);
-            Session.Add("Table", 0);
-            Session.Add("Round", null);
             Session.Add("MissingPair", 0);
             Session.Add("MaxRounds", 0);
+            Session.Add("Table", 0);
+            Session.Add("Round", null);
             Session.Add("Result", null); 
         }
     }

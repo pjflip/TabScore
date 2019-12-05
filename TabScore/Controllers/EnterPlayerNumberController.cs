@@ -6,9 +6,9 @@ namespace TabScore.Controllers
 {
     public class EnterPlayerNumberController : Controller
     {
-        public ActionResult Index(string dir)
+        public ActionResult Index(string direction)
         {
-            ViewData["Direction"] = dir;
+            ViewData["Direction"] = direction;
             ViewData["BackButton"] = "FALSE";
             Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]}";
             return View();

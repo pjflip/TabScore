@@ -57,7 +57,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Model.Board: @Html.Raw(Model.DisplayContract())
+            Board @Model.BoardNumber: @Html.Raw(Model.DisplayContract())
         </h3>
     </div>
 </div>
@@ -141,7 +141,7 @@
     </div>
 </div>
 
-@if (ViewData["SecondPass"].ToString() == "TRUE")
+@if (ViewData["ValidateWarning"].ToString() != "Validate")
 {
     <div class="row mt-2">
         <div class="col-12 text-center">
@@ -150,7 +150,10 @@
             </button>
         </div>
     </div>
+}
 
+@if (ViewData["ValidateWarning"].ToString() == "Warning")
+{
     <script>
         $("#leadNoMatchModal").modal();
     </script>
@@ -231,7 +234,7 @@
         $("#noCardSuitModal").modal();
         }
         else {
-            location.href = '@Url.Action("OKButtonClick", "EnterLead")?card=' + suit + card + '&secondPass=' + '@ViewData["SecondPass"].ToString()';
+            location.href = '@Url.Action("OKButtonClick", "EnterLead")?card=' + suit + card + '&validateWarning=' + '@ViewData["ValidateWarning"].ToString()';
         }
     }
 

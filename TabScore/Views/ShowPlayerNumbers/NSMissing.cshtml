@@ -50,13 +50,13 @@
     <div class="col-3">
         @if (PlayerNameEast == "")
         {
-            <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?dir=East'">
+            <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=East'">
                 Enter
             </button>
         }
         else
         {
-            <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?dir=East'">
+            <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=East'">
                 Edit
             </button>
         }
@@ -77,13 +77,13 @@
     <div class="col-3">
         @if (PlayerNameWest == "")
         {
-            <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?dir=West'">
+            <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=West'">
                 Enter
             </button>
         }
         else
         {
-            <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?dir=West'">
+            <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=West'">
                 Edit
             </button>
         }

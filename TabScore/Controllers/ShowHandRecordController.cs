@@ -12,7 +12,7 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Result result = Session["Result"] as Result;
-            HandRecord hr = new HandRecord(DBConnectionString, Convert.ToInt32(Session["SectionID"]), result.Board);
+            HandRecord hr = new HandRecord(DBConnectionString, Convert.ToInt32(Session["SectionID"]), result.BoardNumber);
             if (hr.NorthSpades == "###" && Convert.ToInt32(Session["SectionID"]) != 1)    // Use default Section 1 hand records)
             {
                 hr = new HandRecord(DBConnectionString, 1, Convert.ToInt32(Session["SectionID"]));

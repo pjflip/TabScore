@@ -16,7 +16,7 @@
             <p>Some boards do not have a result entered.  Has the Tournament Director told you to skip these boards and move to the next round?</p>
         </div>
         <div class="modal-footer" style="justify-content:space-between">
-            <button class="btn btn-lg btn-danger" ontouchstart="location.href = '@Url.Action("OKButtonClick", "ShowBoards")?roundNumber=@Model.RoundNumber'">
+            <button class="btn btn-lg btn-danger" ontouchstart="location.href = '@Url.Action("OKButtonClick", "ShowBoards")'">
                 Skip Boards
             </button>
             <button class="btn btn-lg btn-success" data-dismiss="modal">
@@ -39,19 +39,19 @@
     <div class="row">
         <div class="col-2 text-right pr-3 align-self-center">
             <h4>
-                @Result.Board:
+                @Result.BoardNumber:
             </h4>
         </div>
         <div class="col-3">
             @if (Result.ContractLevel == -1)
             {
-                <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterContract")?board=' + @Result.Board">
+                <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + @Result.BoardNumber">
                     Enter
                 </button>
             }
             else
             {
-                <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterContract")?board=' + @Result.Board">
+                <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + @Result.BoardNumber">
                     Edit
                 </button>
             }
@@ -67,7 +67,7 @@
 <script>
     function validateOK() {
         if (@Model.GotAllResults.ToString().ToLower()) {
-            location.href = '@Url.Action("OKButtonClick", "ShowBoards")?roundNumber=@Model.RoundNumber';
+            location.href = '@Url.Action("OKButtonClick", "ShowBoards")';
         }
         else {
             $("#notAllResultsModal").modal()

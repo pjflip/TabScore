@@ -9,7 +9,7 @@ namespace TabScore.Models
         public int SectionID { get; set; }
         public int Table { get; set; }
         public int RoundNumber { get; set; }
-        public int Board { get; set; }
+        public int BoardNumber { get; set; }
         public int PairNS { get; set; }
         public int South { get; set; }
         public int PairEW { get; set; }
@@ -222,11 +222,11 @@ namespace TabScore.Models
             bool vul;
             if (NSEW == "N" || NSEW == "S")
             {
-                vul = UtilityFunctions.NSVulnerability[(Convert.ToInt32(Board) - 1) % 16];
+                vul = UtilityFunctions.NSVulnerability[(Convert.ToInt32(BoardNumber) - 1) % 16];
             }
             else
             {
-                vul = UtilityFunctions.EWVulnerability[(Convert.ToInt32(Board) - 1) % 16];
+                vul = UtilityFunctions.EWVulnerability[(Convert.ToInt32(BoardNumber) - 1) % 16];
             }
             int diff = TricksTakenNumber - ContractLevel - 6;
             if (diff < 0)      // Contract not made
@@ -420,7 +420,7 @@ namespace TabScore.Models
             {
                 // Delete any previous result
                 connection.Open();
-                string SQLString = $"DELETE FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={RoundNumber} AND Board={Board}";
+                string SQLString = $"DELETE FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={RoundNumber} AND Board={BoardNumber}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
@@ -437,11 +437,11 @@ namespace TabScore.Models
                 // Add new result
                 if (individual)
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {RoundNumber}, {Board}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
                 }
                 else
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {RoundNumber}, {Board}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
                 }
                 OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
                 try
@@ -463,7 +463,7 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
-                string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={RoundNumber} AND Board={Board}";
+                string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={RoundNumber} AND Board={BoardNumber}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
                 try

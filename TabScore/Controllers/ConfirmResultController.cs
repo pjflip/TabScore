@@ -31,7 +31,7 @@ namespace TabScore.Controllers
             Result result = Session["Result"] as Result;
             if (result.ContractLevel == 0)  // This was passed out, so Back goes all the way to Enter Contract screen
             {
-                return RedirectToAction("Index", "EnterContract", new { board = result.Board });
+                return RedirectToAction("Index", "EnterContract", new { board = result.BoardNumber });
             }
             else
             {

@@ -65,8 +65,7 @@ namespace TabScore.Controllers
 
         public ActionResult OKSitOutButtonClick()
         {
-            Round round = Session["Round"] as Round;
-            return RedirectToAction("Index", "ShowRankingList", new { roundNumber = round.RoundNumber, finalRound = "No" });
+            return RedirectToAction("Index", "ShowRankingList");
         }
 
         public ActionResult BackButtonClick()

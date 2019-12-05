@@ -126,7 +126,7 @@ namespace TabScore.Models
                         {
                             Result res = new Result()
                             {
-                                Board = reader.GetInt32(0),
+                                BoardNumber = reader.GetInt32(0),
                                 PairNS = reader.GetInt32(1),
                                 PairEW = reader.GetInt32(2),
                                 NSEW = reader.GetString(3),
@@ -158,8 +158,8 @@ namespace TabScore.Models
                 foreach (Result res in resList)
                 {
                     currentScore = res.Score;
-                    currentBoard = res.Board;
-                    currentBoardResultList = resList.FindAll(x => x.Board == currentBoard);
+                    currentBoard = res.BoardNumber;
+                    currentBoardResultList = resList.FindAll(x => x.BoardNumber == currentBoard);
                     res.MPNS = 2 * currentBoardResultList.FindAll(x => x.Score < currentScore).Count + currentBoardResultList.FindAll(x => x.Score == currentScore).Count - 1;
                     res.MPMax = 2 * currentBoardResultList.Count - 2;
                     res.MPEW = res.MPMax - res.MPNS;
@@ -330,7 +330,7 @@ namespace TabScore.Models
                             {
                                 Table = reader.GetInt32(0),
                                 RoundNumber = reader.GetInt32(1),
-                                Board = reader.GetInt32(2),
+                                BoardNumber = reader.GetInt32(2),
                                 PairNS = reader.GetInt32(3),
                                 PairEW = reader.GetInt32(4),
                                 South = reader.GetInt32(5),
@@ -365,8 +365,8 @@ namespace TabScore.Models
             foreach (Result res in resList)
             {
                 currentScore = res.Score;
-                currentBoard = res.Board;
-                currentBoardResultList = resList.FindAll(x => x.Board == currentBoard);
+                currentBoard = res.BoardNumber;
+                currentBoardResultList = resList.FindAll(x => x.BoardNumber == currentBoard);
                 res.MPNS = 2 * currentBoardResultList.FindAll(x => x.Score < currentScore).Count + currentBoardResultList.FindAll(x => x.Score == currentScore).Count - 1;
                 res.MPMax = 2 * currentBoardResultList.Count - 2;
                 res.MPEW = res.MPMax - res.MPNS;

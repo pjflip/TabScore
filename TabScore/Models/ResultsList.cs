@@ -4,12 +4,10 @@ namespace TabScore.Models
 {
     public class ResultsList : List<Result>
     {
-        public int RoundNumber { get; private set; }
         public bool GotAllResults { get; private set; }
 
         public ResultsList(string DB, int sectionID, int table, int roundNumber, int lowBoard, int highBoard)
         {
-            RoundNumber = roundNumber;
             int resultCount = 0;
             for (int i = lowBoard; i <= highBoard; i++)
             {
@@ -18,7 +16,7 @@ namespace TabScore.Models
                     SectionID = sectionID,
                     Table = table,
                     RoundNumber = roundNumber,
-                    Board = i,
+                    BoardNumber = i,
                     ContractLevel = -1
                 };
                 result.ReadFromDB(DB);

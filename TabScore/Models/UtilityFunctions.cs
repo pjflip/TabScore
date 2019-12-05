@@ -75,10 +75,6 @@ namespace TabScore.Models
                         }
                     });
                 }
-                catch (OdbcException)
-                {
-                    return -1;
-                }
                 finally
                 {
                     reader.Close();

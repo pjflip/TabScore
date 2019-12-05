@@ -1,7 +1,6 @@
-﻿using TabScore.Models;
-using System;
+﻿using System;
 using System.Web.Mvc;
-using System.Collections.Generic;
+using TabScore.Models;
 
 namespace TabScore.Controllers
 {
@@ -31,9 +30,9 @@ namespace TabScore.Controllers
             return View(resultsList);
         }
 
-        public ActionResult OKButtonClick(string roundNumber)  // Gets and passes round as a parameter to avoid double bounce
+        public ActionResult OKButtonClick()
         {
-            return RedirectToAction("Index", "ShowRankingList", new { roundNumber, finalRound = "No" });
+            return RedirectToAction("Index", "ShowRankingList");
         }
     }
 }

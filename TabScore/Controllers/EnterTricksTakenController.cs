@@ -39,12 +39,12 @@ namespace TabScore.Controllers
 
             if (Settings.GetSetting<bool>(DBConnectionString, SettingName.EnterLeadCard))
             {
-                return RedirectToAction("Index", "EnterLead", new { secondPass = "FALSE" });
+                return RedirectToAction("Index", "EnterLead", new { validateWarning = "NoWarning" });
             }
             else
             {
                 Result result = Session["Result"] as Result;
-                return RedirectToAction("Index", "EnterContract", new { board = result.Board });
+                return RedirectToAction("Index", "EnterContract", new { board = result.BoardNumber });
             }
         }
     }

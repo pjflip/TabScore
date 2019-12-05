@@ -4,7 +4,7 @@ namespace TabScore.Models
 {
     public class HandRecord
     {
-        public int Board { get; private set; }
+        public int BoardNumber { get; private set; }
         public string Dealer { get; private set; }
         public string NorthSpades { get; private set; }
         public string NorthHearts {get; private set;}
@@ -49,16 +49,16 @@ namespace TabScore.Models
         public string HCPEast {get; private set;}
         public string HCPWest {get; private set;}
 
-        public HandRecord(string DB, int sectionID, int board)
+        public HandRecord(string DB, int sectionID, int boardNumber)
         {
-            Board = board;
-            Dealer = UtilityFunctions.GetDealerForBoard(Board);
+            BoardNumber = boardNumber;
+            Dealer = UtilityFunctions.GetDealerForBoard(boardNumber);
             NorthSpades = "###";
             EvalNorthSpades = "###";
 
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
-                string SQLString = $"SELECT NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs FROM HandRecord WHERE Section={sectionID} AND Board={board}";
+                string SQLString = $"SELECT NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs FROM HandRecord WHERE Section={sectionID} AND Board={boardNumber}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
                 connection.Open();
@@ -101,7 +101,7 @@ namespace TabScore.Models
                     cmd.Dispose();
                 }
 
-                SQLString = $"SELECT NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, NorthNotrump, EastSpades, EastHearts, EastDiamonds, EastClubs, EastNotrump, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, SouthNotrump, WestSpades, WestHearts, WestDiamonds, WestClubs, WestNoTrump, NorthHcp, EastHcp, SouthHcp, WestHcp FROM HandEvaluation WHERE Section={sectionID} AND Board={board}";
+                SQLString = $"SELECT NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, NorthNotrump, EastSpades, EastHearts, EastDiamonds, EastClubs, EastNotrump, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, SouthNotrump, WestSpades, WestHearts, WestDiamonds, WestClubs, WestNoTrump, NorthHcp, EastHcp, SouthHcp, WestHcp FROM HandEvaluation WHERE Section={sectionID} AND Board={boardNumber}";
                 cmd = new OdbcCommand(SQLString, connection);
                 try
                 {

@@ -6,22 +6,21 @@ namespace TabScore.Controllers
 {
     public class EnterContractController : Controller
     {
-        public ActionResult Index(string board)
+        public ActionResult Index(int boardNumber)
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            int boardNumber = Convert.ToInt32(board);
             Round round = Session["Round"] as Round;
             Result result = Session["Result"] as Result;
-            if (result == null || result.Board != boardNumber)   // No session result data for this board, so create new result object and check database
+            if (result == null || result.BoardNumber != boardNumber)   // No session result data for this board, so create new result object and check database
             {
                 result = new Result
                 {
                     SectionID = Convert.ToInt32(Session["SectionID"]),
                     Table = Convert.ToInt32(Session["Table"]),
                     RoundNumber = round.RoundNumber,
-                    Board = boardNumber,
+                    BoardNumber = boardNumber,
                     PairNS = round.PairNS,
                     PairEW = round.PairEW,
                     ContractLevel = -1,
@@ -60,7 +59,7 @@ namespace TabScore.Controllers
             result.ContractX = cX;
             result.NSEW = cNSEW;
             Session["Result"] = result;
-            return RedirectToAction("Index", "EnterLead", new { secondPass = "FALSE" });
+            return RedirectToAction("Index", "EnterLead", new { validateWarning = "Validate" });
         }
 
         public ActionResult OKButtonPass()
