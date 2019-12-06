@@ -10,7 +10,8 @@ namespace TabScore.Controllers
         {
             ViewData["Direction"] = direction;
             ViewData["BackButton"] = "FALSE";
-            Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]}";
+            Section section = Session["Section"] as Section;
+            Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]}";
             return View();
         }
 
@@ -20,7 +21,9 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Round round = Session["Round"] as Round;
-            PlayerFunctions.UpdateDatabase(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]), round.RoundNumber, direction, playerNumber, Convert.ToBoolean(Session["IndividualEvent"]));
+            Section section = Session["Section"] as Section;
+
+            PlayerFunctions.UpdateDatabase(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]), round.RoundNumber, direction, playerNumber, Convert.ToBoolean(Session["IndividualEvent"]));
             return RedirectToAction("Index", "ShowPlayerNumbers");
         }
     }

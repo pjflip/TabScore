@@ -12,7 +12,9 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Round round = Session["Round"] as Round;
-            RankingList rankingList = new RankingList(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToBoolean(Session["IndividualEvent"]));
+            Section section = Session["Section"] as Section;
+
+            RankingList rankingList = new RankingList(DBConnectionString, section.ID, Convert.ToBoolean(Session["IndividualEvent"]));
             if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0" && rankingList[0].Score != "50")
             {
                 rankingList.PairNS = round.PairNS;

@@ -12,11 +12,12 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Round round = Session["Round"] as Round;
+            Section section = Session["Section"] as Section;
 
             ViewData["BackButton"] = "FALSE";
-            Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round.RoundNumber}";
+            Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]} - Round {round.RoundNumber}";
 
-            if (round.PairNS == 0 || round.PairNS == Convert.ToInt32(Session["MissingPair"]))
+            if (round.PairNS == 0 || round.PairNS == section.MissingPair)
             {
                 if (Convert.ToBoolean(Session["IndividualEvent"]))
                 {
@@ -27,7 +28,7 @@ namespace TabScore.Controllers
                     return View("NSMissing", round);
                 }
             }
-            else if (round.PairEW == 0 || round.PairEW == Convert.ToInt32(Session["MissingPair"]))
+            else if (round.PairEW == 0 || round.PairEW == section.MissingPair)
             {
                 if (Convert.ToBoolean(Session["IndividualEvent"]))
                 {

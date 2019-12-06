@@ -5,7 +5,7 @@ namespace TabScoreStarter
     public class Hand
     {
         public int SectionID { get; set; }
-        public int Board { get; set;}
+        public int BoardNumber { get; set;}
 
         public string NorthSpades { get; set;}
         public string NorthHearts { get; set;}
@@ -34,7 +34,7 @@ namespace TabScoreStarter
             get
             {
                 StringBuilder PBNString = new StringBuilder();
-                switch ((Board - 1) % 4)
+                switch ((BoardNumber - 1) % 4)
                 {
                     case 0:
                         PBNString.Append("N:");

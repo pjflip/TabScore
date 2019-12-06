@@ -85,9 +85,9 @@ namespace TabScore.Models
         }
 
         // Get the dealer based on board number for standard boards
-        public static string GetDealerForBoard(int board)
+        public static string GetDealerForBoard(int boardNumber)
         {
-            switch ((board - 1) % 4)
+            switch ((boardNumber - 1) % 4)
             {
                 case 0:
                     return "N";

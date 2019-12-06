@@ -20,12 +20,8 @@ namespace TabScore
             Session.Add("DBConnectionString", "");
             Session.Add("Header","");
             Session.Add("IndividualEvent", false);
-            Session.Add("SectionLetter", "");
-            Session.Add("SectionID", 0);
-            Session.Add("NumTables", 0);
-            Session.Add("MissingPair", 0);
-            Session.Add("MaxRounds", 0);
-            Session.Add("Table", 0);
+            Session.Add("Section", null);
+            Session.Add("TableNumber", 0);
             Session.Add("Round", null);
             Session.Add("Result", null); 
         }

@@ -114,11 +114,13 @@
 }
 
 <script>
+    var numTricks = @Model.TricksTakenNumber;
+
     window.onload = setCurrentSelection();
 
     function setCurrentSelection() {
-        if (@Model.TricksTakenNumber != -1) {
-            var diffTricks = @Model.TricksTakenNumber - @Model.ContractLevel - 6;
+        if (numTricks != -1) {
+            var diffTricks = numTricks - @Model.ContractLevel - 6;
             if (diffTricks < 0) {
                 document.getElementById('minus' + (-diffTricks).toString()).className = "btn btn-warning btn-lg m-1";
             }

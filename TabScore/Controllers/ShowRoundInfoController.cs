@@ -12,7 +12,6 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Round round = Session["Round"] as Round;
-
             if (round.RoundNumber == 1)
             {
                 ViewData["BackButton"] = "FALSE";
@@ -21,9 +20,11 @@ namespace TabScore.Controllers
             {
                 ViewData["BackButton"] = "TRUE";
             }
-            Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]}";
 
-            if (round.PairNS == 0 || round.PairNS == Convert.ToInt32(Session["MissingPair"]))
+            Section section = Session["Section"] as Section;
+            Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]}";
+
+            if (round.PairNS == 0 || round.PairNS == section.MissingPair)
             {
                 if (Convert.ToBoolean(Session["IndividualEvent"]))
                 {
@@ -34,7 +35,7 @@ namespace TabScore.Controllers
                     return View("NSMissing", round);
                 }
             }
-            else if (round.PairEW == 0 || round.PairEW == Convert.ToInt32(Session["MissingPair"]))
+            else if (round.PairEW == 0 || round.PairEW == section.MissingPair)
             {
                 if (Convert.ToBoolean(Session["IndividualEvent"]))
                 {
@@ -75,7 +76,8 @@ namespace TabScore.Controllers
 
             // Reset to the previous round; RoundNumber > 1 else no Back button and cannot get here
             Round round = Session["Round"] as Round;
-            Session["Round"] = new Round(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]), round.RoundNumber - 1, Convert.ToBoolean(Session["IndividualEvent"]));
+            Section section = Session["Section"] as Section;
+            Session["Round"] = new Round(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]), round.RoundNumber - 1, Convert.ToBoolean(Session["IndividualEvent"]));
             return RedirectToAction("Index", "ShowMove", new { newRoundNumber = round.RoundNumber });
         }
     }

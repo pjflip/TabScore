@@ -35,6 +35,7 @@ namespace TabScore.Models
                                 Score = reader1.GetString(2),
                                 Rank = reader1.GetString(3)
                             };
+                            ranking.ScoreDecimal = Convert.ToDouble(ranking.Score);
                             Add(ranking);
                         }
                     });
@@ -72,6 +73,13 @@ namespace TabScore.Models
                         throw (e);
                     }
                 }
+                Sort((x, y) =>
+                {
+                    var ret = y.Orientation.CompareTo(x.Orientation);    // N's first then E's
+                    if (ret == 0) ret = y.ScoreDecimal.CompareTo(x.ScoreDecimal);
+                    if (ret == 0) ret = x.PairNo.CompareTo(y.PairNo);
+                    return ret;
+                });
             }
         }
 
@@ -219,7 +227,6 @@ namespace TabScore.Models
                         ranking.Score = ranking.ScoreDecimal.ToString("0.##");
                     }
                     // Calculate ranking
-                    rankingList.Sort((x, y) => y.ScoreDecimal.CompareTo(x.ScoreDecimal));
                     foreach (Ranking ranking in rankingList)
                     {
                         double currentScoreDecimal = ranking.ScoreDecimal;
@@ -285,12 +292,6 @@ namespace TabScore.Models
                         ranking.Score = ranking.ScoreDecimal.ToString("0.##");
                     }
                     // Sort and calculate ranking within Orientation subsections
-                    rankingList.Sort((x, y) =>
-                    {
-                        var ret = y.Orientation.CompareTo(x.Orientation);    // N's first then E's
-                            if (ret == 0) ret = y.ScoreDecimal.CompareTo(x.ScoreDecimal);
-                        return ret;
-                    });
                     foreach (Ranking ranking in rankingList)
                     {
                         double currentScoreDecimal = ranking.ScoreDecimal;
@@ -328,7 +329,7 @@ namespace TabScore.Models
                         {
                             Result res = new Result()
                             {
-                                Table = reader.GetInt32(0),
+                                TableNumber = reader.GetInt32(0),
                                 RoundNumber = reader.GetInt32(1),
                                 BoardNumber = reader.GetInt32(2),
                                 PairNS = reader.GetInt32(3),

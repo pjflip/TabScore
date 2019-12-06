@@ -13,12 +13,14 @@ namespace TabScore.Controllers
 
             Round round = Session["Round"] as Round;
             Result result = Session["Result"] as Result;
+            Section section = Session["Section"] as Section;
+
             if (result == null || result.BoardNumber != boardNumber)   // No session result data for this board, so create new result object and check database
             {
                 result = new Result
                 {
-                    SectionID = Convert.ToInt32(Session["SectionID"]),
-                    Table = Convert.ToInt32(Session["Table"]),
+                    SectionID = Convert.ToInt32(section.ID),
+                    TableNumber = Convert.ToInt32(Session["TableNumber"]),
                     RoundNumber = round.RoundNumber,
                     BoardNumber = boardNumber,
                     PairNS = round.PairNS,
@@ -41,11 +43,11 @@ namespace TabScore.Controllers
 
             if (Convert.ToBoolean(Session["IndividualEvent"]))
             {
-                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"{round.PairNS}+{round.South}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"{round.PairEW}+{round.West}")}";
+                Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"{round.PairNS}+{round.South}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"{round.PairEW}+{round.West}")}";
             }
             else
             {
-                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"NS {round.PairNS}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"EW {round.PairEW}")}";
+                Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"NS {round.PairNS}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"EW {round.PairEW}")}";
             }
             ViewData["BackButton"] = "TRUE";
             return View(result);

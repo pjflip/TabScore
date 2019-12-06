@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -12,14 +11,16 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Result result = Session["Result"] as Result;
-            HandRecord hr = new HandRecord(DBConnectionString, Convert.ToInt32(Session["SectionID"]), result.BoardNumber);
-            if (hr.NorthSpades == "###" && Convert.ToInt32(Session["SectionID"]) != 1)    // Use default Section 1 hand records)
+            Section section = Session["Section"] as Section;
+
+            HandRecord handRecord = new HandRecord(DBConnectionString, section.ID, result.BoardNumber);
+            if (handRecord.NorthSpades == "###" && section.ID != 1)    // Use default Section 1 hand records)
             {
-                hr = new HandRecord(DBConnectionString, 1, Convert.ToInt32(Session["SectionID"]));
+                handRecord = new HandRecord(DBConnectionString, 1, result.BoardNumber);
             }
 
             ViewData["BackButton"] = "FALSE";
-            return View(hr);
+            return View(handRecord);
         }
 
         public ActionResult OKButtonClick()

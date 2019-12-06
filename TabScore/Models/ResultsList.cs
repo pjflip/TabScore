@@ -14,7 +14,7 @@ namespace TabScore.Models
                 Result result = new Result
                 {
                     SectionID = sectionID,
-                    Table = table,
+                    TableNumber = table,
                     RoundNumber = roundNumber,
                     BoardNumber = i,
                     ContractLevel = -1

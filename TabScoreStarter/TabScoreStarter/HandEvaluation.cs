@@ -3,7 +3,7 @@
     public class HandEvaluation
     {
         public int SectionID{ get; private set;}
-        public int Board{ get; private set;}
+        public int BoardNumber{ get; private set;}
 
         public int NorthSpades{ get; private set;}
         public int NorthHearts{ get; private set;}
@@ -34,7 +34,7 @@
         public HandEvaluation(Hand hand)
         {
             SectionID = hand.SectionID;
-            Board = hand.Board;
+            BoardNumber = hand.BoardNumber;
 
             int[] ddTable = new int[20];
             ddTable = DoubleDummySolver.CalcTable(hand.PBN);

@@ -11,7 +11,8 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (newRoundNumber > Convert.ToInt32(Session["MaxRounds"]))  // Session complete
+            Section section = Session["Section"] as Section;
+            if (newRoundNumber > UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, section.ID))  // Session complete
             {
                 if (Settings.GetSetting<int>(DBConnectionString, SettingName.ShowRanking) == 2)
                 {
@@ -23,79 +24,84 @@ namespace TabScore.Controllers
                 }
             }
 
+            int tableNumber = Convert.ToInt32(Session["TableNumber"]);
+            bool individual = Convert.ToBoolean(Session["IndividualEvent"]);
             Round round = Session["Round"] as Round;
-            MoveView moveView = new MoveView();
-            moveView.RoundNumber = newRoundNumber;
-            if (Convert.ToBoolean(Session["IndividualEvent"]))
+            MoveView moveView = new MoveView
+            {
+                RoundNumber = newRoundNumber
+            };
+
+            if (individual)
             {
                 if (round.PairNS != 0)
                 {
-                    Move move = new Move(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRoundNumber, round.PairNS);
+                    Move move = new Move(DBConnectionString, section.ID, newRoundNumber, round.PairNS);
                     moveView.PairNS = round.PairNS;
-                    moveView.NorthNewTable = move.Table;
+                    moveView.NorthNewTable = move.TableNumber;
                     moveView.NorthNewDirection = move.Direction;
-                    moveView.NorthStay = (move.Table == Convert.ToInt32(Session["Table"]) && move.Direction == "North");
+                    moveView.NorthStay = (move.TableNumber == tableNumber && move.Direction == "North");
                 }
                 if (round.PairEW != 0)
                 {
-                    Move move = new Move(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRoundNumber, round.PairEW);
+                    Move move = new Move(DBConnectionString, section.ID, newRoundNumber, round.PairEW);
                     moveView.PairEW = round.PairEW;
-                    moveView.EastNewTable = move.Table;
+                    moveView.EastNewTable = move.TableNumber;
                     moveView.EastNewDirection = move.Direction;
-                    moveView.EastStay = (move.Table == Convert.ToInt32(Session["Table"]) && move.Direction == "East");
+                    moveView.EastStay = (move.TableNumber == tableNumber && move.Direction == "East");
                 }
                 if (round.South != 0)
                 {
-                    Move move = new Move(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRoundNumber, round.South);
+                    Move move = new Move(DBConnectionString, section.ID, newRoundNumber, round.South);
                     moveView.South = round.South;
-                    moveView.SouthNewTable = move.Table;
+                    moveView.SouthNewTable = move.TableNumber;
                     moveView.SouthNewDirection = move.Direction;
-                    moveView.SouthStay = (move.Table == Convert.ToInt32(Session["Table"]) && move.Direction == "South");
+                    moveView.SouthStay = (move.TableNumber == tableNumber && move.Direction == "South");
                 }
                 if (round.West != 0)
                 {
-                    Move move = new Move(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRoundNumber, round.West);
+                    Move move = new Move(DBConnectionString, section.ID, newRoundNumber, round.West);
                     moveView.West = round.West;
-                    moveView.WestNewTable = move.Table;
+                    moveView.WestNewTable = move.TableNumber;
                     moveView.WestNewDirection = move.Direction;
-                    moveView.WestStay = (move.Table == Convert.ToInt32(Session["Table"]) && move.Direction == "West");
+                    moveView.WestStay = (move.TableNumber == tableNumber && move.Direction == "West");
                 }
             }
             else
             {
                 if (round.PairNS != 0)
                 {
-                    Move move = new Move(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRoundNumber, round.PairNS, "NS");
+                    Move move = new Move(DBConnectionString, section.ID, newRoundNumber, round.PairNS, "NS");
                     moveView.PairNS = round.PairNS;
-                    moveView.NorthNewTable = move.Table;
+                    moveView.NorthNewTable = move.TableNumber;
                     moveView.NorthNewDirection = move.Direction;
-                    moveView.NorthStay = (move.Table == Convert.ToInt32(Session["Table"]) && move.Direction == "NS");
+                    moveView.NorthStay = (move.TableNumber == tableNumber && move.Direction == "NS");
                 }
                 if (round.PairEW != 0)
                 {
-                    Move move = new Move(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRoundNumber, round.PairEW, "EW");
+                    Move move = new Move(DBConnectionString, section.ID, newRoundNumber, round.PairEW, "EW");
                     moveView.PairEW = round.PairEW;
-                    moveView.EastNewTable = move.Table;
+                    moveView.EastNewTable = move.TableNumber;
                     moveView.EastNewDirection = move.Direction;
-                    moveView.EastStay = (move.Table == Convert.ToInt32(Session["Table"]) && move.Direction == "EW");
+                    moveView.EastStay = (move.TableNumber == tableNumber && move.Direction == "EW");
                 }
             }
 
             moveView.LowBoard = round.LowBoard;
             moveView.HighBoard = round.HighBoard;
-            BoardMove boardMove = new BoardMove(DBConnectionString, Convert.ToInt32(Session["SectionID"]), newRoundNumber, Convert.ToInt32(Session["Table"]), round.LowBoard);
-            moveView.BoardsNewTable = boardMove.Table;
-            
-            Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]}";
+            BoardMove boardMove = new BoardMove(DBConnectionString, section.ID, newRoundNumber, tableNumber, round.LowBoard);
+            moveView.BoardsNewTable = boardMove.TableNumber;
+
+            Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]}";
             ViewData["BackButton"] = "FALSE";
 
-            moveView.NSMissing = (round.PairNS == 0 || round.PairNS == Convert.ToInt32(Session["MissingPair"]));
-            moveView.EWMissing = (round.PairEW == 0 || round.PairEW == Convert.ToInt32(Session["MissingPair"]));
+            moveView.NSMissing = (round.PairNS == 0 || round.PairNS == section.MissingPair);
+            moveView.EWMissing = (round.PairEW == 0 || round.PairEW == section.MissingPair);
 
             // Update session to new round info
-            Session["Round"] = new Round(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]), newRoundNumber, Convert.ToBoolean(Session["IndividualEvent"]));
+            Session["Round"] = new Round(DBConnectionString, section.ID, tableNumber, newRoundNumber, individual);
 
-            if (Convert.ToBoolean(Session["IndividualEvent"]))
+            if (individual)
             {
                 return View("Individual", moveView);
             }

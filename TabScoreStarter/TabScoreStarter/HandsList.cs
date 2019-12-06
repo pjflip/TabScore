@@ -22,7 +22,7 @@ namespace TabScoreStarter
                         Hand hand = new Hand
                         {
                             SectionID = reader.GetInt32(0),
-                            Board = reader.GetInt32(1),
+                            BoardNumber = reader.GetInt32(1),
                             NorthSpades = reader.GetValue(2).ToString(),
                             NorthHearts = reader.GetValue(3).ToString(),
                             NorthDiamonds = reader.GetValue(4).ToString(),
@@ -79,7 +79,7 @@ namespace TabScoreStarter
                         SectionID = 1,         // Default SectionID=1 if hands apply to more than one section
                         NorthSpades = "###"
                     };
-                    hand.Board = Convert.ToInt32(line.Split(quoteDelimiter)[1]);
+                    hand.BoardNumber = Convert.ToInt32(line.Split(quoteDelimiter)[1]);
                     while ((line = file.ReadLine()) != null)
                     {
                         if (line.Length > 6 && line.Substring(0, 6) == "[Deal ")
@@ -120,7 +120,7 @@ namespace TabScoreStarter
                 {
                     if (hc.NorthSpades != "###")
                     {
-                        SQLString = $"INSERT INTO HandRecord (Section, Board, NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs) VALUES ({hc.SectionID}, {hc.Board}, '{hc.NorthSpades}', '{hc.NorthHearts}', '{hc.NorthDiamonds}', '{hc.NorthClubs}', '{hc.EastSpades}', '{hc.EastHearts}', '{hc.EastDiamonds}', '{hc.EastClubs}', '{hc.SouthSpades}', '{hc.SouthHearts}', '{hc.SouthDiamonds}', '{hc.SouthClubs}', '{hc.WestSpades}', '{hc.WestHearts}', '{hc.WestDiamonds}', '{hc.WestClubs}')";
+                        SQLString = $"INSERT INTO HandRecord (Section, Board, NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs) VALUES ({hc.SectionID}, {hc.BoardNumber}, '{hc.NorthSpades}', '{hc.NorthHearts}', '{hc.NorthDiamonds}', '{hc.NorthClubs}', '{hc.EastSpades}', '{hc.EastHearts}', '{hc.EastDiamonds}', '{hc.EastClubs}', '{hc.SouthSpades}', '{hc.SouthHearts}', '{hc.SouthDiamonds}', '{hc.SouthClubs}', '{hc.WestSpades}', '{hc.WestHearts}', '{hc.WestDiamonds}', '{hc.WestClubs}')";
                         cmd = new OdbcCommand(SQLString, connection);
                         cmd.ExecuteNonQuery();
                     }

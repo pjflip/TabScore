@@ -41,7 +41,7 @@
             this.LeadCardGroup = new System.Windows.Forms.GroupBox();
             this.ValidateLeadCardCheckbox = new System.Windows.Forms.CheckBox();
             this.EnterLeadCardCheckbox = new System.Windows.Forms.CheckBox();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.CanxButton = new System.Windows.Forms.Button();
             this.OKButton = new System.Windows.Forms.Button();
             this.EnterResultsMethodGroup = new System.Windows.Forms.GroupBox();
             this.EnterResultsMethodCombobox = new System.Windows.Forms.ComboBox();
@@ -203,17 +203,17 @@
             this.EnterLeadCardCheckbox.UseVisualStyleBackColor = true;
             this.EnterLeadCardCheckbox.CheckedChanged += new System.EventHandler(this.EnterLeadCard_CheckedChanged);
             // 
-            // CancelButton
+            // CanxButton
             // 
-            this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CancelButton.Location = new System.Drawing.Point(284, 212);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 10;
-            this.CancelButton.TabStop = false;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CanxButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CanxButton.Location = new System.Drawing.Point(284, 212);
+            this.CanxButton.Name = "CanxButton";
+            this.CanxButton.Size = new System.Drawing.Size(75, 23);
+            this.CanxButton.TabIndex = 10;
+            this.CanxButton.TabStop = false;
+            this.CanxButton.Text = "Cancel";
+            this.CanxButton.UseVisualStyleBackColor = true;
+            this.CanxButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // OKButton
             // 
@@ -258,7 +258,7 @@
             this.ClientSize = new System.Drawing.Size(501, 249);
             this.Controls.Add(this.EnterResultsMethodGroup);
             this.Controls.Add(this.OKButton);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.CanxButton);
             this.Controls.Add(this.PlayersGroup);
             this.Controls.Add(this.RankingListGroup);
             this.Controls.Add(this.LeadCardGroup);
@@ -295,7 +295,7 @@
         private System.Windows.Forms.GroupBox LeadCardGroup;
         private System.Windows.Forms.CheckBox ValidateLeadCardCheckbox;
         private System.Windows.Forms.CheckBox EnterLeadCardCheckbox;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button CanxButton;
         private System.Windows.Forms.Button OKButton;
         private System.Windows.Forms.GroupBox EnterResultsMethodGroup;
         private System.Windows.Forms.ComboBox EnterResultsMethodCombobox;

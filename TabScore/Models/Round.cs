@@ -16,7 +16,7 @@ namespace TabScore.Models
         public int South { get; private set; }
         public int West { get; private set; }
 
-        public Round(string dB, int sectionID, int table, int roundNumber, bool individual)
+        public Round(string dB, int sectionID, int tableNumber, int roundNumber, bool individual)
         {
             DB = dB;
             SectionID = sectionID;
@@ -29,7 +29,7 @@ namespace TabScore.Models
                 connection.Open();
                 if (individual)
                 {
-                    string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={roundNumber}";
+                    string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={tableNumber} AND Round={roundNumber}";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = null;
                     try
@@ -56,7 +56,7 @@ namespace TabScore.Models
                 }
                 else  // Not individual
                 {
-                    string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={table} AND Round={roundNumber}";
+                    string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={tableNumber} AND Round={roundNumber}";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = null;
                     try

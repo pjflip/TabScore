@@ -19,15 +19,15 @@ namespace TabScore.Controllers
             if (DBConnectionString == "")return RedirectToAction("Index", "ErrorScreen");
 
             // Check if new round has been added; can't apply to individuals
-            int maxRounds = UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, Convert.ToInt32(Session["SectionID"]));
             Round round = Session["Round"] as Round;
-            if (round.RoundNumber == maxRounds)  // Final round, so no new rounds added
+            Section section = Session["Section"] as Section;
+            if (round.RoundNumber == UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, section.ID))  
             {
-                 return RedirectToAction("Index", "EndScreen");
+                // Final round, so no new rounds added
+                return RedirectToAction("Index", "EndScreen");
             }
             else
             {
-                Session["MaxRounds"] = maxRounds;
                 return RedirectToAction("Index", "ShowMove", new { newRoundNumber = round.RoundNumber + 1 });
             }
         }

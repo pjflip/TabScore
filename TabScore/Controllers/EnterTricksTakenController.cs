@@ -44,7 +44,7 @@ namespace TabScore.Controllers
             else
             {
                 Result result = Session["Result"] as Result;
-                return RedirectToAction("Index", "EnterContract", new { board = result.BoardNumber });
+                return RedirectToAction("Index", "EnterContract", new { boardNumber = result.BoardNumber });
             }
         }
     }

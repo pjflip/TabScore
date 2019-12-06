@@ -5,8 +5,7 @@ namespace TabScore.Models
 {
     public class Move
     {
-        public int Table { get; }
-
+        public int TableNumber { get; }
         public string Direction { get; }
 
         // Constructor for pairs move
@@ -41,7 +40,7 @@ namespace TabScore.Models
 
                 if (queryResult != null)
                 {
-                    Table = Convert.ToInt32(queryResult);
+                    TableNumber = Convert.ToInt32(queryResult);
                     Direction = dir;
                     return;
                 }
@@ -72,7 +71,7 @@ namespace TabScore.Models
 
                     if (queryResult != null)
                     {
-                        Table = Convert.ToInt32(queryResult);
+                        TableNumber = Convert.ToInt32(queryResult);
                         if (dir == "NS")
                         {
                             Direction = "EW";
@@ -84,7 +83,7 @@ namespace TabScore.Models
                     }
                     else   // No move info found - move to sit out
                     {
-                        Table = 0;
+                        TableNumber = 0;
                         Direction = "";
                     }
                 }
@@ -116,7 +115,7 @@ namespace TabScore.Models
                 }
                 if (queryResult != null)
                 {
-                    Table = Convert.ToInt32(queryResult);
+                    TableNumber = Convert.ToInt32(queryResult);
                     Direction = "North";
                     return;
                 }
@@ -137,7 +136,7 @@ namespace TabScore.Models
                 }
                 if (queryResult != null)
                 {
-                    Table = Convert.ToInt32(queryResult);
+                    TableNumber = Convert.ToInt32(queryResult);
                     Direction = "South";
                     return;
                 }
@@ -158,7 +157,7 @@ namespace TabScore.Models
                 }
                 if (queryResult != null)
                 {
-                    Table = Convert.ToInt32(queryResult);
+                    TableNumber = Convert.ToInt32(queryResult);
                     Direction = "East";
                     return;
                 }
@@ -179,13 +178,13 @@ namespace TabScore.Models
                 }
                 if (queryResult != null)
                 {
-                    Table = Convert.ToInt32(queryResult);
+                    TableNumber = Convert.ToInt32(queryResult);
                     Direction = "West";
                     return;
                 }
                 else   // No move info found - move to sit out
                 {
-                    Table = 0;
+                    TableNumber = 0;
                     Direction = "";
                     return;
                 }

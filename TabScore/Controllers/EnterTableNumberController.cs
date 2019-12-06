@@ -8,7 +8,9 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            Session["Header"] = $"Section {Session["SectionLetter"]}";
+            Section section = Session["Section"] as Section;
+            Session["Header"] = $"Section {section.Letter}";
+            TempData["NumTables"] = section.Tables;
             ViewData["BackButton"] = "FALSE";
             return View();
         }
@@ -18,15 +20,16 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Table table = new Table(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(tableNumber));
+            Section section = Session["Section"] as Section;
+            Table table = new Table(DBConnectionString, section.ID, Convert.ToInt32(tableNumber));
             if (confirm == "TRUE" || (table.LogonStatus == 2))     // Status=2 means table not logged on
             {
-                Session["Table"] = tableNumber;
+                Session["TableNumber"] = tableNumber;
                 table.Logon(DBConnectionString);
 
                 // Check if results data exist - set round number accordingly and create round infp
-                int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]));
-                Session["Round"] = new Round(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]), lastRoundWithResults, Convert.ToBoolean(Session["IndividualEvent"]));
+                int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]));
+                Session["Round"] = new Round(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]), lastRoundWithResults, Convert.ToBoolean(Session["IndividualEvent"]));
 
                 if (lastRoundWithResults == 1 || Settings.GetSetting<bool>(DBConnectionString, SettingName.NumberEntryEachRound))
                 {

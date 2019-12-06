@@ -15,15 +15,17 @@ namespace TabScore.Controllers
             Session["Result"] = null;
 
             Round round = Session["Round"] as Round;
-            ResultsList resultsList = new ResultsList(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToInt32(Session["Table"]), round.RoundNumber, round.LowBoard, round.HighBoard);
+            Section section = Session["Section"] as Section;
+
+            ResultsList resultsList = new ResultsList(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]), round.RoundNumber, round.LowBoard, round.HighBoard);
 
             if (Convert.ToBoolean(Session["IndividualEvent"]))
             {
-                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round.RoundNumber} - {round.PairNS}+{round.South} v {round.PairEW}+{round.West}";
+                Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]} - Round {round.RoundNumber} - {round.PairNS}+{round.South} v {round.PairEW}+{round.West}";
             }
             else
             {
-                Session["Header"] = $"Table {Session["SectionLetter"]}{Session["Table"]} - Round {round.RoundNumber} - NS {round.PairNS} v EW {round.PairEW}";
+                Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]} - Round {round.RoundNumber} - NS {round.PairNS} v EW {round.PairEW}";
             }
             ViewData["BackButton"] = "FALSE";
 

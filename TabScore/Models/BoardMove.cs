@@ -5,15 +5,15 @@ namespace TabScore.Models
 {
     public class BoardMove
     {
-        public int Table { get; private set; }
+        public int TableNumber { get; private set; }
 
-        public BoardMove(string DB, int sectionID, int round, int table, int lowBoard)
+        public BoardMove(string DB, int sectionID, int newRoundNumber, int tableNumber, int lowBoard)
         {
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 // Get a list of all possible tables to which boards could move
                 List<int> tableList = new List<int>();
-                string SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND LowBoard={lowBoard}";
+                string SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={newRoundNumber} AND LowBoard={lowBoard}";
                 connection.Open();
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
@@ -38,28 +38,28 @@ namespace TabScore.Models
                 if (tableList.Count == 0)
                 {
                     // No table, so move to relay table
-                    Table = 0;
+                    TableNumber = 0;
                 }
                 else if (tableList.Count == 1)
                 {
                     // Just one table, so use it
-                    Table = tableList[0];
+                    TableNumber = tableList[0];
                 }
                 else
                 {
                     // Find the next table down to which the boards could move
-                    for (int t = table; t > 0; t--)
+                    for (int t = tableNumber; t > 0; t--)
                     {
                         if (tableList.Contains(t))
                         {
-                            Table = t;
+                            TableNumber = t;
                             return;
                         }
                     }
-                    Table = 0;
+                    TableNumber = 0;
                     foreach (int t in tableList)  // Next table down must be highest table number in the list
                     {
-                        if (t > Table) Table = t;
+                        if (t > TableNumber) TableNumber = t;
                     }
                 }
             }

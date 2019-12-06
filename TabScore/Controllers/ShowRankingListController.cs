@@ -12,13 +12,14 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Round round = Session["Round"] as Round;
+            Section section = Session["Section"] as Section;
             if (round.RoundNumber > 1)  // Show ranking list only from round 2 onwards
             {
                 int showRankingSetting = Settings.GetSetting<int>(DBConnectionString, SettingName.ShowRanking);
                 if (showRankingSetting == 1)
                 {
-                    RankingList rankingList = new RankingList(DBConnectionString, Convert.ToInt32(Session["SectionID"]), Convert.ToBoolean(Session["IndividualEvent"]));
-                    if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0" && rankingList[0].Score != "50")
+                    RankingList rankingList = new RankingList(DBConnectionString, section.ID, Convert.ToBoolean(Session["IndividualEvent"]));
+                    if (rankingList != null && rankingList.Count != 0 && rankingList[0].ScoreDecimal != 0.0 && rankingList[0].ScoreDecimal != 50.0)
                     {
                         rankingList.RoundNumber = round.RoundNumber;
                         rankingList.PairNS = round.PairNS;

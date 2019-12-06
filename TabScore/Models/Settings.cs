@@ -56,7 +56,7 @@ namespace TabScore.Models
 
         public static T GetSetting<T>(string DB, SettingName settingName)
         {
-            T settingValue = default(T);
+            T settingValue = default (T);
             SettingType setting = settingsList.Find(x => x.name.Equals(settingName));
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
