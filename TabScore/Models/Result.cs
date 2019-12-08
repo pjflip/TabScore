@@ -6,9 +6,9 @@ namespace TabScore.Models
 {
     public class Result
     {
-        public int SectionID { get; set; }
-        public int TableNumber { get; set; }
-        public int RoundNumber { get; set; }
+        public int SectionID { get; private set; }
+        public int TableNumber { get; private set; }
+        public int RoundNumber { get; private set; }
         public int BoardNumber { get; set; }
         public int PairNS { get; set; }
         public int South { get; set; }
@@ -19,15 +19,88 @@ namespace TabScore.Models
         public string ContractSuit { get; set; }
         public string ContractX { get; set; }
         public string LeadCard { get; set; }
+        public string Remarks { get; set; }
         public int MPNS { get; set; }
         public int MPEW { get; set; }
         public int MPMax { get; set; }
+
+        // Basic constructor - used to create traveller and ranking list
+        public Result() { }
+
+        // Database read constructor 
+        public Result(string DB, int sectionID, int tableNumber, int roundNumber, int boardNumber)
+        {
+            SectionID = sectionID;
+            TableNumber = tableNumber;
+            RoundNumber = roundNumber;
+            BoardNumber = boardNumber;
+            using (OdbcConnection connection = new OdbcConnection(DB))
+            {
+                connection.Open();
+                string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard, Remarks FROM ReceivedData WHERE Section={SectionID} AND [Table]={TableNumber} AND Round={RoundNumber} AND Board={BoardNumber}";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader = null;
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            Remarks = reader.GetString(4);
+                            if (Remarks == "Not played")
+                            {
+                                ContractLevel = -1;
+                                ContractSuit = "";
+                                ContractX = "NONE";
+                                NSEW = "";
+                                TricksTakenNumber = -1;
+                                LeadCard = "";
+                            }
+                            else
+                            {
+                                string temp = reader.GetString(1);
+                                Contract = temp;   // Sets ContractLevel, etc
+                                if (ContractLevel == 0)  // Passed out
+                                {
+                                    NSEW = "";
+                                    TricksTakenNumber = -1;
+                                    LeadCard = "";
+                                }
+                                else
+                                {
+                                    NSEW = reader.GetString(0);
+                                    TricksTakenSymbol = reader.GetString(2);
+                                    LeadCard = reader.GetString(3);
+                                }
+                            }
+                        }
+                        else  // No result in database
+                        {
+                            ContractLevel = -1;
+                            ContractSuit = "";
+                            ContractX = "NONE";
+                            NSEW = "";
+                            TricksTakenNumber = -1;
+                            LeadCard = "";
+                            Remarks = "";
+                        }
+                    });
+                }
+                finally
+                {
+                    reader.Close();
+                    cmd.Dispose();
+                }
+            }
+        }
+
 
         public string Contract
         {
             get
             {
-                if (ContractLevel < 0)
+                if (ContractLevel < 0)  // No result or board not played
                 {
                     return "";
                 }
@@ -47,13 +120,17 @@ namespace TabScore.Models
             }
             set
             {
-                if (value == "PASS")
+                if (value.Length <= 2)  // Board not played or corrupt data
+                {
+                    ContractLevel = -1;
+                }
+                else if (value == "PASS")
                 {
                     ContractLevel = 0;
                     ContractSuit = "";
                     ContractX = "";
                 }
-                else
+                else  // Contract (hopefully) contains a valid contract
                 {
                     string[] temp = value.Split(' ');
                     ContractLevel = Convert.ToInt32(temp[0]);
@@ -120,11 +197,15 @@ namespace TabScore.Models
 
         public string DisplayContract()
         {
-            if (ContractLevel < 0)
+            if (Remarks == "Not played") 
+            {
+                return "<a style=\"color:red\">Not played</a>";
+            }
+            else if (ContractLevel < 0)
             {
                 return "";
             }
-            if (ContractLevel == 0)
+            else if (ContractLevel == 0)
             {
                 return "<a style=\"color:darkgreen\">PASSed Out</a>";
             }
@@ -217,7 +298,7 @@ namespace TabScore.Models
         public void CalculateScore()
         {
             Score = 0;
-            if (ContractLevel == 0) return;
+            if (ContractLevel <= 0) return;
 
             bool vul;
             if (NSEW == "N" || NSEW == "S")
@@ -388,10 +469,10 @@ namespace TabScore.Models
             if (NSEW == "E" || NSEW == "W") Score = -Score;
         }
 
-        public void WriteToDB(string DB, bool individual)
+        public void UpdateDB(string DB, bool individual)
         {
             int declarer;
-            if (ContractLevel == 0)
+            if (ContractLevel <= 0)
             {
                 declarer = 0;
             }
@@ -437,11 +518,11 @@ namespace TabScore.Models
                 // Add new result
                 if (individual)
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{Remarks}', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
                 }
                 else
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{Remarks}', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
                 }
                 OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
                 try
@@ -454,46 +535,6 @@ namespace TabScore.Models
                 finally
                 {
                     cmd2.Dispose();
-                }
-            }
-        }
-        
-        public void ReadFromDB(string DB)
-        {
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                connection.Open();
-                string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard FROM ReceivedData WHERE Section={SectionID} AND [Table]={TableNumber} AND Round={RoundNumber} AND Board={BoardNumber}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                OdbcDataReader reader = null;
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        reader = cmd.ExecuteReader();
-                        if (reader.Read())
-                        {
-                            string temp = reader.GetString(1);
-                            Contract = temp;
-                            if (ContractLevel == 0)
-                            {
-                                NSEW = "";
-                                TricksTakenNumber = -1;
-                                LeadCard = "";
-                            }
-                            else
-                            {
-                                NSEW = reader.GetString(0);
-                                TricksTakenSymbol = reader.GetString(2);
-                                LeadCard = reader.GetString(3);
-                            }
-                        }
-                    });
-                }
-                finally
-                {
-                    reader.Close();
-                    cmd.Dispose();
                 }
             }
         }

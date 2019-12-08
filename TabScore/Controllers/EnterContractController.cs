@@ -15,29 +15,18 @@ namespace TabScore.Controllers
             Result result = Session["Result"] as Result;
             Section section = Session["Section"] as Section;
 
-            if (result == null || result.BoardNumber != boardNumber)   // No session result data for this board, so create new result object and check database
+            if (result == null || result.BoardNumber != boardNumber)   // No session result data for this board
             {
-                result = new Result
+                result = new Result(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]), round.RoundNumber, boardNumber)
                 {
-                    SectionID = Convert.ToInt32(section.ID),
-                    TableNumber = Convert.ToInt32(Session["TableNumber"]),
-                    RoundNumber = round.RoundNumber,
-                    BoardNumber = boardNumber,
                     PairNS = round.PairNS,
-                    PairEW = round.PairEW,
-                    ContractLevel = -1,
-                    ContractSuit = "",
-                    ContractX = "NONE",
-                    NSEW = "",
-                    TricksTakenNumber = -1,
-                    LeadCard = ""
+                    PairEW = round.PairEW
                 };
                 if (Convert.ToBoolean(Session["IndividualEvent"]))
                 {
                     result.South = round.South;
                     result.West = round.West;
                 }
-                result.ReadFromDB(DBConnectionString);
                 Session["Result"] = result;
             }
 
@@ -60,6 +49,7 @@ namespace TabScore.Controllers
             result.ContractSuit = cSuit;
             result.ContractX = cX;
             result.NSEW = cNSEW;
+            result.Remarks = "";
             Session["Result"] = result;
             return RedirectToAction("Index", "EnterLead", new { validateWarning = "Validate" });
         }
@@ -73,8 +63,26 @@ namespace TabScore.Controllers
             result.NSEW = "";
             result.LeadCard = "";
             result.TricksTakenNumber = -1;
+            result.Remarks = "";
             Session["Result"] = result;
             return RedirectToAction("Index", "ConfirmResult");
+        }
+        public ActionResult OKButtonSkip()
+        {
+            Result result = Session["Result"] as Result;
+            result.ContractLevel = -1;
+            result.ContractSuit = "";
+            result.ContractX = "";
+            result.NSEW = "";
+            result.LeadCard = "";
+            result.TricksTakenNumber = -1;
+            result.Remarks = "Not played";
+            Session["Result"] = result;
+
+            string DBConnectionString = Session["DBConnectionString"].ToString();
+            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
+            result.UpdateDB(DBConnectionString, Convert.ToBoolean(Session["IndividualEvent"]));
+            return RedirectToAction("Index", "ShowBoards");
         }
 
         public ActionResult BackButtonClick()

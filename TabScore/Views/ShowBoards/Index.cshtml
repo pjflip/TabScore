@@ -13,14 +13,11 @@
             </p>
         </div>
         <div class="modal-body">
-            <p>Some boards do not have a result entered.  Has the Tournament Director told you to skip these boards and move to the next round?</p>
+            <p>Please enter a result (or Skip = Not played) for every board</p>
         </div>
-        <div class="modal-footer" style="justify-content:space-between">
-            <button class="btn btn-lg btn-danger" ontouchstart="location.href = '@Url.Action("OKButtonClick", "ShowBoards")'">
-                Skip Boards
-            </button>
+        <div class="modal-footer">
             <button class="btn btn-lg btn-success" data-dismiss="modal">
-                Go Back
+                OK <span class="fa fa-check-circle"></span>
             </button>
         </div>
     </div>
@@ -43,7 +40,7 @@
             </h4>
         </div>
         <div class="col-3">
-            @if (Result.ContractLevel == -1)
+            @if (Result.ContractLevel == -1 && Result.Remarks != "Not played")
             {
                 <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + @Result.BoardNumber">
                     Enter

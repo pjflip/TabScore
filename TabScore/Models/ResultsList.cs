@@ -6,22 +6,14 @@ namespace TabScore.Models
     {
         public bool GotAllResults { get; private set; }
 
-        public ResultsList(string DB, int sectionID, int table, int roundNumber, int lowBoard, int highBoard)
+        public ResultsList(string DB, int sectionID, int tableNumber, int roundNumber, int lowBoard, int highBoard)
         {
             int resultCount = 0;
             for (int i = lowBoard; i <= highBoard; i++)
             {
-                Result result = new Result
-                {
-                    SectionID = sectionID,
-                    TableNumber = table,
-                    RoundNumber = roundNumber,
-                    BoardNumber = i,
-                    ContractLevel = -1
-                };
-                result.ReadFromDB(DB);
+                Result result = new Result(DB, sectionID, tableNumber, roundNumber, i);
                 Add(result);
-                if (result.ContractLevel > -1) resultCount++;
+                if (result.ContractLevel > -1 || result.Remarks == "Not played") resultCount++;
             }
             GotAllResults = (resultCount == highBoard - lowBoard + 1);
         }

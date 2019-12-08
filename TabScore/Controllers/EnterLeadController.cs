@@ -10,7 +10,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (!Settings.GetSetting<bool>(DBConnectionString, SettingName.EnterLeadCard))
+            if (!new Settings(DBConnectionString).EnterLeadCard)
             {
                 return RedirectToAction("Index", "EnterTricksTaken");
             }
@@ -34,7 +34,7 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Result result = Session["Result"] as Result;
-            if (validateWarning != "Validate" || !Settings.GetSetting<bool>(DBConnectionString, SettingName.ValidateLeadCard) || UtilityFunctions.ValidateLead(DBConnectionString, result.SectionID, result.BoardNumber, card, result.NSEW))
+            if (validateWarning != "Validate" || !new Settings(DBConnectionString).ValidateLeadCard || UtilityFunctions.ValidateLead(DBConnectionString, result.SectionID, result.BoardNumber, card, result.NSEW))
             {
                 result.LeadCard = card;
                 Session["Result"] = result;

@@ -133,8 +133,7 @@ namespace TabScore.Models
 
         public static string GetNameFromNumber(string DB, string playerNumber)
         {
-            int nameSource = Settings.GetSetting<int>(DB, SettingName.NameSource);
-            switch (nameSource)
+            switch (new Settings(DB).NameSource)
             {
                 case 0:
                     return GetNameFromPlayerNamesTable(DB, playerNumber);

@@ -31,7 +31,7 @@ namespace TabScore.Controllers
                 int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]));
                 Session["Round"] = new Round(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]), lastRoundWithResults, Convert.ToBoolean(Session["IndividualEvent"]));
 
-                if (lastRoundWithResults == 1 || Settings.GetSetting<bool>(DBConnectionString, SettingName.NumberEntryEachRound))
+                if (lastRoundWithResults == 1 || new Settings(DBConnectionString).NumberEntryEachRound)
                 {
                     return RedirectToAction("Index", "ShowPlayerNumbers");
                 }

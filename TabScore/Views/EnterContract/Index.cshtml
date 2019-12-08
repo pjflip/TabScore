@@ -63,6 +63,9 @@
 
 <div class="row mt-4">
     <div class="col-12 text-center">
+        <button id="skip" class="btn btn-outline-danger btn-lg m-1" ontouchstart="setSkip()">
+            Skip
+        </button>
         <button id="pass" class="btn btn-pass btn-lg m-1" ontouchstart="setPass()">
             PASS Out
         </button>
@@ -156,14 +159,19 @@
     var suit = '@Model.ContractSuit';
     var double = '@Model.ContractX';
     var NSEW = '@Model.NSEW';
+    var remarks = '@Model.Remarks'
 
     window.onload = setCurrentSelections();
 
     function setCurrentSelections() {
-        if (number != "-1") {
+        if (remarks == "Not played")
+        {
+            setSkip()
+        }
+        else if (number != "-1") {
             if (number == "0") {
                 setPass()
-            } 
+            }
             else {
                 document.getElementById('n' + number).className = "btn btn-warning btn-lg m-1";
                 document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
@@ -183,7 +191,13 @@
         document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
     }
 
+    function clearSkip() {
+        number = "";
+        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
+    }
+
     function clearNumbers() {
+        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
         document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
         document.getElementById('n1').className = "btn btn-primary btn-lg m-1";
         document.getElementById('n2').className = "btn btn-primary btn-lg m-1";
@@ -215,6 +229,19 @@
         document.getElementById('n' + number).className = "btn btn-warning btn-lg m-1";
     }
 
+    function setSkip() {
+        number = "SKIP";
+        suit = "";
+        double = "NONE";
+        NSEW = "";
+        clearNumbers();
+        clearSuits();
+        clearNSEWs();
+        document.getElementById('X').className = "btn btn-double btn-lg m-1";
+        document.getElementById('XX').className = "btn btn-redouble btn-lg m-1";
+        document.getElementById('skip').className = "btn btn-warning btn-lg m-1";
+    }
+
     function setPass() {
         number = "PASS";
         suit = "";
@@ -232,6 +259,7 @@
         suit = s;
         clearSuits();
         if (number == "PASS") clearPass();
+        if (number == "SKIP") clearSkip();
         document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
     }
 
@@ -239,6 +267,7 @@
         if (double != 'x') {
             double = "x";
             if (number == "PASS") clearPass();
+            if (number == "SKIP") clearSkip();
             document.getElementById('X').className = "btn btn-warning btn-lg m-1";
             document.getElementById('XX').className = "btn btn-redouble btn-lg m-1";
         }
@@ -252,6 +281,7 @@
         if (double != 'xx') {
             double = "xx";
             if (number == "PASS") clearPass();
+            if (number == "SKIP") clearSkip();
             document.getElementById('XX').className = "btn btn-warning btn-lg m-1";
             document.getElementById('X').className = "btn btn-double btn-lg m-1";
         }
@@ -265,12 +295,16 @@
         NSEW = d;
         clearNSEWs();
         if (number == "PASS") clearPass();
+        if (number == "SKIP") clearSkip();
         document.getElementById('d' + NSEW).className = "btn btn-warning btn-lg m-1";
     }
 
     function validateOK() {
         if (number == "PASS") {
-            location.href = '@Url.Action("OKButtonPASS", "EnterContract")';
+            location.href = '@Url.Action("OKButtonPass", "EnterContract")';
+        }
+        else if (number == "SKIP") {
+            location.href = '@Url.Action("OKButtonSkip", "EnterContract")';
         }
         else if (number != "" && suit != "" && NSEW != "") {
             location.href = '@Url.Action("OKButtonContract", "EnterContract")?cLevel=' + number + '&cSuit=' + suit + '&cX=' + double + '&cNSEW=' + NSEW;

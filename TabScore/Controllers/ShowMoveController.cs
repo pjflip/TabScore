@@ -14,7 +14,7 @@ namespace TabScore.Controllers
             Section section = Session["Section"] as Section;
             if (newRoundNumber > UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, section.ID))  // Session complete
             {
-                if (Settings.GetSetting<int>(DBConnectionString, SettingName.ShowRanking) == 2)
+                if (new Settings(DBConnectionString).ShowRanking == 2)
                 {
                     return RedirectToAction("Index", "ShowFinalRankingList");
                 }
@@ -116,7 +116,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (Settings.GetSetting<bool>(DBConnectionString, SettingName.NumberEntryEachRound))
+            if (new Settings(DBConnectionString).NumberEntryEachRound)
             {
                 return RedirectToAction("Index", "ShowPlayerNumbers");
             }

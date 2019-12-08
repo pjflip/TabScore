@@ -22,7 +22,7 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Result result = Session["Result"] as Result;
-            result.WriteToDB(DBConnectionString, Convert.ToBoolean(Session["IndividualEvent"]));
+            result.UpdateDB(DBConnectionString, Convert.ToBoolean(Session["IndividualEvent"]));
             return RedirectToAction("Index", "ShowTraveller");
         }
 

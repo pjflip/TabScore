@@ -11,7 +11,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (!Settings.GetSetting<bool>(DBConnectionString, SettingName.ShowResults))
+            if (!new Settings(DBConnectionString).ShowResults)
             {
                 return RedirectToAction("Index", "ShowBoards");
             }

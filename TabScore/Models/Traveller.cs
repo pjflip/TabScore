@@ -68,7 +68,7 @@ namespace TabScore.Models
                                     TricksTakenSymbol = reader.GetString(5)
                                 };
                             }
-                            if (result.Contract.Length > 2)  // Testing for corrupt ReceivedData table
+                            if (result.Contract.Length > 2)  // Testing for unplayed boards and corrupt ReceivedData table
                             {
                                 result.CalculateScore();
                                 Add(result);
@@ -87,8 +87,9 @@ namespace TabScore.Models
                 }
             };
 
+            Settings settings = new Settings(DB);
             Sort((x, y) => y.Score.CompareTo(x.Score));
-            if (Settings.GetSetting<bool>(DB, SettingName.ShowPercentage))
+            if (settings.ShowPercentage)
             {
                 if (Count == 1)
                 {
@@ -105,7 +106,7 @@ namespace TabScore.Models
                 PercentageNS = -1;   // Don't show percentage
             }
 
-            if (Settings.GetSetting<bool>(DB, SettingName.ShowHandRecord))
+            if (settings.ShowHandRecord)
             {
                 HandRecord hr = new HandRecord(DB, sectionID, boardNumber);
                 if (hr.NorthSpades == "###")

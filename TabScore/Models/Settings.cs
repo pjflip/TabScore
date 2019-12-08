@@ -1,105 +1,64 @@
-﻿using System;
-using System.Data.Odbc;
-using System.Collections.Generic;
+﻿using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public enum SettingName
+    public class Settings
     {
-        ShowResults,
-        ShowPercentage,
-        EnterLeadCard,
-        ValidateLeadCard,
-        ShowRanking,
-        EnterResultsMethod,
-        ShowHandRecord,
-        NumberEntryEachRound,
-        NameSource
-    }
+        public bool ShowResults { get; private set; }
+        public bool ShowPercentage { get; private set; }
+        public bool EnterLeadCard { get; private set; }
+        public bool ValidateLeadCard { get; private set; }
+        public int ShowRanking { get; private set; }
+        public int EnterResultsMethod { get; private set; }
+        public bool ShowHandRecord { get; private set; }
+        public bool NumberEntryEachRound { get; private set; }
+        public int NameSource { get; private set; }
 
-    public class SettingType
-    {
-        public readonly SettingName name;
-        public readonly string databaseName;
-        public readonly bool defaultValueBool;
-        public readonly int defaultValueInt;
-
-        public SettingType(SettingName name, string DbName, bool defaultValue)
+        public Settings(string DB)
         {
-            this.name = name;
-            databaseName = DbName;
-            defaultValueBool = defaultValue;
-        }
-
-        public SettingType(SettingName name, string DbName, int defaultValue)
-        {
-            this.name = name;
-            databaseName = DbName;
-            defaultValueInt = defaultValue;
-        }
-    }
-
-    public static class Settings
-    {
-        public static readonly List<SettingType> settingsList = new List<SettingType>()
-        {
-            new SettingType(SettingName.ShowResults,          "ShowResults",              true),
-            new SettingType(SettingName.ShowPercentage,       "ShowPercentage",           true),
-            new SettingType(SettingName.EnterLeadCard,        "LeadCard",                 true),
-            new SettingType(SettingName.ValidateLeadCard,     "BM2ValidateLeadCard",      true),
-            new SettingType(SettingName.ShowRanking,          "BM2Ranking",               1),
-            new SettingType(SettingName.EnterResultsMethod,   "EnterResultsMethod",       1),
-            new SettingType(SettingName.ShowHandRecord,       "BM2ViewHandRecord",        true),
-            new SettingType(SettingName.NumberEntryEachRound, "BM2NumberEntryEachRound",  true),
-            new SettingType(SettingName.NameSource,           "BM2NameSource",            0)
-        };
-
-        public static T GetSetting<T>(string DB, SettingName settingName)
-        {
-            T settingValue = default (T);
-            SettingType setting = settingsList.Find(x => x.name.Equals(settingName));
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
-                object queryResult = null;
-                string SQLString = $"SELECT {setting.databaseName} FROM Settings";
+                string SQLString = "SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, EnterResultsMethod, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader = null;
                 try
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        queryResult = cmd.ExecuteScalar();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            ShowResults = reader.GetBoolean(0);
+                            ShowPercentage = reader.GetBoolean(1);
+                            EnterLeadCard = reader.GetBoolean(2);
+                            ValidateLeadCard = reader.GetBoolean(3);
+                            ShowRanking = reader.GetInt32(4);
+                            EnterResultsMethod = reader.GetInt32(5);
+                            ShowHandRecord = reader.GetBoolean(6);
+                            NumberEntryEachRound = reader.GetBoolean(7);
+                            NameSource = reader.GetInt32(8);
+                        }
                     });
+                }
+                catch
+                {
+                    ShowResults = true;
+                    ShowPercentage = true;
+                    EnterLeadCard = true;
+                    ValidateLeadCard = true;
+                    ShowRanking = 1;
+                    EnterResultsMethod = 1;
+                    ShowHandRecord = true;
+                    NumberEntryEachRound = true;
+                    NameSource = 0;
                 }
                 finally
                 {
+                    reader.Close();
                     cmd.Dispose();
                 }
-                if (settingValue is bool)
-                {
-                    if (queryResult == null)
-                    {
-                        settingValue = (T)(object)setting.defaultValueBool;
-                    }
-                    else
-                    {
-                        settingValue = (T)(object)Convert.ToBoolean(queryResult);
-                    }
-                }
-                else
-                {
-                    if (queryResult == null)
-                    {
-                        settingValue = (T)(object)setting.defaultValueInt;
-                    }
-                    else
-                    {
-                        settingValue = (T)(object)Convert.ToInt32(queryResult);
-                    }
-                }
             }
-            return settingValue;
         }
     }
 }
-
