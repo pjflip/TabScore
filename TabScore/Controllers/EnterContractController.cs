@@ -49,7 +49,6 @@ namespace TabScore.Controllers
             result.ContractSuit = cSuit;
             result.ContractX = cX;
             result.NSEW = cNSEW;
-            result.Remarks = "";
             Session["Result"] = result;
             return RedirectToAction("Index", "EnterLead", new { validateWarning = "Validate" });
         }
@@ -63,7 +62,6 @@ namespace TabScore.Controllers
             result.NSEW = "";
             result.LeadCard = "";
             result.TricksTakenNumber = -1;
-            result.Remarks = "";
             Session["Result"] = result;
             return RedirectToAction("Index", "ConfirmResult");
         }
@@ -76,7 +74,6 @@ namespace TabScore.Controllers
             result.NSEW = "";
             result.LeadCard = "";
             result.TricksTakenNumber = -1;
-            result.Remarks = "Not played";
             Session["Result"] = result;
 
             string DBConnectionString = Session["DBConnectionString"].ToString();

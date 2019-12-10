@@ -19,7 +19,6 @@ namespace TabScore.Models
         public string ContractSuit { get; set; }
         public string ContractX { get; set; }
         public string LeadCard { get; set; }
-        public string Remarks { get; set; }
         public int MPNS { get; set; }
         public int MPEW { get; set; }
         public int MPMax { get; set; }
@@ -47,8 +46,7 @@ namespace TabScore.Models
                         reader = cmd.ExecuteReader();
                         if (reader.Read())
                         {
-                            Remarks = reader.GetString(4);
-                            if (Remarks == "Not played")
+                            if (reader.GetString(4) == "Not played")
                             {
                                 ContractLevel = -1;
                                 ContractSuit = "";
@@ -77,13 +75,12 @@ namespace TabScore.Models
                         }
                         else  // No result in database
                         {
-                            ContractLevel = -1;
+                            ContractLevel = -999;
                             ContractSuit = "";
                             ContractX = "NONE";
                             NSEW = "";
                             TricksTakenNumber = -1;
                             LeadCard = "";
-                            Remarks = "";
                         }
                     });
                 }
@@ -122,13 +119,13 @@ namespace TabScore.Models
             {
                 if (value.Length <= 2)  // Board not played or corrupt data
                 {
-                    ContractLevel = -1;
+                    ContractLevel = -999;
                 }
                 else if (value == "PASS")
                 {
                     ContractLevel = 0;
                     ContractSuit = "";
-                    ContractX = "";
+                    ContractX = "NONE";
                 }
                 else  // Contract (hopefully) contains a valid contract
                 {
@@ -197,13 +194,13 @@ namespace TabScore.Models
 
         public string DisplayContract()
         {
-            if (Remarks == "Not played") 
-            {
-                return "<a style=\"color:red\">Not played</a>";
-            }
-            else if (ContractLevel < 0)
+            if (ContractLevel == -999)  // No result entry yet
             {
                 return "";
+            }
+            else if (ContractLevel == -1)  // Board not played
+            {
+                return "<a style=\"color:red\">Not played</a>";
             }
             else if (ContractLevel == 0)
             {
@@ -266,7 +263,6 @@ namespace TabScore.Models
 
         public string DisplayTravellerContract()
         {
-            if (ContractLevel < 0) return "";
             if (ContractLevel == 0) return "<a style=\"color:darkgreen\">PASS</a>";
             StringBuilder s = new StringBuilder(ContractLevel.ToString());
             switch (ContractSuit) {
@@ -516,13 +512,18 @@ namespace TabScore.Models
                 }
 
                 // Add new result
+                string remarks = "";
+                if (ContractLevel == -1)
+                {
+                    remarks = "Not played";
+                }
                 if (individual)
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{Remarks}', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
                 }
                 else
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{Remarks}', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
                 }
                 OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
                 try

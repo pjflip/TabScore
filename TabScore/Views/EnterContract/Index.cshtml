@@ -17,13 +17,19 @@
         background-color:crimson;
         color:white;
     }
-    .btn-redouble {
-        background-color:darkblue;
+    .btn-double:hover {
         color:white;
     }
+    .btn-redouble {
+        background-color: darkblue;
+        color: white;
+    }
+    .btn-redouble:hover {
+        color: white;
+    }
     .btn-declarer {
-        background-color:lightslategrey;
-        color:white;
+        background-color: lightslategrey;
+        color: white;
     }
 </style>
 
@@ -69,10 +75,10 @@
         <button id="pass" class="btn btn-pass btn-lg m-1" ontouchstart="setPass()">
             PASS Out
         </button>
-        <button id="n1" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumber('1')">
+        <button id="n1" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(1)">
             1
         </button>
-        <button id="n2" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumber('2')">
+        <button id="n2" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(2)">
             2
         </button>
     </div>
@@ -80,19 +86,19 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="n3" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumber('3')">
+        <button id="n3" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(3)">
             3
         </button>
-        <button id="n4" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumber('4')">
+        <button id="n4" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(4)">
             4
         </button>
-        <button id="n5" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumber('5')">
+        <button id="n5" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(5)">
             5
         </button>
-        <button id="n6" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumber('6')">
+        <button id="n6" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(6)">
             6
         </button>
-        <button id="n7" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumber('7')">
+        <button id="n7" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(7)">
             7
         </button>
     </div>
@@ -155,50 +161,35 @@
 </div>
 
 <script>
-    var number = '@Model.ContractLevel';
+    var level = @Model.ContractLevel;
     var suit = '@Model.ContractSuit';
     var double = '@Model.ContractX';
     var NSEW = '@Model.NSEW';
-    var remarks = '@Model.Remarks'
 
     window.onload = setCurrentSelections();
 
     function setCurrentSelections() {
-        if (remarks == "Not played")
+        if (level == -1)
         {
             setSkip()
         }
-        else if (number != "-1") {
-            if (number == "0") {
-                setPass()
+        else if (level == 0) {
+            setPass()
+        }
+        else if (level != -999) {
+            document.getElementById('n' + level.toString()).className = "btn btn-warning btn-lg m-1";
+            document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
+            document.getElementById('d' + NSEW).className = "btn btn-warning btn-lg m-1";
+            if (double == 'x') {
+                document.getElementById('X').className = "btn btn-warning btn-lg m-1";
             }
-            else {
-                document.getElementById('n' + number).className = "btn btn-warning btn-lg m-1";
-                document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
-                document.getElementById('d' + NSEW).className = "btn btn-warning btn-lg m-1";
-                if (double == 'x') {
-                    document.getElementById('X').className = "btn btn-warning btn-lg m-1";
-                }
-                else if (double == 'xx') {
-                    document.getElementById('XX').className = "btn btn-warning btn-lg m-1";
-                }
+            else if (double == 'xx') {
+                document.getElementById('XX').className = "btn btn-warning btn-lg m-1";
             }
         }
     }
 
-    function clearPass() {
-        number = "";
-        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
-    }
-
-    function clearSkip() {
-        number = "";
-        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
-    }
-
     function clearNumbers() {
-        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
-        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
         document.getElementById('n1').className = "btn btn-primary btn-lg m-1";
         document.getElementById('n2').className = "btn btn-primary btn-lg m-1";
         document.getElementById('n3').className = "btn btn-primary btn-lg m-1";
@@ -223,17 +214,20 @@
         document.getElementById('dW').className = "btn btn-declarer btn-lg m-1";
     }
 
-    function setNumber(n) {
-        number = n;
+    function setLevel(n) {
+        level = n;
+        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
+        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
         clearNumbers();
-        document.getElementById('n' + number).className = "btn btn-warning btn-lg m-1";
+        document.getElementById('n' + level.toString()).className = "btn btn-warning btn-lg m-1";
     }
 
     function setSkip() {
-        number = "SKIP";
+        level = -1;
         suit = "";
         double = "NONE";
         NSEW = "";
+        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
         clearNumbers();
         clearSuits();
         clearNSEWs();
@@ -243,10 +237,11 @@
     }
 
     function setPass() {
-        number = "PASS";
+        level = 0;
         suit = "";
         double = "NONE";
         NSEW = "";
+        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
         clearNumbers();
         clearSuits();
         clearNSEWs();
@@ -258,16 +253,16 @@
     function setSuit(s) {
         suit = s;
         clearSuits();
-        if (number == "PASS") clearPass();
-        if (number == "SKIP") clearSkip();
+        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
+        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
         document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
     }
 
     function setX() {
         if (double != 'x') {
             double = "x";
-            if (number == "PASS") clearPass();
-            if (number == "SKIP") clearSkip();
+            document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
+            document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
             document.getElementById('X').className = "btn btn-warning btn-lg m-1";
             document.getElementById('XX').className = "btn btn-redouble btn-lg m-1";
         }
@@ -280,8 +275,8 @@
     function setXX() {
         if (double != 'xx') {
             double = "xx";
-            if (number == "PASS") clearPass();
-            if (number == "SKIP") clearSkip();
+            document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
+            document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
             document.getElementById('XX').className = "btn btn-warning btn-lg m-1";
             document.getElementById('X').className = "btn btn-double btn-lg m-1";
         }
@@ -294,20 +289,20 @@
     function setNSEW(d) {
         NSEW = d;
         clearNSEWs();
-        if (number == "PASS") clearPass();
-        if (number == "SKIP") clearSkip();
+        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
+        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
         document.getElementById('d' + NSEW).className = "btn btn-warning btn-lg m-1";
     }
 
     function validateOK() {
-        if (number == "PASS") {
+        if (level == 0) {
             location.href = '@Url.Action("OKButtonPass", "EnterContract")';
         }
-        else if (number == "SKIP") {
+        else if (level == -1) {
             location.href = '@Url.Action("OKButtonSkip", "EnterContract")';
         }
-        else if (number != "" && suit != "" && NSEW != "") {
-            location.href = '@Url.Action("OKButtonContract", "EnterContract")?cLevel=' + number + '&cSuit=' + suit + '&cX=' + double + '&cNSEW=' + NSEW;
+        else if (level != -999 && suit != "" && NSEW != "") {
+            location.href = '@Url.Action("OKButtonContract", "EnterContract")?cLevel=' + level.toString() + '&cSuit=' + suit + '&cX=' + double + '&cNSEW=' + NSEW;
         }
         else {
             $("#noContractModal").modal();

@@ -13,7 +13,7 @@ namespace TabScore.Models
             {
                 Result result = new Result(DB, sectionID, tableNumber, roundNumber, i);
                 Add(result);
-                if (result.ContractLevel > -1 || result.Remarks == "Not played") resultCount++;
+                if (result.ContractLevel != -999) resultCount++;
             }
             GotAllResults = (resultCount == highBoard - lowBoard + 1);
         }

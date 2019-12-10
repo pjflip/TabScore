@@ -13,7 +13,7 @@
             </p>
         </div>
         <div class="modal-body">
-            <p>Please enter a result (or SKIP = Not played) for every board</p>
+            <p>Please enter a result (or Skip = Not played) for every board</p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-lg btn-success" data-dismiss="modal">
@@ -40,7 +40,7 @@
             </h4>
         </div>
         <div class="col-3">
-            @if (Result.ContractLevel == -1 && Result.Remarks != "Not played")
+            @if (Result.ContractLevel == -999)
             {
                 <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + @Result.BoardNumber">
                     Enter
