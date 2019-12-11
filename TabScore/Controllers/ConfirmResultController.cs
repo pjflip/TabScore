@@ -21,8 +21,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Result result = Session["Result"] as Result;
-            result.UpdateDB(DBConnectionString, Convert.ToBoolean(Session["IndividualEvent"]));
+            (Session["Result"] as Result).UpdateDB(DBConnectionString, Convert.ToBoolean(Session["IndividualEvent"]));
             return RedirectToAction("Index", "ShowTraveller");
         }
 

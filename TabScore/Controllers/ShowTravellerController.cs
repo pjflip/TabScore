@@ -17,8 +17,7 @@ namespace TabScore.Controllers
             }
 
             Result result = Session["Result"] as Result;
-            Section section = Session["Section"] as Section;
-            Traveller traveller = new Traveller(DBConnectionString, section.ID, result.BoardNumber, result.PairNS, Convert.ToBoolean(Session["IndividualEvent"]));
+            Traveller traveller = new Traveller(DBConnectionString, (Session["Section"] as Section).ID, result.BoardNumber, result.PairNS, Convert.ToBoolean(Session["IndividualEvent"]));
             ViewData["BackButton"] = "TRUE";
             return View(traveller);
         }

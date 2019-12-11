@@ -6,20 +6,20 @@ namespace TabScore.Models
     public class Table
     {
         public int LogonStatus { get; private set; }
-
-        private readonly int TableNo;
+        
+        private readonly int TableNumber;
         private readonly int SectionID;
 
-        public Table(string DB, int sectionID, int table)
+        public Table(string DB, int sectionID, int tableNumber)
         {
-            TableNo = table;
+            TableNumber = tableNumber;
             SectionID = sectionID;
 
             object queryResult = null;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
-                string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section={sectionID} AND [Table]={table}";
+                string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section={sectionID} AND [Table]={tableNumber}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
@@ -41,7 +41,7 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 connection.Open();
-                string SQLString = $"UPDATE Tables SET LogOnOff=1 WHERE Section={SectionID} AND [Table]={TableNo}";
+                string SQLString = $"UPDATE Tables SET LogOnOff=1 WHERE Section={SectionID} AND [Table]={TableNumber}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {

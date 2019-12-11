@@ -16,8 +16,7 @@ namespace TabScore.Controllers
             {
                if (new Settings(DBConnectionString).ShowRanking == 1)
                 {
-                    Section section = Session["Section"] as Section;
-                    RankingList rankingList = new RankingList(DBConnectionString, section.ID, Convert.ToBoolean(Session["IndividualEvent"]));
+                    RankingList rankingList = new RankingList(DBConnectionString, (Session["Section"] as Section).ID, Convert.ToBoolean(Session["IndividualEvent"]));
                     if (rankingList != null && rankingList.Count != 0 && rankingList[0].ScoreDecimal != 0.0 && rankingList[0].ScoreDecimal != 50.0)
                     {
                         rankingList.RoundNumber = round.RoundNumber;

@@ -10,13 +10,13 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Result result = Session["Result"] as Result;
-            Section section = Session["Section"] as Section;
+            int boardNumber = (Session["Result"] as Result).BoardNumber;
+            int sectionID = (Session["Section"] as Section).ID;
 
-            HandRecord handRecord = new HandRecord(DBConnectionString, section.ID, result.BoardNumber);
-            if (handRecord.NorthSpades == "###" && section.ID != 1)    // Use default Section 1 hand records)
+            HandRecord handRecord = new HandRecord(DBConnectionString, sectionID, boardNumber);
+            if (handRecord.NorthSpades == "###" && sectionID != 1)    // Use default Section 1 hand records)
             {
-                handRecord = new HandRecord(DBConnectionString, 1, result.BoardNumber);
+                handRecord = new HandRecord(DBConnectionString, 1, boardNumber);
             }
 
             ViewData["BackButton"] = "FALSE";

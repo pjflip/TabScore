@@ -92,7 +92,6 @@ namespace TabScore.Models
             }
         }
 
-
         public string Contract
         {
             get

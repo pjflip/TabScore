@@ -5,188 +5,192 @@ namespace TabScore.Models
 {
     public class Move
     {
-        public int TableNumber { get; }
-        public string Direction { get; }
+        public int NewTableNumber { get; private set; }
+        public string Direction { get; private set; }
+        public string NewDirection { get; private set; }
+        public bool Stay { get; private set; }
+        public int PairNumber { get; private set; }
 
-        // Constructor for pairs move
-        public Move(string DB, int sectionID, int round, int pairNumber, string dir)
+        public Move(string DB, int sectionID, int newRoundNumber, int tableNumber, int pairNumber, string direction)
         {
+            PairNumber = pairNumber;
+            Direction = direction;
             using (OdbcConnection connection = new OdbcConnection(DB))
             {
                 object queryResult = null;
                 connection.Open();
                 string SQLString;
-                if (dir == "NS")
-                {
-                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND NSPair={pairNumber}";
-                }
-                else
-                {
-                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND EWPair={pairNumber}";
-                }
 
-                OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
-                try
+                if (direction.Length == 2)  // Pairs
                 {
-                    ODBCRetryHelper.ODBCRetry(() =>
+                    if (direction == "NS")
                     {
-                        queryResult = cmd1.ExecuteScalar();
-                    });
-                }
-                finally
-                {
-                    cmd1.Dispose();
-                }
-
-                if (queryResult != null)
-                {
-                    TableNumber = Convert.ToInt32(queryResult);
-                    Direction = dir;
-                    return;
-                }
-                else
-                {
-                    // Pair changes Direction
-                    if (dir == "NS")
-                    {
-                        SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND EWPair={pairNumber}";
+                        SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={newRoundNumber} AND NSPair={pairNumber}";
                     }
                     else
                     {
-                        SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND NSPair={pairNumber}";
+                        SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={newRoundNumber} AND EWPair={pairNumber}";
                     }
 
-                    OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                    OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
                     try
                     {
                         ODBCRetryHelper.ODBCRetry(() =>
                         {
-                            queryResult = cmd2.ExecuteScalar();
+                            queryResult = cmd1.ExecuteScalar();
                         });
                     }
                     finally
                     {
-                        cmd2.Dispose();
+                        cmd1.Dispose();
                     }
 
                     if (queryResult != null)
                     {
-                        TableNumber = Convert.ToInt32(queryResult);
-                        if (dir == "NS")
+                        NewTableNumber = Convert.ToInt32(queryResult);
+                        NewDirection = direction;
+                    }
+                    else
+                    {
+                        // Pair changes Direction
+                        if (direction == "NS")
                         {
-                            Direction = "EW";
+                            SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={newRoundNumber} AND EWPair={pairNumber}";
                         }
                         else
                         {
-                            Direction = "NS";
+                            SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={newRoundNumber} AND NSPair={pairNumber}";
                         }
+
+                        OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                        try
+                        {
+                            ODBCRetryHelper.ODBCRetry(() =>
+                            {
+                                queryResult = cmd2.ExecuteScalar();
+                            });
+                        }
+                        finally
+                        {
+                            cmd2.Dispose();
+                        }
+
+                        if (queryResult != null)
+                        {
+                            NewTableNumber = Convert.ToInt32(queryResult);
+                            if (direction == "NS")
+                            {
+                                NewDirection = "EW";
+                            }
+                            else
+                            {
+                                NewDirection = "NS";
+                            }
+                        }
+                        else   // No move info found - move to sit out
+                        {
+                            NewTableNumber = 0;
+                            NewDirection = "";
+                        }
+                    }
+                    Stay = (NewTableNumber == tableNumber && NewDirection == Direction);
+                }
+                else   // Individual
+                {
+                    // Try Direction = North
+                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={newRoundNumber} AND NSPair={pairNumber}";
+                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            queryResult = cmd.ExecuteScalar();
+                        });
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                    }
+                    if (queryResult != null)
+                    {
+                        NewTableNumber = Convert.ToInt32(queryResult);
+                        NewDirection = "North";
+                        Stay = (NewTableNumber == tableNumber && NewDirection == Direction);
+                        return;
+                    }
+
+                    // Try Direction = South
+                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={newRoundNumber} AND South={pairNumber}";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            queryResult = cmd.ExecuteScalar();
+                        });
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                    }
+                    if (queryResult != null)
+                    {
+                        NewTableNumber = Convert.ToInt32(queryResult);
+                        NewDirection = "South";
+                        Stay = (NewTableNumber == tableNumber && NewDirection == Direction);
+                        return;
+                    }
+
+                    // Try Direction = East
+                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={newRoundNumber} AND EWPair={pairNumber}";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            queryResult = cmd.ExecuteScalar();
+                        });
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                    }
+                    if (queryResult != null)
+                    {
+                        NewTableNumber = Convert.ToInt32(queryResult);
+                        NewDirection = "East";
+                        Stay = (NewTableNumber == tableNumber && NewDirection == Direction);
+                        return;
+                    }
+
+                    // Try Direction = West
+                    SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={newRoundNumber} AND West={pairNumber}";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            queryResult = cmd.ExecuteScalar();
+                        });
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                    }
+                    if (queryResult != null)
+                    {
+                        NewTableNumber = Convert.ToInt32(queryResult);
+                        NewDirection = "West";
+                        Stay = (NewTableNumber == tableNumber && NewDirection == Direction);
+                        return;
                     }
                     else   // No move info found - move to sit out
                     {
-                        TableNumber = 0;
+                        NewTableNumber = 0;
                         Direction = "";
+                        Stay = false;
+                        return;
                     }
-                }
-            }
-        }
-
-        // Constructor for individual move
-        public Move(string DB, int sectionID, int round, int playerNumber)
-        {
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                object queryResult = null;
-                connection.Open();
-                string SQLString;
-
-                // Try Direction = North
-                SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND NSPair={playerNumber}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        queryResult = cmd.ExecuteScalar();
-                    });
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-                if (queryResult != null)
-                {
-                    TableNumber = Convert.ToInt32(queryResult);
-                    Direction = "North";
-                    return;
-                }
-
-                // Try Direction = South
-                SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND South={playerNumber}";
-                cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        queryResult = cmd.ExecuteScalar();
-                    });
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-                if (queryResult != null)
-                {
-                    TableNumber = Convert.ToInt32(queryResult);
-                    Direction = "South";
-                    return;
-                }
-
-                // Try Direction = East
-                SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND EWPair={playerNumber}";
-                cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        queryResult = cmd.ExecuteScalar();
-                    });
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-                if (queryResult != null)
-                {
-                    TableNumber = Convert.ToInt32(queryResult);
-                    Direction = "East";
-                    return;
-                }
-
-                // Try Direction = West
-                SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={round} AND West={playerNumber}";
-                cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        queryResult = cmd.ExecuteScalar();
-                    });
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-                if (queryResult != null)
-                {
-                    TableNumber = Convert.ToInt32(queryResult);
-                    Direction = "West";
-                    return;
-                }
-                else   // No move info found - move to sit out
-                {
-                    TableNumber = 0;
-                    Direction = "";
-                    return;
                 }
             }
         }

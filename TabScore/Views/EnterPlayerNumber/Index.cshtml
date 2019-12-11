@@ -142,6 +142,7 @@
             $("#noPlayerNoModal").modal();
         }
         else {
+            if (playerNumber == "Unknown") playerNumber = "0";
             location.href = '@Url.Action("OKButtonClick", "EnterPlayerNumber")?direction=' + '@ViewData["Direction"]' + '&playerNumber=' + playerNumber;
         }
     }

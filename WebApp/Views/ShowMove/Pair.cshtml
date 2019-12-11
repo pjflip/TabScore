@@ -1,4 +1,4 @@
-﻿@model TabScore.Models.MoveView
+﻿@model TabScore.Models.MovesList
 
 @{
     ViewBag.Title = "Show Move";
@@ -7,24 +7,33 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Move for Round @Model.RoundNumber
+            Move for Round @Model.NewRoundNumber
         </h3>
     </div>
 </div>
 
-@if (!Model.NSMissing)
+@foreach (var move in Model)
 {
     <div class="row mt-4">
         <div class="col-12 text-center">
-            <h3 style="color:blue">
-                North/South: @Model.PairNS
-            </h3>
+            @if (move.Direction == "NS")
+            {
+                <h3 style="color:blue">
+                    North/South: @move.PairNumber
+                </h3>
+            }
+            else
+            {
+                <h3 style="color:blue">
+                    East/West: @move.PairNumber
+                </h3>
+            }
         </div>
     </div>
 
     <div class="row">
         <div class="col-12 text-center">
-            @if (Model.NorthNewTable == 0)
+            @if (move.NewTableNumber == 0)
             {
                 <h4>
                     Move to Sit Out
@@ -32,53 +41,16 @@
             }
             else
             {
-                if (Model.NorthStay)
+                if (move.Stay)
                 {
                     <h4>
-                        Stay at Table @Model.NorthNewTable @Model.NorthNewDirection
+                        Stay at Table @move.NewTableNumber @move.NewDirection
                     </h4>
                 }
                 else
                 {
                     <h4>
-                        Move to Table @Model.NorthNewTable @Model.NorthNewDirection
-                    </h4>
-                }
-            }
-        </div>
-    </div>
-}
-
-@if (!Model.EWMissing)
-{
-    <div class="row mt-3">
-        <div class="col-12 text-center">
-            <h3 style="color:blue">
-                East/West: @Model.PairEW
-            </h3>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12 text-center">
-            @if (Model.EastNewTable == 0)
-            {
-                <h4>
-                    Move to Sit Out
-                </h4>
-            }
-            else
-            {
-                if (Model.EastStay)
-                {
-                    <h4>
-                        Stay at Table @Model.EastNewTable @Model.EastNewDirection
-                    </h4>
-                }
-                else
-                {
-                    <h4>
-                        Move to Table @Model.EastNewTable @Model.EastNewDirection
+                        Move to Table @move.NewTableNumber @move.NewDirection
                     </h4>
                 }
             }

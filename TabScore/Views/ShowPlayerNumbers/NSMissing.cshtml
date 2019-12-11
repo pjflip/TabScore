@@ -3,8 +3,6 @@
 @{
     ViewBag.Title = "Show Player Numbers NS Missing";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
-    var PlayerNameEast = Model.NameEast;
-    var PlayerNameWest = Model.NameWest;
 }
 
 <div id="notAllNamesModal" class="modal modal-dialog modal-lg">
@@ -48,7 +46,7 @@
         </h4>
     </div>
     <div class="col-3">
-        @if (PlayerNameEast == "")
+        @if (Model.NameEast == "")
         {
             <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=East'">
                 Enter
@@ -63,7 +61,7 @@
     </div>
     <div class="col-7 align-self-center">
         <h4>
-            @PlayerNameEast
+            @Model.NameEast
         </h4>
     </div>
 </div>
@@ -75,7 +73,7 @@
         </h4>
     </div>
     <div class="col-3">
-        @if (PlayerNameWest == "")
+        @if (Model.NameWest == "")
         {
             <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=West'">
                 Enter
@@ -90,14 +88,14 @@
     </div>
     <div class="col-7 align-self-center">
         <h4>
-            @PlayerNameWest
+            @Model.NameWest
         </h4>
     </div>
 </div>
 
 <script>
     function validateOK() {
-        if ("@PlayerNameEast" == "" || "@PlayerNameWest" == "") {
+        if ("@Model.NameEast" == "" || "@Model.NameWest" == "") {
             $("#notAllNamesModal").modal();
         }
         else {

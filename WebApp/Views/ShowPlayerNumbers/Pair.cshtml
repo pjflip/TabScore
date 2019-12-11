@@ -3,10 +3,6 @@
 @{
     ViewBag.Title = "Show Player Numbers";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
-    var PlayerNameNorth = Model.NameNorth;
-    var PlayerNameSouth = Model.NameSouth;
-    var PlayerNameEast = Model.NameEast;
-    var PlayerNameWest = Model.NameWest;
 }
 
 <div id="notAllNamesModal" class="modal modal-dialog modal-lg">
@@ -50,7 +46,7 @@
         </h4>
     </div>
     <div class="col-3">
-        @if (PlayerNameNorth == "")
+        @if (Model.NameNorth == "")
         {
             <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=North'">
                 Enter
@@ -65,7 +61,7 @@
     </div>
     <div class="col-7 align-self-center">
         <h4>
-            @PlayerNameNorth
+            @Model.NameNorth
         </h4>
     </div>
 </div>
@@ -77,7 +73,7 @@
         </h4>
     </div>
     <div class="col-3">
-        @if (PlayerNameSouth == "")
+        @if (Model.NameSouth == "")
         {
             <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=South'">
                 Enter
@@ -92,7 +88,7 @@
     </div>
     <div class="col-7 align-self-center">
         <h4>
-            @PlayerNameSouth
+            @Model.NameSouth
         </h4>
     </div>
 </div>
@@ -112,7 +108,7 @@
         </h4>
     </div>
     <div class="col-3">
-        @if (PlayerNameEast == "")
+        @if (Model.NameEast == "")
         {
             <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=East'">
                 Enter
@@ -127,7 +123,7 @@
     </div>
     <div class="col-7 align-self-center">
         <h4>
-            @PlayerNameEast
+            @Model.NameEast
         </h4>
     </div>
 </div>
@@ -139,7 +135,7 @@
         </h4>
     </div>
     <div class="col-3">
-        @if (PlayerNameWest == "")
+        @if (Model.NameWest == "")
         {
             <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=West'">
                 Enter
@@ -154,14 +150,14 @@
     </div>
     <div class="col-7 align-self-center">
         <h4>
-            @PlayerNameWest
+            @Model.NameWest
         </h4>
     </div>
 </div>
 
 <script>
     function validateOK() {
-        if ("@PlayerNameNorth" == "" || "@PlayerNameSouth" == "" || "@PlayerNameEast" == "" || "@PlayerNameWest" == "") {
+        if ("@Model.NameNorth" == "" || "@Model.NameSouth" == "" || "@Model.NameEast" == "" || "@Model.NameWest" == "") {
             $("#notAllNamesModal").modal();
         }
         else {

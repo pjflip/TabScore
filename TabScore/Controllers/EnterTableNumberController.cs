@@ -15,21 +15,21 @@ namespace TabScore.Controllers
             return View();
         }
 
-        public ActionResult OKButtonClick(string tableNumber, string confirm)
+        public ActionResult OKButtonClick(int tableNumber, string confirm)
         {
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Section section = Session["Section"] as Section;
-            Table table = new Table(DBConnectionString, section.ID, Convert.ToInt32(tableNumber));
+            int sectionID = (Session["Section"] as Section).ID;
+            Table table = new Table(DBConnectionString, sectionID, tableNumber);
             if (confirm == "TRUE" || (table.LogonStatus == 2))     // Status=2 means table not logged on
             {
                 Session["TableNumber"] = tableNumber;
                 table.Logon(DBConnectionString);
 
                 // Check if results data exist - set round number accordingly and create round infp
-                int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]));
-                Session["Round"] = new Round(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]), lastRoundWithResults, Convert.ToBoolean(Session["IndividualEvent"]));
+                int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, sectionID, Convert.ToInt32(Session["TableNumber"]));
+                Session["Round"] = new Round(DBConnectionString, sectionID, tableNumber, lastRoundWithResults, Convert.ToBoolean(Session["IndividualEvent"]));
 
                 if (lastRoundWithResults == 1 || new Settings(DBConnectionString).NumberEntryEachRound)
                 {

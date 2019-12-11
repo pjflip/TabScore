@@ -75,10 +75,9 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             // Reset to the previous round; RoundNumber > 1 else no Back button and cannot get here
-            Round round = Session["Round"] as Round;
-            Section section = Session["Section"] as Section;
-            Session["Round"] = new Round(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]), round.RoundNumber - 1, Convert.ToBoolean(Session["IndividualEvent"]));
-            return RedirectToAction("Index", "ShowMove", new { newRoundNumber = round.RoundNumber });
+            int roundNumber =(Session["Round"] as Round).RoundNumber;
+            Session["Round"] = new Round(DBConnectionString, (Session["Section"] as Section).ID, Convert.ToInt32(Session["TableNumber"]), roundNumber - 1, Convert.ToBoolean(Session["IndividualEvent"]));
+            return RedirectToAction("Index", "ShowMove", new { newRoundNumber = roundNumber });
         }
     }
 }

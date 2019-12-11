@@ -11,16 +11,14 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Result result = Session["Result"] as Result;
-
             ViewData["BackButton"] = "TRUE";
             if (new Settings(DBConnectionString).EnterResultsMethod == 1)
             {
-                return View("TotalTricks", result);
+                return View("TotalTricks", Session["Result"] as Result);
             }
             else
             {
-                return View("TricksPlusMinus", result);
+                return View("TricksPlusMinus", Session["Result"] as Result);
             }
         }
 
@@ -43,8 +41,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                Result result = Session["Result"] as Result;
-                return RedirectToAction("Index", "EnterContract", new { boardNumber = result.BoardNumber });
+                return RedirectToAction("Index", "EnterContract", new { boardNumber = (Session["Result"] as Result).BoardNumber });
             }
         }
     }

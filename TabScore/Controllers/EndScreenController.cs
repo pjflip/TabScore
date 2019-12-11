@@ -19,16 +19,15 @@ namespace TabScore.Controllers
             if (DBConnectionString == "")return RedirectToAction("Index", "ErrorScreen");
 
             // Check if new round has been added; can't apply to individuals
-            Round round = Session["Round"] as Round;
-            Section section = Session["Section"] as Section;
-            if (round.RoundNumber == UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, section.ID))  
+            int roundNumber = (Session["Round"] as Round).RoundNumber;
+            if (roundNumber == UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, (Session["Section"] as Section).ID))  
             {
                 // Final round, so no new rounds added
                 return RedirectToAction("Index", "EndScreen");
             }
             else
             {
-                return RedirectToAction("Index", "ShowMove", new { newRoundNumber = round.RoundNumber + 1 });
+                return RedirectToAction("Index", "ShowMove", new { newRoundNumber = roundNumber + 1 });
             }
         }
     }
