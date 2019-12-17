@@ -16,14 +16,15 @@ namespace TabScore.Controllers
             {
                if (new Settings(DBConnectionString).ShowRanking == 1)
                 {
-                    RankingList rankingList = new RankingList(DBConnectionString, (Session["Section"] as Section).ID, Convert.ToBoolean(Session["IndividualEvent"]));
+                    Sesh sesh = Session["Sesh"] as Sesh;
+                    RankingList rankingList = new RankingList(DBConnectionString, sesh.SectionID, sesh.IsIndividual);
                     if (rankingList != null && rankingList.Count != 0 && rankingList[0].ScoreDecimal != 0.0 && rankingList[0].ScoreDecimal != 50.0)
                     {
                         rankingList.RoundNumber = round.RoundNumber;
                         rankingList.PairNS = round.PairNS;
                         rankingList.PairEW = round.PairEW;
                         ViewData["BackButton"] = "REFRESH";
-                        if (Convert.ToBoolean(Session["IndividualEvent"]))
+                        if (sesh.IsIndividual)
                         {
                             rankingList.South = round.South;
                             rankingList.West = round.West;

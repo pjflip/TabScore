@@ -187,7 +187,7 @@ namespace TabScore.Models
                     else   // No move info found - move to sit out
                     {
                         NewTableNumber = 0;
-                        Direction = "";
+                        NewDirection = "";
                         Stay = false;
                         return;
                     }

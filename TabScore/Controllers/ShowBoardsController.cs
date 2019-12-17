@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -15,17 +14,17 @@ namespace TabScore.Controllers
             Session["Result"] = null;
 
             Round round = Session["Round"] as Round;
-            Section section = Session["Section"] as Section;
+            Sesh sesh = Session["Sesh"] as Sesh;
 
-            ResultsList resultsList = new ResultsList(DBConnectionString, section.ID, Convert.ToInt32(Session["TableNumber"]), round.RoundNumber, round.LowBoard, round.HighBoard);
+            ResultsList resultsList = new ResultsList(DBConnectionString, sesh.SectionID, sesh.TableNumber, round.RoundNumber, round.LowBoard, round.HighBoard);
 
-            if (Convert.ToBoolean(Session["IndividualEvent"]))
+            if (sesh.IsIndividual)
             {
-                Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]} - Round {round.RoundNumber} - {round.PairNS}+{round.South} v {round.PairEW}+{round.West}";
+                Session["Header"] = $"Table {sesh.SectionTableString} - Round {round.RoundNumber} - {round.PairNS}+{round.South} v {round.PairEW}+{round.West}";
             }
             else
             {
-                Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]} - Round {round.RoundNumber} - NS {round.PairNS} v EW {round.PairEW}";
+                Session["Header"] = $"Table {sesh.SectionTableString} - Round {round.RoundNumber} - NS {round.PairNS} v EW {round.PairEW}";
             }
             ViewData["BackButton"] = "FALSE";
 

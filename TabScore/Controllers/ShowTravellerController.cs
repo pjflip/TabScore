@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -17,9 +16,17 @@ namespace TabScore.Controllers
             }
 
             Result result = Session["Result"] as Result;
-            Traveller traveller = new Traveller(DBConnectionString, (Session["Section"] as Section).ID, result.BoardNumber, result.PairNS, Convert.ToBoolean(Session["IndividualEvent"]));
+            Sesh sesh = Session["Sesh"] as Sesh;
+            Traveller traveller = new Traveller(DBConnectionString, sesh.SectionID, result.BoardNumber, result.PairNS, sesh.IsIndividual);
             ViewData["BackButton"] = "TRUE";
-            return View(traveller);
+            if (sesh.IsIndividual)
+            {
+                return View("Individual", traveller);
+            }
+            else
+            {
+                return View("Pairs", traveller);
+            }
         }
 
         public ActionResult OKButtonClick()

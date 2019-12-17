@@ -6,30 +6,6 @@ namespace TabScore.Models
 {
     public static class UtilityFunctions
     {
-        // Check if this is an individual event, when RoundData will have a 'South' column
-        public static bool IsEventIndividual(string DB)
-        {
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                connection.Open();
-                string SQLString = $"SELECT TOP 1 South FROM RoundData";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    cmd.ExecuteScalar();
-                    return true;
-                }
-                catch (OdbcException)
-                {
-                    return false;
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-            } 
-        }
-
         // Find out how many rounds there are in the event
         public static int NumberOfRoundsInEvent(string DB, int sectionID)
         {

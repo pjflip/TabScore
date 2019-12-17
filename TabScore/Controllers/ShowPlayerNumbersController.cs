@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -12,14 +11,14 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Round round = Session["Round"] as Round;
-            Section section = Session["Section"] as Section;
+            Sesh sesh = Session["Sesh"] as Sesh;
 
             ViewData["BackButton"] = "FALSE";
-            Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]} - Round {round.RoundNumber}";
+            Session["Header"] = $"Table {sesh.SectionTableString} - Round {round.RoundNumber}";
 
-            if (round.PairNS == 0 || round.PairNS == section.MissingPair)
+            if (round.PairNS == 0 || round.PairNS == sesh.MissingPair)
             {
-                if (Convert.ToBoolean(Session["IndividualEvent"]))
+                if (sesh.IsIndividual)
                 {
                     return View("NSMissingIndividual", round);
                 }
@@ -28,9 +27,9 @@ namespace TabScore.Controllers
                     return View("NSMissing", round);
                 }
             }
-            else if (round.PairEW == 0 || round.PairEW == section.MissingPair)
+            else if (round.PairEW == 0 || round.PairEW == sesh.MissingPair)
             {
-                if (Convert.ToBoolean(Session["IndividualEvent"]))
+                if (sesh.IsIndividual)
                 {
                     return View("EWMissingIndividual", round);
                 }
@@ -41,7 +40,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                if (Convert.ToBoolean(Session["IndividualEvent"]))
+                if (sesh.IsIndividual)
                 {
                     return View("Individual", round);
                 }

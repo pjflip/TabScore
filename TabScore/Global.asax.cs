@@ -19,9 +19,7 @@ namespace TabScore
         {
             Session.Add("DBConnectionString", "");
             Session.Add("Header","");
-            Session.Add("IndividualEvent", false);
-            Session.Add("Section", null);
-            Session.Add("TableNumber", 0);
+            Session.Add("Sesh", null);
             Session.Add("Round", null);
             Session.Add("Result", null); 
         }

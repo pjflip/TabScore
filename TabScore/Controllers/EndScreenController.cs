@@ -20,7 +20,7 @@ namespace TabScore.Controllers
 
             // Check if new round has been added; can't apply to individuals
             int roundNumber = (Session["Round"] as Round).RoundNumber;
-            if (roundNumber == UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, (Session["Section"] as Section).ID))  
+            if (roundNumber == UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, (Session["Sesh"] as Sesh).SectionID))  
             {
                 // Final round, so no new rounds added
                 return RedirectToAction("Index", "EndScreen");

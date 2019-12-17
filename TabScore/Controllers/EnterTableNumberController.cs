@@ -1,18 +1,16 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
 {
     public class EnterTableNumberController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index() 
         {
-            Section section = Session["Section"] as Section;
-            Session["Header"] = $"Section {section.Letter}";
-            TempData["NumTables"] = section.Tables;
-            ViewData["BackButton"] = "FALSE";
-            return View();
+            Sesh sesh = Session["Sesh"] as Sesh;
+            Session["Header"] = $"Section {sesh.SectionTableString}";
+            ViewData["BackButton"] = "FALSE"; 
+            return View(sesh);   // At this stage, TableNumber > 0 means we've already tried to log on and need to confirm
         }
 
         public ActionResult OKButtonClick(int tableNumber, string confirm)
@@ -20,30 +18,36 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            int sectionID = (Session["Section"] as Section).ID;
-            Table table = new Table(DBConnectionString, sectionID, tableNumber);
-            if (confirm == "TRUE" || (table.LogonStatus == 2))     // Status=2 means table not logged on
+            Sesh sesh = Session["Sesh"] as Sesh;
+            sesh.TableNumber = tableNumber;
+
+            if (confirm == "FALSE")
             {
-                Session["TableNumber"] = tableNumber;
-                table.Logon(DBConnectionString);
-
-                // Check if results data exist - set round number accordingly and create round infp
-                int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, sectionID, Convert.ToInt32(Session["TableNumber"]));
-                Session["Round"] = new Round(DBConnectionString, sectionID, tableNumber, lastRoundWithResults, Convert.ToBoolean(Session["IndividualEvent"]));
-
-                if (lastRoundWithResults == 1 || new Settings(DBConnectionString).NumberEntryEachRound)
+                if (sesh.TableLogonStatus(DBConnectionString) == 1)  // Table is already logged on, so need to confirm
                 {
-                    return RedirectToAction("Index", "ShowPlayerNumbers");
+                    Session["Sesh"] = sesh;   // Save table number
+                    return RedirectToAction("Index", "EnterTableNumber");
                 }
                 else
                 {
-                    return RedirectToAction("Index", "ShowRoundInfo");
+                    sesh.LogonTable(DBConnectionString);
                 }
             }
-            else  // Table already logged on - confirm log on anyway?
+
+            sesh.SectionTableString += tableNumber.ToString();   // Concatenate valid table number to section letter to give eg "A1", and save
+            Session["Sesh"] = sesh;    
+            
+            // Check if results data exist - set round number accordingly and create round info
+            int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, sesh.SectionID, tableNumber);
+            Session["Round"] = new Round(DBConnectionString, sesh.SectionID, tableNumber, lastRoundWithResults, sesh.IsIndividual);
+
+            if (lastRoundWithResults == 1 || new Settings(DBConnectionString).NumberEntryEachRound)
             {
-                TempData["LoggedOnTable"] = tableNumber;
-                return RedirectToAction("Index", "EnterTableNumber");
+                return RedirectToAction("Index", "ShowPlayerNumbers");
+            }
+            else
+            {
+                return RedirectToAction("Index", "ShowRoundInfo");
             }
         }
     }

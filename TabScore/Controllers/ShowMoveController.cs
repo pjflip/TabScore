@@ -11,8 +11,8 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Section section = Session["Section"] as Section;
-            if (newRoundNumber > UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, section.ID))  // Session complete
+            Sesh sesh = Session["Sesh"] as Sesh;
+            if (newRoundNumber > UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, sesh.SectionID))  // Session complete
             {
                 if (new Settings(DBConnectionString).ShowRanking == 2)
                 {
@@ -24,17 +24,15 @@ namespace TabScore.Controllers
                 }
             }
 
-            int tableNumber = Convert.ToInt32(Session["TableNumber"]);
-            bool individual = Convert.ToBoolean(Session["IndividualEvent"]);
-            MovesList movesList = new MovesList(DBConnectionString, section.ID, Session["Round"] as Round, newRoundNumber, tableNumber, section.MissingPair, individual);
+            MovesList movesList = new MovesList(DBConnectionString, sesh.SectionID, Session["Round"] as Round, newRoundNumber, sesh.TableNumber, sesh.MissingPair, sesh.IsIndividual);
 
-            Session["Header"] = $"Table {section.Letter}{Session["TableNumber"]}";
+            Session["Header"] = $"Table {sesh.SectionTableString}";
             ViewData["BackButton"] = "FALSE";
 
             // Update session to new round info
-            Session["Round"] = new Round(DBConnectionString, section.ID, tableNumber, newRoundNumber, individual);
+            Session["Round"] = new Round(DBConnectionString, sesh.SectionID, sesh.TableNumber, newRoundNumber, sesh.IsIndividual);
 
-            if (individual)
+            if (sesh.IsIndividual)
             {
                 return View("Individual", movesList);
             }

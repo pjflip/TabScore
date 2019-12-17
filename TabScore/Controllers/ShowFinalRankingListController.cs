@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -12,14 +11,15 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Round round = Session["Round"] as Round;
+            Sesh sesh = Session["Sesh"] as Sesh;
 
-            RankingList rankingList = new RankingList(DBConnectionString, (Session["Section"] as Section).ID, Convert.ToBoolean(Session["IndividualEvent"]));
+            RankingList rankingList = new RankingList(DBConnectionString, sesh.SectionID, sesh.IsIndividual);
             if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0" && rankingList[0].Score != "50")
             {
                 rankingList.PairNS = round.PairNS;
                 rankingList.PairEW = round.PairEW;
                 ViewData["BackButton"] = "REFRESH";
-                if (Convert.ToBoolean(Session["IndividualEvent"]))
+                if (sesh.IsIndividual)
                 {
                     rankingList.South = round.South;
                     rankingList.West = round.West;

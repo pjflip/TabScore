@@ -11,7 +11,7 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             int boardNumber = (Session["Result"] as Result).BoardNumber;
-            int sectionID = (Session["Section"] as Section).ID;
+            int sectionID = (Session["Sesh"] as Sesh).SectionID;
 
             HandRecord handRecord = new HandRecord(DBConnectionString, sectionID, boardNumber);
             if (handRecord.NorthSpades == "###" && sectionID != 1)    // Use default Section 1 hand records)

@@ -2502,7 +2502,7 @@ intellisense.annotate(jQuery.fn, {
     /// </signature>
     /// <signature>
     ///   <summary>Execute all handlers and behaviors attached to the matched elements for the given event type.</summary>
-    ///   <param name="event" type="Event">A jQuery.Event object.</param>
+    ///   <param name="Sesh" type="Event">A jQuery.Event object.</param>
     ///   <param name="extraParameters" type="">Additional parameters to pass along to the event handler.</param>
     ///   <returns type="jQuery" />
     /// </signature>
@@ -2530,7 +2530,7 @@ intellisense.annotate(jQuery.fn, {
     /// </signature>
     /// <signature>
     ///   <summary>Remove a previously-attached event handler from the elements.</summary>
-    ///   <param name="event" type="Object">A JavaScript event object as passed to an event handler.</param>
+    ///   <param name="Sesh" type="Object">A JavaScript event object as passed to an event handler.</param>
     ///   <returns type="jQuery" />
     /// </signature>
   },

@@ -1,6 +1,5 @@
-﻿using TabScore.Models;
-using System.Web.Mvc;
-using System;
+﻿using System.Web.Mvc;
+using TabScore.Models;
 
 namespace TabScore.Controllers
 {
@@ -10,7 +9,8 @@ namespace TabScore.Controllers
         {
             ViewData["Direction"] = direction;
             ViewData["BackButton"] = "FALSE";
-            Session["Header"] = $"Table {(Session["Section"] as Section).Letter}{Session["TableNumber"]}";
+            Sesh sesh = Session["Sesh"] as Sesh;
+            Session["Header"] = $"Table {sesh.SectionTableString}";
             return View();
         }
 
@@ -19,7 +19,8 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            new Player(DBConnectionString, (Session["Section"] as Section).ID, Convert.ToInt32(Session["TableNumber"]), Session["Round"] as Round, direction, playerNumber, Convert.ToBoolean(Session["IndividualEvent"])).UpdateDatabase();
+            Sesh sesh = Session["Sesh"] as Sesh;
+            new Player(DBConnectionString, sesh.SectionID, sesh.TableNumber, Session["Round"] as Round, direction, playerNumber, sesh.IsIndividual).UpdateDatabase();
             return RedirectToAction("Index", "ShowPlayerNumbers");
         }
     }

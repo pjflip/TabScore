@@ -24,7 +24,7 @@ namespace TabScore.Models
                             {
                                 ID = reader.GetInt32(0),
                                 Letter = reader.GetString(1),
-                                Tables = reader.GetInt32(2),
+                                NumTables = reader.GetInt32(2),
                                 MissingPair = reader.GetInt32(3)
                             };
                             Add(s);

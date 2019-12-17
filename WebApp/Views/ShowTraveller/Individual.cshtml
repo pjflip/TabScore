@@ -1,7 +1,7 @@
 ﻿@model TabScore.Models.Traveller
 
 @{
-    ViewBag.Title = "Show Traveller";
+    ViewBag.Title = "Show Traveller Individual";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -94,16 +94,8 @@
                     if (Model.PairNS == Result.PairNS)
                     {
                         <tr class="table-success">
-                            @if (Convert.ToBoolean(Session["IndividualEvent"]))
-                            {
-                                <td>@Result.PairNS+@Result.South</td>
-                                <td>@Result.PairEW+@Result.West</td>
-                            }
-                            else
-                            {
-                                <td>@Result.PairNS</td>
-                                <td>@Result.PairEW</td>
-                            }
+                            <td>@Result.PairNS+@Result.South</td>
+                            <td>@Result.PairEW+@Result.West</td>
                             <td>@Html.Raw(Result.DisplayTravellerContract())</td>
                             <td>@Result.NSEW</td>
                             <td>@Html.Raw(Result.DisplayLeadCard())</td>
@@ -115,16 +107,8 @@
                     else
                     {
                         <tr>
-                            @if (Convert.ToBoolean(Session["IndividualEvent"]))
-                            {
-                                <td>@Result.PairNS+@Result.South</td>
-                                <td>@Result.PairEW+@Result.West</td>
-                            }
-                            else
-                            {
-                                <td>@Result.PairNS</td>
-                                <td>@Result.PairEW</td>
-                            }
+                            <td>@Result.PairNS+@Result.South</td>
+                            <td>@Result.PairEW+@Result.West</td>
                             <td>@Html.Raw(Result.DisplayTravellerContract())</td>
                             <td>@Result.NSEW</td>
                             <td>@Html.Raw(Result.DisplayLeadCard())</td>

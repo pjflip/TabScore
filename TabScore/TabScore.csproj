@@ -141,7 +141,7 @@
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\SectionsList.cs" />
     <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\Table.cs" />
+    <Compile Include="Models\Sesh.cs" />
     <Compile Include="Models\Traveller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -237,7 +237,6 @@
     <Content Include="Views\EnterSection\Index.cshtml" />
     <Content Include="Views\ShowRoundInfo\NSMissing.cshtml" />
     <Content Include="Views\ShowRoundInfo\EWMissing.cshtml" />
-    <Content Include="Views\ShowTraveller\Index.cshtml" />
     <Content Include="Views\ShowHandRecord\Index.cshtml" />
     <Content Include="Views\ShowRankingList\OneWinner.cshtml" />
     <Content Include="Views\ShowRankingList\TwoWinners.cshtml" />
@@ -258,6 +257,8 @@
     <Content Include="Views\ShowFinalRankingList\Individual.cshtml" />
     <Content Include="Views\ShowFinalRankingList\OneWinner.cshtml" />
     <Content Include="Views\ShowFinalRankingList\TwoWinners.cshtml" />
+    <Content Include="Views\ShowTraveller\Individual.cshtml" />
+    <Content Include="Views\ShowTraveller\Pairs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

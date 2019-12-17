@@ -1,7 +1,8 @@
-﻿@{
+﻿@model TabScore.Models.Sesh 
+
+@{
     ViewBag.Title = "Enter Table Number";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
-    var numTables = Convert.ToInt32(TempData["NumTables"]);
 }
 
 <div id="tableLoggedOnModal" class="modal modal-dialog modal-lg">
@@ -12,10 +13,10 @@
             </p>
         </div>
         <div class="modal-body">
-            <p>Table @TempData["LoggedOnTable"] is already logged on.  Do not press Log On unless you intend to log back on to your current table</p>
+            <p>Table @Model.TableNumber is already logged on.  Do not press Log On unless you intend to log back on to your current table</p>
         </div>
         <div class="modal-footer" style="justify-content:space-between">
-            <button class="btn btn-lg btn-danger" ontouchstart="location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?tableNumber=@TempData["LoggedOnTable"]&confirm=TRUE'">
+            <button class="btn btn-lg btn-danger" ontouchstart="location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?tableNumber=@Model.TableNumber&confirm=TRUE'">
                 <span class="fa fa-play-circle"></span> Log On
             </button>
             <button class="btn btn-lg btn-success" data-dismiss="modal">
@@ -53,7 +54,7 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        @for (int i = 1; i <= numTables && i < 6; i++)
+        @for (int i = 1; i <= Model.NumTables && i < 6; i++)
         {
             <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="selectTableNumber('@i')">
                 @i
@@ -62,11 +63,11 @@
     </div>
 </div>
 
-@if (numTables > 5)
+@if (Model.NumTables > 5)
 {
     <div class="row">
         <div class="col-12 text-center">
-            @for (int i = 6; i <= numTables && i < 11; i++)
+            @for (int i = 6; i <= Model.NumTables && i < 11; i++)
             {
                 <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="selectTableNumber('@i')">
                     @i
@@ -76,11 +77,11 @@
     </div>
 }
 
-@if (numTables > 10)
+@if (Model.NumTables > 10)
 {
     <div class="row">
         <div class="col-12 text-center">
-            @for (int i = 11; i <= numTables && i < 16; i++)
+            @for (int i = 11; i <= Model.NumTables && i < 16; i++)
             {
                 <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="selectTableNumber('@i')">
                     @i
@@ -90,11 +91,11 @@
     </div>
 }
 
-@if (numTables > 15)
+@if (Model.NumTables > 15)
 {
     <div class="row">
         <div class="col-12 text-center">
-            @for (int i = 16; i <= numTables && i < 21; i++)
+            @for (int i = 16; i <= Model.NumTables && i < 21; i++)
             {
                 <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="selectTableNumber('@i')">
                     @i
@@ -103,25 +104,11 @@
         </div>
     </div>
 }
-@if (numTables > 20)
+@if (Model.NumTables > 20)
 {
     <div class="row">
         <div class="col-12 text-center">
-            @for (int i = 21; i <= numTables && i < 26; i++)
-            {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="selectTableNumber('@i')">
-                    @i
-                </button>
-            }
-        </div>
-    </div>
-}
-
-@if (numTables > 25)
-{
-    <div class="row">
-        <div class="col-12 text-center">
-            @for (int i = 26; i <= numTables && i < 31; i++)
+            @for (int i = 21; i <= Model.NumTables && i < 26; i++)
             {
                 <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="selectTableNumber('@i')">
                     @i
@@ -131,7 +118,21 @@
     </div>
 }
 
-@if (null != TempData["LoggedOnTable"])
+@if (Model.NumTables > 25)
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            @for (int i = 26; i <= Model.NumTables && i < 31; i++)
+            {
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="selectTableNumber('@i')">
+                    @i
+                </button>
+            }
+        </div>
+    </div>
+}
+
+@if (Model.TableNumber > 0)
 {
     <script>
         $("#tableLoggedOnModal").modal();
