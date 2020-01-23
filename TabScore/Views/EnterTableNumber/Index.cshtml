@@ -16,7 +16,7 @@
             <p>Table @Model.TableNumber is already logged on.  Do not press Log On unless you intend to log back on to your current table</p>
         </div>
         <div class="modal-footer" style="justify-content:space-between">
-            <button class="btn btn-lg btn-danger" ontouchstart="location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?tableNumber=@Model.TableNumber&confirm=TRUE'">
+            <button class="btn btn-lg btn-danger" ontouchstart="modalLogOn()">
                 <span class="fa fa-play-circle"></span> Log On
             </button>
             <button class="btn btn-lg btn-success" data-dismiss="modal">
@@ -141,10 +141,11 @@
 
 <script>
     var tableNumber = "";
+    var isSubmitted = false;
 
     function selectTableNumber(n) {
         if (tableNumber != "") {
-            document.getElementById("tn" + tableNumber).className = "btn btn-primary btn-lg m-1";
+           document.getElementById("tn" + tableNumber).className = "btn btn-primary btn-lg m-1";
         }
         document.getElementById("tn" + n).className = "btn btn-warning btn-lg m-1";
         tableNumber = n;
@@ -152,10 +153,20 @@
 
     function validateOK() {
         if (tableNumber != "") {
-            location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?tableNumber=' + tableNumber + '&confirm=FALSE';
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?tableNumber=' + tableNumber + '&confirm=FALSE';
+            }
         }
         else {
             $("#noTableNoModal").modal();
+        }
+    }
+
+    function modalLogOn() {
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?tableNumber=@Model.TableNumber&confirm=TRUE';
         }
     }
 </script>

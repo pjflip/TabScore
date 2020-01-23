@@ -88,11 +88,19 @@
 </div>
 
 <script>
+    var isSubmitted = false;
+
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ShowFinalRankingList")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "ShowFinalRankingList")';
+        }
     }
 
     function refreshClick() {
-        location.href = '@Url.Action("RefreshButtonClick", "ShowFinalRankingList")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("RefreshButtonClick", "ShowFinalRankingList")';
+        }
     }
 </script>

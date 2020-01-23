@@ -64,11 +64,19 @@ else
 }
 
 <script>
+    var isSubmitted = false;
+
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ConfirmResult")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "ConfirmResult")';
+        }
     }
 
     function backClick() {
-        location.href = '@Url.Action("BackButtonClick", "ConfirmResult")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("BackButtonClick", "ConfirmResult")';
+        }
     }
 </script>

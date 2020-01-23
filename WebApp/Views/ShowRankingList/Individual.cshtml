@@ -73,11 +73,19 @@
 </div>
 
 <script>
+    var isSubmitted = false;
+
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?roundNumber=@Model.RoundNumber';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?roundNumber=@Model.RoundNumber';
+        }
     }
 
     function refreshClick() {
-        location.href = '@Url.Action("RefreshButtonClick", "ShowRankingList")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("RefreshButtonClick", "ShowRankingList")';
+        }
     }
 </script>

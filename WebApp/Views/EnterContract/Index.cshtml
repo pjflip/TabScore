@@ -165,6 +165,7 @@
     var suit = '@Model.ContractSuit';
     var double = '@Model.ContractX';
     var NSEW = '@Model.NSEW';
+    var isSubmitted = false;
 
     window.onload = setCurrentSelections();
 
@@ -296,13 +297,22 @@
 
     function validateOK() {
         if (level == 0) {
-            location.href = '@Url.Action("OKButtonPass", "EnterContract")';
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonPass", "EnterContract")';
+            }
         }
         else if (level == -1) {
-            location.href = '@Url.Action("OKButtonSkip", "EnterContract")';
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonSkip", "EnterContract")';
+            }
         }
         else if (level != -999 && suit != "" && NSEW != "") {
-            location.href = '@Url.Action("OKButtonContract", "EnterContract")?cLevel=' + level.toString() + '&cSuit=' + suit + '&cX=' + double + '&cNSEW=' + NSEW;
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonContract", "EnterContract")?cLevel=' + level.toString() + '&cSuit=' + suit + '&cX=' + double + '&cNSEW=' + NSEW;
+            }
         }
         else {
             $("#noContractModal").modal();
@@ -310,6 +320,9 @@
     }
 
     function backClick() {
-        location.href = '@Url.Action("BackButtonClick", "EnterContract")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("BackButtonClick", "EnterContract")';
+        }
     }
 </script>

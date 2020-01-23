@@ -124,16 +124,27 @@
 </div>
 
 <script>
+    var isSubmitted = false;
+
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ShowTraveller")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "ShowTraveller")';
+        }
     }
 
     function handRecordClick() {
-        location.href = '@Url.Action("HandRecordButtonClick", "ShowTraveller")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("HandRecordButtonClick", "ShowTraveller")';
+        }
     }
 
     function backClick() {
-        location.href = '@Url.Action("BackButtonClick", "ShowTraveller")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("BackButtonClick", "ShowTraveller")';
+        }
     }
 </script>
 

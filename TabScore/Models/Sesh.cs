@@ -7,6 +7,7 @@ namespace TabScore.Models
     {
         public int TableNumber { get; set; }
         public int SectionID { get; set; }
+        public string SectionLetter { get; set; }
         public string SectionTableString { get; set; }
         public int NumTables { get; set; }
         public int MissingPair { get; set; }

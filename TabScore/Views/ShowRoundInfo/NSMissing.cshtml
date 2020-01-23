@@ -46,11 +46,19 @@
 </div>
 
 <script>
+    var isSubmitted = false;
+
     function validateOK() {
-        location.href = '@Url.Action("OKSitOutButtonClick", "ShowRoundInfo")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKSitOutButtonClick", "ShowRoundInfo")';
+        }
     }
 
     function backClick() {
-        location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")';
+        }
     }
 </script>

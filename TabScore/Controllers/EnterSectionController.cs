@@ -19,7 +19,7 @@ namespace TabScore.Controllers
                 Session["Sesh"] = new Sesh(DBConnectionString)
                 {
                     SectionID = sectionsList[0].ID,
-                    SectionTableString = sectionsList[0].Letter,
+                    SectionLetter = sectionsList[0].Letter,
                     NumTables = sectionsList[0].NumTables,
                     MissingPair = sectionsList[0].MissingPair,
                 };
@@ -45,7 +45,7 @@ namespace TabScore.Controllers
             Session["Sesh"] = new Sesh(DBConnectionString)
             {
                 SectionID = section.ID,
-                SectionTableString = section.Letter,
+                SectionLetter = section.Letter,
                 NumTables = section.NumTables,
                 MissingPair = section.MissingPair,
             };

@@ -42,13 +42,13 @@
         <div class="col-3">
             @if (Result.ContractLevel == -999)
             {
-                <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + @Result.BoardNumber">
+                <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterEdit(@Result.BoardNumber)">
                     Enter
                 </button>
             }
             else
             {
-                <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + @Result.BoardNumber">
+                <button class="btn btn-info btn-lg m-1" ontouchstart="EnterEdit(@Result.BoardNumber)">
                     Edit
                 </button>
             }
@@ -62,13 +62,25 @@
 }
 
 <script>
+    var isSubmitted = false;
+
     function validateOK() {
         if (@Model.GotAllResults.ToString().ToLower()) {
-            location.href = '@Url.Action("OKButtonClick", "ShowBoards")';
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonClick", "ShowBoards")';
+            }
         }
         else {
             $("#notAllResultsModal").modal()
         }
+    }
+
+    function EnterEdit(n) {
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + n;
+            }
     }
 </script>
 

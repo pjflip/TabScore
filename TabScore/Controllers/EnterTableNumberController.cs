@@ -8,7 +8,7 @@ namespace TabScore.Controllers
         public ActionResult Index() 
         {
             Sesh sesh = Session["Sesh"] as Sesh;
-            Session["Header"] = $"Section {sesh.SectionTableString}";
+            Session["Header"] = $"Section {sesh.SectionLetter}";
             ViewData["BackButton"] = "FALSE"; 
             return View(sesh);   // At this stage, TableNumber > 0 means we've already tried to log on and need to confirm
         }
@@ -34,7 +34,7 @@ namespace TabScore.Controllers
                 }
             }
 
-            sesh.SectionTableString += tableNumber.ToString();   // Concatenate valid table number to section letter to give eg "A1", and save
+            sesh.SectionTableString = sesh.SectionLetter + tableNumber.ToString();   // Concatenate valid table number to section letter to give eg "A1", and save
             Session["Sesh"] = sesh;    
             
             // Check if results data exist - set round number accordingly and create round info

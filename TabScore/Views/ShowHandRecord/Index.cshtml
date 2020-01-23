@@ -183,7 +183,12 @@
 </div>
 
 <script>
+    var isSubmitted = false;
+
     function validateOK() {
-        location.href = '@Url.Action("OKButtonClick", "ShowHandRecord")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "ShowHandRecord")';
+        }
     }
 </script>

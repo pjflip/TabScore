@@ -98,6 +98,7 @@
 
 <script>
     var numTricks = '@Model.TricksTakenNumber';
+    var isSubmitted = false;
 
     window.onload = setCurrentSelection();
 
@@ -131,12 +132,18 @@
             $("#noTricksModal").modal();
         }
         else {
-            location.href = '@Url.Action("OKButtonClick", "EnterTricksTaken")?numTricks=' + numTricks;
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonClick", "EnterTricksTaken")?numTricks=' + numTricks;
+            }
         }
     }
 
     function backClick() {
-        location.href = '@Url.Action("BackButtonClick", "EnterTricksTaken")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("BackButtonClick", "EnterTricksTaken")';
+        }
     }
 </script>
 

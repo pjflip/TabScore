@@ -162,6 +162,7 @@
 <script>
     var suit = "@suitRazor";
     var card = "@cardRazor";
+    var isSubmitted = false;
 
     window.onload = setCurrentSelections();
 
@@ -234,12 +235,18 @@
         $("#noCardSuitModal").modal();
         }
         else {
-            location.href = '@Url.Action("OKButtonClick", "EnterLead")?card=' + suit + card + '&validateWarning=' + '@ViewData["ValidateWarning"].ToString()';
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonClick", "EnterLead")?card=' + suit + card + '&validateWarning=' + '@ViewData["ValidateWarning"].ToString()';
+            }
         }
     }
 
     function backClick() {
-        location.href = '@Url.Action("BackButtonClick", "EnterLead")';
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("BackButtonClick", "EnterLead")';
+        }
     }
 
 </script>

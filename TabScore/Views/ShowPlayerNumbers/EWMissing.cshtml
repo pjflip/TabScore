@@ -48,13 +48,13 @@
     <div class="col-3">
         @if (Model.NameNorth == "")
         {
-            <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=North'">
+            <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerNumber('North')">
                 Enter
             </button>
         }
         else
         {
-            <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=North'">
+            <button class="btn btn-info btn-lg m-1" ontouchstart="EnterPlayerNumber('North')">
                 Edit
             </button>
         }
@@ -75,13 +75,13 @@
     <div class="col-3">
         @if (Model.NameSouth == "")
         {
-            <button class="btn btn-primary btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=South'">
+            <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerNumber('South')">
                 Enter
             </button>
         }
         else
         {
-            <button class="btn btn-info btn-lg m-1" ontouchstart="location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=South'">
+            <button class="btn btn-info btn-lg m-1" ontouchstart="EnterPlayerNumber('South')">
                 Edit
             </button>
         }
@@ -94,12 +94,24 @@
 </div>
 
 <script>
+    var isSubmitted = false;
+
     function validateOK() {
         if ("@Model.NameNorth" == "" || "@Model.NameSouth" == "") {
             $("#notAllNamesModal").modal();
         }
         else {
-            location.href = '@Url.Action("OKButtonClick", "ShowPlayerNumbers")';
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonClick", "ShowPlayerNumbers")';
+            }
         }
+    }
+
+    function EnterPlayerNumber(direction) {
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=' + direction;
+            }
     }
 </script>

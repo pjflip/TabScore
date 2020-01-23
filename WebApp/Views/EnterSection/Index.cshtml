@@ -44,6 +44,7 @@
 
 <script>
     var section = "";
+    var isSubmitted = false;
 
     function selectSection(n) {
         if (section != "") {
@@ -55,7 +56,10 @@
 
     function validateOK() {
         if (section != "") {
-            location.href = '@Url.Action("OKButtonClick", "EnterSection")?sectionLetter=' + section;
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonClick", "EnterSection")?sectionLetter=' + section;
+            }
         }
         else {
             $("#noSectionModal").modal();

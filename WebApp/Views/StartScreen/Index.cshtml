@@ -69,7 +69,12 @@
 }
 
 <script>
-   function validateOK() {
-       location.href = '@Url.Action("OKButtonClick", "StartScreen")';
+    var isSubmitted = false;
+
+    function validateOK() {
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "StartScreen")';
+        }
    }
 </script>
