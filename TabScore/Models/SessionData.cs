@@ -3,7 +3,7 @@ using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public class Sesh  // A class for general (bridge) session data; Sesh is shorthand for Session
+    public class SessionData  // A class for bridge session data
     {
         public int TableNumber { get; set; }
         public int SectionID { get; set; }
@@ -13,7 +13,7 @@ namespace TabScore.Models
         public int MissingPair { get; set; }
         public bool IsIndividual { get; private set; }
 
-        public Sesh(string DB)
+        public SessionData(string DB)
         {
             TableNumber = 0;
             using (OdbcConnection connection = new OdbcConnection(DB))

@@ -7,10 +7,10 @@ namespace TabScore.Controllers
     {
         public ActionResult Index() 
         {
-            Sesh sesh = Session["Sesh"] as Sesh;
-            Session["Header"] = $"Section {sesh.SectionLetter}";
+            SessionData sessionData = Session["SessionData"] as SessionData;
+            Session["Header"] = $"Section {sessionData.SectionLetter}";
             ViewData["BackButton"] = "FALSE"; 
-            return View(sesh);   // At this stage, TableNumber > 0 means we've already tried to log on and need to confirm
+            return View(sessionData);   // At this stage, TableNumber > 0 means we've already tried to log on and need to confirm
         }
 
         public ActionResult OKButtonClick(int tableNumber, string confirm)
@@ -18,30 +18,30 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Sesh sesh = Session["Sesh"] as Sesh;
-            sesh.TableNumber = tableNumber;
+            SessionData sessionData = Session["SessionData"] as SessionData;
+            sessionData.TableNumber = tableNumber;
 
             if (confirm == "FALSE")
             {
-                if (sesh.TableLogonStatus(DBConnectionString) == 1)  // Table is already logged on, so need to confirm
+                if (sessionData.TableLogonStatus(DBConnectionString) == 1)  // Table is already logged on, so need to confirm
                 {
-                    Session["Sesh"] = sesh;   // Save table number
+                    Session["SessionData"] = sessionData;   // Save table number
                     return RedirectToAction("Index", "EnterTableNumber");
                 }
                 else
                 {
-                    sesh.LogonTable(DBConnectionString);
+                    sessionData.LogonTable(DBConnectionString);
                 }
             }
 
-            sesh.SectionTableString = sesh.SectionLetter + tableNumber.ToString();   // Concatenate valid table number to section letter to give eg "A1", and save
-            Session["Sesh"] = sesh;    
+            sessionData.SectionTableString = sessionData.SectionLetter + tableNumber.ToString();   // Concatenate valid table number to section letter to give eg "A1", and save
+            Session["SessionData"] = sessionData;    
             
             // Check if results data exist - set round number accordingly and create round info
-            int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, sesh.SectionID, tableNumber);
-            Session["Round"] = new Round(DBConnectionString, sesh.SectionID, tableNumber, lastRoundWithResults, sesh.IsIndividual);
+            int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, sessionData.SectionID, tableNumber);
+            Session["Round"] = new Round(DBConnectionString, sessionData.SectionID, tableNumber, lastRoundWithResults, sessionData.IsIndividual);
 
-            if (lastRoundWithResults == 1 || new Settings(DBConnectionString).NumberEntryEachRound)
+            if (lastRoundWithResults == 1 || (Session["Settings"] as Settings).NumberEntryEachRound)
             {
                 return RedirectToAction("Index", "ShowPlayerNumbers");
             }

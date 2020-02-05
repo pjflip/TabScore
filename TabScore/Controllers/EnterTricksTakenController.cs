@@ -12,7 +12,7 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             ViewData["BackButton"] = "TRUE";
-            if (new Settings(DBConnectionString).EnterResultsMethod == 1)
+            if ((Session["Settings"] as Settings).EnterResultsMethod == 1)
             {
                 return View("TotalTricks", Session["Result"] as Result);
             }
@@ -35,7 +35,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (new Settings(DBConnectionString).EnterLeadCard)
+            if ((Session["Settings"] as Settings).EnterLeadCard)
             {
                 return RedirectToAction("Index", "EnterLead", new { validateWarning = "NoWarning" });
             }

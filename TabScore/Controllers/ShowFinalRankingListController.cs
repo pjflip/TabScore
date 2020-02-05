@@ -11,15 +11,15 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Round round = Session["Round"] as Round;
-            Sesh sesh = Session["Sesh"] as Sesh;
+            SessionData sessionData = Session["SessionData"] as SessionData;
 
-            RankingList rankingList = new RankingList(DBConnectionString, sesh.SectionID, sesh.IsIndividual);
+            RankingList rankingList = new RankingList(DBConnectionString, sessionData.SectionID, sessionData.IsIndividual);
             if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0" && rankingList[0].Score != "50")
             {
                 rankingList.PairNS = round.PairNS;
                 rankingList.PairEW = round.PairEW;
                 ViewData["BackButton"] = "REFRESH";
-                if (sesh.IsIndividual)
+                if (sessionData.IsIndividual)
                 {
                     rankingList.South = round.South;
                     rankingList.West = round.West;

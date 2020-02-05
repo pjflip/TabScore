@@ -141,7 +141,7 @@
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\SectionsList.cs" />
     <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\Sesh.cs" />
+    <Compile Include="Models\SessionData.cs" />
     <Compile Include="Models\Traveller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

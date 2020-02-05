@@ -15,7 +15,7 @@ namespace TabScore.Models
         private readonly bool Individual;
         private readonly string Dir;
 
-        public Player(string DB, int sectionID, int tableNumber, Round round, string direction, int playerNumber, bool individual)
+        public Player(string DB, int sectionID, int tableNumber, Round round, string direction, int playerNumber, bool individual, int nameSource)
         {
             this.DB = DB;
             SectionID = sectionID;
@@ -71,7 +71,33 @@ namespace TabScore.Models
             }
             else
             {
-                PlayerName = GetNameFromNumber(DB, playerNumber);
+                switch (nameSource)
+                {
+                    case 0:
+                        PlayerName = GetNameFromPlayerNamesTable(DB, playerNumber);
+                        break;
+                    case 1:
+                        PlayerName = GetNameFromExternalDatabase(playerNumber);
+                        break;
+                    case 2:
+                        PlayerName = "";
+                        break;
+                    case 3:
+                        string name;
+                        name = GetNameFromPlayerNamesTable(DB, playerNumber);
+                        if (name == "" || name.Substring(0, 1) == "#" || (name.Length >= 7 && name.Substring(0, 7) == "Unknown"))
+                        {
+                            PlayerName = GetNameFromExternalDatabase(playerNumber);
+                        }
+                        else
+                        {
+                            PlayerName = name;
+                        }
+                        break;
+                    default:
+                        PlayerName = "";
+                        break;
+                }
                 if (PlayerName.Substring(0, 1) == "#")    // PlayerNames table doesn't exist, so let scoring software set the name 
                 {
                     PlayerName = "";
@@ -126,32 +152,6 @@ namespace TabScore.Models
                 {
                     cmd2.Dispose();
                 }
-            }
-        }
-
-        private static string GetNameFromNumber(string DB, int playerNumber)
-        {
-            switch (new Settings(DB).NameSource)
-            {
-                case 0:
-                    return GetNameFromPlayerNamesTable(DB, playerNumber);
-                case 1:
-                    return GetNameFromExternalDatabase(playerNumber);
-                case 2:
-                    return "";
-                case 3:
-                    string name;
-                    name = GetNameFromPlayerNamesTable(DB, playerNumber);
-                    if (name == "" || name.Substring(0, 1) == "#" || (name.Length >= 7 && name.Substring(0, 7) == "Unknown"))
-                    {
-                        return GetNameFromExternalDatabase(playerNumber);
-                    }
-                    else
-                    {
-                        return name;
-                    }
-                default:
-                    return "";
             }
         }
 

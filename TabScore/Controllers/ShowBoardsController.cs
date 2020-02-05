@@ -14,17 +14,17 @@ namespace TabScore.Controllers
             Session["Result"] = null;
 
             Round round = Session["Round"] as Round;
-            Sesh sesh = Session["Sesh"] as Sesh;
+            SessionData sessionData = Session["SessionData"] as SessionData;
 
-            ResultsList resultsList = new ResultsList(DBConnectionString, sesh.SectionID, sesh.TableNumber, round.RoundNumber, round.LowBoard, round.HighBoard);
+            ResultsList resultsList = new ResultsList(DBConnectionString, sessionData.SectionID, sessionData.TableNumber, round.RoundNumber, round.LowBoard, round.HighBoard);
 
-            if (sesh.IsIndividual)
+            if (sessionData.IsIndividual)
             {
-                Session["Header"] = $"Table {sesh.SectionTableString} - Round {round.RoundNumber} - {round.PairNS}+{round.South} v {round.PairEW}+{round.West}";
+                Session["Header"] = $"Table {sessionData.SectionTableString} - Round {round.RoundNumber} - {round.PairNS}+{round.South} v {round.PairEW}+{round.West}";
             }
             else
             {
-                Session["Header"] = $"Table {sesh.SectionTableString} - Round {round.RoundNumber} - NS {round.PairNS} v EW {round.PairEW}";
+                Session["Header"] = $"Table {sessionData.SectionTableString} - Round {round.RoundNumber} - NS {round.PairNS} v EW {round.PairEW}";
             }
             ViewData["BackButton"] = "FALSE";
 

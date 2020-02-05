@@ -11,10 +11,10 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            Sesh sesh = Session["Sesh"] as Sesh;
-            if (newRoundNumber > UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, sesh.SectionID))  // Session complete
+            SessionData sessionData = Session["SessionData"] as SessionData;
+            if (newRoundNumber > UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, sessionData.SectionID))  // Session complete
             {
-                if (new Settings(DBConnectionString).ShowRanking == 2)
+                if ((Session["Settings"] as Settings).ShowRanking == 2)
                 {
                     return RedirectToAction("Index", "ShowFinalRankingList");
                 }
@@ -24,15 +24,15 @@ namespace TabScore.Controllers
                 }
             }
 
-            MovesList movesList = new MovesList(DBConnectionString, sesh.SectionID, Session["Round"] as Round, newRoundNumber, sesh.TableNumber, sesh.MissingPair, sesh.IsIndividual);
+            MovesList movesList = new MovesList(DBConnectionString, sessionData.SectionID, Session["Round"] as Round, newRoundNumber, sessionData.TableNumber, sessionData.MissingPair, sessionData.IsIndividual);
 
-            Session["Header"] = $"Table {sesh.SectionTableString}";
+            Session["Header"] = $"Table {sessionData.SectionTableString}";
             ViewData["BackButton"] = "FALSE";
 
             // Update session to new round info
-            Session["Round"] = new Round(DBConnectionString, sesh.SectionID, sesh.TableNumber, newRoundNumber, sesh.IsIndividual);
+            Session["Round"] = new Round(DBConnectionString, sessionData.SectionID, sessionData.TableNumber, newRoundNumber, sessionData.IsIndividual);
 
-            if (sesh.IsIndividual)
+            if (sessionData.IsIndividual)
             {
                 return View("Individual", movesList);
             }
@@ -47,7 +47,11 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (new Settings(DBConnectionString).NumberEntryEachRound)
+            // Refresh settings for the start of the round
+            Settings settings = new Settings(DBConnectionString);
+            Session["Settings"] = settings;
+            
+            if (settings.NumberEntryEachRound)
             {
                 return RedirectToAction("Index", "ShowPlayerNumbers");
             }

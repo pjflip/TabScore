@@ -11,14 +11,14 @@ namespace TabScore.Controllers
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
             Round round = Session["Round"] as Round;
-            Sesh sesh = Session["Sesh"] as Sesh;
+            SessionData sessionData = Session["SessionData"] as SessionData;
 
             ViewData["BackButton"] = "FALSE";
-            Session["Header"] = $"Table {sesh.SectionTableString} - Round {round.RoundNumber}";
+            Session["Header"] = $"Table {sessionData.SectionTableString} - Round {round.RoundNumber}";
 
-            if (round.PairNS == 0 || round.PairNS == sesh.MissingPair)
+            if (round.PairNS == 0 || round.PairNS == sessionData.MissingPair)
             {
-                if (sesh.IsIndividual)
+                if (sessionData.IsIndividual)
                 {
                     return View("NSMissingIndividual", round);
                 }
@@ -27,9 +27,9 @@ namespace TabScore.Controllers
                     return View("NSMissing", round);
                 }
             }
-            else if (round.PairEW == 0 || round.PairEW == sesh.MissingPair)
+            else if (round.PairEW == 0 || round.PairEW == sessionData.MissingPair)
             {
-                if (sesh.IsIndividual)
+                if (sessionData.IsIndividual)
                 {
                     return View("EWMissingIndividual", round);
                 }
@@ -40,7 +40,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                if (sesh.IsIndividual)
+                if (sessionData.IsIndividual)
                 {
                     return View("Individual", round);
                 }

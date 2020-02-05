@@ -13,7 +13,7 @@ namespace TabScore.Models
 
         private int currentScore;
 
-        public Traveller(string DB, int sectionID, int boardNumber, int pairNS, bool individual)
+        public Traveller(string DB, int sectionID, int boardNumber, int pairNS, bool individual, Settings settings)
         {
             BoardNumber = boardNumber;
             PairNS = pairNS;
@@ -87,7 +87,6 @@ namespace TabScore.Models
                 }
             };
 
-            Settings settings = new Settings(DB);
             Sort((x, y) => y.Score.CompareTo(x.Score));
             if (settings.ShowPercentage)
             {

@@ -21,7 +21,7 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            (Session["Result"] as Result).UpdateDB(DBConnectionString, (Session["Sesh"] as Sesh).IsIndividual);
+            (Session["Result"] as Result).UpdateDB(DBConnectionString, (Session["SessionData"] as SessionData).IsIndividual);
             return RedirectToAction("Index", "ShowTraveller");
         }
 

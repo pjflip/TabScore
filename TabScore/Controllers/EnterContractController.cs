@@ -13,16 +13,16 @@ namespace TabScore.Controllers
 
             Round round = Session["Round"] as Round;
             Result result = Session["Result"] as Result;
-            Sesh sesh = Session["Sesh"] as Sesh;
+            SessionData sessionData = Session["SessionData"] as SessionData;
 
             if (result == null || result.BoardNumber != boardNumber)   // No session result data for this board
             {
-                result = new Result(DBConnectionString, sesh.SectionID, sesh.TableNumber, round.RoundNumber, boardNumber)
+                result = new Result(DBConnectionString, sessionData.SectionID, sessionData.TableNumber, round.RoundNumber, boardNumber)
                 {
                     PairNS = round.PairNS,
                     PairEW = round.PairEW
                 };
-                if (sesh.IsIndividual)
+                if (sessionData.IsIndividual)
                 {
                     result.South = round.South;
                     result.West = round.West;
@@ -30,13 +30,13 @@ namespace TabScore.Controllers
                 Session["Result"] = result;
             }
 
-            if (sesh.IsIndividual)
+            if (sessionData.IsIndividual)
             {
-                Session["Header"] = $"Table {sesh.SectionTableString} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"{round.PairNS}+{round.South}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"{round.PairEW}+{round.West}")}";
+                Session["Header"] = $"Table {sessionData.SectionTableString} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"{round.PairNS}+{round.South}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"{round.PairEW}+{round.West}")}";
             }
             else
             {
-                Session["Header"] = $"Table {sesh.SectionTableString} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"NS {round.PairNS}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"EW {round.PairEW}")}";
+                Session["Header"] = $"Table {sessionData.SectionTableString} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"NS {round.PairNS}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"EW {round.PairEW}")}";
             }
             ViewData["BackButton"] = "TRUE";
             return View(result);
@@ -78,7 +78,7 @@ namespace TabScore.Controllers
 
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-            result.UpdateDB(DBConnectionString, (Session["Sesh"] as Sesh).IsIndividual);
+            result.UpdateDB(DBConnectionString, (Session["SessionData"] as SessionData).IsIndividual);
             return RedirectToAction("Index", "ShowBoards");
         }
 

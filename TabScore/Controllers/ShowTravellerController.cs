@@ -10,16 +10,16 @@ namespace TabScore.Controllers
             string DBConnectionString = Session["DBConnectionString"].ToString();
             if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
 
-            if (!new Settings(DBConnectionString).ShowResults)
+            if (!(Session["Settings"] as Settings).ShowResults)
             {
                 return RedirectToAction("Index", "ShowBoards");
             }
 
             Result result = Session["Result"] as Result;
-            Sesh sesh = Session["Sesh"] as Sesh;
-            Traveller traveller = new Traveller(DBConnectionString, sesh.SectionID, result.BoardNumber, result.PairNS, sesh.IsIndividual);
+            SessionData sessionData = Session["SessionData"] as SessionData;
+            Traveller traveller = new Traveller(DBConnectionString, sessionData.SectionID, result.BoardNumber, result.PairNS, sessionData.IsIndividual, Session["Settings"] as Settings);
             ViewData["BackButton"] = "TRUE";
-            if (sesh.IsIndividual)
+            if (sessionData.IsIndividual)
             {
                 return View("Individual", traveller);
             }

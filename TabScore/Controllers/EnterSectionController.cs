@@ -16,7 +16,7 @@ namespace TabScore.Controllers
             // Check if only one section - if so use it
             if (sectionsList.Count == 1)
             {
-                Session["Sesh"] = new Sesh(DBConnectionString)
+                Session["SessionData"] = new SessionData(DBConnectionString)
                 {
                     SectionID = sectionsList[0].ID,
                     SectionLetter = sectionsList[0].Letter,
@@ -42,7 +42,7 @@ namespace TabScore.Controllers
             if (sectionsList == null) return RedirectToAction("Index", "ErrorScreen");
 
             Section section = sectionsList.Find(x => x.Letter == sectionLetter);
-            Session["Sesh"] = new Sesh(DBConnectionString)
+            Session["SessionData"] = new SessionData(DBConnectionString)
             {
                 SectionID = section.ID,
                 SectionLetter = section.Letter,

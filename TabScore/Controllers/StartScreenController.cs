@@ -1,6 +1,7 @@
 ﻿using System.Data.Odbc;
 using System.Reflection;
 using System.Web.Mvc;
+using TabScore.Models;
 
 namespace TabScore.Controllers
 {
@@ -50,6 +51,9 @@ namespace TabScore.Controllers
                 
                 // Set connection string for the session.  This is used to check if the session is interrupted
                 Session["DBConnectionString"] = cs.ToString();
+
+                // Get settings
+                Session["Settings"] = new Settings(cs.ToString());
 
                 return RedirectToAction("Index", "EnterSection");
             }

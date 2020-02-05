@@ -14,17 +14,17 @@ namespace TabScore.Controllers
             Round round = Session["Round"] as Round;
             if (round.RoundNumber > 1)  // Show ranking list only from round 2 onwards
             {
-               if (new Settings(DBConnectionString).ShowRanking == 1)
+               if ((Session["Settings"] as Settings).ShowRanking == 1)
                 {
-                    Sesh sesh = Session["Sesh"] as Sesh;
-                    RankingList rankingList = new RankingList(DBConnectionString, sesh.SectionID, sesh.IsIndividual);
+                    SessionData sessionData = Session["SessionData"] as SessionData;
+                    RankingList rankingList = new RankingList(DBConnectionString, sessionData.SectionID, sessionData.IsIndividual);
                     if (rankingList != null && rankingList.Count != 0 && rankingList[0].ScoreDecimal != 0.0 && rankingList[0].ScoreDecimal != 50.0)
                     {
                         rankingList.RoundNumber = round.RoundNumber;
                         rankingList.PairNS = round.PairNS;
                         rankingList.PairEW = round.PairEW;
                         ViewData["BackButton"] = "REFRESH";
-                        if (sesh.IsIndividual)
+                        if (sessionData.IsIndividual)
                         {
                             rankingList.South = round.South;
                             rankingList.West = round.West;

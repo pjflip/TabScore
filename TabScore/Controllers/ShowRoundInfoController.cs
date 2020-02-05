@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -21,12 +20,12 @@ namespace TabScore.Controllers
                 ViewData["BackButton"] = "TRUE";
             }
 
-            Sesh sesh = Session["Sesh"] as Sesh;
-            Session["Header"] = $"Table {sesh.SectionTableString}";
+            SessionData sessionData = Session["SessionData"] as SessionData;
+            Session["Header"] = $"Table {sessionData.SectionTableString}";
 
-            if (round.PairNS == 0 || round.PairNS == sesh.MissingPair)
+            if (round.PairNS == 0 || round.PairNS == sessionData.MissingPair)
             {
-                if (sesh.IsIndividual)
+                if (sessionData.IsIndividual)
                 {
                    return View("NSMissingIndividual", round);
                 }
@@ -35,9 +34,9 @@ namespace TabScore.Controllers
                     return View("NSMissing", round);
                 }
             }
-            else if (round.PairEW == 0 || round.PairEW == sesh.MissingPair)
+            else if (round.PairEW == 0 || round.PairEW == sessionData.MissingPair)
             {
-                if (sesh.IsIndividual)
+                if (sessionData.IsIndividual)
                 {
                    return View("EWMissingIndividual", round);
                 }
@@ -48,7 +47,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                if (sesh.IsIndividual)
+                if (sessionData.IsIndividual)
                 {
                     return View("Individual", round);
                 }
@@ -76,8 +75,8 @@ namespace TabScore.Controllers
 
             // Reset to the previous round; RoundNumber > 1 else no Back button and cannot get here
             int roundNumber =(Session["Round"] as Round).RoundNumber;
-            Sesh sesh = Session["Sesh"] as Sesh;
-            Session["Round"] = new Round(DBConnectionString, sesh.SectionID, sesh.TableNumber, roundNumber - 1, sesh.IsIndividual);
+            SessionData sessionData = Session["SessionData"] as SessionData;
+            Session["Round"] = new Round(DBConnectionString, sessionData.SectionID, sessionData.TableNumber, roundNumber - 1, sessionData.IsIndividual);
             return RedirectToAction("Index", "ShowMove", new { newRoundNumber = roundNumber });
         }
     }
