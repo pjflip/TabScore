@@ -13,7 +13,7 @@ TabScore is designed for use on a PC with Windows 10 (which includes Internet
 Information Services (IIS) 10), .NET Framework 4.6.1 and ASP.NET 4.7.  It has
 been installed and run successfully (but not fully tested) on Windows 7.
 
-IMPORTANT: Please ensure you have completed all the intallation steps in the 
+IMPORTANT: Please ensure you have completed all the installation steps in the 
 'TabScore User Guide' document before attempting to run TabScore.
 
 To upgrade TabScore from a previous installation, please read the section in

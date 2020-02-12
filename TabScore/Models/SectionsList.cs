@@ -5,9 +5,9 @@ namespace TabScore.Models
 {
     public class SectionsList : List<Section>
     {
-        public SectionsList(string DB)
+        public SectionsList()
         {
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
                 string SQLString = "SELECT ID, Letter, Tables, MissingPair FROM Section";

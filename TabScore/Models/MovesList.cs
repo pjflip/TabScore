@@ -9,42 +9,42 @@ namespace TabScore.Models
         public int HighBoard { get; private set; }
         public int BoardsNewTable { get; private set; }
 
-        public MovesList(string DB, int sectionID, Round round, int newRoundNumber, int tableNumber, int missingPair, bool individual)
+        public MovesList(SessionData sessionData, Round round, int newRoundNumber)
         {
             NewRoundNumber = newRoundNumber;
             LowBoard = round.LowBoard;
             HighBoard = round.HighBoard;
-            if (individual)
+            if (AppData.IsIndividual)
             {
                 if (round.PairNS != 0)
                 {
-                    Add(new Move(DB, sectionID, newRoundNumber, tableNumber, round.PairNS, "North"));
+                    Add(new Move(sessionData, newRoundNumber, round.PairNS, "North"));
                 }
                 if (round.South != 0)
                 {
-                    Add(new Move(DB, sectionID, newRoundNumber, tableNumber, round.South, "South"));
+                    Add(new Move(sessionData, newRoundNumber, round.South, "South"));
                 }
                 if (round.PairEW != 0)
                 {
-                    Add(new Move(DB, sectionID, newRoundNumber, tableNumber, round.PairEW, "East"));
+                    Add(new Move(sessionData, newRoundNumber, round.PairEW, "East"));
                 }
                 if (round.West != 0)
                 {
-                    Add(new Move(DB, sectionID, newRoundNumber, tableNumber, round.West, "West"));
+                    Add(new Move(sessionData, newRoundNumber, round.West, "West"));
                 }
             }
             else
             {
-                if (round.PairNS != 0 && round.PairNS != missingPair)
+                if (round.PairNS != 0 && round.PairNS != sessionData.MissingPair)
                 {
-                    Add(new Move(DB, sectionID, newRoundNumber, tableNumber, round.PairNS, "NS"));
+                    Add(new Move(sessionData, newRoundNumber, round.PairNS, "NS"));
                 }
-               if (round.PairEW != 0 && round.PairEW != missingPair)
+               if (round.PairEW != 0 && round.PairEW != sessionData.MissingPair)
                 {
-                    Add(new Move(DB, sectionID, newRoundNumber, tableNumber, round.PairEW, "EW"));
+                    Add(new Move(sessionData, newRoundNumber, round.PairEW, "EW"));
                 }
             }
-            BoardsNewTable = new BoardMove(DB, sectionID, newRoundNumber, tableNumber, round.LowBoard).TableNumber;
+            BoardsNewTable = new BoardMove(sessionData, newRoundNumber, round.LowBoard).NewTableNumber;
         }
     }
 }

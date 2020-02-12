@@ -15,22 +15,19 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(int tableNumber, string confirm)
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
             SessionData sessionData = Session["SessionData"] as SessionData;
             sessionData.TableNumber = tableNumber;
 
             if (confirm == "FALSE")
             {
-                if (sessionData.TableLogonStatus(DBConnectionString) == 1)  // Table is already logged on, so need to confirm
+                if (sessionData.TableLogonStatus() == 1)  // Table is already logged on, so need to confirm
                 {
                     Session["SessionData"] = sessionData;   // Save table number
                     return RedirectToAction("Index", "EnterTableNumber");
                 }
                 else
                 {
-                    sessionData.LogonTable(DBConnectionString);
+                    sessionData.LogonTable();
                 }
             }
 
@@ -38,10 +35,10 @@ namespace TabScore.Controllers
             Session["SessionData"] = sessionData;    
             
             // Check if results data exist - set round number accordingly and create round info
-            int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(DBConnectionString, sessionData.SectionID, tableNumber);
-            Session["Round"] = new Round(DBConnectionString, sessionData.SectionID, tableNumber, lastRoundWithResults, sessionData.IsIndividual);
+            int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(sessionData.SectionID, tableNumber);
+            Session["Round"] = new Round(sessionData, lastRoundWithResults);
 
-            if (lastRoundWithResults == 1 || (Session["Settings"] as Settings).NumberEntryEachRound)
+            if (lastRoundWithResults == 1 || Settings.NumberEntryEachRound)
             {
                 return RedirectToAction("Index", "ShowPlayerNumbers");
             }

@@ -5,10 +5,6 @@ namespace TabScore.Models
 {
     public class Round
     {
-        private readonly string DB;
-        private readonly int SectionID;
-        private readonly bool Individual;
-        
         public int RoundNumber { get; private set; }
         public int PairNS { get; private set; }   // Doubles as North player number for individuals
         public int PairEW { get; private set; }   // Doubles as East player number for individuals
@@ -16,21 +12,23 @@ namespace TabScore.Models
         public int HighBoard { get; private set; }
         public int South { get; private set; }
         public int West { get; private set; }
+        public string NameNorth { get; private set; }
+        public string NameSouth { get; private set; }
+        public string NameEast { get; private set; }
+        public string NameWest { get; private set; }
 
-        public Round(string dB, int sectionID, int tableNumber, int roundNumber, bool individual)
+        public Round(SessionData sessionData, int roundNumber)
         {
-            DB = dB;
-            SectionID = sectionID;
             RoundNumber = roundNumber;
-            Individual = individual;
 
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 PairNS = 0;
                 connection.Open();
-                if (individual)
+                CheckTabScorePairNos(connection);
+                if (AppData.IsIndividual)
                 {
-                    string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={tableNumber} AND Round={roundNumber}";
+                    string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={sessionData.SectionID} AND Table={sessionData.TableNumber} AND Round={roundNumber}";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = null;
                     try
@@ -54,10 +52,14 @@ namespace TabScore.Models
                         reader.Close();
                         cmd.Dispose();
                     }
+                    NameNorth = GetNameFromPlayerNumbersTableIndividual(connection, sessionData.SectionID, RoundNumber, PairNS);
+                    NameSouth = GetNameFromPlayerNumbersTableIndividual(connection, sessionData.SectionID, RoundNumber, South);
+                    NameEast = GetNameFromPlayerNumbersTableIndividual(connection, sessionData.SectionID, RoundNumber, PairEW);
+                    NameWest = GetNameFromPlayerNumbersTableIndividual(connection, sessionData.SectionID, RoundNumber, West);
                 }
                 else  // Not individual
                 {
-                    string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={tableNumber} AND Round={roundNumber}";
+                    string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sessionData.SectionID} AND Table={sessionData.TableNumber} AND Round={roundNumber}";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = null;
                     try
@@ -79,377 +81,246 @@ namespace TabScore.Models
                         reader.Close();
                         cmd.Dispose();
                     }
+                    NameNorth = GetNameFromPlayerNumbersTable(connection, sessionData.SectionID, RoundNumber, PairNS, "N");
+                    NameSouth = GetNameFromPlayerNumbersTable(connection, sessionData.SectionID, RoundNumber, PairNS, "S");
+                    NameEast = GetNameFromPlayerNumbersTable(connection, sessionData.SectionID, RoundNumber, PairEW, "E");
+                    NameWest = GetNameFromPlayerNumbersTable(connection, sessionData.SectionID, RoundNumber, PairEW, "W");
                 }
             }
             return;
         }
 
-        public string NameNorth
+        private static void CheckTabScorePairNos(OdbcConnection conn)
         {
-            get
-            {
-                if (Individual)
-                {
-                    return GetNameIndividual(DB, SectionID, RoundNumber, PairNS);
-                }
-                else
-                {
-                    return GetName(DB, SectionID, RoundNumber, PairNS, "N");
-                }
-            }
-        }
-        public string NameSouth
-        {
-            get
-            {
-                if (Individual)
-                {
-                    return GetNameIndividual(DB, SectionID, RoundNumber, South);
-                }
-                else
-                {
-                    return GetName(DB, SectionID, RoundNumber, PairNS, "S");
-                }
-            }
-        }
-        public string NameEast
-        {
-            get
-            {
-                if (Individual)
-                {
-                    return GetNameIndividual(DB, SectionID, RoundNumber, PairEW);
-                }
-                else
-                {
-                    return GetName(DB, SectionID, RoundNumber, PairEW, "E");
-                }
-            }
-        }
-        public string NameWest
-        {
-            get
-            {
-                if (Individual)
-                {
-                    return GetNameIndividual(DB, SectionID, RoundNumber, West);
-                }
-                else
-                {
-                    return GetName(DB, SectionID, RoundNumber, PairEW, "W");
-                }
-            }
-        }
+            object queryResult = null;
 
-        private static string GetName(string DB, int sectionID, int round, int pairNo, string direction)
-        {
-            string number = "###";
-            string name = "";
-
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            // Check to see if TabScorePairNo exists (it may get overwritten)
+            string SQLString = $"SELECT 1 FROM PlayerNumbers WHERE TabScorePairNo IS NULL";
+            OdbcCommand cmd1 = new OdbcCommand(SQLString, conn);
+            try
             {
-                object queryResult = null;
-                connection.Open();
+                ODBCRetryHelper.ODBCRetry(() =>
+                {
+                    queryResult = cmd1.ExecuteScalar();
+                });
+            }
+            finally
+            {
+                cmd1.Dispose();
+            }
 
-                // Check to see if TabScorePairNo exists (it may get overwritten), and if not recreate it
-                string SQLString = $"SELECT 1 FROM PlayerNumbers WHERE TabScorePairNo IS NULL";
-                OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
+            if (queryResult != null)
+            {
+                // TabScorePairNo doesn't exist, so recreate it.  This duplicates the code in TabScoreStarter
+                SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
+                OdbcCommand cmd2 = new OdbcCommand(SQLString, conn);
+                OdbcDataReader reader2 = null;
                 try
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        queryResult = cmd1.ExecuteScalar();
-                    });
-                }
-                finally
-                {
-                    cmd1.Dispose();
-                }
-
-                if (queryResult != null)
-                {
-                    // This duplicates the code in TabScoreStarter
-                    SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
-                    OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
-                    OdbcDataReader reader2 = null;
-                    try
-                    {
-                        ODBCRetryHelper.ODBCRetry(() =>
+                        reader2 = cmd2.ExecuteReader();
+                        while (reader2.Read())
                         {
-                            reader2 = cmd2.ExecuteReader();
-                            while (reader2.Read())
+                            int tempSectionID = reader2.GetInt32(0);
+                            int tempTable = reader2.GetInt32(1);
+                            string tempDirection = reader2.GetString(2);
+                            if (tempDirection == "N" || tempDirection == "S")
                             {
-                                int tempSectionID = reader2.GetInt32(0);
-                                int tempTable = reader2.GetInt32(1);
-                                string tempDirection = reader2.GetString(2);
-                                if (tempDirection == "N" || tempDirection == "S")
-                                {
-                                    SQLString = $"SELECT NSPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
-                                }
-                                else
-                                {
-                                    SQLString = $"SELECT EWPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
-                                }
-
-                                OdbcCommand cmd3 = new OdbcCommand(SQLString, connection);
-                                try
-                                {
-                                    ODBCRetryHelper.ODBCRetry(() =>
-                                    {
-                                        queryResult = cmd3.ExecuteScalar();
-                                    });
-                                }
-                                finally
-                                {
-                                    cmd3.Dispose();
-                                }
-                                string TSpairNo = queryResult.ToString();
-                                SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID.ToString()} AND [Table]={tempTable.ToString()} AND Direction='{tempDirection}'";
-                                OdbcCommand cmd4 = new OdbcCommand(SQLString, connection);
-                                try
-                                {
-                                    ODBCRetryHelper.ODBCRetry(() =>
-                                    {
-                                        cmd4.ExecuteNonQuery();
-                                    });
-                                }
-                                finally
-                                {
-                                    cmd4.Dispose();
-                                }
+                                SQLString = $"SELECT NSPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
                             }
-                        });
-                    }
-                    finally
-                    {
-                        reader2.Close();
-                        cmd2.Dispose();
-                    }
-                }
-
-                // First look for entries in the same direction
-                SQLString = $"SELECT Number, Name, Round FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={pairNo} AND Direction='{direction}'";
-                OdbcCommand cmd5 = new OdbcCommand(SQLString, connection);
-                OdbcDataReader reader5 = null;
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        reader5 = cmd5.ExecuteReader();
-                        int biggestRoundSoFar = -1;
-                        while (reader5.Read())
-                        {
-                            int readerRound = Convert.ToInt32(reader5.GetValue(2));
-                            if (readerRound <= round && readerRound > biggestRoundSoFar)
+                            else
                             {
-                                if (!reader5.IsDBNull(0))
+                                SQLString = $"SELECT EWPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                            }
+
+                            OdbcCommand cmd3 = new OdbcCommand(SQLString, conn);
+                            try
+                            {
+                                ODBCRetryHelper.ODBCRetry(() =>
                                 {
-                                    number = reader5.GetString(0);
-                                }
-                                if (!reader5.IsDBNull(1))
+                                    queryResult = cmd3.ExecuteScalar();
+                                });
+                            }
+                            finally
+                            {
+                                cmd3.Dispose();
+                            }
+                            string TSpairNo = queryResult.ToString();
+                            SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID.ToString()} AND [Table]={tempTable.ToString()} AND Direction='{tempDirection}'";
+                            OdbcCommand cmd4 = new OdbcCommand(SQLString, conn);
+                            try
+                            {
+                                ODBCRetryHelper.ODBCRetry(() =>
                                 {
-                                    name = reader5.GetString(1);
-                                }
-                                biggestRoundSoFar = readerRound;
+                                    cmd4.ExecuteNonQuery();
+                                });
+                            }
+                            finally
+                            {
+                                cmd4.Dispose();
                             }
                         }
                     });
                 }
                 finally
                 {
-                    reader5.Close();
-                    cmd5.Dispose();
+                    reader2.Close();
+                    cmd2.Dispose();
                 }
+            }
+        }
 
-                if (number == "###")  // Nothing found so try Round 0 entries in the other direction (for Howell type pairs movement)
+        private static string GetNameFromPlayerNumbersTable(OdbcConnection conn, int sectionID, int round, int pairNo, string dir)
+        {
+            string number = "###";
+            string name = "";
+            
+            // First look for entries in the same direction
+            // If the player has changed (eg in teams), we need the latest name applicable to this round
+            string SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={pairNo} AND Direction='{dir}'";
+            OdbcCommand cmd5 = new OdbcCommand(SQLString, conn);
+            OdbcDataReader reader5 = null;
+            try
+            {
+                ODBCRetryHelper.ODBCRetry(() =>
                 {
-                    string otherDirection;
-                    switch (direction)
+                    reader5 = cmd5.ExecuteReader();
+                    DateTime latestTimeLog = new DateTime(2010, 1, 1);
+                    while (reader5.Read())
                     {
-                        case "N":
-                            otherDirection = "E";
-                            break;
-                        case "S":
-                            otherDirection = "W";
-                            break;
-                        case "E":
-                            otherDirection = "N";
-                            break;
-                        case "W":
-                            otherDirection = "S";
-                            break;
-                        default:
-                            otherDirection = "";
-                            break;
-                    }
-                    SQLString = $"SELECT Number, Name FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={pairNo} AND Direction='{otherDirection}' AND Round=0";
-                    OdbcCommand cmd6 = new OdbcCommand(SQLString, connection);
-                    OdbcDataReader reader6 = null;
-                    try
-                    {
-                        ODBCRetryHelper.ODBCRetry(() =>
+                        try
                         {
-                            reader6 = cmd6.ExecuteReader();
-                            while (reader6.Read())
+                            int readerRound = reader5.GetInt32(2);
+                            DateTime timeLog = reader5.GetDateTime(3);
+                            if (readerRound <= round && timeLog > latestTimeLog)
                             {
-                                if (!reader6.IsDBNull(0))
+                                number = reader5.GetString(0);
+                                name = reader5.GetString(1);
+                                latestTimeLog = timeLog;
+                            }
+                        }
+                        catch   // Record found, but format cannot be parsed
+                        {
+                            number = "";
+                        }
+                    }
+                });
+            }
+            finally 
+            {
+                reader5.Close();
+                cmd5.Dispose();
+            }
+
+            if (number == "###")  // Nothing found so try Round 0 entries in the other direction (for Howell type pairs movement)
+            {
+                string otherDir;
+                switch (dir)
+                {
+                    case "N":
+                        otherDir = "E";
+                        break;
+                    case "S":
+                        otherDir = "W";
+                        break;
+                    case "E":
+                        otherDir = "N";
+                        break;
+                    case "W":
+                        otherDir = "S";
+                        break;
+                    default:
+                        otherDir = "";
+                        break;
+                }
+                SQLString = $"SELECT Number, Name, TimeLog FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={pairNo} AND Direction='{otherDir}' AND Round=0";
+                OdbcCommand cmd6 = new OdbcCommand(SQLString, conn);
+                OdbcDataReader reader6 = null;
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        reader6 = cmd6.ExecuteReader();
+                        DateTime latestTimeLog = new DateTime(2010, 1, 1);
+                        while (reader6.Read())
+                        {
+                            try
+                            {
+                                DateTime timeLog = reader6.GetDateTime(2);
+                                if (timeLog > latestTimeLog)
                                 {
                                     number = reader6.GetString(0);
-                                }
-                                if (!reader6.IsDBNull(1))
-                                {
                                     name = reader6.GetString(1);
+                                    latestTimeLog = timeLog;
                                 }
                             }
-                        });
-                    }
-                    finally
-                    {
-                        reader6.Close();
-                        cmd6.Dispose();
-                    }
+                            catch   // Record found, but format cannot be parsed
+                            {
+                                number = "";
+                            }
+                        }
+                    });
                 }
-
-                if (number == "###")  // Nothing found in either direction!!
+                finally
                 {
-                    number = "";
+                    reader6.Close();
+                    cmd6.Dispose();
                 }
+            }
+
+            if (number == "###")  // Nothing found in either direction!!
+            {
+                number = "";
             }
             return FormatName(name, number);
         }
 
-        private static string GetNameIndividual(string DB, int sectionID, int round, int playerNo)
+        private static string GetNameFromPlayerNumbersTableIndividual(OdbcConnection conn, int sectionID, int round, int playerNo)
         {
             string number = "###";
             string name = "";
 
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            string SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={playerNo}";
+            OdbcCommand cmd5 = new OdbcCommand(SQLString, conn);
+            OdbcDataReader reader5 = null;
+            try
             {
-                object queryResult = null;
-                connection.Open();
-
-                // Check to see if TabScorePairNo exists (it may get overwritten), and if not recreate it
-                string SQLString = $"SELECT 1 FROM PlayerNumbers WHERE TabScorePairNo IS NULL";
-                OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
-                try
+                ODBCRetryHelper.ODBCRetry(() =>
                 {
-                    ODBCRetryHelper.ODBCRetry(() =>
+                    reader5 = cmd5.ExecuteReader();
+                    DateTime latestTimeLog = new DateTime(2010, 1, 1);
+                    while (reader5.Read())
                     {
-                        queryResult = cmd1.ExecuteScalar();
-                    });
-                }
-                finally
-                {
-                    cmd1.Dispose();
-                }
-
-                if (queryResult != null)
-                {
-                    // This duplicates the code in TabScoreStarter
-                    SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
-                    OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
-                    OdbcDataReader reader2 = null;
-                    try
-                    {
-                        ODBCRetryHelper.ODBCRetry(() =>
+                        try
                         {
-                            reader2 = cmd2.ExecuteReader();
-                            while (reader2.Read())
+                            int readerRound = reader5.GetInt32(2);
+                            DateTime timeLog = reader5.GetDateTime(3);
+                            if (readerRound <= round && timeLog > latestTimeLog)
                             {
-                                int tempSectionID = reader2.GetInt32(0);
-                                int tempTable = reader2.GetInt32(1);
-                                string tempDirection = reader2.GetString(2);
-                                switch (tempDirection)
-                                {
-                                    case "N":
-                                        SQLString = $"SELECT NSPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
-                                        break;
-                                    case "S":
-                                        SQLString = $"SELECT South FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
-                                        break;
-                                    case "E":
-                                        SQLString = $"SELECT EWPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
-                                        break;
-                                    case "W":
-                                        SQLString = $"SELECT West FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
-                                        break;
-                                }
-
-                                OdbcCommand cmd3 = new OdbcCommand(SQLString, connection);
-                                try
-                                {
-                                    ODBCRetryHelper.ODBCRetry(() =>
-                                    {
-                                        queryResult = cmd3.ExecuteScalar();
-                                    });
-                                }
-                                finally
-                                {
-                                    cmd3.Dispose();
-                                }
-                                string TSpairNo = queryResult.ToString();
-                                SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID.ToString()} AND [Table]={tempTable.ToString()} AND Direction='{tempDirection}'";
-                                OdbcCommand cmd4 = new OdbcCommand(SQLString, connection);
-                                try
-                                {
-                                    ODBCRetryHelper.ODBCRetry(() =>
-                                    {
-                                        cmd4.ExecuteNonQuery();
-                                    });
-                                }
-                                finally
-                                {
-                                    cmd4.Dispose();
-                                }
-                            }
-                        });
-                    }
-                    finally
-                    {
-                        reader2.Close();
-                        cmd2.Dispose();
-                    }
-                }
-
-                // Now find name from TabScorePairNo
-                SQLString = $"SELECT Number, Name, Round FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={playerNo}";
-                OdbcCommand cmd5 = new OdbcCommand(SQLString, connection);
-                OdbcDataReader reader5 = null;
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        reader5 = cmd5.ExecuteReader();
-                        int biggestRoundSoFar = -1;
-                        while (reader5.Read())
-                        {
-                            int readerRound = Convert.ToInt32(reader5.GetValue(2));
-                            if (readerRound <= round && readerRound > biggestRoundSoFar)
-                            {
-                                if (!reader5.IsDBNull(0))
-                                {
-                                    number = reader5.GetString(0);
-                                }
-                                if (!reader5.IsDBNull(1))
-                                {
-                                    name = reader5.GetString(1);
-                                }
-                                biggestRoundSoFar = readerRound;
+                                number = reader5.GetString(0);
+                                name = reader5.GetString(1);
+                                latestTimeLog = timeLog;
                             }
                         }
-                    });
-                }
-                finally
-                {
-                    cmd5.Dispose();
-                    reader5.Close();
-                }
-
-                if (number == "###")  // Nothing found
-                {
-                    number = "";
-                }
+                        catch   // Record found, but format cannot be parsed
+                        {
+                            number = "";
+                        }
+                    }
+                });
             }
+            finally
+            {
+                cmd5.Dispose();
+                reader5.Close();
+            }
+
+            if (number == "###")  // Nothing found
+            {
+                number = "";
+            }
+
             return FormatName(name, number);
         }
 
@@ -475,6 +346,185 @@ namespace TabScore.Models
             {
                 return name;
             }
+        }
+
+        public void UpdatePlayer(SessionData sessionData, string direction, int playerNumber)
+        {
+            // First get name, and update the Round
+            string playerName = "";
+            string dir = direction.Substring(0, 1);    // Need just N, S, E or W
+            
+            if (playerNumber == 0)
+            {
+                playerName = "Unknown";
+            }
+            else
+            {
+                switch (Settings.NameSource)
+                {
+                    case 0:
+                        playerName = PlayerNames.GetNameFromNumber(playerNumber);
+                        break;
+                    case 1:
+                        playerName = GetNameFromExternalDatabase(playerNumber);
+                        break;
+                    case 2:
+                        playerName = "";
+                        break;
+                    case 3:
+                        string name;
+                        name = PlayerNames.GetNameFromNumber(playerNumber);
+                        if (name == "" || name.Substring(0, 1) == "#" || (name.Length >= 7 && name.Substring(0, 7) == "Unknown"))
+                        {
+                            playerName = GetNameFromExternalDatabase(playerNumber);
+                        }
+                        else
+                        {
+                            playerName = name;
+                        }
+                        break;
+                }
+            }
+
+            int pairNumber = 0;
+            if (AppData.IsIndividual)
+            {
+                switch (dir)
+                {
+                    case "N":
+                        NameNorth = playerName;
+                        pairNumber = PairNS;
+                        break;
+                    case "S":
+                        NameSouth = playerName;
+                        pairNumber = South;
+                        break;
+                    case "E":
+                        NameEast = playerName;
+                        pairNumber = PairEW;
+                        break;
+                    case "W":
+                        NameWest = playerName;
+                        pairNumber = West;
+                        break;
+                }
+            }
+            else
+            {
+                switch (dir)
+                {
+                    case "N":
+                        NameNorth = playerName;
+                        pairNumber = PairNS;
+                        break;
+                    case "S":
+                        NameSouth = playerName;
+                        pairNumber = PairNS;
+                        break;
+                    case "E":
+                        NameEast = playerName;
+                        pairNumber = PairEW;
+                        break;
+                    case "W":
+                        NameWest = playerName;
+                        pairNumber = PairEW;
+                        break;
+                }
+            }
+
+            // Now update the PlayerNumbers table in the database
+            // Numbers entered at the start (when round = 1) need to be set as round 0 in the database
+            int roundNumber = RoundNumber;
+            if (roundNumber == 1)
+            {
+                roundNumber = 0;
+            }
+            if (playerNumber == 0)
+            {
+                playerName = "";
+            }
+            playerName = playerName.Replace("'", "''");    // Deal with apostrophes in names, eg O'Connor
+
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
+            {
+                connection.Open();
+                object queryResult = null;
+
+                // Check if PlayerNumbers entry exists already; if it does update it, if not create it
+                string SQLString = $"SELECT [Number] FROM PlayerNumbers WHERE Section={sessionData.SectionID} AND [Table]={sessionData.TableNumber} AND ROUND={roundNumber} AND Direction='{dir}'";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        queryResult = cmd.ExecuteScalar();
+                    });
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+                if (queryResult == DBNull.Value || queryResult == null)
+                {
+                    SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({sessionData.SectionID}, {sessionData.TableNumber}, '{dir}', '{playerNumber}', '{playerName}', {roundNumber}, False, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, {pairNumber})";
+                }
+                else
+                {
+                    SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerNumber}', [Name]='{playerName}', Processed=False, TimeLog=#{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, TabScorePairNo={pairNumber} WHERE Section={sessionData.SectionID} AND [Table]={sessionData.TableNumber} AND Round={roundNumber} AND Direction='{dir}'";
+                }
+                OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        cmd2.ExecuteNonQuery();
+                    });
+                }
+                finally
+                {
+                    cmd2.Dispose();
+                }
+            }
+            return;
+        }
+
+        private static string GetNameFromExternalDatabase(int playerNumber)
+        {
+            string name = "";
+            OdbcConnectionStringBuilder externalDB = new OdbcConnectionStringBuilder { Driver = "Microsoft Access Driver (*.mdb)" };
+            externalDB.Add("Dbq", @"C:\Bridgemate\BMPlayerDB.mdb");
+            externalDB.Add("Uid", "Admin");
+            using (OdbcConnection connection = new OdbcConnection(externalDB.ToString()))
+            {
+                object queryResult = null;
+                string SQLString = $"SELECT Name FROM PlayerNameDatabase WHERE ID={playerNumber}";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    connection.Open();
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        queryResult = cmd.ExecuteScalar();
+                        if (queryResult == null)
+                        {
+                            name = "Unknown #" + playerNumber;
+                        }
+                        else
+                        {
+                            name = queryResult.ToString();
+                        }
+                    });
+                }
+                catch (OdbcException)  // If we can't read the external database for whatever reason...
+                {
+                    name = "#" + playerNumber;
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+            }
+            return name;
         }
     }
 }

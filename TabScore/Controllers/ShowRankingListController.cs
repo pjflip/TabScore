@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -8,23 +7,19 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
             Round round = Session["Round"] as Round;
             if (round.RoundNumber > 1)  // Show ranking list only from round 2 onwards
             {
-               if ((Session["Settings"] as Settings).ShowRanking == 1)
+               if (Settings.ShowRanking == 1)
                 {
-                    SessionData sessionData = Session["SessionData"] as SessionData;
-                    RankingList rankingList = new RankingList(DBConnectionString, sessionData.SectionID, sessionData.IsIndividual);
+                    RankingList rankingList = new RankingList((Session["SessionData"] as SessionData).SectionID);
                     if (rankingList != null && rankingList.Count != 0 && rankingList[0].ScoreDecimal != 0.0 && rankingList[0].ScoreDecimal != 50.0)
                     {
                         rankingList.RoundNumber = round.RoundNumber;
                         rankingList.PairNS = round.PairNS;
                         rankingList.PairEW = round.PairEW;
                         ViewData["BackButton"] = "REFRESH";
-                        if (sessionData.IsIndividual)
+                        if (AppData.IsIndividual)
                         {
                             rankingList.South = round.South;
                             rankingList.West = round.West;

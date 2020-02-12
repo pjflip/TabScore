@@ -7,57 +7,58 @@ namespace TabScore.Models
     public static class UtilityFunctions
     {
         // Find out how many rounds there are in the event
-        public static int NumberOfRoundsInEvent(string DB, int sectionID)
+        public static int NumberOfRoundsInEvent(int sectionID)
         {
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            object queryResult = null;
+            using(OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
                 string SQLString = SQLString = $"SELECT MAX(Round) FROM RoundData WHERE Section={sectionID}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
-                    object queryResult = cmd.ExecuteScalar();
-                    return Convert.ToInt32(queryResult);
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-            }
-        }
-
-        // Get the last round that has any results entered for it
-        public static int GetLastRoundWithResults(string DB, int sectionID, int table)
-        {
-            int maxRound = 1;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                connection.Open();
-                string SQLString = $"SELECT Round FROM ReceivedData WHERE Section={sectionID} AND [Table]={table}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                OdbcDataReader reader = null;
-                try
-                {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        reader = cmd.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            int thisRound = reader.GetInt32(0);
-                            if (thisRound > maxRound)
-                            {
-                                maxRound = thisRound;
-                            }
-                        }
+                        queryResult = cmd.ExecuteScalar();
                     });
                 }
                 finally
                 {
-                    reader.Close();
                     cmd.Dispose();
                 }
             }
-            return maxRound;
+            return Convert.ToInt32(queryResult);
+        }
+
+        // Get the last round that has any results entered for it
+        public static int GetLastRoundWithResults(int sectionID, int table)
+        {
+            object queryResult = null;
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
+            {
+                connection.Open();
+                string SQLString = $"SELECT MAX(Round) FROM ReceivedData WHERE Section={sectionID} AND [Table]={table}";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        queryResult = cmd.ExecuteScalar();
+                    });
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+            }
+            if (queryResult == DBNull.Value || queryResult == null)
+            {
+                return 1;
+            }
+            else
+            {
+                return Convert.ToInt32(queryResult);
+            }
         }
 
         // Get the dealer based on board number for standard boards

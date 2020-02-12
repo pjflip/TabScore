@@ -12,9 +12,9 @@ namespace TabScore.Models
         public int South { get; set; }
         public int West { get; set; }
         
-        public RankingList(string DB, int sectionID, bool individual)
+        public RankingList(int sectionID)
         {
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
                 string SQLString = $"SELECT Orientation, Number, Score, Rank FROM Results WHERE Section={sectionID}";
@@ -43,13 +43,13 @@ namespace TabScore.Models
                     cmd.Dispose();
                     if (Count == 0)  // Results table exists but is empty
                     {
-                        if (individual)
+                        if (AppData.IsIndividual)
                         {
-                            InsertRange(0, CalculateIndividualRankingFromReceivedData(DB, sectionID));
+                            InsertRange(0, CalculateIndividualRankingFromReceivedData(sectionID));
                         }
                         else
                         {
-                            InsertRange(0, CalculateRankingFromReceivedData(DB, sectionID));
+                            InsertRange(0, CalculateRankingFromReceivedData(sectionID));
                         }
                     }
                 }
@@ -59,13 +59,13 @@ namespace TabScore.Models
                     cmd.Dispose();
                     if (e.Errors.Count == 1 && e.Errors[0].SQLState == "42S02")  // Results table doesn't exist
                     {
-                        if (individual)
+                        if (AppData.IsIndividual)
                         {
-                            InsertRange(0, CalculateIndividualRankingFromReceivedData(DB, sectionID));
+                            InsertRange(0, CalculateIndividualRankingFromReceivedData(sectionID));
                         }
                         else
                         {
-                            InsertRange(0, CalculateRankingFromReceivedData(DB, sectionID));
+                            InsertRange(0, CalculateRankingFromReceivedData(sectionID));
                         }
                     }
                     else
@@ -83,12 +83,12 @@ namespace TabScore.Models
             }
         }
 
-        private static List<Ranking> CalculateRankingFromReceivedData(string DB, int sectionID)
+        private static List<Ranking> CalculateRankingFromReceivedData(int sectionID)
         {
             List<Ranking> rankingList = new List<Ranking>();
             List<Result> resList = new List<Result>();
 
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 int Winners = 0;
                 connection.Open();
@@ -168,9 +168,9 @@ namespace TabScore.Models
                     currentScore = result.Score;
                     currentBoard = result.BoardNumber;
                     currentBoardResultList = resList.FindAll(x => x.BoardNumber == currentBoard);
-                    result.MPNS = 2 * currentBoardResultList.FindAll(x => x.Score < currentScore).Count + currentBoardResultList.FindAll(x => x.Score == currentScore).Count - 1;
-                    result.MPMax = 2 * currentBoardResultList.Count - 2;
-                    result.MPEW = result.MPMax - result.MPNS;
+                    result.MatchpointsNS = 2 * currentBoardResultList.FindAll(x => x.Score < currentScore).Count + currentBoardResultList.FindAll(x => x.Score == currentScore).Count - 1;
+                    result.MatchpointsMax = 2 * currentBoardResultList.Count - 2;
+                    result.MatchpointsEW = result.MatchpointsMax - result.MatchpointsNS;
                 }
 
                 if (Winners == 1)
@@ -185,15 +185,15 @@ namespace TabScore.Models
                             {
                                 PairNo = result.PairNS,
                                 Orientation = "0",
-                                MP = result.MPNS,
-                                MPMax = result.MPMax
+                                MP = result.MatchpointsNS,
+                                MPMax = result.MatchpointsMax
                             };
                             rankingList.Add(ranking);
                         }
                         else
                         {
-                            rankingListFind.MP += result.MPNS;
-                            rankingListFind.MPMax += result.MPMax;
+                            rankingListFind.MP += result.MatchpointsNS;
+                            rankingListFind.MPMax += result.MatchpointsMax;
                         }
                         rankingListFind = rankingList.Find(x => x.PairNo == result.PairEW);
                         if (rankingListFind == null)
@@ -202,15 +202,15 @@ namespace TabScore.Models
                             {
                                 PairNo = result.PairEW,
                                 Orientation = "0",
-                                MP = result.MPEW,
-                                MPMax = result.MPMax
+                                MP = result.MatchpointsEW,
+                                MPMax = result.MatchpointsMax
                             };
                             rankingList.Add(ranking);
                         }
                         else
                         {
-                            rankingListFind.MP += result.MPEW;
-                            rankingListFind.MPMax += result.MPMax;
+                            rankingListFind.MP += result.MatchpointsEW;
+                            rankingListFind.MPMax += result.MatchpointsMax;
                         }
                     }
                     // Calculate percentages
@@ -250,15 +250,15 @@ namespace TabScore.Models
                             {
                                 PairNo = result.PairNS,
                                 Orientation = "N",
-                                MP = result.MPNS,
-                                MPMax = result.MPMax
+                                MP = result.MatchpointsNS,
+                                MPMax = result.MatchpointsMax
                             };
                             rankingList.Add(ranking);
                         }
                         else
                         {
-                            rankingListFind.MP += result.MPNS;
-                            rankingListFind.MPMax += result.MPMax;
+                            rankingListFind.MP += result.MatchpointsNS;
+                            rankingListFind.MPMax += result.MatchpointsMax;
                         }
                         rankingListFind = rankingList.Find(x => x.PairNo == result.PairEW && x.Orientation == "E");
                         if (rankingListFind == null)
@@ -267,15 +267,15 @@ namespace TabScore.Models
                             {
                                 PairNo = result.PairEW,
                                 Orientation = "E",
-                                MP = result.MPEW,
-                                MPMax = result.MPMax
+                                MP = result.MatchpointsEW,
+                                MPMax = result.MatchpointsMax
                             };
                             rankingList.Add(ranking);
                         }
                         else
                         {
-                            rankingListFind.MP += result.MPEW;
-                            rankingListFind.MPMax += result.MPMax;
+                            rankingListFind.MP += result.MatchpointsEW;
+                            rankingListFind.MPMax += result.MatchpointsMax;
                         }
                     }
                     // Calculate percentages
@@ -308,12 +308,12 @@ namespace TabScore.Models
             }
         }
 
-        private static List<Ranking> CalculateIndividualRankingFromReceivedData(string DB, int sectionID)
+        private static List<Ranking> CalculateIndividualRankingFromReceivedData(int sectionID)
         {
             List<Ranking> rankingList = new List<Ranking>();
             List<Result> resList = new List<Result>();
 
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
                 string SQLString = $"SELECT Board, PairNS, PairEW, South, West, [NS/EW], Contract, Result FROM ReceivedData WHERE Section={sectionID}";
@@ -366,9 +366,9 @@ namespace TabScore.Models
                 currentScore = result.Score;
                 currentBoard = result.BoardNumber;
                 currentBoardResultList = resList.FindAll(x => x.BoardNumber == currentBoard);
-                result.MPNS = 2 * currentBoardResultList.FindAll(x => x.Score < currentScore).Count + currentBoardResultList.FindAll(x => x.Score == currentScore).Count - 1;
-                result.MPMax = 2 * currentBoardResultList.Count - 2;
-                result.MPEW = result.MPMax - result.MPNS;
+                result.MatchpointsNS = 2 * currentBoardResultList.FindAll(x => x.Score < currentScore).Count + currentBoardResultList.FindAll(x => x.Score == currentScore).Count - 1;
+                result.MatchpointsMax = 2 * currentBoardResultList.Count - 2;
+                result.MatchpointsEW = result.MatchpointsMax - result.MatchpointsNS;
             }
 
             // Add up MPs for each pair, creating Ranking List entries as we go
@@ -381,15 +381,15 @@ namespace TabScore.Models
                     {
                         PairNo = result.PairNS,
                         Orientation = "0",
-                        MP = result.MPNS,
-                        MPMax = result.MPMax
+                        MP = result.MatchpointsNS,
+                        MPMax = result.MatchpointsMax
                     };
                     rankingList.Add(ranking);
                 }
                 else
                 {
-                    rankingListFind.MP += result.MPNS;
-                    rankingListFind.MPMax += result.MPMax;
+                    rankingListFind.MP += result.MatchpointsNS;
+                    rankingListFind.MPMax += result.MatchpointsMax;
                 }
                 rankingListFind = rankingList.Find(x => x.PairNo == result.PairEW);
                 if (rankingListFind == null)
@@ -398,15 +398,15 @@ namespace TabScore.Models
                     {
                         PairNo = result.PairEW,
                         Orientation = "0",
-                        MP = result.MPEW,
-                        MPMax = result.MPMax
+                        MP = result.MatchpointsEW,
+                        MPMax = result.MatchpointsMax
                     };
                     rankingList.Add(ranking);
                 }
                 else
                 {
-                    rankingListFind.MP += result.MPEW;
-                    rankingListFind.MPMax += result.MPMax;
+                    rankingListFind.MP += result.MatchpointsEW;
+                    rankingListFind.MPMax += result.MatchpointsMax;
                 }
                 rankingListFind = rankingList.Find(x => x.PairNo == result.South);
                 if (rankingListFind == null)
@@ -415,15 +415,15 @@ namespace TabScore.Models
                     {
                         PairNo = result.South,
                         Orientation = "0",
-                        MP = result.MPNS,
-                        MPMax = result.MPMax
+                        MP = result.MatchpointsNS,
+                        MPMax = result.MatchpointsMax
                     };
                     rankingList.Add(ranking);
                 }
                 else
                 {
-                    rankingListFind.MP += result.MPNS;
-                    rankingListFind.MPMax += result.MPMax;
+                    rankingListFind.MP += result.MatchpointsNS;
+                    rankingListFind.MPMax += result.MatchpointsMax;
                 }
                 rankingListFind = rankingList.Find(x => x.PairNo == result.West);
                 if (rankingListFind == null)
@@ -432,15 +432,15 @@ namespace TabScore.Models
                     {
                         PairNo = result.West,
                         Orientation = "0",
-                        MP = result.MPEW,
-                        MPMax = result.MPMax
+                        MP = result.MatchpointsEW,
+                        MPMax = result.MatchpointsMax
                     };
                     rankingList.Add(ranking);
                 }
                 else
                 {
-                    rankingListFind.MP += result.MPEW;
-                    rankingListFind.MPMax += result.MPMax;
+                    rankingListFind.MP += result.MatchpointsEW;
+                    rankingListFind.MPMax += result.MatchpointsMax;
                 }
             }
             // Calculate percentages

@@ -1,22 +1,29 @@
-﻿using System.Data.Odbc;
+﻿using System;
+using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public class Settings
+    // Settings is a global class that applies accross all sessions
+    public static class Settings
     {
-        public bool ShowResults { get; private set; }
-        public bool ShowPercentage { get; private set; }
-        public bool EnterLeadCard { get; private set; }
-        public bool ValidateLeadCard { get; private set; }
-        public int ShowRanking { get; private set; }
-        public int EnterResultsMethod { get; private set; }
-        public bool ShowHandRecord { get; private set; }
-        public bool NumberEntryEachRound { get; private set; }
-        public int NameSource { get; private set; }
+        public static bool ShowResults { get; private set; }
+        public static bool ShowPercentage { get; private set; }
+        public static bool EnterLeadCard { get; private set; }
+        public static bool ValidateLeadCard { get; private set; }
+        public static int ShowRanking { get; private set; }
+        public static int EnterResultsMethod { get; private set; }
+        public static bool ShowHandRecord { get; private set; }
+        public static bool NumberEntryEachRound { get; private set; }
+        public static int NameSource { get; private set; }
 
-        public Settings(string DB)
+        private static DateTime UpdateTime;
+
+        public static void Refresh()
         {
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            if (DateTime.Now.Subtract(UpdateTime).TotalMinutes < 1.0) return;  // Settings updated recently, so don't bother
+            UpdateTime = DateTime.Now;
+
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
                 string SQLString = "SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, EnterResultsMethod, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource FROM Settings";

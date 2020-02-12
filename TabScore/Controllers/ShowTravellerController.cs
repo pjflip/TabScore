@@ -7,19 +7,15 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
-            if (!(Session["Settings"] as Settings).ShowResults)
+            if (!Settings.ShowResults)
             {
                 return RedirectToAction("Index", "ShowBoards");
             }
 
             Result result = Session["Result"] as Result;
-            SessionData sessionData = Session["SessionData"] as SessionData;
-            Traveller traveller = new Traveller(DBConnectionString, sessionData.SectionID, result.BoardNumber, result.PairNS, sessionData.IsIndividual, Session["Settings"] as Settings);
+            Traveller traveller = new Traveller((Session["SessionData"] as SessionData).SectionID, result.BoardNumber, result.PairNS);
             ViewData["BackButton"] = "TRUE";
-            if (sessionData.IsIndividual)
+            if (AppData.IsIndividual)
             {
                 return View("Individual", traveller);
             }

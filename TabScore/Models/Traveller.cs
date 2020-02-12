@@ -13,11 +13,11 @@ namespace TabScore.Models
 
         private int currentScore;
 
-        public Traveller(string DB, int sectionID, int boardNumber, int pairNS, bool individual, Settings settings)
+        public Traveller(int sectionID, int boardNumber, int pairNS)
         {
             BoardNumber = boardNumber;
             PairNS = pairNS;
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
                 string SQLString;
@@ -25,7 +25,7 @@ namespace TabScore.Models
                 OdbcDataReader reader = null;
                 try
                 {
-                    if (individual)
+                    if (AppData.IsIndividual)
                     {
                         SQLString = $"SELECT PairNS, PairEW, South, West, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={sectionID} AND Board={boardNumber}";
                     }
@@ -40,7 +40,7 @@ namespace TabScore.Models
                         while (reader.Read())
                         {
                             Result result = null;
-                            if (individual)
+                            if (AppData.IsIndividual)
                             {
                                 result = new Result()
                                 {
@@ -88,7 +88,7 @@ namespace TabScore.Models
             };
 
             Sort((x, y) => y.Score.CompareTo(x.Score));
-            if (settings.ShowPercentage)
+            if (Settings.ShowPercentage)
             {
                 if (Count == 1)
                 {
@@ -105,15 +105,15 @@ namespace TabScore.Models
                 PercentageNS = -1;   // Don't show percentage
             }
 
-            if (settings.ShowHandRecord)
+            if (Settings.ShowHandRecord)
             {
-                HandRecord hr = new HandRecord(DB, sectionID, boardNumber);
+                HandRecord hr = new HandRecord(sectionID, boardNumber);
                 if (hr.NorthSpades == "###")
                 {
                     HandRecord = false;
                     if (sectionID != 1)    // Try default Section 1 hand records
                     {
-                        hr = new HandRecord(DB, 1, sectionID);
+                        hr = new HandRecord(1, sectionID);
                         if (hr.NorthSpades != "###")
                         {
                             HandRecord = true;

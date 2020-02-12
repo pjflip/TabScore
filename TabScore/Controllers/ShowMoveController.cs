@@ -1,6 +1,5 @@
-﻿using TabScore.Models;
-using System.Web.Mvc;
-using System;
+﻿using System.Web.Mvc;
+using TabScore.Models;
 
 namespace TabScore.Controllers
 {
@@ -8,13 +7,10 @@ namespace TabScore.Controllers
     {
         public ActionResult Index(int newRoundNumber)
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
             SessionData sessionData = Session["SessionData"] as SessionData;
-            if (newRoundNumber > UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, sessionData.SectionID))  // Session complete
+            if (newRoundNumber > UtilityFunctions.NumberOfRoundsInEvent(sessionData.SectionID))  // Session complete
             {
-                if ((Session["Settings"] as Settings).ShowRanking == 2)
+                if (Settings.ShowRanking == 2)
                 {
                     return RedirectToAction("Index", "ShowFinalRankingList");
                 }
@@ -24,15 +20,12 @@ namespace TabScore.Controllers
                 }
             }
 
-            MovesList movesList = new MovesList(DBConnectionString, sessionData.SectionID, Session["Round"] as Round, newRoundNumber, sessionData.TableNumber, sessionData.MissingPair, sessionData.IsIndividual);
+            MovesList movesList = new MovesList(sessionData, Session["Round"] as Round, newRoundNumber);
 
             Session["Header"] = $"Table {sessionData.SectionTableString}";
             ViewData["BackButton"] = "FALSE";
 
-            // Update session to new round info
-            Session["Round"] = new Round(DBConnectionString, sessionData.SectionID, sessionData.TableNumber, newRoundNumber, sessionData.IsIndividual);
-
-            if (sessionData.IsIndividual)
+            if (AppData.IsIndividual)
             {
                 return View("Individual", movesList);
             }
@@ -42,16 +35,15 @@ namespace TabScore.Controllers
             }
         }
 
-        public ActionResult OKButtonClick()
+        public ActionResult OKButtonClick(int newRoundNumber)
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
             // Refresh settings for the start of the round
-            Settings settings = new Settings(DBConnectionString);
-            Session["Settings"] = settings;
-            
-            if (settings.NumberEntryEachRound)
+            Settings.Refresh();
+
+            // Update session to new round info
+            Session["Round"] = new Round(Session["SessionData"] as SessionData, newRoundNumber);
+
+            if (Settings.NumberEntryEachRound)
             {
                 return RedirectToAction("Index", "ShowPlayerNumbers");
             }

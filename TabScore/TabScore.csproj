@@ -126,8 +126,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AppData.cs" />
     <Compile Include="Models\MovesList.cs" />
-    <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\PlayerNames.cs" />
     <Compile Include="Models\ResultsList.cs" />
     <Compile Include="Models\UtilityFunctions.cs" />
     <Compile Include="Models\ODBCRetryHelper.cs" />

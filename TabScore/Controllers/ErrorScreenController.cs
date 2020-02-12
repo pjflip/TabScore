@@ -1,5 +1,5 @@
-﻿using System.Data.Odbc;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using TabScore.Models;
 
 namespace TabScore.Controllers
 {
@@ -14,39 +14,15 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick()
         {
-            // Check if DB connection has been set up
-            string pathToTabScoreDB = System.Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
-            string pathToDB = "";
-            if (System.IO.File.Exists(pathToTabScoreDB))
-            {
-                pathToDB = System.IO.File.ReadAllText(pathToTabScoreDB);
-            }
-            if (pathToDB == "")
+            AppData.Refresh();
+            if (AppData.DBConnectionString == "")
             {
                 TempData["warningMessage"] = "Scoring database not yet started";
                 return RedirectToAction("Index", "StartScreen");
             }
             else
             {
-                // Check that we can open the DB and set connection string for session
-                OdbcConnectionStringBuilder cs = new OdbcConnectionStringBuilder();
-                cs.Driver = "Microsoft Access Driver (*.mdb)";
-                cs.Add("Dbq", pathToDB);
-                cs.Add("Uid", "Admin");
-                using (OdbcConnection connection = new OdbcConnection(cs.ToString()))
-                {
-                    try
-                    {
-                        connection.Open();
-                    }
-                    catch (OdbcException e)
-                    {
-                        TempData["warningMessage"] = e.Message;
-                        return RedirectToAction("Index", "StartScreen");
-                    }
-                }
-                Session["DBConnectionString"] = cs.ToString();
-
+                Settings.Refresh();
                 return RedirectToAction("Index", "EnterSection");
             }
         }

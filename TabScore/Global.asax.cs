@@ -17,10 +17,8 @@ namespace TabScore
 
         protected void Session_Start(Object sender, EventArgs e)
         {
-            Session.Add("DBConnectionString", "");
             Session.Add("Header","");
             Session.Add("SessionData", null);
-            Session.Add("Settings", null);
             Session.Add("Round", null);
             Session.Add("Result", null); 
         }

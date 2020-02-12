@@ -7,9 +7,6 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
             Round round = Session["Round"] as Round;
             SessionData sessionData = Session["SessionData"] as SessionData;
 
@@ -18,7 +15,7 @@ namespace TabScore.Controllers
 
             if (round.PairNS == 0 || round.PairNS == sessionData.MissingPair)
             {
-                if (sessionData.IsIndividual)
+                if (AppData.IsIndividual)
                 {
                     return View("NSMissingIndividual", round);
                 }
@@ -29,7 +26,7 @@ namespace TabScore.Controllers
             }
             else if (round.PairEW == 0 || round.PairEW == sessionData.MissingPair)
             {
-                if (sessionData.IsIndividual)
+                if (AppData.IsIndividual)
                 {
                     return View("EWMissingIndividual", round);
                 }
@@ -40,7 +37,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                if (sessionData.IsIndividual)
+                if (AppData.IsIndividual)
                 {
                     return View("Individual", round);
                 }

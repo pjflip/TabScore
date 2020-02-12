@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TabScore.Models;
 
 namespace TabScore.Controllers
@@ -15,12 +14,9 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick()
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "")return RedirectToAction("Index", "ErrorScreen");
-
             // Check if new round has been added; can't apply to individuals
             int roundNumber = (Session["Round"] as Round).RoundNumber;
-            if (roundNumber == UtilityFunctions.NumberOfRoundsInEvent(DBConnectionString, (Session["SessionData"] as SessionData).SectionID))  
+            if (roundNumber == UtilityFunctions.NumberOfRoundsInEvent((Session["SessionData"] as SessionData).SectionID))  
             {
                 // Final round, so no new rounds added
                 return RedirectToAction("Index", "EndScreen");

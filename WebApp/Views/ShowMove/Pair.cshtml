@@ -1,7 +1,7 @@
 ﻿@model TabScore.Models.MovesList
 
 @{
-    ViewBag.Title = "Show Move";
+    ViewData["Title"] = "Show Move";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 <div class="row mt-5">
@@ -89,7 +89,7 @@
     function validateOK() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "ShowMove")';
+            location.href = '@Url.Action("OKButtonClick", "ShowMove")?newRoundNumber=@Model.NewRoundNumber';
         }
     }
 </script>

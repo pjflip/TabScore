@@ -5,15 +5,15 @@ namespace TabScore.Models
 {
     public class BoardMove
     {
-        public int TableNumber { get; private set; }
+        public int NewTableNumber { get; private set; }
 
-        public BoardMove(string DB, int sectionID, int newRoundNumber, int tableNumber, int lowBoard)
+        public BoardMove(SessionData sessionData, int newRoundNumber, int lowBoard)
         {
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 // Get a list of all possible tables to which boards could move
                 List<int> tableList = new List<int>();
-                string SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sectionID} AND Round={newRoundNumber} AND LowBoard={lowBoard}";
+                string SQLString = $"SELECT [Table] FROM RoundData WHERE Section={sessionData.SectionID} AND Round={newRoundNumber} AND LowBoard={lowBoard}";
                 connection.Open();
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
@@ -38,28 +38,28 @@ namespace TabScore.Models
                 if (tableList.Count == 0)
                 {
                     // No table, so move to relay table
-                    TableNumber = 0;
+                    NewTableNumber = 0;
                 }
                 else if (tableList.Count == 1)
                 {
                     // Just one table, so use it
-                    TableNumber = tableList[0];
+                    NewTableNumber = tableList[0];
                 }
                 else
                 {
                     // Find the next table down to which the boards could move
-                    for (int t = tableNumber; t > 0; t--)
+                    for (int t = sessionData.TableNumber; t > 0; t--)
                     {
                         if (tableList.Contains(t))
                         {
-                            TableNumber = t;
+                            NewTableNumber = t;
                             return;
                         }
                     }
-                    TableNumber = 0;
+                    NewTableNumber = 0;
                     foreach (int t in tableList)  // Next table down must be highest table number in the list
                     {
-                        if (t > TableNumber) TableNumber = t;
+                        if (t > NewTableNumber) NewTableNumber = t;
                     }
                 }
             }

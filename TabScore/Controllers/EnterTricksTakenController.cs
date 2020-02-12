@@ -8,11 +8,8 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
             ViewData["BackButton"] = "TRUE";
-            if ((Session["Settings"] as Settings).EnterResultsMethod == 1)
+            if (Settings.EnterResultsMethod == 1)
             {
                 return View("TotalTricks", Session["Result"] as Result);
             }
@@ -26,16 +23,14 @@ namespace TabScore.Controllers
         {
             Result result = Session["Result"] as Result;
             result.TricksTakenNumber = Convert.ToInt32(numTricks);
+            result.CalculateScore();
             Session["Result"] = result;
             return RedirectToAction("Index", "ConfirmResult");
         }
 
         public ActionResult BackButtonClick()
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
-            if ((Session["Settings"] as Settings).EnterLeadCard)
+            if (Settings.EnterLeadCard)
             {
                 return RedirectToAction("Index", "EnterLead", new { validateWarning = "NoWarning" });
             }

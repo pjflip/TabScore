@@ -7,9 +7,6 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
             Round round = Session["Round"] as Round;
             if (round.RoundNumber == 1)
             {
@@ -25,7 +22,7 @@ namespace TabScore.Controllers
 
             if (round.PairNS == 0 || round.PairNS == sessionData.MissingPair)
             {
-                if (sessionData.IsIndividual)
+                if (AppData.IsIndividual)
                 {
                    return View("NSMissingIndividual", round);
                 }
@@ -36,7 +33,7 @@ namespace TabScore.Controllers
             }
             else if (round.PairEW == 0 || round.PairEW == sessionData.MissingPair)
             {
-                if (sessionData.IsIndividual)
+                if (AppData.IsIndividual)
                 {
                    return View("EWMissingIndividual", round);
                 }
@@ -47,7 +44,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                if (sessionData.IsIndividual)
+                if (AppData.IsIndividual)
                 {
                     return View("Individual", round);
                 }
@@ -70,13 +67,10 @@ namespace TabScore.Controllers
 
         public ActionResult BackButtonClick()
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
             // Reset to the previous round; RoundNumber > 1 else no Back button and cannot get here
-            int roundNumber =(Session["Round"] as Round).RoundNumber;
+            int roundNumber = (Session["Round"] as Round).RoundNumber;
             SessionData sessionData = Session["SessionData"] as SessionData;
-            Session["Round"] = new Round(DBConnectionString, sessionData.SectionID, sessionData.TableNumber, roundNumber - 1, sessionData.IsIndividual);
+            Session["Round"] = new Round(sessionData, roundNumber - 1);
             return RedirectToAction("Index", "ShowMove", new { newRoundNumber = roundNumber });
         }
     }

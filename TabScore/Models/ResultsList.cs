@@ -6,16 +6,16 @@ namespace TabScore.Models
     {
         public bool GotAllResults { get; private set; }
 
-        public ResultsList(string DB, int sectionID, int tableNumber, int roundNumber, int lowBoard, int highBoard)
+        public ResultsList(SessionData sessionData, Round round)
         {
             int resultCount = 0;
-            for (int i = lowBoard; i <= highBoard; i++)
+            for (int i = round.LowBoard; i <= round.HighBoard; i++)
             {
-                Result result = new Result(DB, sectionID, tableNumber, roundNumber, i);
+                Result result = new Result(sessionData.SectionID, sessionData.TableNumber, round.RoundNumber, i);
                 Add(result);
                 if (result.ContractLevel != -999) resultCount++;
             }
-            GotAllResults = (resultCount == highBoard - lowBoard + 1);
+            GotAllResults = (resultCount == round.HighBoard - round.LowBoard + 1);
         }
     }
 }

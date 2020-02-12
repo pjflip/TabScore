@@ -7,10 +7,7 @@ namespace TabScore.Controllers
     {
         public ActionResult Index(string validateWarning)
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
-            if (!(Session["Settings"] as Settings).EnterLeadCard)
+            if (!Settings.EnterLeadCard)
             {
                 return RedirectToAction("Index", "EnterTricksTaken");
             }
@@ -30,11 +27,8 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(string card, string validateWarning)
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
             Result result = Session["Result"] as Result;
-            if (validateWarning != "Validate" || !(Session["Settings"] as Settings).ValidateLeadCard || UtilityFunctions.ValidateLead(DBConnectionString, result.SectionID, result.BoardNumber, card, result.NSEW))
+            if (validateWarning != "Validate" || !Settings.ValidateLeadCard || UtilityFunctions.ValidateLead(AppData.DBConnectionString, result.SectionID, result.BoardNumber, card, result.NSEW))
             {
                 result.LeadCard = card;
                 Session["Result"] = result;

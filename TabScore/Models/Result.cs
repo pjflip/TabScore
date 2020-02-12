@@ -19,21 +19,22 @@ namespace TabScore.Models
         public string ContractSuit { get; set; }
         public string ContractX { get; set; }
         public string LeadCard { get; set; }
-        public int MPNS { get; set; }
-        public int MPEW { get; set; }
-        public int MPMax { get; set; }
+        public int Score { get; private set; }
+        public int MatchpointsNS { get; set; }
+        public int MatchpointsEW { get; set; }
+        public int MatchpointsMax { get; set; }
 
         // Basic constructor - used to create traveller and ranking list
         public Result() { }
 
         // Database read constructor 
-        public Result(string DB, int sectionID, int tableNumber, int roundNumber, int boardNumber)
+        public Result(int sectionID, int tableNumber, int roundNumber, int boardNumber)
         {
             SectionID = sectionID;
             TableNumber = tableNumber;
             RoundNumber = roundNumber;
             BoardNumber = boardNumber;
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
                 string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard, Remarks FROM ReceivedData WHERE Section={SectionID} AND [Table]={TableNumber} AND Round={RoundNumber} AND Board={BoardNumber}";
@@ -288,8 +289,6 @@ namespace TabScore.Models
             return s.ToString();
         }
 
-        public int Score { get; private set; }
-
         public void CalculateScore()
         {
             Score = 0;
@@ -464,7 +463,7 @@ namespace TabScore.Models
             if (NSEW == "E" || NSEW == "W") Score = -Score;
         }
 
-        public void UpdateDB(string DB, bool individual)
+        public void UpdateDB()
         {
             int declarer;
             if (ContractLevel <= 0)
@@ -492,7 +491,7 @@ namespace TabScore.Models
                 leadcard = LeadCard;
             }
 
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 // Delete any previous result
                 connection.Open();
@@ -516,7 +515,7 @@ namespace TabScore.Models
                 {
                     remarks = "Not played";
                 }
-                if (individual)
+                if (AppData.IsIndividual)
                 {
                     SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
                 }

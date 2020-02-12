@@ -1,6 +1,5 @@
-﻿using TabScore.Models;
-using System.Web.Mvc;
-using System;
+﻿using System.Web.Mvc;
+using TabScore.Models;
 
 namespace TabScore.Controllers
 {
@@ -8,20 +7,13 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            Result result = Session["Result"] as Result;
-            result.CalculateScore();
-            Session["Result"] = result;
-
             ViewData["BackButton"] = "TRUE";
-            return View(result);
+            return View(Session["Result"] as Result);
         }
 
         public ActionResult OKButtonClick()
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
-            (Session["Result"] as Result).UpdateDB(DBConnectionString, (Session["SessionData"] as SessionData).IsIndividual);
+            (Session["Result"] as Result).UpdateDB();
             return RedirectToAction("Index", "ShowTraveller");
         }
 

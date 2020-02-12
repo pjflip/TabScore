@@ -11,36 +11,11 @@ namespace TabScore.Models
         public string SectionTableString { get; set; }
         public int NumTables { get; set; }
         public int MissingPair { get; set; }
-        public bool IsIndividual { get; private set; }
 
-        public SessionData(string DB)
-        {
-            TableNumber = 0;
-            using (OdbcConnection connection = new OdbcConnection(DB))
-            {
-                connection.Open();
-                string SQLString = $"SELECT TOP 1 South FROM RoundData";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    cmd.ExecuteScalar();
-                    IsIndividual = true;
-                }
-                catch (OdbcException)
-                {
-                    IsIndividual = false;
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-            }
-        }
-
-        public int TableLogonStatus(string DB)
+        public int TableLogonStatus()
         {
             object queryResult = null;
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
                 string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section={SectionID} AND [Table]={TableNumber}";
@@ -60,9 +35,9 @@ namespace TabScore.Models
             return Convert.ToInt32(queryResult);
         }
 
-        public void LogonTable(string DB)
+        public void LogonTable()
         {
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
                 string SQLString = $"UPDATE Tables SET LogOnOff=1 WHERE Section={SectionID} AND [Table]={TableNumber}";

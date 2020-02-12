@@ -9,18 +9,15 @@ namespace TabScore.Controllers
         {
             ViewData["Direction"] = direction;
             ViewData["BackButton"] = "FALSE";
-            SessionData sessionData = Session["SessionData"] as SessionData;
-            Session["Header"] = $"Table {sessionData.SectionTableString}";
+            Session["Header"] = $"Table {(Session["SessionData"] as SessionData).SectionTableString}";
             return View();
         }
 
         public ActionResult OKButtonClick(string direction, int playerNumber)
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
-            SessionData sessionData = Session["SessionData"] as SessionData;
-            new Player(DBConnectionString, sessionData.SectionID, sessionData.TableNumber, Session["Round"] as Round, direction, playerNumber, sessionData.IsIndividual, (Session["Settings"] as Settings).NameSource).UpdateDatabase();
+            // Update Round with new player
+            (Session["Round"] as Round).UpdatePlayer(Session["SessionData"] as SessionData, direction, playerNumber);
+            
             return RedirectToAction("Index", "ShowPlayerNumbers");
         }
     }

@@ -7,17 +7,14 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
-            SectionsList sectionsList = new SectionsList(DBConnectionString);
-            if (sectionsList == null) return RedirectToAction("Index", "ErrorScreen");
+            SectionsList sectionsList = new SectionsList();
 
             // Check if only one section - if so use it
             if (sectionsList.Count == 1)
             {
-                Session["SessionData"] = new SessionData(DBConnectionString)
+                Session["SessionData"] = new SessionData()
                 {
+                    TableNumber = 0,
                     SectionID = sectionsList[0].ID,
                     SectionLetter = sectionsList[0].Letter,
                     NumTables = sectionsList[0].NumTables,
@@ -26,24 +23,20 @@ namespace TabScore.Controllers
                 return RedirectToAction("Index", "EnterTableNumber");
             }
             else
-            // Get Section
+            // Get section
             {
                 ViewData["BackButton"] = "FALSE";
                 return View(sectionsList);
             }
         }
-
         public ActionResult OKButtonClick(string sectionLetter)
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
-            SectionsList sectionsList = new SectionsList(DBConnectionString);
-            if (sectionsList == null) return RedirectToAction("Index", "ErrorScreen");
+            SectionsList sectionsList = new SectionsList();
 
             Section section = sectionsList.Find(x => x.Letter == sectionLetter);
-            Session["SessionData"] = new SessionData(DBConnectionString)
+            Session["SessionData"] = new SessionData()
             {
+                TableNumber = 0,
                 SectionID = section.ID,
                 SectionLetter = section.Letter,
                 NumTables = section.NumTables,

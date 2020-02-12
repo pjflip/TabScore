@@ -8,21 +8,18 @@ namespace TabScore.Controllers
     {
         public ActionResult Index(int boardNumber)
         {
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-
             Round round = Session["Round"] as Round;
             Result result = Session["Result"] as Result;
             SessionData sessionData = Session["SessionData"] as SessionData;
 
             if (result == null || result.BoardNumber != boardNumber)   // No session result data for this board
             {
-                result = new Result(DBConnectionString, sessionData.SectionID, sessionData.TableNumber, round.RoundNumber, boardNumber)
+                result = new Result(sessionData.SectionID, sessionData.TableNumber, round.RoundNumber, boardNumber)
                 {
                     PairNS = round.PairNS,
                     PairEW = round.PairEW
                 };
-                if (sessionData.IsIndividual)
+                if (AppData.IsIndividual)
                 {
                     result.South = round.South;
                     result.West = round.West;
@@ -30,7 +27,7 @@ namespace TabScore.Controllers
                 Session["Result"] = result;
             }
 
-            if (sessionData.IsIndividual)
+            if (AppData.IsIndividual)
             {
                 Session["Header"] = $"Table {sessionData.SectionTableString} - Round {round.RoundNumber} - {UtilityFunctions.ColourPairByVulnerability("NS", boardNumber, $"{round.PairNS}+{round.South}")} v {UtilityFunctions.ColourPairByVulnerability("EW", boardNumber, $"{round.PairEW}+{round.West}")}";
             }
@@ -62,6 +59,7 @@ namespace TabScore.Controllers
             result.NSEW = "";
             result.LeadCard = "";
             result.TricksTakenNumber = -1;
+            result.CalculateScore();
             Session["Result"] = result;
             return RedirectToAction("Index", "ConfirmResult");
         }
@@ -76,9 +74,7 @@ namespace TabScore.Controllers
             result.TricksTakenNumber = -1;
             Session["Result"] = result;
 
-            string DBConnectionString = Session["DBConnectionString"].ToString();
-            if (DBConnectionString == "") return RedirectToAction("Index", "ErrorScreen");
-            result.UpdateDB(DBConnectionString, (Session["SessionData"] as SessionData).IsIndividual);
+            result.UpdateDB();
             return RedirectToAction("Index", "ShowBoards");
         }
 

@@ -49,14 +49,14 @@ namespace TabScore.Models
         public string HCPEast {get; private set;}
         public string HCPWest {get; private set;}
 
-        public HandRecord(string DB, int sectionID, int boardNumber)
+        public HandRecord(int sectionID, int boardNumber)
         {
             BoardNumber = boardNumber;
             Dealer = UtilityFunctions.GetDealerForBoard(boardNumber);
             NorthSpades = "###";
             EvalNorthSpades = "###";
 
-            using (OdbcConnection connection = new OdbcConnection(DB))
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 string SQLString = $"SELECT NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs FROM HandRecord WHERE Section={sectionID} AND Board={boardNumber}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
