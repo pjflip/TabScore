@@ -10,33 +10,37 @@
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <link rel="preload" as="font" href="/fonts/fontawesome-webfont.woff2?v=4.7.0" type="font/woff2" crossorigin="anonymous">
     <script>
-        if ("getBattery" in navigator) {
-            window.onload = navigator.getBattery().then(function (battery) {
-                document.getElementById('battery').style.display = "block";
-                document.getElementById('header').className = "col-10 my-auto pr-0";
-                var batteryLevel = battery.level * 100;
-                if (batteryLevel > 87.5) {
-                    document.getElementById('bl').className = "fa fa-battery-full";
-                }
-                else if (batteryLevel > 62.5) {
-                    document.getElementById('bl').className = "fa fa-battery-three-quarters";
-                }
-                else if (batteryLevel > 37.5) {
-                    document.getElementById('bl').className = "fa fa-battery-half";
-                }
-                else if (batteryLevel > 12.5) {
-                    document.getElementById('bl').className = "fa fa-battery-quarter";
-                }
-                else {
-                    document.getElementById('bl').className = "fa fa-battery-empty";
-                }
-            })
-        }
+        $(function () {
+            $("body").css("padding-top", $("#headerRow").height().toString() + "px");
+            $("body").css("padding-bottom", ($("#footerRow").height() + 10).toString() + "px");
+            if ("getBattery" in navigator) {
+                navigator.getBattery().then(function (battery) {
+                    $("#battery").css("display", "block");
+                    $("#header").attr("class", "col-10 my-auto pr-0");
+                    var batteryLevel = battery.level * 100;
+                    if (batteryLevel > 87.5) {
+                        $("#bl").attr("class", "fa fa-battery-full");
+                    }
+                    else if (batteryLevel > 62.5) {
+                        $("#bl").attr("class", "fa fa-battery-three-quarters");
+                    }
+                    else if (batteryLevel > 37.5) {
+                        $("#bl").attr("class", "fa fa-battery-half");
+                    }
+                    else if (batteryLevel > 12.5) {
+                        $("#bl").attr("class", "fa fa-battery-quarter");
+                    }
+                    else {
+                        $("#bl").attr("class", "fa fa-battery-empty");
+                    }
+                });
+            }
+        });
     </script>
 </head>
 
-<body style="background-color: ivory; padding-top: 90px; padding-bottom: 90px">
-    <div class="container-fluid fixed-top" style="min-height: 51px; background-color: bisque; border-bottom-style: solid">
+<body style="background-color: ivory">
+    <div id="headerRow" class="container-fluid fixed-top" style="min-height: 51px; background-color: bisque; border-bottom-style: solid">
         <div class="row my-2">
             <div id="header" class="col-12 my-auto">
                 <h5>@Html.Raw(Session["Header"])</h5>
@@ -51,7 +55,7 @@
         @RenderBody()
     </div>
 
-    <div class="container-fluid fixed-bottom" style="background-color: bisque; border-top-style: solid">
+    <div id="footerRow" class="container-fluid fixed-bottom" style="background-color: bisque; border-top-style: solid">
         <div class="row">
             <div class="col-6">
                 @if (ViewData["BackButton"].ToString() == "TRUE")

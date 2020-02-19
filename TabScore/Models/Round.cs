@@ -94,7 +94,7 @@ namespace TabScore.Models
         {
             object queryResult = null;
 
-            // Check to see if TabScorePairNo exists (it may get overwritten)
+            // Check to see if TabScorePairNo exists (it may get overwritten if the scoring program recreates the PlayerNumbers table)
             string SQLString = $"SELECT 1 FROM PlayerNumbers WHERE TabScorePairNo IS NULL";
             OdbcCommand cmd1 = new OdbcCommand(SQLString, conn);
             try
@@ -125,15 +125,38 @@ namespace TabScore.Models
                             int tempSectionID = reader2.GetInt32(0);
                             int tempTable = reader2.GetInt32(1);
                             string tempDirection = reader2.GetString(2);
-                            if (tempDirection == "N" || tempDirection == "S")
+                            if (AppData.IsIndividual)
                             {
-                                SQLString = $"SELECT NSPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                switch (tempDirection)
+                                {
+                                    case "N":
+                                        SQLString = $"SELECT NSPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                        break;
+                                    case "S":
+                                        SQLString = $"SELECT South FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                        break;
+                                    case "E":
+                                        SQLString = $"SELECT EWPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                        break;
+                                    case "W":
+                                        SQLString = $"SELECT West FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                        break;
+                                }
                             }
                             else
                             {
-                                SQLString = $"SELECT EWPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                switch (tempDirection)
+                                {
+                                    case "N":
+                                    case "S":
+                                        SQLString = $"SELECT NSPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                        break;
+                                    case "E":
+                                    case "W":
+                                        SQLString = $"SELECT EWPair FROM RoundData WHERE Section={tempSectionID} AND [Table]={tempTable} AND ROUND=1";
+                                        break;
+                                }
                             }
-
                             OdbcCommand cmd3 = new OdbcCommand(SQLString, conn);
                             try
                             {
@@ -192,8 +215,16 @@ namespace TabScore.Models
                         try
                         {
                             int readerRound = reader5.GetInt32(2);
-                            DateTime timeLog = reader5.GetDateTime(3);
-                            if (readerRound <= round && timeLog > latestTimeLog)
+                            DateTime timeLog;
+                            if(reader5.IsDBNull(3))
+                            {
+                                timeLog = new DateTime(2010, 1, 1);
+                            }
+                            else
+                            {
+                                timeLog = reader5.GetDateTime(3); 
+                            }
+                            if (readerRound <= round && timeLog >= latestTimeLog)
                             {
                                 number = reader5.GetString(0);
                                 name = reader5.GetString(1);
@@ -202,7 +233,7 @@ namespace TabScore.Models
                         }
                         catch   // Record found, but format cannot be parsed
                         {
-                            number = "";
+                            if (number == "###") number = "";
                         }
                     }
                 });
@@ -247,8 +278,16 @@ namespace TabScore.Models
                         {
                             try
                             {
-                                DateTime timeLog = reader6.GetDateTime(2);
-                                if (timeLog > latestTimeLog)
+                                DateTime timeLog;
+                                if (reader6.IsDBNull(2))
+                                {
+                                    timeLog = new DateTime(2010, 1, 1);
+                                }
+                                else
+                                {
+                                    timeLog = reader6.GetDateTime(2);
+                                }
+                                if (timeLog >= latestTimeLog)
                                 {
                                     number = reader6.GetString(0);
                                     name = reader6.GetString(1);
@@ -257,7 +296,7 @@ namespace TabScore.Models
                             }
                             catch   // Record found, but format cannot be parsed
                             {
-                                number = "";
+                                if (number == "###") number = "";
                             }
                         }
                     });
@@ -295,17 +334,25 @@ namespace TabScore.Models
                         try
                         {
                             int readerRound = reader5.GetInt32(2);
-                            DateTime timeLog = reader5.GetDateTime(3);
-                            if (readerRound <= round && timeLog > latestTimeLog)
+                            DateTime timeLog;
+                            if (reader5.IsDBNull(3))
+                            {
+                                timeLog = new DateTime(2010, 1, 1);
+                            }
+                            else 
+                            {
+                                timeLog = reader5.GetDateTime(3);
+                            }
+                            if (readerRound <= round && timeLog >= latestTimeLog)
                             {
                                 number = reader5.GetString(0);
                                 name = reader5.GetString(1);
                                 latestTimeLog = timeLog;
                             }
                         }
-                        catch   // Record found, but format cannot be parsed
+                        catch  // Record found, but format cannot be parsed
                         {
-                            number = "";
+                            if (number == "###") number = "";
                         }
                     }
                 });

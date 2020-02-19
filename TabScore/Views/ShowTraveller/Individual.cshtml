@@ -5,63 +5,63 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-    <div class="row my-1">
-        @if (Model.HandRecord)
-        {
-            <div class="col-9">
-                <div class="row">
-                    <div class="col-12 text-center">
+<div class="row mt-4">
+    @if (Model.HandRecord)
+    {
+        <div class="col-9">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3>
+                        Board @Model.BoardNumber
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    @if (Model.PercentageNS == -1)
+                    {
                         <h4>
-                            Board @Model.BoardNumber
+                            Traveller
                         </h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 text-center">
-                        @if (Model.PercentageNS == -1)
-                        {
-                            <h4>
-                                Traveller
-                            </h4>
-                        }
-                        else
-                        {
-                            <h4>
-                                NS: @Model.PercentageNS% - EW: @(100 - Model.PercentageNS)%
-                            </h4>
-                        }
-                    </div>
+                    }
+                    else
+                    {
+                        <h4>
+                            NS: @Model.PercentageNS% - EW: @(100 - Model.PercentageNS)%
+                        </h4>
+                    }
                 </div>
             </div>
-            <div class="col-3">
-                <button class="btn btn-outline-light btn-lg mr-2 my-2 float-right" ontouchstart="handRecordClick()">
-                    <img src="~/Cards Logo.png" />
-                </button>
-            </div>
-        }
-        else
-        {
-            <div class="col-12 text-center">
+        </div>
+        <div class="col-3">
+            <button class="btn btn-outline-light btn-lg mr-2 my-2 float-right" ontouchstart="handRecordClick()">
+                <img src="~/Cards Logo.png" />
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="col-12 text-center">
+            <h4>
+                Board @Model.BoardNumber
+            </h4>
+        </div>
+        <div class="col-12 text-center">
+            @if (Model.PercentageNS == -1)
+            {
                 <h4>
-                    Board @Model.BoardNumber
+                    Traveller
                 </h4>
-            </div>
-            <div class="col-12 text-center">
-                @if (Model.PercentageNS == -1)
-                {
-                    <h4>
-                        Traveller
-                    </h4>
-                }
-                else
-                {
-                    <h4>
-                        NS: @Model.PercentageNS% - EW: @(100 - Model.PercentageNS)%
-                    </h4>
-                }
-            </div>
-        }
-    </div>
+            }
+            else
+            {
+                <h4>
+                    NS: @Model.PercentageNS% - EW: @(100 - Model.PercentageNS)%
+                </h4>
+            }
+        </div>
+    }
+</div>
 
 <div class="row">
     <div class="col-12">
@@ -125,6 +125,23 @@
 
 <script>
     var isSubmitted = false;
+    var scrollPosition = 0;
+    var wait = 0;
+    var interval = setInterval(scrollpage, 20)
+
+    function scrollpage() {
+        if (wait < 250) {
+            wait++;
+        }
+        else {
+            window.scrollTo(0, scrollPosition += 2);
+            if (scrollPosition > document.body.clientHeight) {
+                scrollPosition = 0;
+                window.scrollTo(0, 0);
+                wait = 0;
+            }
+        }
+    }
 
     function validateOK() {
         if (!isSubmitted) {
