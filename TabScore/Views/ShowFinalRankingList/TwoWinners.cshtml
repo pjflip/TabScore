@@ -89,23 +89,6 @@
 
 <script>
     var isSubmitted = false;
-    var scrollPosition = 0;
-    var wait = 0;
-    var interval = setInterval(scrollpage, 20)
-
-    function scrollpage() {
-        if (wait < 250) {
-            wait++;
-        }
-        else {
-            window.scrollTo(0, scrollPosition += 2);
-            if (scrollPosition > document.body.clientHeight) {
-                scrollPosition = 0;
-                window.scrollTo(0, 0);
-                wait = 0;
-            }
-        }
-    }
 
     function validateOK() {
         if (!isSubmitted) {
