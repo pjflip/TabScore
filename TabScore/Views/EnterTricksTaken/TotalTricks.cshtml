@@ -1,4 +1,7 @@
-﻿@model TabScore.Models.Result
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.Result
 
 @{
     ViewData["Title"] = "Enter Total Tricks Taken";
@@ -107,7 +110,7 @@
             document.getElementById('n' + numTricks).className = "btn btn-warning btn-lg m-1";
         }
     }
-    
+
     function setNumTricks(n) {
         numTricks = n;
         document.getElementById('n0').className = "btn btn-primary btn-lg m-1";

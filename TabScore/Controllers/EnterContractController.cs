@@ -1,4 +1,7 @@
-﻿using System;
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+// Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
+
+using System;
 using System.Web.Mvc;
 using TabScore.Models;
 
@@ -14,8 +17,12 @@ namespace TabScore.Controllers
 
             if (result == null || result.BoardNumber != boardNumber)   // No session result data for this board
             {
-                result = new Result(sessionData.SectionID, sessionData.TableNumber, round.RoundNumber, boardNumber)
+                result = new Result()
                 {
+                    SectionID = sessionData.SectionID,
+                    TableNumber = sessionData.TableNumber,
+                    RoundNumber = round.RoundNumber,
+                    BoardNumber = boardNumber,
                     PairNS = round.PairNS,
                     PairEW = round.PairEW
                 };
@@ -24,6 +31,7 @@ namespace TabScore.Controllers
                     result.South = round.South;
                     result.West = round.West;
                 }
+                result.ReadDB();
                 Session["Result"] = result;
             }
 
@@ -63,6 +71,7 @@ namespace TabScore.Controllers
             Session["Result"] = result;
             return RedirectToAction("Index", "ConfirmResult");
         }
+        
         public ActionResult OKButtonSkip()
         {
             Result result = Session["Result"] as Result;

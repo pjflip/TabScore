@@ -1,4 +1,7 @@
-﻿using System;
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+// Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
+
+using System;
 using System.Data.Odbc;
 
 namespace TabScore.Models
@@ -6,17 +9,22 @@ namespace TabScore.Models
     public class Round
     {
         public int RoundNumber { get; private set; }
-        public int PairNS { get; private set; }   // Doubles as North player number for individuals
-        public int PairEW { get; private set; }   // Doubles as East player number for individuals
-        public int LowBoard { get; private set; }
-        public int HighBoard { get; private set; }
-        public int South { get; private set; }
-        public int West { get; private set; }
+        public int TableNumber { get; set; }
+        public int PairNS { get; set; }   // Doubles as North player number for individuals
+        public int PairEW { get; set; }   // Doubles as East player number for individuals
+        public int LowBoard { get; set; }
+        public int HighBoard { get; set; }
+        public int South { get; set; }
+        public int West { get; set; }
         public string NameNorth { get; private set; }
         public string NameSouth { get; private set; }
         public string NameEast { get; private set; }
         public string NameWest { get; private set; }
 
+        // Constructor used for creating lists
+        public Round() { }
+        
+        // Database read constructor
         public Round(SessionData sessionData, int roundNumber)
         {
             RoundNumber = roundNumber;

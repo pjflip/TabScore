@@ -130,10 +130,10 @@
     <Compile Include="Models\MovesList.cs" />
     <Compile Include="Models\PlayerNames.cs" />
     <Compile Include="Models\ResultsList.cs" />
+    <Compile Include="Models\RoundsList.cs" />
     <Compile Include="Models\UtilityFunctions.cs" />
     <Compile Include="Models\ODBCRetryHelper.cs" />
     <Compile Include="Models\HandRecord.cs" />
-    <Compile Include="Models\BoardMove.cs" />
     <Compile Include="Models\Move.cs" />
     <Compile Include="Models\RankingList.cs" />
     <Compile Include="Models\Ranking.cs" />

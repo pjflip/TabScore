@@ -1,4 +1,7 @@
-﻿using System;
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+// Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
+
+using System;
 using System.Data.Odbc;
 using System.Text;
 
@@ -6,9 +9,9 @@ namespace TabScore.Models
 {
     public class Result
     {
-        public int SectionID { get; private set; }
-        public int TableNumber { get; private set; }
-        public int RoundNumber { get; private set; }
+        public int SectionID { get; set; }
+        public int TableNumber { get; set; }
+        public int RoundNumber { get; set; }
         public int BoardNumber { get; set; }
         public int PairNS { get; set; }
         public int South { get; set; }
@@ -24,16 +27,8 @@ namespace TabScore.Models
         public int MatchpointsEW { get; set; }
         public int MatchpointsMax { get; set; }
 
-        // Basic constructor - used to create traveller and ranking list
-        public Result() { }
-
-        // Database read constructor 
-        public Result(int sectionID, int tableNumber, int roundNumber, int boardNumber)
+        public void ReadDB()
         {
-            SectionID = sectionID;
-            TableNumber = tableNumber;
-            RoundNumber = roundNumber;
-            BoardNumber = boardNumber;
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();

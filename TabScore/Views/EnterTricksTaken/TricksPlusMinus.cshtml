@@ -1,4 +1,7 @@
-﻿@model TabScore.Models.Result
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.Result
 
 @{
     ViewData["Title"] = "Enter Tricks Taken Plus Or Minus";
@@ -6,8 +9,13 @@
 }
 
 <style>
-    .btn-plus { background-color:lightgreen; }
-    .btn-minus { background-color:lightcoral; }
+    .btn-plus {
+        background-color: lightgreen;
+    }
+
+    .btn-minus {
+        background-color: lightcoral;
+    }
 </style>
 
 <div id="noTricksModal" class="modal modal-dialog modal-lg">
