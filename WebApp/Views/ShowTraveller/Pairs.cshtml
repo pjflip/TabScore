@@ -1,4 +1,7 @@
-﻿@model TabScore.Models.Traveller
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.Traveller
 
 @{
     ViewData["Title"] = "Show Traveller";
@@ -129,21 +132,21 @@
     function validateOK() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "ShowTraveller")';
+            location.href = '@Url.Action("Index", "ShowBoards")';
         }
     }
 
     function handRecordClick() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("HandRecordButtonClick", "ShowTraveller")';
+            location.href = '@Url.Action("Index", "ShowHandRecord")?boardNumber=' + @Model.BoardNumber;
         }
     }
 
     function backClick() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("BackButtonClick", "ShowTraveller")';
+            location.href = '@Url.Action("Index", "ConfirmResult")';
         }
     }
 </script>

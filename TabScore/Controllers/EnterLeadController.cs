@@ -34,19 +34,12 @@ namespace TabScore.Controllers
             if (validateWarning != "Validate" || !Settings.ValidateLeadCard || UtilityFunctions.ValidateLead(AppData.DBConnectionString, result.SectionID, result.BoardNumber, card, result.NSEW))
             {
                 result.LeadCard = card;
-                Session["Result"] = result;
                 return RedirectToAction("Index", "EnterTricksTaken");
             }
             else
             {
                 return RedirectToAction("Index", "EnterLead", new { validateWarning = "Warning" });
             }
-        }
-
-        public ActionResult BackButtonClick()
-        {
-            Result result = Session["Result"] as Result;
-            return RedirectToAction("Index", "EnterContract", new { boardNumber = result.BoardNumber } );
         }
     }
 }

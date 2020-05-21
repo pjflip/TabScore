@@ -248,10 +248,9 @@
     function backClick() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("BackButtonClick", "EnterLead")';
+            location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + @Model.BoardNumber;
         }
     }
-
 </script>
 
 

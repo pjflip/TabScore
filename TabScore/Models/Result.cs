@@ -225,22 +225,7 @@ namespace TabScore.Models
             {
                 s.Append(ContractX);
             }
-            s.Append($"{TricksTakenSymbol} by ");
-                switch (NSEW)
-                {
-                    case "N":
-                        s.Append("North");
-                        break;
-                    case "S":
-                        s.Append("South");
-                        break;
-                    case "E":
-                        s.Append("East");
-                        break;
-                    case "W":
-                        s.Append("West");
-                        break;
-                }
+            s.Append($"{TricksTakenSymbol} by {NSEW}");
             return s.ToString();
         }
 

@@ -42,46 +42,39 @@ namespace TabScore.Models
                             Add(ranking);
                         }
                     });
-                    reader1.Close();
-                    cmd.Dispose();
-                    if (Count == 0)  // Results table exists but is empty
-                    {
-                        if (AppData.IsIndividual)
-                        {
-                            InsertRange(0, CalculateIndividualRankingFromReceivedData(sectionID));
-                        }
-                        else
-                        {
-                            InsertRange(0, CalculateRankingFromReceivedData(sectionID));
-                        }
-                    }
                 }
                 catch (OdbcException e)
                 {
-                    reader1.Close();
-                    cmd.Dispose();
-                    if (e.Errors.Count == 1 && e.Errors[0].SQLState == "42S02")  // Results table doesn't exist
-                    {
-                        if (AppData.IsIndividual)
-                        {
-                            InsertRange(0, CalculateIndividualRankingFromReceivedData(sectionID));
-                        }
-                        else
-                        {
-                            InsertRange(0, CalculateRankingFromReceivedData(sectionID));
-                        }
-                    }
-                    else
+                    if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Any error other than results table doesn't exist
                     {
                         throw (e);
                     }
                 }
+                finally
+                {
+                    reader1.Close();
+                    cmd.Dispose();
+                }
+
+                if (Count == 0)  // Results table either doesn't exist or contains no entries, so try to calculate rankings
+                {
+                    if (AppData.IsIndividual)
+                    {
+                        InsertRange(0, CalculateIndividualRankingFromReceivedData(sectionID));
+                    }
+                    else
+                    {
+                        InsertRange(0, CalculateRankingFromReceivedData(sectionID));
+                    }
+                }
+                
+                // Make sure that ranking list is sorted into presentation order
                 Sort((x, y) =>
                 {
-                    var ret = y.Orientation.CompareTo(x.Orientation);    // N's first then E's
-                    if (ret == 0) ret = y.ScoreDecimal.CompareTo(x.ScoreDecimal);
-                    if (ret == 0) ret = x.PairNo.CompareTo(y.PairNo);
-                    return ret;
+                    int sortValue = y.Orientation.CompareTo(x.Orientation);    // N's first then E's
+                    if (sortValue == 0) sortValue = y.ScoreDecimal.CompareTo(x.ScoreDecimal);
+                    if (sortValue == 0) sortValue = x.PairNo.CompareTo(y.PairNo);
+                    return sortValue;
                 });
             }
         }

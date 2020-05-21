@@ -8,7 +8,7 @@ namespace TabScore.Controllers
 {
     public class ShowTravellerController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int boardNumber)
         {
             if (!Settings.ShowResults)
             {
@@ -16,8 +16,17 @@ namespace TabScore.Controllers
             }
 
             Result result = Session["Result"] as Result;
-            Traveller traveller = new Traveller((Session["SessionData"] as SessionData).SectionID, result.BoardNumber, result.PairNS);
-            ViewData["BackButton"] = "TRUE";
+            if (result == null || result.BoardNumber != boardNumber)
+            {
+                // No session result data for this board, so must have come from ShowBoards screen View button
+                ViewData["BackButton"] = "FALSE";
+            }
+            else
+            {
+                ViewData["BackButton"] = "TRUE";
+            }
+
+            Traveller traveller = new Traveller((Session["SessionData"] as SessionData).SectionID, boardNumber, (Session["Round"] as Round).PairNS);
             if (AppData.IsIndividual)
             {
                 return View("Individual", traveller);
@@ -26,21 +35,6 @@ namespace TabScore.Controllers
             {
                 return View("Pairs", traveller);
             }
-        }
-
-        public ActionResult OKButtonClick()
-        {
-            return RedirectToAction("Index", "ShowBoards");
-        }
-
-        public ActionResult BackButtonClick()
-        {
-            return RedirectToAction("Index", "ConfirmResult");
-        }
-
-        public ActionResult HandRecordButtonClick()
-        {
-            return RedirectToAction("Index", "ShowHandRecord");
         }
     }
 }

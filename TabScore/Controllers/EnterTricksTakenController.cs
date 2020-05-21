@@ -22,12 +22,11 @@ namespace TabScore.Controllers
             }
         }
 
-        public ActionResult OKButtonClick(string numTricks)
+        public ActionResult OKButtonClick(int numTricks)
         {
             Result result = Session["Result"] as Result;
-            result.TricksTakenNumber = Convert.ToInt32(numTricks);
+            result.TricksTakenNumber = numTricks;
             result.CalculateScore();
-            Session["Result"] = result;
             return RedirectToAction("Index", "ConfirmResult");
         }
 

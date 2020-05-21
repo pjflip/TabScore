@@ -50,10 +50,5 @@ namespace TabScore.Controllers
                 }
             }
         }
-
-        public ActionResult OKButtonClick()
-        {
-            return RedirectToAction("Index", "ShowRoundInfo");
-        }
     }
 }

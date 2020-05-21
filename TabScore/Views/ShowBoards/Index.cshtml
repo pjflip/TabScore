@@ -42,21 +42,33 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 @Result.BoardNumber:
             </h4>
         </div>
-        <div class="col-3">
+        <div class="col-4 px-0">
             @if (Result.ContractLevel == -999)
             {
-                <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterEdit(@Result.BoardNumber)">
+                <button class="btn btn-primary btn-lg px-4 m-1" ontouchstart="EnterEdit(@Result.BoardNumber)">
                     Enter
                 </button>
             }
             else
             {
-                <button class="btn btn-info btn-lg m-1" ontouchstart="EnterEdit(@Result.BoardNumber)">
-                    Edit
-                </button>
+                if (Model.ShowViewButton && Result.ContractLevel != -1)
+                {
+                    <button class="btn btn-info btn-lg px-2 m-1" ontouchstart="EnterEdit(@Result.BoardNumber)">
+                        Edit
+                    </button>
+                    <button class="btn btn-secondary btn-lg px-2" ontouchstart="View(@Result.BoardNumber)">
+                        View
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-info btn-lg px-4 m-1" ontouchstart="EnterEdit(@Result.BoardNumber)">
+                        Edit
+                    </button>
+                }
             }
         </div>
-        <div class="col-7 align-self-center">
+        <div class="col-6 align-self-center">
             <h4>
                 @Html.Raw(Result.DisplayContract())
             </h4>
@@ -71,7 +83,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         if (@Model.GotAllResults.ToString().ToLower()) {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("OKButtonClick", "ShowBoards")';
+                location.href = '@Url.Action("Index", "ShowRankingList")';
             }
         }
         else {
@@ -83,6 +95,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             if (!isSubmitted) {
                 isSubmitted = true;
                 location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + n;
+            }
+    }
+
+    function View(n) {
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("Index", "ShowTraveller")?boardNumber=' + n;
             }
     }
 </script>

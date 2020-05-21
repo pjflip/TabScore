@@ -30,10 +30,5 @@ namespace TabScore.Controllers
 
             return View(resultsList);
         }
-
-        public ActionResult OKButtonClick()
-        {
-            return RedirectToAction("Index", "ShowRankingList");
-        }
     }
 }

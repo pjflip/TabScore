@@ -8,9 +8,8 @@ namespace TabScore.Controllers
 {
     public class ShowHandRecordController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int boardNumber)
         {
-            int boardNumber = (Session["Result"] as Result).BoardNumber;
             int sectionID = (Session["SessionData"] as SessionData).SectionID;
 
             HandRecord handRecord = new HandRecord(sectionID, boardNumber);
@@ -21,11 +20,6 @@ namespace TabScore.Controllers
 
             ViewData["BackButton"] = "FALSE";
             return View(handRecord);
-        }
-
-        public ActionResult OKButtonClick()
-        {
-            return RedirectToAction("Index", "ShowTraveller");
         }
     }
 }

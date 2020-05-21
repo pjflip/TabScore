@@ -1,4 +1,7 @@
-﻿@model TabScore.Models.RankingList
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.RankingList
 
 @{
     ViewData["Title"] = "Show Ranking List - One Winner";
@@ -62,14 +65,14 @@
     function validateOK() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?roundNumber=@Model.RoundNumber';
+            location.href = '@Url.Action("Index", "ShowMove")?newRoundNumber=' + (@Model.RoundNumber + 1).toString();
         }
     }
 
     function refreshClick() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("RefreshButtonClick", "ShowRankingList")';
+            location.href = '@Url.Action("Index", "ShowRankingList")';
         }
     }
 </script>

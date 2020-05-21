@@ -25,7 +25,6 @@ namespace TabScore.Controllers
             {
                 if (sessionData.TableLogonStatus() == 1)  // Table is already logged on, so need to confirm
                 {
-                    Session["SessionData"] = sessionData;   // Save table number
                     return RedirectToAction("Index", "EnterTableNumber");
                 }
                 else
@@ -34,8 +33,8 @@ namespace TabScore.Controllers
                 }
             }
 
-            sessionData.SectionTableString = sessionData.SectionLetter + tableNumber.ToString();   // Concatenate valid table number to section letter to give eg "A1", and save
-            Session["SessionData"] = sessionData;    
+            // Concatenate valid table number to section letter to give eg "A1"
+            sessionData.SectionTableString = sessionData.SectionLetter + tableNumber.ToString();
             
             // Check if results data exist - set round number accordingly and create round info
             int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(sessionData.SectionID, tableNumber);

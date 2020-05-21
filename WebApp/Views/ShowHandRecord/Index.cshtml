@@ -1,4 +1,7 @@
-﻿@model TabScore.Models.HandRecord
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.HandRecord
 
 @{
     ViewData["Title"] = "Show Hand Record";
@@ -96,7 +99,7 @@
     </div>
     <div class="col-4 pl-4">
         <div class="row">
-            <h5><a  style="color:black">&spades;</a>@Model.EastSpades</h5>
+            <h5><a style="color:black">&spades;</a>@Model.EastSpades</h5>
         </div>
         <div class="row">
             <h5><a style="color:red">&hearts;</a>@Model.EastHearts</h5>
@@ -188,7 +191,7 @@
     function validateOK() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "ShowHandRecord")';
+            location.href = '@Url.Action("Index", "ShowTraveller")?boardNumber=' + @Model.BoardNumber;
         }
     }
 </script>

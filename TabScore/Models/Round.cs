@@ -208,34 +208,35 @@ namespace TabScore.Models
             string name = "";
             
             // First look for entries in the same direction
-            // If the player has changed (eg in teams), we need the latest name applicable to this round
+            // If the player has changed (eg in teams), there will be more than one PlayerNumbers record for this pair number and direction
+            // We need the most recently added name applicable to this round
             string SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={pairNo} AND Direction='{dir}'";
-            OdbcCommand cmd5 = new OdbcCommand(SQLString, conn);
-            OdbcDataReader reader5 = null;
+            OdbcCommand cmd1 = new OdbcCommand(SQLString, conn);
+            OdbcDataReader reader1 = null;
             try
             {
                 ODBCRetryHelper.ODBCRetry(() =>
                 {
-                    reader5 = cmd5.ExecuteReader();
+                    reader1 = cmd1.ExecuteReader();
                     DateTime latestTimeLog = new DateTime(2010, 1, 1);
-                    while (reader5.Read())
+                    while (reader1.Read())
                     {
                         try
                         {
-                            int readerRound = reader5.GetInt32(2);
+                            int readerRound = reader1.GetInt32(2);
                             DateTime timeLog;
-                            if(reader5.IsDBNull(3))
+                            if(reader1.IsDBNull(3))
                             {
                                 timeLog = new DateTime(2010, 1, 1);
                             }
                             else
                             {
-                                timeLog = reader5.GetDateTime(3); 
+                                timeLog = reader1.GetDateTime(3); 
                             }
                             if (readerRound <= round && timeLog >= latestTimeLog)
                             {
-                                number = reader5.GetString(0);
-                                name = reader5.GetString(1);
+                                number = reader1.GetString(0);
+                                name = reader1.GetString(1);
                                 latestTimeLog = timeLog;
                             }
                         }
@@ -248,8 +249,8 @@ namespace TabScore.Models
             }
             finally 
             {
-                reader5.Close();
-                cmd5.Dispose();
+                reader1.Close();
+                cmd1.Dispose();
             }
 
             if (number == "###")  // Nothing found so try Round 0 entries in the other direction (for Howell type pairs movement)
@@ -274,31 +275,31 @@ namespace TabScore.Models
                         break;
                 }
                 SQLString = $"SELECT Number, Name, TimeLog FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={pairNo} AND Direction='{otherDir}' AND Round=0";
-                OdbcCommand cmd6 = new OdbcCommand(SQLString, conn);
-                OdbcDataReader reader6 = null;
+                OdbcCommand cmd2 = new OdbcCommand(SQLString, conn);
+                OdbcDataReader reader2 = null;
                 try
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        reader6 = cmd6.ExecuteReader();
+                        reader2 = cmd2.ExecuteReader();
                         DateTime latestTimeLog = new DateTime(2010, 1, 1);
-                        while (reader6.Read())
+                        while (reader2.Read())
                         {
                             try
                             {
                                 DateTime timeLog;
-                                if (reader6.IsDBNull(2))
+                                if (reader2.IsDBNull(2))
                                 {
                                     timeLog = new DateTime(2010, 1, 1);
                                 }
                                 else
                                 {
-                                    timeLog = reader6.GetDateTime(2);
+                                    timeLog = reader2.GetDateTime(2);
                                 }
                                 if (timeLog >= latestTimeLog)
                                 {
-                                    number = reader6.GetString(0);
-                                    name = reader6.GetString(1);
+                                    number = reader2.GetString(0);
+                                    name = reader2.GetString(1);
                                     latestTimeLog = timeLog;
                                 }
                             }
@@ -311,8 +312,8 @@ namespace TabScore.Models
                 }
                 finally
                 {
-                    reader6.Close();
-                    cmd6.Dispose();
+                    reader2.Close();
+                    cmd2.Dispose();
                 }
             }
 
@@ -329,32 +330,32 @@ namespace TabScore.Models
             string name = "";
 
             string SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={playerNo}";
-            OdbcCommand cmd5 = new OdbcCommand(SQLString, conn);
-            OdbcDataReader reader5 = null;
+            OdbcCommand cmd = new OdbcCommand(SQLString, conn);
+            OdbcDataReader reader = null;
             try
             {
                 ODBCRetryHelper.ODBCRetry(() =>
                 {
-                    reader5 = cmd5.ExecuteReader();
+                    reader = cmd.ExecuteReader();
                     DateTime latestTimeLog = new DateTime(2010, 1, 1);
-                    while (reader5.Read())
+                    while (reader.Read())
                     {
                         try
                         {
-                            int readerRound = reader5.GetInt32(2);
+                            int readerRound = reader.GetInt32(2);
                             DateTime timeLog;
-                            if (reader5.IsDBNull(3))
+                            if (reader.IsDBNull(3))
                             {
                                 timeLog = new DateTime(2010, 1, 1);
                             }
                             else 
                             {
-                                timeLog = reader5.GetDateTime(3);
+                                timeLog = reader.GetDateTime(3);
                             }
                             if (readerRound <= round && timeLog >= latestTimeLog)
                             {
-                                number = reader5.GetString(0);
-                                name = reader5.GetString(1);
+                                number = reader.GetString(0);
+                                name = reader.GetString(1);
                                 latestTimeLog = timeLog;
                             }
                         }
@@ -367,8 +368,8 @@ namespace TabScore.Models
             }
             finally
             {
-                cmd5.Dispose();
-                reader5.Close();
+                cmd.Dispose();
+                reader.Close();
             }
 
             if (number == "###")  // Nothing found

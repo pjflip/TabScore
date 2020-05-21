@@ -22,7 +22,7 @@ namespace TabScore.Controllers
             AppData.Refresh();
             if (AppData.DBConnectionString == "")
             {
-                TempData["warningMessage"] = "Scoring database not yet started";
+                TempData["warningMessage"] = "Scoring database not yet selected";
                 return RedirectToAction("Index", "StartScreen");
             }
             Settings.Refresh();

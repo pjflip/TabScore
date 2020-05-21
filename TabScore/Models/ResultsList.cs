@@ -9,10 +9,12 @@ namespace TabScore.Models
     public class ResultsList : List<Result>
     {
         public bool GotAllResults { get; private set; }
+        public bool ShowViewButton { get; private set; }
 
         public ResultsList(SessionData sessionData, Round round)
         {
             GotAllResults = true;
+            ShowViewButton = Settings.ShowResults;
 
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {

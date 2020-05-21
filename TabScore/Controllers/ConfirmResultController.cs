@@ -16,8 +16,9 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick()
         {
-            (Session["Result"] as Result).UpdateDB();
-            return RedirectToAction("Index", "ShowTraveller");
+            Result result = Session["Result"] as Result;
+            result.UpdateDB();
+            return RedirectToAction("Index", "ShowTraveller", new { boardNumber = result.BoardNumber });
         }
 
         public ActionResult BackButtonClick()

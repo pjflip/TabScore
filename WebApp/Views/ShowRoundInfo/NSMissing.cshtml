@@ -1,4 +1,7 @@
-﻿@model TabScore.Models.Round
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.Round
 
 @{
     ViewData["Title"] = "Show Round NS Missing";
@@ -51,7 +54,7 @@
     function validateOK() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKSitOutButtonClick", "ShowRoundInfo")';
+            location.href = '@Url.Action("Index", "ShowRankingList")';
         }
     }
 

@@ -32,7 +32,7 @@ namespace TabScore.Controllers
                     result.West = round.West;
                 }
                 result.ReadDB();
-                Session["Result"] = result;
+                Session["Result"] = result;   // Need to update Session object, as implicit reference is broken
             }
 
             if (AppData.IsIndividual)
@@ -54,7 +54,6 @@ namespace TabScore.Controllers
             result.ContractSuit = cSuit;
             result.ContractX = cX;
             result.NSEW = cNSEW;
-            Session["Result"] = result;
             return RedirectToAction("Index", "EnterLead", new { validateWarning = "Validate" });
         }
 
@@ -68,7 +67,6 @@ namespace TabScore.Controllers
             result.LeadCard = "";
             result.TricksTakenNumber = -1;
             result.CalculateScore();
-            Session["Result"] = result;
             return RedirectToAction("Index", "ConfirmResult");
         }
         
@@ -81,14 +79,8 @@ namespace TabScore.Controllers
             result.NSEW = "";
             result.LeadCard = "";
             result.TricksTakenNumber = -1;
-            Session["Result"] = result;
 
             result.UpdateDB();
-            return RedirectToAction("Index", "ShowBoards");
-        }
-
-        public ActionResult BackButtonClick()
-        {
             return RedirectToAction("Index", "ShowBoards");
         }
     }

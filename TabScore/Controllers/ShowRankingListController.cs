@@ -13,10 +13,12 @@ namespace TabScore.Controllers
             Round round = Session["Round"] as Round;
             if (round.RoundNumber > 1)  // Show ranking list only from round 2 onwards
             {
-               if (Settings.ShowRanking == 1)
+                if (Settings.ShowRanking == 1)
                 {
                     RankingList rankingList = new RankingList((Session["SessionData"] as SessionData).SectionID);
-                    if (rankingList != null && rankingList.Count != 0 && rankingList[0].ScoreDecimal != 0.0 && rankingList[0].ScoreDecimal != 50.0)
+                    
+                    // Only show the ranking list if it contains something meaningful
+                    if (rankingList != null && rankingList.Count != 0 && rankingList[0].ScoreDecimal != 0 && rankingList[0].ScoreDecimal != 50)
                     {
                         rankingList.RoundNumber = round.RoundNumber;
                         rankingList.PairNS = round.PairNS;
@@ -40,15 +42,6 @@ namespace TabScore.Controllers
                 }
             }
             return RedirectToAction("Index", "ShowMove", new { newRoundNumber = round.RoundNumber + 1 });
-        }
-
-        public ActionResult OKButtonClick(int roundNumber)   // Pass back round to ensure it is not incremented twice by a double bounce
-        {
-            return RedirectToAction("Index", "ShowMove", new { newRoundNumber = roundNumber + 1 });
-        }
-        public ActionResult RefreshButtonClick()
-        {
-            return RedirectToAction("Index", "ShowRankingList");
         }
     }
 }

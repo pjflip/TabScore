@@ -96,14 +96,14 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     function validateOK() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "ShowRankingList")?roundNumber=@Model.RoundNumber';
+            location.href = '@Url.Action("Index", "ShowMove")?newRoundNumber=' + (@Model.RoundNumber + 1).toString();
         }
     }
 
     function refreshClick() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("RefreshButtonClick", "ShowRankingList")';
+            location.href = '@Url.Action("Index", "ShowRankingList")';
         }
     }
 </script>

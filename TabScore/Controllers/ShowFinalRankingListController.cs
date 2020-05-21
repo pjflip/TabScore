@@ -10,11 +10,16 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            Round round = Session["Round"] as Round;
-
             RankingList rankingList = new RankingList((Session["SessionData"] as SessionData).SectionID);
-            if (rankingList != null && rankingList.Count != 0 && rankingList[0].Score != "     0" && rankingList[0].Score != "50")
+
+            // Don't show the ranking list if it doesn't contain anything useful
+            if (rankingList == null || rankingList.Count == 0 || rankingList[0].ScoreDecimal == 0 || rankingList[0].ScoreDecimal == 50)
             {
+                return RedirectToAction("Index", "EndScreen");
+            }
+            else
+            {
+                Round round = Session["Round"] as Round;
                 rankingList.PairNS = round.PairNS;
                 rankingList.PairEW = round.PairEW;
                 ViewData["BackButton"] = "REFRESH";
@@ -33,18 +38,6 @@ namespace TabScore.Controllers
                     return View("OneWinner", rankingList);
                 }
             }
-
-            return RedirectToAction("Index", "EndScreen");
-        }
-
-        public ActionResult OKButtonClick()
-        {
-            return RedirectToAction("Index", "EndScreen");
-        }
-
-        public ActionResult RefreshButtonClick()
-        {
-            return RedirectToAction("Index", "ShowFinalRankingList");
         }
     }
 }

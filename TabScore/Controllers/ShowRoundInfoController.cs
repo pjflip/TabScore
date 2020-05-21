@@ -58,22 +58,11 @@ namespace TabScore.Controllers
             }
         }
 
-        public ActionResult OKButtonClick()
-        {
-            return RedirectToAction("Index", "ShowBoards");
-        }
-
-        public ActionResult OKSitOutButtonClick()
-        {
-            return RedirectToAction("Index", "ShowRankingList");
-        }
-
         public ActionResult BackButtonClick()
         {
             // Reset to the previous round; RoundNumber > 1 else no Back button and cannot get here
             int roundNumber = (Session["Round"] as Round).RoundNumber;
-            SessionData sessionData = Session["SessionData"] as SessionData;
-            Session["Round"] = new Round(sessionData, roundNumber - 1);
+            Session["Round"] = new Round(Session["SessionData"] as SessionData, roundNumber - 1);
             return RedirectToAction("Index", "ShowMove", new { newRoundNumber = roundNumber });
         }
     }

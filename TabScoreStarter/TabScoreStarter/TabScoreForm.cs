@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace TabScoreStarter
@@ -14,6 +15,8 @@ namespace TabScoreStarter
 
         private void TabScoreForm_Load(object sender, EventArgs e)
         {
+            Text = $"TabScoreStarter - Version {Assembly.GetExecutingAssembly().GetName().Version}";
+            
             String argsString = "", pathToDB = "";
             String[] arguments = Environment.GetCommandLineArgs();
 
@@ -25,7 +28,11 @@ namespace TabScoreStarter
             arguments = argsString.Split(new Char[] { '/' });
             foreach (string s in arguments)
             {
-                if (s.StartsWith("f:[")) pathToDB = s.Split(new char[] { '[', ']' })[1];
+                if (s.StartsWith("f:["))
+                {
+                    pathToDB = s.Split(new char[] { '[', ']' })[1];
+                    break;
+                }
             }
 
             Database db = new Database(pathToDB);

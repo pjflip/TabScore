@@ -13,46 +13,67 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
-                string SQLString;
-                OdbcCommand cmd = null;
-                OdbcDataReader reader = null;
-                try
+                if (AppData.IsIndividual)
                 {
-                    if (AppData.IsIndividual)
+                    string SQLString = $"SELECT Table, NSPair, EWPair, LowBoard, HighBoard, South, West FROM RoundData WHERE Section={sectionID} AND Round={roundNumber}";
+                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                    OdbcDataReader reader = null;
+                    try
                     {
-                        SQLString = $"SELECT Table, NSPair, EWPair, LowBoard, HighBoard, South, West FROM RoundData WHERE Section={sectionID} AND Round={roundNumber}";
-                    }
-                    else
-                    {
-                        SQLString = $"SELECT Table, NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Round={roundNumber}";
-                    }
-                    cmd = new OdbcCommand(SQLString, connection);
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        reader = cmd.ExecuteReader();
-                        while (reader.Read())
+                        ODBCRetryHelper.ODBCRetry(() =>
                         {
-                            Round round = new Round()
+                            reader = cmd.ExecuteReader();
+                            while (reader.Read())
                             {
-                                TableNumber = reader.GetInt32(0),
-                                PairNS = reader.GetInt32(1),
-                                PairEW = reader.GetInt32(2),
-                                LowBoard = reader.GetInt32(3),
-                                HighBoard = reader.GetInt32(4)
-                            };
-                            if (AppData.IsIndividual)
-                            {
-                                round.South = reader.GetInt32(5);
-                                round.West = reader.GetInt32(6);
+                                Round round = new Round()
+                                {
+                                    TableNumber = reader.GetInt32(0),
+                                    PairNS = reader.GetInt32(1),
+                                    PairEW = reader.GetInt32(2),
+                                    LowBoard = reader.GetInt32(3),
+                                    HighBoard = reader.GetInt32(4),
+                                    South = reader.GetInt32(5),
+                                    West = reader.GetInt32(6)
+                                };
+                                Add(round);
                             }
-                            Add(round);
-                        }
-                    });
+                        });
+                    }
+                    finally
+                    {
+                        reader.Close();
+                        cmd.Dispose();
+                    }
                 }
-                finally
+                else  // Not individual
                 {
-                    reader.Close();
-                    cmd.Dispose();
+                    string SQLString = $"SELECT Table, NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Round={roundNumber}";
+                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                    OdbcDataReader reader = null;
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            reader = cmd.ExecuteReader();
+                            while (reader.Read())
+                            {
+                                Round round = new Round()
+                                {
+                                    TableNumber = reader.GetInt32(0),
+                                    PairNS = reader.GetInt32(1),
+                                    PairEW = reader.GetInt32(2),
+                                    LowBoard = reader.GetInt32(3),
+                                    HighBoard = reader.GetInt32(4),
+                                };
+                                Add(round);
+                            }
+                        });
+                    }
+                    finally
+                    {
+                        reader.Close();
+                        cmd.Dispose();
+                    }
                 }
             }
         }
