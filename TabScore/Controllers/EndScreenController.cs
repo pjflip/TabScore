@@ -8,25 +8,27 @@ namespace TabScore.Controllers
 {
     public class EndScreenController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int sectionID, int tableNumber)
         {
-            Session["Header"] = "";
-            ViewData["BackButton"] = "FALSE";
-            return View();
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            ViewData["Header"] = $"Table {tableStatus.SectionTableString}";
+            ViewData["Title"] = $"Show Move - {tableStatus.SectionTableString}";
+            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+            return View(tableStatus);
         }
 
-        public ActionResult OKButtonClick()
+        public ActionResult OKButtonClick(int sectionID, int tableNumber)
         {
             // Check if new round has been added; can't apply to individuals
-            int roundNumber = (Session["Round"] as Round).RoundNumber;
-            if (roundNumber == UtilityFunctions.NumberOfRoundsInEvent((Session["SessionData"] as SessionData).SectionID))  
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            if (tableStatus.RoundData.RoundNumber == Utilities.NumberOfRoundsInEvent(sectionID))  
             {
                 // Final round, so no new rounds added
-                return RedirectToAction("Index", "EndScreen");
+                return RedirectToAction("Index", "EndScreen", new { sectionID, tableNumber });
             }
             else
             {
-                return RedirectToAction("Index", "ShowMove", new { newRoundNumber = roundNumber + 1 });
+                return RedirectToAction("Index", "ShowMove", new { sectionID, tableNumber, newRoundNumber = tableStatus.RoundData.RoundNumber + 1 });
             }
         }
     }

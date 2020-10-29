@@ -3,11 +3,6 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 
 @model TabScore.Models.HandRecord
 
-@{
-    ViewData["Title"] = "Show Hand Record";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
-
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3>
@@ -188,10 +183,10 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    function validateOK() {
+    $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowTraveller")?boardNumber=' + @Model.BoardNumber;
+            location.href = '@Url.Action("Index", "ShowTraveller")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&boardNumber=@Model.BoardNumber';
         }
-    }
+    });
 </script>

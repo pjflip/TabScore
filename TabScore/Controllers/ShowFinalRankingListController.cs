@@ -8,34 +8,33 @@ namespace TabScore.Controllers
 {
     public class ShowFinalRankingListController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int sectionID, int tableNumber)
         {
-            RankingList rankingList = new RankingList((Session["SessionData"] as SessionData).SectionID);
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            RankingList rankingList = new RankingList(tableStatus);
 
-            // Don't show the ranking list if it doesn't contain anything useful
+            // Only show the ranking list if it contains something meaningful
             if (rankingList == null || rankingList.Count == 0 || rankingList[0].ScoreDecimal == 0 || rankingList[0].ScoreDecimal == 50)
             {
-                return RedirectToAction("Index", "EndScreen");
+                return RedirectToAction("Index", "EndScreen", new { sectionID, tableNumber });
             }
             else
             {
-                Round round = Session["Round"] as Round;
-                rankingList.PairNS = round.PairNS;
-                rankingList.PairEW = round.PairEW;
-                ViewData["BackButton"] = "REFRESH";
+                rankingList.FinalRankingList = true;
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber}";
+                ViewData["Title"] = $"Final Ranking List - {tableStatus.SectionTableString}";
+                ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 if (AppData.IsIndividual)
                 {
-                    rankingList.South = round.South;
-                    rankingList.West = round.West;
-                    return View("Individual", rankingList);
+                    return View("IndividualRankingList", rankingList);
                 }
                 else if (rankingList.Exists(x => x.Orientation == "E"))
                 {
-                    return View("TwoWinners", rankingList);
+                    return View("TwoWinnersRankingList", rankingList);
                 }
                 else
                 {
-                    return View("OneWinner", rankingList);
+                    return View("OneWinnerRankingList", rankingList);
                 }
             }
         }

@@ -8,25 +8,26 @@ namespace TabScore.Controllers
 {
     public class ShowMoveController : Controller
     {
-        public ActionResult Index(int newRoundNumber)
+        public ActionResult Index(int sectionID, int tableNumber, int newRoundNumber)
         {
-            SessionData sessionData = Session["SessionData"] as SessionData;
-            if (newRoundNumber > UtilityFunctions.NumberOfRoundsInEvent(sessionData.SectionID))  // Session complete
+            if (newRoundNumber > Utilities.NumberOfRoundsInEvent(sectionID))  // Session complete
             {
                 if (Settings.ShowRanking == 2)
                 {
-                    return RedirectToAction("Index", "ShowFinalRankingList");
+                    return RedirectToAction("Index", "ShowFinalRankingList", new { sectionID, tableNumber });
                 }
                 else
                 {
-                    return RedirectToAction("Index", "EndScreen");
+                    return RedirectToAction("Index", "EndScreen", new { sectionID, tableNumber });
                 }
             }
 
-            MovesList movesList = new MovesList(sessionData, Session["Round"] as Round, newRoundNumber);
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            MovesList movesList = new MovesList(tableStatus, newRoundNumber);
 
-            Session["Header"] = $"Table {sessionData.SectionTableString}";
-            ViewData["BackButton"] = "FALSE";
+            ViewData["Header"] = $"Table {tableStatus.SectionTableString}";
+            ViewData["Title"] = $"Show Move - {tableStatus.SectionTableString}";
+            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
 
             if (AppData.IsIndividual)
             {
@@ -38,21 +39,25 @@ namespace TabScore.Controllers
             }
         }
 
-        public ActionResult OKButtonClick(int newRoundNumber)
+        public ActionResult OKButtonClick(int sectionID, int tableNumber, int newRoundNumber)
         {
-            // Refresh settings for the start of the round
+            // Refresh settings and hand records for the start of the round
             Settings.Refresh();
+            if (Settings.ShowHandRecord || Settings.ValidateLeadCard)
+            {
+                HandRecords.Refresh();
+            }
 
-            // Update session to new round info
-            Session["Round"] = new Round(Session["SessionData"] as SessionData, newRoundNumber);
+            // Update table status round info
+            AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber).RoundData = new Round(sectionID, tableNumber, newRoundNumber);
 
             if (Settings.NumberEntryEachRound)
             {
-                return RedirectToAction("Index", "ShowPlayerNumbers");
+                return RedirectToAction("Index", "ShowPlayerNumbers", new { sectionID, tableNumber });
             }
             else
             {
-                return RedirectToAction("Index", "ShowRoundInfo");
+                return RedirectToAction("Index", "ShowRoundInfo", new { sectionID, tableNumber });
             }
         }
     }

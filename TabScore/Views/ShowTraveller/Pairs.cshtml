@@ -3,11 +3,6 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 
 @model TabScore.Models.Traveller
 
-@{
-    ViewData["Title"] = "Show Traveller";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
-
 <div class="row mt-4">
     @if (Model.HandRecord)
     {
@@ -100,7 +95,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                             <td>@Result.PairNS</td>
                             <td>@Result.PairEW</td>
                             <td>@Html.Raw(Result.DisplayTravellerContract())</td>
-                            <td>@Result.NSEW</td>
+                            <td>@Result.DeclarerNSEW</td>
                             <td>@Html.Raw(Result.DisplayLeadCard())</td>
                             <td>@Result.TricksTakenSymbol</td>
                             <td>@ScoreNS</td>
@@ -113,7 +108,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                             <td>@Result.PairNS</td>
                             <td>@Result.PairEW</td>
                             <td>@Html.Raw(Result.DisplayTravellerContract())</td>
-                            <td>@Result.NSEW</td>
+                            <td>@Result.DeclarerNSEW</td>
                             <td>@Html.Raw(Result.DisplayLeadCard())</td>
                             <td>@Result.TricksTakenSymbol</td>
                             <td>@ScoreNS</td>
@@ -129,25 +124,25 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    function validateOK() {
+    $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowBoards")';
+            location.href = '@Url.Action("Index", "ShowBoards")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
         }
-    }
+    });
 
     function handRecordClick() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowHandRecord")?boardNumber=' + @Model.BoardNumber;
+            location.href = '@Url.Action("Index", "ShowHandRecord")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&boardNumber=@Model.BoardNumber';
         }
     }
 
-    function backClick() {
+    $(document).on('touchstart', '#BackButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ConfirmResult")';
+            location.href = '@Url.Action("Index", "ConfirmResult")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
         }
-    }
+    });
 </script>
 

@@ -8,8 +8,8 @@ namespace TabScore.Models
 {
     public class Round
     {
-        public int RoundNumber { get; private set; }
         public int TableNumber { get; set; }
+        public int RoundNumber { get; private set; }
         public int PairNS { get; set; }   // Doubles as North player number for individuals
         public int PairEW { get; set; }   // Doubles as East player number for individuals
         public int LowBoard { get; set; }
@@ -24,8 +24,8 @@ namespace TabScore.Models
         // Constructor used for creating lists
         public Round() { }
         
-        // Database read constructor
-        public Round(SessionData sessionData, int roundNumber)
+        // Get specific round info
+        public Round(int sectionID, int tableNumber, int roundNumber)
         {
             RoundNumber = roundNumber;
 
@@ -36,7 +36,7 @@ namespace TabScore.Models
                 CheckTabScorePairNos(connection);
                 if (AppData.IsIndividual)
                 {
-                    string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={sessionData.SectionID} AND Table={sessionData.TableNumber} AND Round={roundNumber}";
+                    string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={tableNumber} AND Round={roundNumber}";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = null;
                     try
@@ -60,14 +60,14 @@ namespace TabScore.Models
                         reader.Close();
                         cmd.Dispose();
                     }
-                    NameNorth = GetNameFromPlayerNumbersTableIndividual(connection, sessionData.SectionID, RoundNumber, PairNS);
-                    NameSouth = GetNameFromPlayerNumbersTableIndividual(connection, sessionData.SectionID, RoundNumber, South);
-                    NameEast = GetNameFromPlayerNumbersTableIndividual(connection, sessionData.SectionID, RoundNumber, PairEW);
-                    NameWest = GetNameFromPlayerNumbersTableIndividual(connection, sessionData.SectionID, RoundNumber, West);
+                    NameNorth = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, PairNS);
+                    NameSouth = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, South);
+                    NameEast = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, PairEW);
+                    NameWest = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, West);
                 }
                 else  // Not individual
                 {
-                    string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sessionData.SectionID} AND Table={sessionData.TableNumber} AND Round={roundNumber}";
+                    string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Table={tableNumber} AND Round={roundNumber}";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = null;
                     try
@@ -89,10 +89,10 @@ namespace TabScore.Models
                         reader.Close();
                         cmd.Dispose();
                     }
-                    NameNorth = GetNameFromPlayerNumbersTable(connection, sessionData.SectionID, RoundNumber, PairNS, "N");
-                    NameSouth = GetNameFromPlayerNumbersTable(connection, sessionData.SectionID, RoundNumber, PairNS, "S");
-                    NameEast = GetNameFromPlayerNumbersTable(connection, sessionData.SectionID, RoundNumber, PairEW, "E");
-                    NameWest = GetNameFromPlayerNumbersTable(connection, sessionData.SectionID, RoundNumber, PairEW, "W");
+                    NameNorth = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, PairNS, "N");
+                    NameSouth = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, PairNS, "S");
+                    NameEast = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, PairEW, "E");
+                    NameWest = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, PairEW, "W");
                 }
             }
             return;
@@ -178,7 +178,7 @@ namespace TabScore.Models
                                 cmd3.Dispose();
                             }
                             string TSpairNo = queryResult.ToString();
-                            SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID.ToString()} AND [Table]={tempTable.ToString()} AND Direction='{tempDirection}'";
+                            SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={TSpairNo} WHERE Section={tempSectionID} AND [Table]={tempTable} AND Direction='{tempDirection}'";
                             OdbcCommand cmd4 = new OdbcCommand(SQLString, conn);
                             try
                             {
@@ -202,7 +202,7 @@ namespace TabScore.Models
             }
         }
 
-        private static string GetNameFromPlayerNumbersTable(OdbcConnection conn, int sectionID, int round, int pairNo, string dir)
+        private static string GetNameFromPlayerNumbersTable(OdbcConnection conn, int sectionID, int roundNumber, int pairNo, string dir)
         {
             string number = "###";
             string name = "";
@@ -223,7 +223,7 @@ namespace TabScore.Models
                     {
                         try
                         {
-                            int readerRound = reader1.GetInt32(2);
+                            int readerRoundNumber = reader1.GetInt32(2);
                             DateTime timeLog;
                             if(reader1.IsDBNull(3))
                             {
@@ -233,7 +233,7 @@ namespace TabScore.Models
                             {
                                 timeLog = reader1.GetDateTime(3); 
                             }
-                            if (readerRound <= round && timeLog >= latestTimeLog)
+                            if (readerRoundNumber <= roundNumber && timeLog >= latestTimeLog)
                             {
                                 number = reader1.GetString(0);
                                 name = reader1.GetString(1);
@@ -324,7 +324,7 @@ namespace TabScore.Models
             return FormatName(name, number);
         }
 
-        private static string GetNameFromPlayerNumbersTableIndividual(OdbcConnection conn, int sectionID, int round, int playerNo)
+        private static string GetNameFromPlayerNumbersTableIndividual(OdbcConnection conn, int sectionID, int roundNumber, int playerNo)
         {
             string number = "###";
             string name = "";
@@ -342,7 +342,7 @@ namespace TabScore.Models
                     {
                         try
                         {
-                            int readerRound = reader.GetInt32(2);
+                            int readerRoundNumber = reader.GetInt32(2);
                             DateTime timeLog;
                             if (reader.IsDBNull(3))
                             {
@@ -352,7 +352,7 @@ namespace TabScore.Models
                             {
                                 timeLog = reader.GetDateTime(3);
                             }
-                            if (readerRound <= round && timeLog >= latestTimeLog)
+                            if (readerRoundNumber <= roundNumber && timeLog >= latestTimeLog)
                             {
                                 number = reader.GetString(0);
                                 name = reader.GetString(1);
@@ -404,7 +404,7 @@ namespace TabScore.Models
             }
         }
 
-        public void UpdatePlayer(SessionData sessionData, string direction, int playerNumber)
+        public void UpdatePlayer(int sectionID, int tableNumber, string direction, int playerNumber)
         {
             // First get name, and update the Round
             string playerName = "";
@@ -419,7 +419,7 @@ namespace TabScore.Models
                 switch (Settings.NameSource)
                 {
                     case 0:
-                        playerName = PlayerNames.GetNameFromNumber(playerNumber);
+                        playerName = AppData.GetNameFromPlayerNamesTable(playerNumber);
                         break;
                     case 1:
                         playerName = GetNameFromExternalDatabase(playerNumber);
@@ -428,15 +428,10 @@ namespace TabScore.Models
                         playerName = "";
                         break;
                     case 3:
-                        string name;
-                        name = PlayerNames.GetNameFromNumber(playerNumber);
-                        if (name == "" || name.Substring(0, 1) == "#" || (name.Length >= 7 && name.Substring(0, 7) == "Unknown"))
+                        playerName = AppData.GetNameFromPlayerNamesTable(playerNumber);
+                        if (playerName == "" || playerName.Substring(0, 1) == "#" || (playerName.Length >= 7 && playerName.Substring(0, 7) == "Unknown"))
                         {
                             playerName = GetNameFromExternalDatabase(playerNumber);
-                        }
-                        else
-                        {
-                            playerName = name;
                         }
                         break;
                 }
@@ -507,7 +502,7 @@ namespace TabScore.Models
                 object queryResult = null;
 
                 // Check if PlayerNumbers entry exists already; if it does update it, if not create it
-                string SQLString = $"SELECT [Number] FROM PlayerNumbers WHERE Section={sessionData.SectionID} AND [Table]={sessionData.TableNumber} AND ROUND={roundNumber} AND Direction='{dir}'";
+                string SQLString = $"SELECT [Number] FROM PlayerNumbers WHERE Section={sectionID} AND [Table]={tableNumber} AND ROUND={roundNumber} AND Direction='{dir}'";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
@@ -522,11 +517,11 @@ namespace TabScore.Models
                 }
                 if (queryResult == DBNull.Value || queryResult == null)
                 {
-                    SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({sessionData.SectionID}, {sessionData.TableNumber}, '{dir}', '{playerNumber}', '{playerName}', {roundNumber}, False, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, {pairNumber})";
+                    SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({sectionID}, {tableNumber}, '{dir}', '{playerNumber}', '{playerName}', {roundNumber}, False, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, {pairNumber})";
                 }
                 else
                 {
-                    SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerNumber}', [Name]='{playerName}', Processed=False, TimeLog=#{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, TabScorePairNo={pairNumber} WHERE Section={sessionData.SectionID} AND [Table]={sessionData.TableNumber} AND Round={roundNumber} AND Direction='{dir}'";
+                    SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerNumber}', [Name]='{playerName}', Processed=False, TimeLog=#{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, TabScorePairNo={pairNumber} WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Direction='{dir}'";
                 }
                 OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
                 try

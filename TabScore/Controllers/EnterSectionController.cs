@@ -10,42 +10,19 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            SectionsList sectionsList = new SectionsList();
-
             // Check if only one section - if so use it
-            if (sectionsList.Count == 1)
+            if (AppData.SectionsList.Count == 1)
             {
-                Session["SessionData"] = new SessionData()
-                {
-                    TableNumber = 0,
-                    SectionID = sectionsList[0].ID,
-                    SectionLetter = sectionsList[0].Letter,
-                    NumTables = sectionsList[0].NumTables,
-                    MissingPair = sectionsList[0].MissingPair,
-                };
-                return RedirectToAction("Index", "EnterTableNumber");
+                return RedirectToAction("Index", "EnterTableNumber", new { sectionID = AppData.SectionsList[0].SectionID, tableNumber = 0 });
             }
             else
             // Get section
             {
-                ViewData["BackButton"] = "FALSE";
-                return View(sectionsList);
+                ViewData["Title"] = "Enter Section";
+                ViewData["Header"] = "";
+                ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
+                return View(AppData.SectionsList);
             }
-        }
-        public ActionResult OKButtonClick(string sectionLetter)
-        {
-            SectionsList sectionsList = new SectionsList();
-
-            Section section = sectionsList.Find(x => x.Letter == sectionLetter);
-            Session["SessionData"] = new SessionData()
-            {
-                TableNumber = 0,
-                SectionID = section.ID,
-                SectionLetter = section.Letter,
-                NumTables = section.NumTables,
-                MissingPair = section.MissingPair,
-            };
-            return RedirectToAction("Index", "EnterTableNumber");
         }
     }
 }

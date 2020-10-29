@@ -3,11 +3,6 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 
 @model TabScore.Models.RankingList
 
-@{
-    ViewData["Title"] = "Show Ranking List - One Winner";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
-
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h4>
@@ -26,7 +21,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                     <th>Percentage</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tableBody">
                 @foreach (var Rank in Model)
                 {
                     if (Model.PairNS == Rank.PairNo)
@@ -60,19 +55,11 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 </div>
 
 <script>
-    var isSubmitted = false;
-
-    function validateOK() {
-        if (!isSubmitted) {
-            isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowMove")?newRoundNumber=' + (@Model.RoundNumber + 1).toString();
-        }
-    }
-
-    function refreshClick() {
-        if (!isSubmitted) {
-            isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowRankingList")';
-        }
-    }
+    var urlPollRanking = '@Url.Action("PollRanking", "ShowRankingList")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+    var urlEndScreen = '@Url.Action("Index", "EndScreen")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+    var urlShowMove = '@Url.Action("Index", "ShowMove")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&newRoundNumber=' + (@Model.RoundNumber + 1).toString();
+    var finalRankingList = @Model.FinalRankingList.ToString().ToLower();
+    var pairNS = @Model.PairNS;
+    var pairEW = @Model.PairEW;
 </script>
+<script src='@Url.Content("~/Scripts/OneWinnerRankingList.js")' type="text/javascript"></script>

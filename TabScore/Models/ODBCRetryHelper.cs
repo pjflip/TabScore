@@ -21,7 +21,8 @@ namespace TabScore.Models
                 }
                 catch (OdbcException e)
                 {
-                    if (e.Errors.Count == 1 && (e.Errors[0].SQLState != "42S02" || e.Errors[0].SQLState != "42S22"))  throw e;   // Table or column does not exist
+                    // Don't retry if single error is that table, column or field does not exist
+                    if (e.Errors.Count == 1 && (e.Errors[0].SQLState == "42S02" || e.Errors[0].SQLState == "42S22" || e.Errors[0].SQLState == "07002"))  throw e;
                     if (attempts <= 0) throw e;
                     Random r = new Random();
                     System.Threading.Thread.Sleep(r.Next(300, 500));

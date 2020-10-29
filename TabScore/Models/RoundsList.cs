@@ -15,7 +15,7 @@ namespace TabScore.Models
                 connection.Open();
                 if (AppData.IsIndividual)
                 {
-                    string SQLString = $"SELECT Table, NSPair, EWPair, LowBoard, HighBoard, South, West FROM RoundData WHERE Section={sectionID} AND Round={roundNumber}";
+                    string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard, South, West FROM RoundData WHERE Section={sectionID} AND Round={roundNumber}";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = null;
                     try

@@ -2,22 +2,18 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
-using System.Data.Odbc;
 using System.Text;
 
 namespace TabScore.Models
 {
     public class Result
     {
-        public int SectionID { get; set; }
-        public int TableNumber { get; set; }
-        public int RoundNumber { get; set; }
         public int BoardNumber { get; set; }
         public int PairNS { get; set; }
         public int South { get; set; }
         public int PairEW { get; set; }
         public int West { get; set; }
-        public string NSEW { get; set; }
+        public string DeclarerNSEW { get; set; }
         public int ContractLevel { get; set; }
         public string ContractSuit { get; set; }
         public string ContractX { get; set; }
@@ -26,67 +22,6 @@ namespace TabScore.Models
         public int MatchpointsNS { get; set; }
         public int MatchpointsEW { get; set; }
         public int MatchpointsMax { get; set; }
-
-        public void ReadDB()
-        {
-            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
-            {
-                connection.Open();
-                string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard, Remarks FROM ReceivedData WHERE Section={SectionID} AND [Table]={TableNumber} AND Round={RoundNumber} AND Board={BoardNumber}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                OdbcDataReader reader = null;
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        reader = cmd.ExecuteReader();
-                        if (reader.Read())
-                        {
-                            if (reader.GetString(4) == "Not played")
-                            {
-                                ContractLevel = -1;
-                                ContractSuit = "";
-                                ContractX = "NONE";
-                                NSEW = "";
-                                TricksTakenNumber = -1;
-                                LeadCard = "";
-                            }
-                            else
-                            {
-                                string temp = reader.GetString(1);
-                                Contract = temp;   // Sets ContractLevel, etc
-                                if (ContractLevel == 0)  // Passed out
-                                {
-                                    NSEW = "";
-                                    TricksTakenNumber = -1;
-                                    LeadCard = "";
-                                }
-                                else
-                                {
-                                    NSEW = reader.GetString(0);
-                                    TricksTakenSymbol = reader.GetString(2);
-                                    LeadCard = reader.GetString(3);
-                                }
-                            }
-                        }
-                        else  // No result in database
-                        {
-                            ContractLevel = -999;
-                            ContractSuit = "";
-                            ContractX = "NONE";
-                            NSEW = "";
-                            TricksTakenNumber = -1;
-                            LeadCard = "";
-                        }
-                    });
-                }
-                finally
-                {
-                    reader.Close();
-                    cmd.Dispose();
-                }
-            }
-        }
 
         public string Contract
         {
@@ -103,7 +38,7 @@ namespace TabScore.Models
                 else
                 {
                     string contract = $"{ContractLevel} {ContractSuit}";
-                    if (ContractX != "NONE")
+                    if (ContractX != "")
                     {
                         contract = $"{contract} {ContractX}";
                     }
@@ -120,7 +55,7 @@ namespace TabScore.Models
                 {
                     ContractLevel = 0;
                     ContractSuit = "";
-                    ContractX = "NONE";
+                    ContractX = "";
                 }
                 else  // Contract (hopefully) contains a valid contract
                 {
@@ -128,7 +63,7 @@ namespace TabScore.Models
                     ContractLevel = Convert.ToInt32(temp[0]);
                     ContractSuit = temp[1];
                     if (temp.Length > 2) ContractX = temp[2];
-                    else ContractX = "NONE";
+                    else ContractX = "";
                 }
             }
         }
@@ -221,11 +156,8 @@ namespace TabScore.Models
                     s.Append("<a style=\"color:lightslategrey\">&clubs;</a>");
                     break;
             }
-            if (ContractX != "NONE")
-            {
-                s.Append(ContractX);
-            }
-            s.Append($"{TricksTakenSymbol} by {NSEW}");
+            s.Append(ContractX);
+            s.Append($"{TricksTakenSymbol} by {DeclarerNSEW}");
             return s.ToString();
         }
 
@@ -262,10 +194,7 @@ namespace TabScore.Models
                     s.Append("NT");
                     break;
             }
-            if (ContractX != "NONE")
-            {
-                s.Append(ContractX);
-            }
+            s.Append(ContractX);
             return s.ToString();
         }
 
@@ -275,18 +204,18 @@ namespace TabScore.Models
             if (ContractLevel <= 0) return;
 
             bool vul;
-            if (NSEW == "N" || NSEW == "S")
+            if (DeclarerNSEW == "N" || DeclarerNSEW == "S")
             {
-                vul = UtilityFunctions.NSVulnerability[(Convert.ToInt32(BoardNumber) - 1) % 16];
+                vul = Utilities.NSVulnerability[(Convert.ToInt32(BoardNumber) - 1) % 16];
             }
             else
             {
-                vul = UtilityFunctions.EWVulnerability[(Convert.ToInt32(BoardNumber) - 1) % 16];
+                vul = Utilities.EWVulnerability[(Convert.ToInt32(BoardNumber) - 1) % 16];
             }
             int diff = TricksTakenNumber - ContractLevel - 6;
             if (diff < 0)      // Contract not made
             {
-                if (ContractX == "NONE")
+                if (ContractX == "")
                 {
                     if (vul)
                     {
@@ -329,7 +258,7 @@ namespace TabScore.Models
                 // Basic score, game/part-score bonuses and making x/xx contract bonuses
                 if (ContractSuit == "C" || ContractSuit == "D")
                 {
-                    if (ContractX == "NONE")
+                    if (ContractX == "")
                     {
                         Score = 20 * (TricksTakenNumber - 6);
                         if (ContractLevel <= 4)
@@ -375,7 +304,7 @@ namespace TabScore.Models
                 }
                 else   // Major suits and NT
                 {
-                    if (ContractX == "NONE")
+                    if (ContractX == "")
                     {
                         Score = 30 * (TricksTakenNumber - 6);
                         if (ContractSuit == "NT")
@@ -440,82 +369,7 @@ namespace TabScore.Models
                     else Score += 1000;
                 }
             }
-            if (NSEW == "E" || NSEW == "W") Score = -Score;
-        }
-
-        public void UpdateDB()
-        {
-            int declarer;
-            if (ContractLevel <= 0)
-            {
-                declarer = 0;
-            }
-            else
-            {
-                if (NSEW == "N" || NSEW == "S")
-                {
-                    declarer = PairNS;
-                }
-                else
-                {
-                    declarer = PairEW;
-                }
-            }
-            string leadcard;
-            if (LeadCard == null || LeadCard == "" || LeadCard == "SKIP")
-            {
-                leadcard = "";
-            }
-            else
-            {
-                leadcard = LeadCard;
-            }
-
-            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
-            {
-                // Delete any previous result
-                connection.Open();
-                string SQLString = $"DELETE FROM ReceivedData WHERE Section={SectionID} AND [Table]={TableNumber} AND Round={RoundNumber} AND Board={BoardNumber}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        cmd.ExecuteNonQuery(); 
-                    });
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-
-                // Add new result
-                string remarks = "";
-                if (ContractLevel == -1)
-                {
-                    remarks = "Not played";
-                }
-                if (AppData.IsIndividual)
-                {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
-                }
-                else
-                {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundNumber}, {BoardNumber}, {PairNS}, {PairEW}, {declarer}, '{NSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now.ToString("yyyy-MM-dd")}#, #{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}#, False, False, False, False, False, False)";
-                }
-                OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        cmd2.ExecuteNonQuery();
-                    });
-                }
-                finally
-                {
-                    cmd2.Dispose();
-                }
-            }
+            if (DeclarerNSEW == "E" || DeclarerNSEW == "W") Score = -Score;
         }
     }
 }

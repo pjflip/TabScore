@@ -11,9 +11,10 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            Session["Header"] = "";
-            ViewData["BackButton"] = "FALSE";
-            ViewData["Version"]= Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            ViewData["Header"] = "";
+            ViewData["Title"] = "Start Screen";
+            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+            ViewData["Version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             return View();
         }
 
@@ -26,6 +27,10 @@ namespace TabScore.Controllers
                 return RedirectToAction("Index", "StartScreen");
             }
             Settings.Refresh();
+            if (Settings.ShowHandRecord || Settings.ValidateLeadCard)
+            {
+                HandRecords.Refresh();
+            }
 
             return RedirectToAction("Index", "EnterSection");
         }

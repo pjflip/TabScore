@@ -196,7 +196,7 @@ namespace TabScoreStarter
                         cmd2 = new OdbcCommand(SQLString, connection);
                         object queryResult = cmd2.ExecuteScalar();
                         string pairNo = queryResult.ToString();
-                        SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={pairNo} WHERE Section={section.ToString()} AND [Table]={table.ToString()} AND Direction='{direction}'";
+                        SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={pairNo} WHERE Section={section} AND [Table]={table} AND Direction='{direction}'";
                         cmd2 = new OdbcCommand(SQLString, connection);
                         cmd2.ExecuteNonQuery();
                     }

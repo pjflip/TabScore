@@ -8,11 +8,17 @@ namespace TabScore.Models
 {
     public class ResultsList : List<Result>
     {
+        public int SectionID { get; private set; }
+        public int TableNumber { get; private set; }
+        public int RoundNumber { get; set; }
         public bool GotAllResults { get; private set; }
         public bool ShowViewButton { get; private set; }
 
-        public ResultsList(SessionData sessionData, Round round)
+        public ResultsList(TableStatus tableStatus)
         {
+            SectionID = tableStatus.SectionID;
+            TableNumber = tableStatus.TableNumber;
+            RoundNumber = tableStatus.RoundData.RoundNumber;
             GotAllResults = true;
             ShowViewButton = Settings.ShowResults;
 
@@ -24,26 +30,20 @@ namespace TabScore.Models
                 OdbcDataReader reader = null;
                 try
                 {
-                    SQLString = $"SELECT Board, [NS/EW], Contract, Result, Remarks FROM ReceivedData WHERE Section={sessionData.SectionID} AND [Table]={sessionData.TableNumber} AND Round={round.RoundNumber} AND Board>={round.LowBoard} AND Board<={round.HighBoard}";
+                    SQLString = $"SELECT Board, [NS/EW], Contract, Result, Remarks FROM ReceivedData WHERE Section={tableStatus.SectionID} AND [Table]={tableStatus.TableNumber} AND Round={tableStatus.RoundData.RoundNumber} AND Board>={tableStatus.RoundData.LowBoard} AND Board<={tableStatus.RoundData.HighBoard}";
                     cmd = new OdbcCommand(SQLString, connection);
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
                         reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            Result result = new Result()
-                            {
-                                SectionID = sessionData.SectionID,
-                                TableNumber = sessionData.TableNumber,
-                                RoundNumber = round.RoundNumber,
-                                BoardNumber = reader.GetInt32(0)
-                            };
+                            Result result = new Result() { BoardNumber = reader.GetInt32(0) };
                             if (reader.GetString(4) == "Not played")
                             {
                                 result.ContractLevel = -1;
                                 result.ContractSuit = "";
-                                result.ContractX = "NONE";
-                                result.NSEW = "";
+                                result.ContractX = "";
+                                result.DeclarerNSEW = "";
                                 result.TricksTakenNumber = -1;
                             }
                             else
@@ -52,12 +52,12 @@ namespace TabScore.Models
                                 result.Contract = temp;   // Sets ContractLevel, etc
                                 if (result.ContractLevel == 0)  // Passed out
                                 {
-                                    result.NSEW = "";
+                                    result.DeclarerNSEW = "";
                                     result.TricksTakenNumber = -1;
                                 }
                                 else
                                 {
-                                    result.NSEW = reader.GetString(1);
+                                    result.DeclarerNSEW = reader.GetString(1);
                                     result.TricksTakenSymbol = reader.GetString(3);
                                 }
                             }
@@ -72,21 +72,18 @@ namespace TabScore.Models
                 }
 
                 // Check to see if any boards don't have a result, and add dummies to the list
-                for (int iBoard = round.LowBoard; iBoard <= round.HighBoard; iBoard++)
+                for (int iBoard = tableStatus.RoundData.LowBoard; iBoard <= tableStatus.RoundData.HighBoard; iBoard++)
                 {
                     if (Find(x => x.BoardNumber == iBoard) == null)
                     {
                         GotAllResults = false;
                         Result result = new Result
                         {
-                            SectionID = sessionData.SectionID,
-                            TableNumber = sessionData.TableNumber,
-                            RoundNumber = round.RoundNumber,
                             BoardNumber = iBoard,
                             ContractLevel = -999,
                             ContractSuit = "",
-                            ContractX = "NONE",
-                            NSEW = "",
+                            ContractX = "",
+                            DeclarerNSEW = "",
                             TricksTakenNumber = -1,
                             LeadCard = ""
                         };

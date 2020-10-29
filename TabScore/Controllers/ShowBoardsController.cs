@@ -8,25 +8,22 @@ namespace TabScore.Controllers
 {
     public class ShowBoardsController : Controller
     {
-       public ActionResult Index()
+       public ActionResult Index(int sectionID, int tableNumber)
         {
-            // Reset default session value as no board has yet been selected
-            Session["Result"] = null;
-
-            Round round = Session["Round"] as Round;
-            SessionData sessionData = Session["SessionData"] as SessionData;
-
-            ResultsList resultsList = new ResultsList(sessionData, round);
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            ResultsList resultsList = new ResultsList(tableStatus);
+            tableStatus.ResultData = null;  // No board selected yet
 
             if (AppData.IsIndividual)
             {
-                Session["Header"] = $"Table {sessionData.SectionTableString} - Round {round.RoundNumber} - {round.PairNS}+{round.South} v {round.PairEW}+{round.West}";
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {tableStatus.RoundData.PairNS}+{tableStatus.RoundData.South} v {tableStatus.RoundData.PairEW}+{tableStatus.RoundData.West}";
             }
             else
             {
-                Session["Header"] = $"Table {sessionData.SectionTableString} - Round {round.RoundNumber} - NS {round.PairNS} v EW {round.PairEW}";
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - NS {tableStatus.RoundData.PairNS} v EW {tableStatus.RoundData.PairEW}";
             }
-            ViewData["BackButton"] = "FALSE";
+            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+            ViewData["Title"] = $"Show Boards - {tableStatus.SectionTableString}";
 
             return View(resultsList);
         }

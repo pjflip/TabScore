@@ -1,17 +1,12 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.Round
-
-@{
-    ViewData["Title"] = "Show Round Info Individual";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
+@model TabScore.Models.TableStatus
 
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Round: @Model.RoundNumber
+            Round: @Model.RoundData.RoundNumber
         </h3>
     </div>
 </div>
@@ -19,7 +14,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row">
     <div class="col-12 text-center">
         <h3 style="color:green">
-            Boards: @Model.LowBoard to @Model.HighBoard
+            Boards: @Model.RoundData.LowBoard to @Model.RoundData.HighBoard
         </h3>
     </div>
 </div>
@@ -27,7 +22,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            North: @Model.PairNS & South: @Model.South
+            North: @Model.RoundData.PairNS & South: @Model.RoundData.South
         </h3>
     </div>
 </div>
@@ -35,7 +30,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row">
     <div class="col-12 text-center">
         <h4>
-            @Model.NameNorth & @Model.NameSouth
+            @Model.RoundData.NameNorth & @Model.RoundData.NameSouth
         </h4>
     </div>
 </div>
@@ -43,7 +38,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            East: @Model.PairEW & West: @Model.West
+            East: @Model.RoundData.PairEW & West: @Model.RoundData.West
         </h3>
     </div>
 </div>
@@ -51,7 +46,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row">
     <div class="col-12 text-center">
         <h4>
-            @Model.NameEast & @Model.NameWest
+            @Model.RoundData.NameEast & @Model.RoundData.NameWest
         </h4>
     </div>
 </div>
@@ -59,17 +54,17 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    function validateOK() {
+    $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowBoards")';
+            location.href = '@Url.Action("Index", "ShowBoards")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
         }
-    }
+    });
 
-    function backClick() {
+    $(document).on('touchstart', '#BackButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")';
+            location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
         }
-    }
+    });
 </script>

@@ -8,45 +8,56 @@ namespace TabScore.Controllers
 {
     public class EnterTableNumberController : Controller
     {
-        public ActionResult Index() 
+        public ActionResult Index(int sectionID, int tableNumber) 
         {
-            SessionData sessionData = Session["SessionData"] as SessionData;
-            Session["Header"] = $"Section {sessionData.SectionLetter}";
-            ViewData["BackButton"] = "FALSE"; 
-            return View(sessionData);   // At this stage, TableNumber > 0 means we've already tried to log on and need to confirm
+            Section section = AppData.SectionsList.Find(x => x.SectionID == sectionID);
+            ViewData["Title"] = $"Enter Table Number - Section {section.SectionLetter}";
+            ViewData["Header"] = $"Section {section.SectionLetter}";
+            ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
+            EnterTableNumber tableNumberData = new EnterTableNumber
+            {
+                SectionID = sectionID,
+                TableNumber = tableNumber,   // At this stage, TableNumber > 0 means we've already tried to log on and need to confirm
+                NumTables = section.NumTables
+            };
+            return View(tableNumberData);   
         }
 
-        public ActionResult OKButtonClick(int tableNumber, string confirm)
+        public ActionResult OKButtonClick(int sectionID, int tableNumber, string confirm)
         {
-            SessionData sessionData = Session["SessionData"] as SessionData;
-            sessionData.TableNumber = tableNumber;
-
             if (confirm == "FALSE")
             {
-                if (sessionData.TableLogonStatus() == 1)  // Table is already logged on, so need to confirm
+                if (Utilities.TableLogonStatus(sectionID, tableNumber) == 1)  // Table is already logged on, so need to confirm
                 {
-                    return RedirectToAction("Index", "EnterTableNumber");
+                    return RedirectToAction("Index", "EnterTableNumber", new { sectionID, tableNumber });
                 }
                 else
                 {
-                    sessionData.LogonTable();
+                    Utilities.LogonTable(sectionID, tableNumber);
                 }
             }
 
-            // Concatenate valid table number to section letter to give eg "A1"
-            sessionData.SectionTableString = sessionData.SectionLetter + tableNumber.ToString();
-            
-            // Check if results data exist - set round number accordingly and create round info
-            int lastRoundWithResults = UtilityFunctions.GetLastRoundWithResults(sessionData.SectionID, tableNumber);
-            Session["Round"] = new Round(sessionData, lastRoundWithResults);
-
-            if (lastRoundWithResults == 1 || Settings.NumberEntryEachRound)
+            // Check if results data exist - set round number accordingly, create round info and table status
+            int lastRoundWithResults = Utilities.GetLastRoundWithResults(sectionID, tableNumber);
+            Round round = new Round(sectionID, tableNumber, lastRoundWithResults);
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            if (tableStatus == null)
             {
-                return RedirectToAction("Index", "ShowPlayerNumbers");
+                tableStatus = new TableStatus(sectionID, tableNumber, round);
+                AppData.TableStatusList.Add(tableStatus);
             }
             else
             {
-                return RedirectToAction("Index", "ShowRoundInfo");
+                tableStatus.RoundData = round;
+            }
+
+            if (lastRoundWithResults == 1 || Settings.NumberEntryEachRound)
+            {
+                return RedirectToAction("Index", "ShowPlayerNumbers", new { sectionID, tableNumber });
+            }
+            else
+            {
+                return RedirectToAction("Index", "ShowRoundInfo", new { sectionID, tableNumber });
             }
         }
     }

@@ -8,31 +8,35 @@ namespace TabScore.Controllers
 {
     public class ShowTravellerController : Controller
     {
-        public ActionResult Index(int boardNumber)
+        public ActionResult Index(int sectionID, int tableNumber, int boardNumber)
         {
             if (!Settings.ShowResults)
             {
                 return RedirectToAction("Index", "ShowBoards");
             }
 
-            Result result = Session["Result"] as Result;
-            if (result == null || result.BoardNumber != boardNumber)
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            if (tableStatus.ResultData == null)
             {
-                // No session result data for this board, so must have come from ShowBoards screen View button
-                ViewData["BackButton"] = "FALSE";
+                // No result data for this board, so must have come from ShowBoards screen View button
+                tableStatus.ResultData = new Result() { BoardNumber = boardNumber };
+                ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             }
             else
             {
-                ViewData["BackButton"] = "TRUE";
+                ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             }
 
-            Traveller traveller = new Traveller((Session["SessionData"] as SessionData).SectionID, boardNumber, (Session["Round"] as Round).PairNS);
+            Traveller traveller = new Traveller(tableStatus);
+            ViewData["Title"] = $"Traveller - {tableStatus.SectionTableString}";
             if (AppData.IsIndividual)
             {
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.PairNS}+{tableStatus.RoundData.South}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.PairEW}+{tableStatus.RoundData.West}")}";
                 return View("Individual", traveller);
             }
             else
             {
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"NS {tableStatus.RoundData.PairNS}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"EW {tableStatus.RoundData.PairEW}")}";
                 return View("Pairs", traveller);
             }
         }

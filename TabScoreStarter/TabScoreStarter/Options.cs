@@ -8,17 +8,17 @@ namespace TabScoreStarter
 {
     class Options
     {
-        public bool showTraveller {get; set;}
-        public bool showPercentage {get; set;}
-        public bool enterLeadCard {get; set;}
-        public bool validateLeadCard {get; set;}
-        public int showRanking {get; set;}
-        public bool showHandRecord {get; set;}
-        public bool numberEntryEachRound {get; set;}
-        public int nameSource {get; set;}
-        public int enterResultsMethod {get; set;}
+        public bool ShowTraveller {get; set;}
+        public bool ShowPercentage {get; set;}
+        public bool EnterLeadCard {get; set;}
+        public bool ValidateLeadCard {get; set;}
+        public int ShowRanking {get; set;}
+        public bool ShowHandRecord {get; set;}
+        public bool NumberEntryEachRound {get; set;}
+        public int NameSource {get; set;}
+        public int EnterResultsMethod {get; set;}
 
-        private string dbConnectionString;
+        private readonly string dbConnectionString;
 
         public Options(Database db)
         {
@@ -30,16 +30,16 @@ namespace TabScoreStarter
                 connection.Open();
                 OdbcDataReader reader = cmd.ExecuteReader();
                 reader.Read();
-                showTraveller = reader.GetBoolean(0);
-                showPercentage = reader.GetBoolean(1);
-                enterLeadCard = reader.GetBoolean(2);
-                validateLeadCard = reader.GetBoolean(3);
-                showRanking = reader.GetInt32(4);
-                showHandRecord = reader.GetBoolean(5);
-                numberEntryEachRound = reader.GetBoolean(6);
-                nameSource = reader.GetInt32(7);
-                enterResultsMethod = reader.GetInt32(8);
-                if (enterResultsMethod != 1) enterResultsMethod = 0;
+                ShowTraveller = reader.GetBoolean(0);
+                ShowPercentage = reader.GetBoolean(1);
+                EnterLeadCard = reader.GetBoolean(2);
+                ValidateLeadCard = reader.GetBoolean(3);
+                ShowRanking = reader.GetInt32(4);
+                ShowHandRecord = reader.GetBoolean(5);
+                NumberEntryEachRound = reader.GetBoolean(6);
+                NameSource = reader.GetInt32(7);
+                EnterResultsMethod = reader.GetInt32(8);
+                if (EnterResultsMethod != 1) EnterResultsMethod = 0;
                 reader.Close();
                 cmd.Dispose();
             }
@@ -51,7 +51,7 @@ namespace TabScoreStarter
             {
                 StringBuilder SQLString = new StringBuilder();
                 SQLString.Append($"UPDATE Settings SET");
-                if (showTraveller)
+                if (ShowTraveller)
                 {
                     SQLString.Append(" ShowResults=YES,");
                 }
@@ -59,7 +59,7 @@ namespace TabScoreStarter
                 {
                     SQLString.Append(" ShowResults=NO,");
                 }
-                if (showPercentage)
+                if (ShowPercentage)
                 {
                     SQLString.Append(" ShowPercentage=YES,");
                 }
@@ -67,7 +67,7 @@ namespace TabScoreStarter
                 {
                     SQLString.Append(" ShowPercentage=NO,");
                 }
-                if (enterLeadCard)
+                if (EnterLeadCard)
                 {
                     SQLString.Append(" LeadCard=YES,");
                 }
@@ -75,7 +75,7 @@ namespace TabScoreStarter
                 {
                     SQLString.Append(" LeadCard=NO,");
                 }
-                if (validateLeadCard)
+                if (ValidateLeadCard)
                 {
                     SQLString.Append(" BM2ValidateLeadCard=YES,");
                 }
@@ -83,8 +83,8 @@ namespace TabScoreStarter
                 {
                     SQLString.Append(" BM2ValidateLeadCard=NO,");
                 }
-                SQLString.Append($" BM2Ranking={showRanking.ToString()},");
-                if (showHandRecord)
+                SQLString.Append($" BM2Ranking={ShowRanking},");
+                if (ShowHandRecord)
                 {
                     SQLString.Append(" BM2ViewHandRecord=YES,");
                 }
@@ -92,7 +92,7 @@ namespace TabScoreStarter
                 {
                     SQLString.Append(" BM2ViewHandRecord=NO,");
                 }
-                if (numberEntryEachRound)
+                if (NumberEntryEachRound)
                 {
                     SQLString.Append(" BM2NumberEntryEachRound=YES,");
                 }
@@ -100,8 +100,8 @@ namespace TabScoreStarter
                 {
                     SQLString.Append(" BM2NumberEntryEachRound=NO,");
                 }
-                SQLString.Append($" BM2NameSource={nameSource.ToString()},");
-                SQLString.Append($" EnterResultsMethod={enterResultsMethod.ToString()}");
+                SQLString.Append($" BM2NameSource={NameSource},");
+                SQLString.Append($" EnterResultsMethod={EnterResultsMethod}");
                 OdbcCommand cmd = new OdbcCommand(SQLString.ToString(), connection);
                 connection.Open();
                 cmd.ExecuteNonQuery();

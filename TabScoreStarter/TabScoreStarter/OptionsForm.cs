@@ -15,15 +15,15 @@ namespace TabScoreStarter
         {
             Options opt = new Options(new Database(Tag.ToString()));
 
-            ShowTravellerCheckbox.Checked = opt.showTraveller;
-            ShowPercentageCheckbox.Checked = opt.showPercentage;
-            ShowHandRecordCheckbox.Checked = opt.showHandRecord;
-            ShowRankingCombobox.SelectedIndex = opt.showRanking;
-            EnterLeadCardCheckbox.Checked = opt.enterLeadCard;
-            ValidateLeadCardCheckbox.Checked = opt.validateLeadCard;
-            NameSourceCombobox.SelectedIndex = opt.nameSource;
-            NumberEntryEachRoundCheckbox.Checked = opt.numberEntryEachRound;
-            EnterResultsMethodCombobox.SelectedIndex = opt.enterResultsMethod;
+            ShowTravellerCheckbox.Checked = opt.ShowTraveller;
+            ShowPercentageCheckbox.Checked = opt.ShowPercentage;
+            ShowHandRecordCheckbox.Checked = opt.ShowHandRecord;
+            ShowRankingCombobox.SelectedIndex = opt.ShowRanking;
+            EnterLeadCardCheckbox.Checked = opt.EnterLeadCard;
+            ValidateLeadCardCheckbox.Checked = opt.ValidateLeadCard;
+            NameSourceCombobox.SelectedIndex = opt.NameSource;
+            NumberEntryEachRoundCheckbox.Checked = opt.NumberEntryEachRound;
+            EnterResultsMethodCombobox.SelectedIndex = opt.EnterResultsMethod;
 
             ShowPercentageCheckbox.Enabled = ShowTravellerCheckbox.Checked;
             ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
@@ -39,15 +39,15 @@ namespace TabScoreStarter
         {
             Options opt = new Options(new Database(Tag.ToString()))
             {
-                showTraveller = ShowTravellerCheckbox.Checked,
-                showPercentage = ShowPercentageCheckbox.Checked,
-                showHandRecord = ShowHandRecordCheckbox.Checked,
-                showRanking = ShowRankingCombobox.SelectedIndex,
-                enterLeadCard = EnterLeadCardCheckbox.Checked,
-                validateLeadCard = ValidateLeadCardCheckbox.Checked,
-                nameSource = NameSourceCombobox.SelectedIndex,
-                numberEntryEachRound = NumberEntryEachRoundCheckbox.Checked,
-                enterResultsMethod = EnterResultsMethodCombobox.SelectedIndex
+                ShowTraveller = ShowTravellerCheckbox.Checked,
+                ShowPercentage = ShowPercentageCheckbox.Checked,
+                ShowHandRecord = ShowHandRecordCheckbox.Checked,
+                ShowRanking = ShowRankingCombobox.SelectedIndex,
+                EnterLeadCard = EnterLeadCardCheckbox.Checked,
+                ValidateLeadCard = ValidateLeadCardCheckbox.Checked,
+                NameSource = NameSourceCombobox.SelectedIndex,
+                NumberEntryEachRound = NumberEntryEachRoundCheckbox.Checked,
+                EnterResultsMethod = EnterResultsMethodCombobox.SelectedIndex
             };
             opt.UpdateDB();
             Close();

@@ -8,20 +8,27 @@ namespace TabScore.Controllers
 {
     public class EnterPlayerNumberController : Controller
     {
-        public ActionResult Index(string direction)
+        public ActionResult Index(int sectionID, int tableNumber, string direction)
         {
-            ViewData["Direction"] = direction;
-            ViewData["BackButton"] = "FALSE";
-            Session["Header"] = $"Table {(Session["SessionData"] as SessionData).SectionTableString}";
-            return View();
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            EnterPlayerNumber enterPlayerNumber = new EnterPlayerNumber
+            {
+                SectionID = tableStatus.SectionID,
+                TableNumber = tableStatus.TableNumber,
+                Direction = direction
+            };
+            ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
+            ViewData["Title"] = $"Enter Player Number - {tableStatus.SectionTableString} {direction}";
+            ViewData["Header"] = $"Table {tableStatus.SectionTableString}";
+            return View(enterPlayerNumber);
         }
 
-        public ActionResult OKButtonClick(string direction, int playerNumber)
+        public ActionResult OKButtonClick(int sectionID, int tableNumber, string direction, int playerNumber)
         {
             // Update Round with new player
-            (Session["Round"] as Round).UpdatePlayer(Session["SessionData"] as SessionData, direction, playerNumber);
+            AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber).RoundData.UpdatePlayer(sectionID, tableNumber, direction, playerNumber);
             
-            return RedirectToAction("Index", "ShowPlayerNumbers");
+            return RedirectToAction("Index", "ShowPlayerNumbers", new { sectionID, tableNumber });
         }
     }
 }

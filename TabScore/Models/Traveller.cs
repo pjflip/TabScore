@@ -9,17 +9,22 @@ namespace TabScore.Models
 {
     public class Traveller : List<Result>
     {
+        public int SectionID { get; private set; }
+        public int TableNumber { get; private set; }
+        public int BoardNumber { get; private set; }
         public bool HandRecord { get; private set; }
         public int PairNS { get; private set; }
         public int PercentageNS { get; private set; }
-        public int BoardNumber { get; private set; }
 
         private int currentScore;
 
-        public Traveller(int sectionID, int boardNumber, int pairNS)
+        public Traveller(TableStatus tableStatus)
         {
-            BoardNumber = boardNumber;
-            PairNS = pairNS;
+            SectionID = tableStatus.SectionID;
+            TableNumber = tableStatus.TableNumber;
+            BoardNumber = tableStatus.ResultData.BoardNumber;
+            PairNS = tableStatus.RoundData.PairNS;
+
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
@@ -30,11 +35,11 @@ namespace TabScore.Models
                 {
                     if (AppData.IsIndividual)
                     {
-                        SQLString = $"SELECT PairNS, PairEW, South, West, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={sectionID} AND Board={boardNumber}";
+                        SQLString = $"SELECT PairNS, PairEW, South, West, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={SectionID} AND Board={BoardNumber}";
                     }
                     else
                     {
-                        SQLString = $"SELECT PairNS, PairEW, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={sectionID} AND Board={boardNumber}";
+                        SQLString = $"SELECT PairNS, PairEW, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={SectionID} AND Board={BoardNumber}";
                     }
                     cmd = new OdbcCommand(SQLString, connection);
                     ODBCRetryHelper.ODBCRetry(() =>
@@ -47,12 +52,12 @@ namespace TabScore.Models
                             {
                                 result = new Result()
                                 {
-                                    BoardNumber = boardNumber,
+                                    BoardNumber = BoardNumber,
                                     PairNS = reader.GetInt32(0),
                                     PairEW = reader.GetInt32(1),
                                     South = reader.GetInt32(2),
                                     West = reader.GetInt32(3),
-                                    NSEW = reader.GetString(4),
+                                    DeclarerNSEW = reader.GetString(4),
                                     Contract = reader.GetString(5),
                                     LeadCard = reader.GetString(6),
                                     TricksTakenSymbol = reader.GetString(7)
@@ -62,10 +67,10 @@ namespace TabScore.Models
                             {
                                 result = new Result()
                                 {
-                                    BoardNumber = boardNumber,
+                                    BoardNumber = BoardNumber,
                                     PairNS = reader.GetInt32(0),
                                     PairEW = reader.GetInt32(1),
-                                    NSEW = reader.GetString(2),
+                                    DeclarerNSEW = reader.GetString(2),
                                     Contract = reader.GetString(3),
                                     LeadCard = reader.GetString(4),
                                     TricksTakenSymbol = reader.GetString(5)
@@ -75,7 +80,7 @@ namespace TabScore.Models
                             {
                                 result.CalculateScore();
                                 Add(result);
-                                if (result.PairNS == pairNS)  // Get score for current result for calculating percentages
+                                if (result.PairNS == PairNS)  // Get score for current result for calculating percentages
                                 {
                                     currentScore = result.Score;
                                 }
@@ -90,6 +95,7 @@ namespace TabScore.Models
                 }
             };
 
+            // Sort traveller and calculate percentage for current result
             Sort((x, y) => y.Score.CompareTo(x.Score));
             if (Settings.ShowPercentage)
             {
@@ -108,29 +114,23 @@ namespace TabScore.Models
                 PercentageNS = -1;   // Don't show percentage
             }
 
-            if (Settings.ShowHandRecord)
+            // Determine if there is a hand record to view
+            HandRecord = false;
+            if (Settings.ShowHandRecord && HandRecords.HandRecordsList.Count > 0)
             {
-                HandRecord hr = new HandRecord(sectionID, boardNumber);
-                if (hr.NorthSpades == "###")
-                {
-                    HandRecord = false;
-                    if (sectionID != 1)    // Try default Section 1 hand records
-                    {
-                        hr = new HandRecord(1, sectionID);
-                        if (hr.NorthSpades != "###")
-                        {
-                            HandRecord = true;
-                        }
-                    }
-                }
-                else
+                HandRecord handRecord = HandRecords.HandRecordsList.Find(x => x.SectionID == SectionID && x.BoardNumber == BoardNumber);
+                if (handRecord != null)     
                 {
                     HandRecord = true;
                 }
-            }
-            else
-            {
-                HandRecord = false;
+                else    // Can't find matching hand record, so try default SectionID = 1
+                {
+                    handRecord = HandRecords.HandRecordsList.Find(x => x.SectionID == 1 && x.BoardNumber == BoardNumber);
+                    if (handRecord != null)
+                    {
+                        HandRecord = true;
+                    }
+                }
             }
         }
     }

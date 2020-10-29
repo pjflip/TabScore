@@ -8,62 +8,64 @@ namespace TabScore.Controllers
 {
     public class ShowRoundInfoController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int sectionID, int tableNumber)
         {
-            Round round = Session["Round"] as Round;
-            if (round.RoundNumber == 1)
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            if (tableStatus.RoundData.RoundNumber == 1)
             {
-                ViewData["BackButton"] = "FALSE";
+                ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             }
             else 
             {
-                ViewData["BackButton"] = "TRUE";
+                ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             }
 
-            SessionData sessionData = Session["SessionData"] as SessionData;
-            Session["Header"] = $"Table {sessionData.SectionTableString}";
+            ViewData["Title"] = $"Show Round Info - {tableStatus.SectionTableString}";
+            ViewData["Header"] = $"Table {tableStatus.SectionTableString}";
 
-            if (round.PairNS == 0 || round.PairNS == sessionData.MissingPair)
+            Section section = AppData.SectionsList.Find(x => x.SectionID == sectionID);
+            if (tableStatus.RoundData.PairNS == 0 || tableStatus.RoundData.PairNS == section.MissingPair)
             {
                 if (AppData.IsIndividual)
                 {
-                   return View("NSMissingIndividual", round);
+                   return View("NSMissingIndividual", tableStatus);
                 }
                 else
                 {
-                    return View("NSMissing", round);
+                    return View("NSMissing", tableStatus);
                 }
             }
-            else if (round.PairEW == 0 || round.PairEW == sessionData.MissingPair)
+            else if (tableStatus.RoundData.PairEW == 0 || tableStatus.RoundData.PairEW == section.MissingPair)
             {
                 if (AppData.IsIndividual)
                 {
-                   return View("EWMissingIndividual", round);
+                   return View("EWMissingIndividual", tableStatus);
                 }
                 else
                 {
-                    return View("EWMissing", round);
+                    return View("EWMissing", tableStatus);
                 }
             }
             else
             {
                 if (AppData.IsIndividual)
                 {
-                    return View("Individual", round);
+                    return View("Individual", tableStatus);
                 }
                 else
                 {
-                   return View("Pair", round);
+                   return View("Pair", tableStatus);
                 }
             }
         }
 
-        public ActionResult BackButtonClick()
+        public ActionResult BackButtonClick(int sectionID, int tableNumber)
         {
             // Reset to the previous round; RoundNumber > 1 else no Back button and cannot get here
-            int roundNumber = (Session["Round"] as Round).RoundNumber;
-            Session["Round"] = new Round(Session["SessionData"] as SessionData, roundNumber - 1);
-            return RedirectToAction("Index", "ShowMove", new { newRoundNumber = roundNumber });
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            int roundNumber = tableStatus.RoundData.RoundNumber;
+            tableStatus.RoundData =  new Round(sectionID, tableNumber, roundNumber - 1);
+            return RedirectToAction("Index", "ShowMove", new { sectionID, tableNumber, newRoundNumber = roundNumber });
         }
     }
 }

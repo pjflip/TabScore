@@ -9,18 +9,29 @@ namespace TabScore.Models
 {
     public class RankingList : List<Ranking>
     {
+        public int SectionID { get; private set; }
+        public int TableNumber { get; private set; }
         public int RoundNumber { get; set; }
         public int PairNS { get; set; }   // Doubles as North player number for individuals
         public int PairEW { get; set; }   // Doubles as East player number for individuals
         public int South { get; set; }
         public int West { get; set; }
-        
-        public RankingList(int sectionID)
+        public bool FinalRankingList { get; set; } = false;
+       
+        public RankingList(TableStatus tableStatus)
         {
+            SectionID = tableStatus.SectionID;
+            TableNumber = tableStatus.TableNumber;
+            RoundNumber = tableStatus.RoundData.RoundNumber;
+            PairNS = tableStatus.RoundData.PairNS;
+            PairEW = tableStatus.RoundData.PairEW;
+            South = tableStatus.RoundData.South;
+            West = tableStatus.RoundData.West;
+
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
-                string SQLString = $"SELECT Orientation, Number, Score, Rank FROM Results WHERE Section={sectionID}";
+                string SQLString = $"SELECT Orientation, Number, Score, Rank FROM Results WHERE Section={SectionID}";
 
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader1 = null;
@@ -60,11 +71,11 @@ namespace TabScore.Models
                 {
                     if (AppData.IsIndividual)
                     {
-                        InsertRange(0, CalculateIndividualRankingFromReceivedData(sectionID));
+                        InsertRange(0, CalculateIndividualRankingFromReceivedData(SectionID));
                     }
                     else
                     {
-                        InsertRange(0, CalculateRankingFromReceivedData(sectionID));
+                        InsertRange(0, CalculateRankingFromReceivedData(SectionID));
                     }
                 }
                 
@@ -133,7 +144,7 @@ namespace TabScore.Models
                                 BoardNumber = reader.GetInt32(0),
                                 PairNS = reader.GetInt32(1),
                                 PairEW = reader.GetInt32(2),
-                                NSEW = reader.GetString(3),
+                                DeclarerNSEW = reader.GetString(3),
                                 Contract = reader.GetString(4),
                                 TricksTakenSymbol = reader.GetString(5)
                             };
@@ -330,7 +341,7 @@ namespace TabScore.Models
                                 PairEW = reader.GetInt32(2),
                                 South = reader.GetInt32(3),
                                 West = reader.GetInt32(4),
-                                NSEW = reader.GetString(5),
+                                DeclarerNSEW = reader.GetString(5),
                                 Contract = reader.GetString(6),
                                 TricksTakenSymbol = reader.GetString(7)
                             };

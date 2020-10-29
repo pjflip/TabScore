@@ -1,12 +1,7 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.Result
-
-@{
-    ViewData["Title"] = "Enter Tricks Taken Plus Or Minus";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
+@model TabScore.Models.TableStatus
 
 <style>
     .btn-plus {
@@ -18,28 +13,10 @@
     }
 </style>
 
-<div id="noTricksModal" class="modal modal-dialog modal-lg">
-    <div class="modal-content">
-        <div class="modal-header text-primary">
-            <p class="modal-title text-center">
-                <h3>Warning</h3>
-            </p>
-        </div>
-        <div class="modal-body">
-            <p>Please select result</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-lg btn-success" data-dismiss="modal">
-                OK <span class="fa fa-check-circle"></span>
-            </button>
-        </div>
-    </div>
-</div>
-
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Model.BoardNumber: @Html.Raw(Model.DisplayContract())
+            Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.DisplayContract())
         </h3>
     </div>
 </div>
@@ -52,13 +29,13 @@
     </div>
 </div>
 
-@if (Model.ContractLevel > 4)
+@if (Model.ResultData.ContractLevel > 4)
 {
     <div class="row">
         <div class="col-12 text-center">
-            @for (int i = Model.ContractLevel + 6; i > 10; i--)
+            @for (int i = Model.ResultData.ContractLevel + 6; i > 10; i--)
             {
-                <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width: 3em" ontouchstart="setMinusTricks(@i)">
+                <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width:3em" ontouchstart="setMinusTricks(@i)">
                     -@i
                 </button>
             }
@@ -68,9 +45,9 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        @for (int i = ((Model.ContractLevel > 3) ? 10 : (Model.ContractLevel + 6)); i > 5; i--)
+        @for (int i = ((Model.ResultData.ContractLevel > 3) ? 10 : (Model.ResultData.ContractLevel + 6)); i > 5; i--)
         {
-            <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width: 3em" ontouchstart="setMinusTricks(@i)">
+            <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width:3em" ontouchstart="setMinusTricks(@i)">
                 -@i
             </button>
         }
@@ -81,7 +58,7 @@
     <div class="col-12 text-center">
         @for (int i = 5; i > 0; i--)
         {
-            <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width: 3em" ontouchstart="setMinusTricks(@i)">
+            <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width:3em" ontouchstart="setMinusTricks(@i)">
                 -@i
             </button>
         }
@@ -96,13 +73,13 @@
     </div>
 </div>
 
-@if (Model.ContractLevel < 7)
+@if (Model.ResultData.ContractLevel < 7)
 {
     <div class="row">
         <div class="col-12 text-center">
-            @for (int i = 1; i < ((Model.ContractLevel < 3) ? 6 : (8 - Model.ContractLevel)); i++)
+            @for (int i = 1; i < ((Model.ResultData.ContractLevel < 3) ? 6 : (8 - Model.ResultData.ContractLevel)); i++)
             {
-                <button id="plus@(i)" class="btn btn-plus btn-lg m-1" style="width: 3em" ontouchstart="setPlusTricks(@i)">
+                <button id="plus@(i)" class="btn btn-plus btn-lg m-1" style="width:3em" ontouchstart="setPlusTricks(@i)">
                     +@i
                 </button>
             }
@@ -110,11 +87,11 @@
     </div>
 }
 
-@if (Model.ContractLevel == 1)
+@if (Model.ResultData.ContractLevel == 1)
 {
     <div class="row">
         <div class="col-12 text-center">
-            <button id="plus6" class="btn btn-plus btn-lg m-1" style="width: 3em" ontouchstart="setPlusTricks(6)">
+            <button id="plus6" class="btn btn-plus btn-lg m-1" style="width:3em" ontouchstart="setPlusTricks(6)">
                 +6
             </button>
         </div>
@@ -122,71 +99,9 @@
 }
 
 <script>
-    var numTricks = @Model.TricksTakenNumber;
-    var isSubmitted = false;
-
-    window.onload = setCurrentSelection();
-
-    function setCurrentSelection() {
-        if (numTricks != -1) {
-            var diffTricks = numTricks - @Model.ContractLevel - 6;
-            if (diffTricks < 0) {
-                document.getElementById('minus' + (-diffTricks).toString()).className = "btn btn-warning btn-lg m-1";
-            }
-            else if (diffTricks == 0) {
-                document.getElementById('equals').className = "btn btn-warning btn-lg m-1";
-            }
-            else {
-                document.getElementById('plus' + diffTricks.toString()).className = "btn btn-warning btn-lg m-1";
-            }
-        }
-    }
-
-    function resetButtons() {
-        for (var i = 1; i < @Model.ContractLevel + 7; i++) {
-            document.getElementById('minus' + i.toString()).className = "btn btn-minus btn-lg m-1";
-        }
-        document.getElementById('equals').className = "btn btn-primary btn-lg m-1";
-        for (var i = 1; i < 8 - @Model.ContractLevel; i++) {
-            document.getElementById('plus' + i.toString()).className = "btn btn-plus btn-lg m-1";
-        }
-    }
-
-    function setMinusTricks(n) {
-        numTricks = @Model.ContractLevel + 6 - n;
-        resetButtons();
-        document.getElementById('minus' + n.toString()).className = "btn btn-warning btn-lg m-1";
-    }
-
-    function setPlusTricks(n) {
-        numTricks = @Model.ContractLevel + 6 + n;
-        resetButtons();
-        document.getElementById('plus' + n.toString()).className = "btn btn-warning btn-lg m-1";
-    }
-
-    function setEqualsTricks() {
-        numTricks = @Model.ContractLevel + 6;
-        resetButtons();
-        document.getElementById('equals').className = "btn btn-warning btn-lg m-1";
-    }
-
-    function validateOK() {
-        if (numTricks == -1) {
-            $("#noTricksModal").modal();
-        }
-        else {
-            if (!isSubmitted) {
-                isSubmitted = true;
-                location.href = '@Url.Action("OKButtonClick", "EnterTricksTaken")?numTricks=' + numTricks.toString();
-            }
-        }
-    }
-
-    function backClick() {
-        if (!isSubmitted) {
-            isSubmitted = true;
-            location.href = '@Url.Action("BackButtonClick", "EnterTricksTaken")';
-        }
-    }
+    var numTricks = @Model.ResultData.TricksTakenNumber;
+    var contractLevel = @Model.ResultData.ContractLevel;
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterTricksTaken")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+    var urlBackButtonClick = '@Url.Action("BackButtonClick", "EnterTricksTaken")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
 </script>
-
+<script src='@Url.Content("~/Scripts/TricksPlusMinus.js")' type="text/javascript"></script>

@@ -8,37 +8,47 @@ namespace TabScore.Controllers
 {
     public class EnterLeadController : Controller
     {
-        public ActionResult Index(string validateWarning)
+        public ActionResult Index(int sectionID, int tableNumber, LeadValidationOptions leadValidation)
         {
             if (!Settings.EnterLeadCard)
             {
                 return RedirectToAction("Index", "EnterTricksTaken");
             }
 
-            Result result = Session["Result"] as Result;
-            if (result.LeadCard == "")  // Lead not set, so use validateWarning value as passed to controller
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            if (tableStatus.ResultData.LeadCard == "")  // Lead not set, so use leadValidation value as passed to controller
             {
-                ViewData["ValidateWarning"] = validateWarning;
+                tableStatus.LeadValidation = leadValidation;
             }
             else  // Lead already set, so must be an edit (ie no validation and no warning)
             {
-                ViewData["ValidateWarning"] = "NoWarning";
+                tableStatus.LeadValidation = LeadValidationOptions.NoWarning;
             }
-            ViewData["BackButton"] = "TRUE";
-            return View(result);
-        }
-
-        public ActionResult OKButtonClick(string card, string validateWarning)
-        {
-            Result result = Session["Result"] as Result;
-            if (validateWarning != "Validate" || !Settings.ValidateLeadCard || UtilityFunctions.ValidateLead(AppData.DBConnectionString, result.SectionID, result.BoardNumber, card, result.NSEW))
+            
+            if (AppData.IsIndividual)
             {
-                result.LeadCard = card;
-                return RedirectToAction("Index", "EnterTricksTaken");
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.PairNS}+{tableStatus.RoundData.South}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.PairEW}+{tableStatus.RoundData.West}")}";
             }
             else
             {
-                return RedirectToAction("Index", "EnterLead", new { validateWarning = "Warning" });
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"NS {tableStatus.RoundData.PairNS}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"EW {tableStatus.RoundData.PairEW}")}";
+            }
+            ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
+            ViewData["Title"] = $"Enter Lead - {tableStatus.SectionTableString}";
+            return View(tableStatus);
+        }
+
+        public ActionResult OKButtonClick(int sectionID, int tableNumber, string card)
+        {
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            if (tableStatus.LeadValidation != LeadValidationOptions.Validate || !Settings.ValidateLeadCard || Utilities.ValidateLead(tableStatus, card))
+            {
+                tableStatus.ResultData.LeadCard = card;
+                return RedirectToAction("Index", "EnterTricksTaken", new { sectionID, tableNumber });
+            }
+            else
+            {
+                return RedirectToAction("Index", "EnterLead", new { sectionID, tableNumber, leadValidation = LeadValidationOptions.Warning });
             }
         }
     }

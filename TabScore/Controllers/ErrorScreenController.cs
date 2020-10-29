@@ -10,8 +10,8 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            Session["Header"] = "";
-            ViewData["BackButton"] = "FALSE";
+            ViewData["Header"] = "";
+            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             return View();
         }
 
@@ -26,6 +26,10 @@ namespace TabScore.Controllers
             else
             {
                 Settings.Refresh();
+                if (Settings.ShowHandRecord || Settings.ValidateLeadCard)
+                {
+                    HandRecords.Refresh();
+                }
                 return RedirectToAction("Index", "EnterSection");
             }
         }

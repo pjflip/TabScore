@@ -1,27 +1,24 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.Round
+@model TabScore.Models.TableStatus
 
-@{
-    ViewData["Title"] = "Show Player Numbers EW Missing Individual";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
-
-<div id="notAllNamesModal" class="modal modal-dialog modal-lg">
-    <div class="modal-content">
-        <div class="modal-header text-primary">
-            <p class="modal-title text-center">
-                <h3>Warning</h3>
-            </p>
-        </div>
-        <div class="modal-body">
-            <p>Please select a name for both North and South</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-lg btn-success" data-dismiss="modal">
-                OK <span class="fa fa-check-circle"></span>
-            </button>
+<div id="notAllNamesModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-primary">
+                <p class="modal-title text-center">
+                    <h3>Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>Please select a name or 'Unknown' for both North and South</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    OK <span class="fa fa-check-circle"></span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -37,7 +34,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-3">
     <div class="col-12 text-center">
         <h3 style="color:blue">
-            North/South: @Model.PairNS
+            North/South: @Model.RoundData.PairNS
         </h3>
     </div>
 </div>
@@ -49,7 +46,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         </h4>
     </div>
     <div class="col-3">
-        @if (Model.NameNorth == "")
+        @if (Model.RoundData.NameNorth == "")
         {
             <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerNumber('North')">
                 Enter
@@ -64,7 +61,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-7 align-self-center">
         <h4>
-            @Model.NameNorth
+            @Model.RoundData.NameNorth
         </h4>
     </div>
 </div>
@@ -76,7 +73,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         </h4>
     </div>
     <div class="col-3">
-        @if (Model.NameSouth == "")
+        @if (Model.RoundData.NameSouth == "")
         {
             <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerNumber('South')">
                 Enter
@@ -91,7 +88,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-7 align-self-center">
         <h4>
-            @Model.NameSouth
+            @Model.RoundData.NameSouth
         </h4>
     </div>
 </div>
@@ -99,22 +96,22 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    function validateOK() {
-        if ("@Model.NameNorth" == "" || "@Model.NameSouth" == "") {
-            $("#notAllNamesModal").modal();
+    $(document).on('touchstart', '#OKButton:enabled', function () {
+        if ("@Model.RoundData.NameNorth" == "" || "@Model.RoundData.NameSouth" == "") {
+            $("#notAllNamesModal").modal("show");
         }
         else {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("Index", "ShowRoundInfo")';
+                location.href = '@Url.Action("Index", "ShowRoundInfo")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
             }
         }
-    }
+    });
 
     function EnterPlayerNumber(direction) {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("Index", "EnterPlayerNumber")?direction=' + direction;
+                location.href = '@Url.Action("Index", "EnterPlayerNumber")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=' + direction;
             }
     }
 </script>

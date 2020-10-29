@@ -1,19 +1,7 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.Result
-
-@{
-    ViewData["Title"] = "Enter Lead";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-    var suitRazor = "";
-    var cardRazor = "";
-    if (Model.LeadCard != "")
-    {
-        suitRazor = Model.LeadCard.Substring(0, 1);
-        cardRazor = Model.LeadCard.Substring(1, 1);
-    }
-}
+@model TabScore.Models.TableStatus
 
 <style>
     .btn-suit {
@@ -21,38 +9,22 @@
     }
 </style>
 
-<div id="leadNoMatchModal" class="modal modal-dialog modal-lg">
-    <div class="modal-content">
-        <div class="modal-header text-primary">
-            <p class="modal-title text-center">
-                <h3>Warning</h3>
-            </p>
-        </div>
-        <div class="modal-body">
-            <p>Lead does not match hand record</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-lg btn-success" data-dismiss="modal">
-                OK <span class="fa fa-check-circle"></span>
-            </button>
-        </div>
-    </div>
-</div>
-
-<div id="noCardSuitModal" class="modal modal-dialog modal-lg">
-    <div class="modal-content">
-        <div class="modal-header text-primary">
-            <p class="modal-title text-center">
-                <h3>Warning</h3>
-            </p>
-        </div>
-        <div class="modal-body">
-            <p>Please select card and suit</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-lg btn-success" data-dismiss="modal">
-                OK <span class="fa fa-check-circle"></span>
-            </button>
+<div id="leadNoMatchModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-primary">
+                <p class="modal-title text-center">
+                    <h3>Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>Lead does not match hand record</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    OK <span class="fa fa-check-circle"></span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -60,7 +32,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Model.BoardNumber: @Html.Raw(Model.DisplayContract())
+            Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.DisplayContract())
         </h3>
     </div>
 </div>
@@ -144,114 +116,27 @@
     </div>
 </div>
 
-@if (ViewData["ValidateWarning"].ToString() != "Validate")
+@if (Model.LeadValidation != TabScore.Models.LeadValidationOptions.Validate)
 {
     <div class="row mt-2">
         <div class="col-12 text-center">
-            <button id="skip" class="btn btn-danger btn-lg m-1" ontouchstart="setSkip()">
+            <button id="skip" class="btn btn-outline-danger btn-lg m-1" ontouchstart="setSkip()">
                 Skip
             </button>
         </div>
     </div>
 }
 
-@if (ViewData["ValidateWarning"].ToString() == "Warning")
+@if (Model.LeadValidation == TabScore.Models.LeadValidationOptions.Warning)
 {
     <script>
-        $("#leadNoMatchModal").modal();
+        $("#leadNoMatchModal").modal("show");
     </script>
 }
 
 <script>
-    var suit = "@suitRazor";
-    var card = "@cardRazor";
-    var isSubmitted = false;
-
-    window.onload = setCurrentSelections();
-
-    function setCurrentSelections() {
-        if (suit != "" && card != "") {
-            document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
-            document.getElementById('c' + card).className = "btn btn-warning btn-lg m-1";
-        }
-    }
-
-    function setCard(c) {
-        card = c;
-        if (suit == "SKIP") suit = "";
-        document.getElementById('cA').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('cK').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('cQ').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('cJ').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c10').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c9').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c8').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c7').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c6').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c5').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c4').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c3').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c2').className = "btn btn-primary btn-lg m-1";
-        if (document.getElementById('skip')) {
-            document.getElementById('skip').className = "btn btn-danger btn-lg m-1";
-        }
-        document.getElementById('c' + card).className = "btn btn-warning btn-lg m-1";
-    }
-
-    function setSuit(s) {
-        suit = s;
-        document.getElementById('sS').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('sH').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('sD').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('sC').className = "btn btn-suit btn-lg m-1 p-1";
-        if (document.getElementById('skip')) {
-            document.getElementById('skip').className = "btn btn-danger btn-lg m-1";
-        }
-        document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
-    }
-
-    function setSkip() {
-        suit = "SKIP";
-        card = "";
-        document.getElementById('cA').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('cK').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('cQ').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('cJ').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c10').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c9').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c8').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c7').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c6').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c5').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c4').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c3').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('c2').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('sS').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('sH').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('sD').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('sC').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('skip').className = "btn btn-warning btn-lg m-1";
-    }
-
-    function validateOK() {
-        if (suit != "SKIP" && (card == "" || suit == "")) {
-        $("#noCardSuitModal").modal();
-        }
-        else {
-            if (!isSubmitted) {
-                isSubmitted = true;
-                location.href = '@Url.Action("OKButtonClick", "EnterLead")?card=' + suit + card + '&validateWarning=' + '@ViewData["ValidateWarning"].ToString()';
-            }
-        }
-    }
-
-    function backClick() {
-        if (!isSubmitted) {
-            isSubmitted = true;
-            location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + @Model.BoardNumber;
-        }
-    }
+    var leadCard = "@Model.ResultData.LeadCard";
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterLead")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+    var urlEnterContract = '@Url.Action("Index", "EnterContract")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&boardNumber=@Model.ResultData.BoardNumber';
 </script>
-
-
-
+<script src='@Url.Content("~/Scripts/EnterLead.js")' type="text/javascript"></script>

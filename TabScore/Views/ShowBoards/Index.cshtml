@@ -3,25 +3,22 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 
 @model TabScore.Models.ResultsList
 
-@{
-    ViewData["Title"] = "Show Boards";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
-
-<div id="notAllResultsModal" class="modal modal-dialog modal-lg">
-    <div class="modal-content">
-        <div class="modal-header text-danger">
-            <p class="modal-title text-center">
-                <h3>Warning</h3>
-            </p>
-        </div>
-        <div class="modal-body">
-            <p>Please enter a result (or Skip = Not played) for every board</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-lg btn-success" data-dismiss="modal">
-                OK <span class="fa fa-check-circle"></span>
-            </button>
+<div id="notAllResultsModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <p class="modal-title text-center">
+                    <h3>Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>Please enter a result (or Skip = Not played) for every board</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    OK <span class="fa fa-check-circle"></span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -45,7 +42,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         <div class="col-4 px-0">
             @if (Result.ContractLevel == -999)
             {
-                <button class="btn btn-primary btn-lg px-4 m-1" ontouchstart="EnterEdit(@Result.BoardNumber)">
+                <button class="btn btn-primary btn-lg m-1" style="width:4.8em" ontouchstart="EnterEdit(@Result.BoardNumber)">
                     Enter
                 </button>
             }
@@ -53,16 +50,16 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             {
                 if (Model.ShowViewButton && Result.ContractLevel != -1)
                 {
-                    <button class="btn btn-info btn-lg px-2 m-1" ontouchstart="EnterEdit(@Result.BoardNumber)">
+                    <button class="btn btn-info btn-lg m-1 px-0" style="width:2.8em" ontouchstart="EnterEdit(@Result.BoardNumber)">
                         Edit
                     </button>
-                    <button class="btn btn-secondary btn-lg px-2" ontouchstart="View(@Result.BoardNumber)">
+                    <button class="btn btn-secondary btn-lg px-0" style="width:2.8em" ontouchstart="View(@Result.BoardNumber)">
                         View
                     </button>
                 }
                 else
                 {
-                    <button class="btn btn-info btn-lg px-4 m-1" ontouchstart="EnterEdit(@Result.BoardNumber)">
+                    <button class="btn btn-info btn-lg m-1" style="width:4em" ontouchstart="EnterEdit(@Result.BoardNumber)">
                         Edit
                     </button>
                 }
@@ -79,30 +76,30 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    function validateOK() {
-        if (@Model.GotAllResults.ToString().ToLower()) {
-            if (!isSubmitted) {
-                isSubmitted = true;
-                location.href = '@Url.Action("Index", "ShowRankingList")';
+    $(document).on('touchstart', '#OKButton:enabled', function () {
+        if (!isSubmitted) {
+            isSubmitted = true;
+            if (@Model.GotAllResults.ToString().ToLower()) {
+                location.href = '@Url.Action("Index", "ShowRankingList")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+            }
+            else {
+                $("#notAllResultsModal").modal("show")
+                isSubmitted = false;
             }
         }
-        else {
-            $("#notAllResultsModal").modal()
-        }
-    }
+    });
 
     function EnterEdit(n) {
-            if (!isSubmitted) {
-                isSubmitted = true;
-                location.href = '@Url.Action("Index", "EnterContract")?boardNumber=' + n;
-            }
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("Index", "EnterContract")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&boardNumber=' + n;
+        }
     }
 
     function View(n) {
-            if (!isSubmitted) {
-                isSubmitted = true;
-                location.href = '@Url.Action("Index", "ShowTraveller")?boardNumber=' + n;
-            }
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("Index", "ShowTraveller")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&boardNumber=' + n;
+        }
     }
 </script>
-

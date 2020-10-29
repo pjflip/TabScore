@@ -1,7 +1,6 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using System;
 using System.Web.Mvc;
 using TabScore.Models;
 
@@ -9,36 +8,47 @@ namespace TabScore.Controllers
 {
     public class EnterTricksTakenController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int sectionID, int tableNumber)
         {
-            ViewData["BackButton"] = "TRUE";
-            if (Settings.EnterResultsMethod == 1)
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+
+            if (AppData.IsIndividual)
             {
-                return View("TotalTricks", Session["Result"] as Result);
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.PairNS}+{tableStatus.RoundData.South}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.PairEW}+{tableStatus.RoundData.West}")}";
             }
             else
             {
-                return View("TricksPlusMinus", Session["Result"] as Result);
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"NS {tableStatus.RoundData.PairNS}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"EW {tableStatus.RoundData.PairEW}")}";
+            }
+            ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
+            ViewData["Title"] = $"Enter Tricks Taken - {tableStatus.SectionTableString}";
+            if (Settings.EnterResultsMethod == 1)
+            {
+                return View("TotalTricks", tableStatus);
+            }
+            else
+            {
+                return View("TricksPlusMinus", tableStatus);
             }
         }
 
-        public ActionResult OKButtonClick(int numTricks)
+        public ActionResult OKButtonClick(int sectionID, int tableNumber, int numTricks)
         {
-            Result result = Session["Result"] as Result;
+            Result result = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber).ResultData;
             result.TricksTakenNumber = numTricks;
             result.CalculateScore();
-            return RedirectToAction("Index", "ConfirmResult");
+            return RedirectToAction("Index", "ConfirmResult", new { sectionID, tableNumber });
         }
 
-        public ActionResult BackButtonClick()
+        public ActionResult BackButtonClick(int sectionID, int tableNumber)
         {
             if (Settings.EnterLeadCard)
             {
-                return RedirectToAction("Index", "EnterLead", new { validateWarning = "NoWarning" });
+                return RedirectToAction("Index", "EnterLead", new { sectionID, tableNumber, leadValidation = LeadValidationOptions.NoWarning });
             }
             else
             {
-                return RedirectToAction("Index", "EnterContract", new { boardNumber = (Session["Result"] as Result).BoardNumber });
+                return RedirectToAction("Index", "EnterContract", new { sectionID, tableNumber, boardNumber = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber).ResultData.BoardNumber });
             }
         }
     }

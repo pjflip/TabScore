@@ -3,10 +3,6 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 
 @model TabScore.Models.MovesList
 
-@{
-    ViewData["Title"] = "Show Move Individual";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
@@ -81,10 +77,10 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    function validateOK() {
+    $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "ShowMove")?newRoundNumber=@Model.NewRoundNumber';
+            location.href = '@Url.Action("OKButtonClick", "ShowMove")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&newRoundNumber=@Model.NewRoundNumber';
         }
-    }
+    });
 </script>

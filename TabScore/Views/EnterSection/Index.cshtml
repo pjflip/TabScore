@@ -1,30 +1,7 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.SectionsList
-
-@{
-    ViewData["Title"] = "Enter Section";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
-
-<div id="noSectionModal" class="modal modal-dialog modal-lg">
-    <div class="modal-content">
-        <div class="modal-header text-primary">
-            <p class="modal-title text-center">
-                <h3>Warning</h3>
-            </p>
-        </div>
-        <div class="modal-body">
-            <p>Please select a Section</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-lg btn-success" data-dismiss="modal">
-                OK <span class="fa fa-check-circle"></span>
-            </button>
-        </div>
-    </div>
-</div>
+@model List<TabScore.Models.Section>
 
 <div class="row mt-5">
     <div class="col-12 text-center">
@@ -36,10 +13,10 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        @foreach (var Section in Model)
+        @foreach (var section in Model)
         {
-            <button id="s@(Section.Letter)" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="selectSection('@(Section.Letter)')">
-                @Section.Letter
+            <button id="s@(section.SectionID)" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="selectSection('@(section.SectionID)')">
+                @(section.SectionLetter)
             </button>
         }
     </div>
@@ -55,17 +32,13 @@
         }
         document.getElementById("s" + n).className = "btn btn-warning btn-lg m-1";
         section = n;
+        document.getElementById("OKButton").disabled = false;
     }
 
-    function validateOK() {
-        if (section != "") {
-            if (!isSubmitted) {
-                isSubmitted = true;
-                location.href = '@Url.Action("OKButtonClick", "EnterSection")?sectionLetter=' + section;
-            }
+    $(document).on('touchstart', '#OKButton:enabled', function () {
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("Index", "EnterTableNumber")?sectionID=' + section;
         }
-        else {
-            $("#noSectionModal").modal();
-        }
-    }
+    });
 </script>

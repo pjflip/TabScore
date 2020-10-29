@@ -7,48 +7,54 @@ namespace TabScore.Models
 {
     public class MovesList : List<Move>
     {
+        public int SectionID { get; private set; }
+        public int TableNumber { get; private set; }
         public int NewRoundNumber { get; private set; }
         public int LowBoard { get; private set; }
         public int HighBoard { get; private set; }
         public int BoardsNewTable { get; private set; }
 
-        public MovesList(SessionData sessionData, Round round, int newRoundNumber)
+        public MovesList(TableStatus tableStatus, int newRoundNumber)
         {
+            SectionID = tableStatus.SectionID;
+            TableNumber = tableStatus.TableNumber;
             NewRoundNumber = newRoundNumber;
-            LowBoard = round.LowBoard;
-            HighBoard = round.HighBoard;
-            RoundsList roundsList = new RoundsList(sessionData.SectionID, newRoundNumber);
+            LowBoard = tableStatus.RoundData.LowBoard;
+            HighBoard = tableStatus.RoundData.HighBoard;
+
+            RoundsList roundsList = new RoundsList(SectionID, newRoundNumber);
             if (AppData.IsIndividual)
             {
-                if (round.PairNS != 0)
+                if (tableStatus.RoundData.PairNS != 0)
                 {
-                    Add(roundsList.GetMove(sessionData.TableNumber, round.PairNS, "North"));
+                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.PairNS, "North"));
                 }
-                if (round.South != 0)
+                if (tableStatus.RoundData.South != 0)
                 {
-                    Add(roundsList.GetMove(sessionData.TableNumber, round.South, "South"));
+                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.South, "South"));
                 }
-                if (round.PairEW != 0)
+                if (tableStatus.RoundData.PairEW != 0)
                 {
-                    Add(roundsList.GetMove(sessionData.TableNumber, round.PairEW, "East"));
+                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.PairEW, "East"));
                 }
-                if (round.West != 0)
+                if (tableStatus.RoundData.West != 0)
                 {
-                    Add(roundsList.GetMove(sessionData.TableNumber, round.West, "West"));
+                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.West, "West"));
                 }
             }
             else
             {
-                if (round.PairNS != 0 && round.PairNS != sessionData.MissingPair)
+                int missingPair = (AppData.SectionsList.Find(x => x.SectionID == SectionID)).MissingPair;
+                if (tableStatus.RoundData.PairNS != 0 && tableStatus.RoundData.PairNS != missingPair)
                 {
-                    Add(roundsList.GetMove(sessionData.TableNumber, round.PairNS, "NS"));
+                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.PairNS, "NS"));
                 }
-               if (round.PairEW != 0 && round.PairEW != sessionData.MissingPair)
+               if (tableStatus.RoundData.PairEW != 0 && tableStatus.RoundData.PairEW != missingPair)
                 {
-                    Add(roundsList.GetMove(sessionData.TableNumber, round.PairEW, "EW"));
+                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.PairEW, "EW"));
                 }
             }
-            BoardsNewTable = roundsList.GetBoardsNewTableNumber(sessionData.TableNumber, round.LowBoard);
+            BoardsNewTable = roundsList.GetBoardsNewTableNumber(TableNumber, tableStatus.RoundData.LowBoard);
         }
     }
 }

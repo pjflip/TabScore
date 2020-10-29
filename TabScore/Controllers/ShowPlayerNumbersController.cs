@@ -8,45 +8,45 @@ namespace TabScore.Controllers
 {
     public class ShowPlayerNumbersController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int sectionID, int tableNumber)
         {
-            Round round = Session["Round"] as Round;
-            SessionData sessionData = Session["SessionData"] as SessionData;
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            Section section = AppData.SectionsList.Find(x => x.SectionID == sectionID);
+            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+            ViewData["Title"] = $"Show Player Numbers - {tableStatus.SectionTableString}";
+            ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber}";
 
-            ViewData["BackButton"] = "FALSE";
-            Session["Header"] = $"Table {sessionData.SectionTableString} - Round {round.RoundNumber}";
-
-            if (round.PairNS == 0 || round.PairNS == sessionData.MissingPair)
+            if (tableStatus.RoundData.PairNS == 0 || tableStatus.RoundData.PairNS == section.MissingPair)
             {
                 if (AppData.IsIndividual)
                 {
-                    return View("NSMissingIndividual", round);
+                    return View("NSMissingIndividual", tableStatus);
                 }
                 else
                 {
-                    return View("NSMissing", round);
+                    return View("NSMissing", tableStatus);
                 }
             }
-            else if (round.PairEW == 0 || round.PairEW == sessionData.MissingPair)
+            else if (tableStatus.RoundData.PairEW == 0 || tableStatus.RoundData.PairEW == section.MissingPair)
             {
                 if (AppData.IsIndividual)
                 {
-                    return View("EWMissingIndividual", round);
+                    return View("EWMissingIndividual", tableStatus);
                 }
                 else
                 {
-                    return View("EWMissing", round);
+                    return View("EWMissing", tableStatus);
                 }
             }
             else
             {
                 if (AppData.IsIndividual)
                 {
-                    return View("Individual", round);
+                    return View("Individual", tableStatus);
                 }
                 else
                 {
-                   return View("Pair", round);
+                   return View("Pair", tableStatus);
                 }
             }
         }

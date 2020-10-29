@@ -26,7 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +36,19 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -127,11 +140,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppData.cs" />
+    <Compile Include="Models\EnterPlayerNumber.cs" />
+    <Compile Include="Models\HandRecords.cs" />
     <Compile Include="Models\MovesList.cs" />
-    <Compile Include="Models\PlayerNames.cs" />
     <Compile Include="Models\ResultsList.cs" />
     <Compile Include="Models\RoundsList.cs" />
-    <Compile Include="Models\UtilityFunctions.cs" />
+    <Compile Include="Models\EnterTableNumber.cs" />
+    <Compile Include="Models\TableStatus.cs" />
+    <Compile Include="Models\Utilities.cs" />
     <Compile Include="Models\ODBCRetryHelper.cs" />
     <Compile Include="Models\HandRecord.cs" />
     <Compile Include="Models\Move.cs" />
@@ -140,9 +156,7 @@
     <Compile Include="Models\Round.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\Section.cs" />
-    <Compile Include="Models\SectionsList.cs" />
     <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\SessionData.cs" />
     <Compile Include="Models\Traveller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -164,6 +178,9 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\EnterContract.js" />
+    <Content Include="Scripts\EnterLead.js" />
+    <Content Include="Scripts\EnterPlayerNumber.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -190,6 +207,7 @@
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\IndividualRankingList.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -198,10 +216,14 @@
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\OneWinnerRankingList.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\TotalTricks.js" />
+    <Content Include="Scripts\TricksPlusMinus.js" />
+    <Content Include="Scripts\TwoWinnersRankingList.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -238,8 +260,6 @@
     <Content Include="Views\ShowRoundInfo\NSMissing.cshtml" />
     <Content Include="Views\ShowRoundInfo\EWMissing.cshtml" />
     <Content Include="Views\ShowHandRecord\Index.cshtml" />
-    <Content Include="Views\ShowRankingList\OneWinner.cshtml" />
-    <Content Include="Views\ShowRankingList\TwoWinners.cshtml" />
     <Content Include="Views\ShowPlayerNumbers\EWMissing.cshtml" />
     <Content Include="Views\ShowPlayerNumbers\Pair.cshtml" />
     <Content Include="Views\ShowPlayerNumbers\NSMissing.cshtml" />
@@ -253,12 +273,12 @@
     <Content Include="Views\ShowRoundInfo\NSMissingIndividual.cshtml" />
     <Content Include="Views\ShowRoundInfo\Individual.cshtml" />
     <Content Include="Views\ShowMove\Individual.cshtml" />
-    <Content Include="Views\ShowRankingList\Individual.cshtml" />
-    <Content Include="Views\ShowFinalRankingList\Individual.cshtml" />
-    <Content Include="Views\ShowFinalRankingList\OneWinner.cshtml" />
-    <Content Include="Views\ShowFinalRankingList\TwoWinners.cshtml" />
     <Content Include="Views\ShowTraveller\Individual.cshtml" />
     <Content Include="Views\ShowTraveller\Pairs.cshtml" />
+    <Content Include="Views\Shared\IndividualRankingList.cshtml" />
+    <Content Include="Views\Shared\OneWinnerRankingList.cshtml" />
+    <Content Include="Views\Shared\TwoWinnersRankingList.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

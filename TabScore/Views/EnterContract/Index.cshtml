@@ -1,25 +1,23 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
-     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+    Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.Result
-
-@{
-    ViewData["Title"] = "Enter Contract";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
+@model TabScore.Models.TableStatus
 
 <style>
     .btn-suit {
         background-color: paleturquoise;
+        border-color: paleturquoise;
     }
 
     .btn-pass {
         background-color: darkgreen;
+        border-color: darkgreen;
         color: white;
     }
 
     .btn-double {
         background-color: crimson;
+        border-color: crimson;
         color: white;
     }
 
@@ -29,41 +27,19 @@
 
     .btn-redouble {
         background-color: darkblue;
+        border-color: darkblue;
         color: white;
     }
 
         .btn-redouble:hover {
             color: white;
         }
-
-    .btn-declarer {
-        background-color: lightslategrey;
-        color: white;
-    }
 </style>
-
-<div id="noContractModal" class="modal modal-dialog modal-lg">
-    <div class="modal-content">
-        <div class="modal-header text-primary">
-            <p class="modal-title text-center">
-                <h3>Warning</h3>
-            </p>
-        </div>
-        <div class="modal-body">
-            <p>Please select all contract elements</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-lg btn-success" data-dismiss="modal">
-                OK <span class="fa fa-check-circle"></span>
-            </button>
-        </div>
-    </div>
-</div>
 
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Model.BoardNumber
+            Board @Model.ResultData.BoardNumber
         </h3>
     </div>
 </div>
@@ -78,16 +54,16 @@
 
 <div class="row mt-4">
     <div class="col-12 text-center">
-        <button id="skip" class="btn btn-outline-danger btn-lg m-1" ontouchstart="setSkip()">
+        <button id="skip" class="btn btn-lg btn-outline-danger m-1" ontouchstart="setSkip()">
             Skip
         </button>
-        <button id="pass" class="btn btn-pass btn-lg m-1" ontouchstart="setPass()">
+        <button id="pass" class="btn btn-lg btn-pass m-1" ontouchstart="setPass()">
             PASS Out
         </button>
-        <button id="n1" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(1)">
+        <button id="n1" class="btn btn-lg btn-primary m-1" style="width:3em" ontouchstart="setLevel(1)">
             1
         </button>
-        <button id="n2" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(2)">
+        <button id="n2" class="btn btn-lg btn-primary m-1" style="width:3em" ontouchstart="setLevel(2)">
             2
         </button>
     </div>
@@ -95,19 +71,19 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="n3" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(3)">
+        <button id="n3" class="btn btn-lg btn-primary m-1" style="width:3em" ontouchstart="setLevel(3)">
             3
         </button>
-        <button id="n4" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(4)">
+        <button id="n4" class="btn btn-lg btn-primary m-1" style="width:3em" ontouchstart="setLevel(4)">
             4
         </button>
-        <button id="n5" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(5)">
+        <button id="n5" class="btn btn-lg btn-primary m-1" style="width:3em" ontouchstart="setLevel(5)">
             5
         </button>
-        <button id="n6" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(6)">
+        <button id="n6" class="btn btn-lg btn-primary m-1" style="width:3em" ontouchstart="setLevel(6)">
             6
         </button>
-        <button id="n7" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setLevel(7)">
+        <button id="n7" class="btn btn-lg btn-primary m-1" style="width:3em" ontouchstart="setLevel(7)">
             7
         </button>
     </div>
@@ -115,30 +91,30 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="sNT" class="btn btn-suit btn-lg m-1 p-1" style="width:3em; height:3em" ontouchstart="setSuit('NT')">
+        <button id="sNT" class="btn btn-lg btn-suit m-1 p-1" style="width:3em; height:3em" ontouchstart="setSuit('NT')">
             NT
         </button>
-        <button id="sS" class="btn btn-suit btn-lg m-1 p-1" style="color:black; width:3em; height:3em" ontouchstart="setSuit('S')">
-            <div style="font-size:xx-large; line-height:1em">&spades;</div>
+        <button id="sS" class="btn btn-lg btn-suit m-1 p-1" style="width:3em; height:3em" ontouchstart="setSuit('S')">
+            <div style="font-size: 2rem; color: black">&spades;</div>
         </button>
-        <button id="sH" class="btn btn-suit btn-lg m-1 p-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('H')">
-            <div style="font-size:xx-large; line-height:1em">&hearts;</div>
+        <button id="sH" class="btn btn-lg btn-suit m-1 p-1" style="width:3em; height:3em" ontouchstart="setSuit('H')">
+            <div style="font-size:2rem; color: red">&hearts;</div>
         </button>
-        <button id="sD" class="btn btn-suit btn-lg m-1 p-1" style="color:lightsalmon; width:3em; height:3em" ontouchstart="setSuit('D')">
-            <div style="font-size:xx-large; line-height:1em">&diams;</div>
+        <button id="sD" class="btn btn-lg btn-suit m-1 p-1" style="width:3em; height:3em" ontouchstart="setSuit('D')">
+            <div style="font-size: 2rem; color: lightsalmon ">&diams;</div>
         </button>
-        <button id="sC" class="btn btn-suit btn-lg m-1 p-1" style="color:lightslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
-            <div style="font-size:xx-large; line-height:1em">&clubs;</div>
+        <button id="sC" class="btn btn-lg btn-suit m-1 p-1" style="width:3em; height:3em" ontouchstart="setSuit('C')">
+            <div style="font-size:2rem; color:lightslategrey">&clubs;</div>
         </button>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="X" class="btn btn-double btn-lg m-1" style="width:3em" ontouchstart="setX()">
+        <button id="X" class="btn btn-lg btn-double m-1" style="width:3em" ontouchstart="setX()">
             X
         </button>
-        <button id="XX" class="btn btn-redouble btn-lg m-1" style="width:3em" ontouchstart="setXX()">
+        <button id="XX" class="btn btn-lg btn-redouble m-1" style="width:3em" ontouchstart="setXX()">
             XX
         </button>
     </div>
@@ -154,184 +130,29 @@
 
 <div class="row mt-2">
     <div class="col-12 text-center">
-        <button id="dN" class="btn btn-declarer btn-lg m-1" ontouchstart="setNSEW('N')">
+        <button id="dN" class="btn btn-lg btn-secondary m-1" ontouchstart="setNSEW('N')">
             North
         </button>
-        <button id="dS" class="btn btn-declarer btn-lg m-1" ontouchstart="setNSEW('S')">
+        <button id="dS" class="btn btn-lg btn-secondary m-1" ontouchstart="setNSEW('S')">
             South
         </button>
-        <button id="dE" class="btn btn-declarer btn-lg m-1" ontouchstart="setNSEW('E')">
+        <button id="dE" class="btn btn-lg btn-secondary m-1" ontouchstart="setNSEW('E')">
             East
         </button>
-        <button id="dW" class="btn btn-declarer btn-lg m-1" ontouchstart="setNSEW('W')">
+        <button id="dW" class="btn btn-lg btn-secondary m-1" ontouchstart="setNSEW('W')">
             West
         </button>
     </div>
 </div>
 
 <script>
-    var level = @Model.ContractLevel;
-    var suit = '@Model.ContractSuit';
-    var double = '@Model.ContractX';
-    var NSEW = '@Model.NSEW';
-    var isSubmitted = false;
-
-    window.onload = setCurrentSelections();
-
-    function setCurrentSelections() {
-        if (level == -1)
-        {
-            setSkip()
-        }
-        else if (level == 0) {
-            setPass()
-        }
-        else if (level != -999) {
-            document.getElementById('n' + level.toString()).className = "btn btn-warning btn-lg m-1";
-            document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
-            document.getElementById('d' + NSEW).className = "btn btn-warning btn-lg m-1";
-            if (double == 'x') {
-                document.getElementById('X').className = "btn btn-warning btn-lg m-1";
-            }
-            else if (double == 'xx') {
-                document.getElementById('XX').className = "btn btn-warning btn-lg m-1";
-            }
-        }
-    }
-
-    function clearNumbers() {
-        document.getElementById('n1').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n2').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n3').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n4').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n5').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n6').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n7').className = "btn btn-primary btn-lg m-1";
-    }
-
-    function clearSuits() {
-        document.getElementById('sNT').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('sS').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('sH').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('sD').className = "btn btn-suit btn-lg m-1 p-1";
-        document.getElementById('sC').className = "btn btn-suit btn-lg m-1 p-1";
-    }
-
-    function clearNSEWs() {
-        document.getElementById('dN').className = "btn btn-declarer btn-lg m-1";
-        document.getElementById('dS').className = "btn btn-declarer btn-lg m-1";
-        document.getElementById('dE').className = "btn btn-declarer btn-lg m-1";
-        document.getElementById('dW').className = "btn btn-declarer btn-lg m-1";
-    }
-
-    function setLevel(n) {
-        level = n;
-        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
-        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
-        clearNumbers();
-        document.getElementById('n' + level.toString()).className = "btn btn-warning btn-lg m-1";
-    }
-
-    function setSkip() {
-        level = -1;
-        suit = "";
-        double = "NONE";
-        NSEW = "";
-        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
-        clearNumbers();
-        clearSuits();
-        clearNSEWs();
-        document.getElementById('X').className = "btn btn-double btn-lg m-1";
-        document.getElementById('XX').className = "btn btn-redouble btn-lg m-1";
-        document.getElementById('skip').className = "btn btn-warning btn-lg m-1";
-    }
-
-    function setPass() {
-        level = 0;
-        suit = "";
-        double = "NONE";
-        NSEW = "";
-        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
-        clearNumbers();
-        clearSuits();
-        clearNSEWs();
-        document.getElementById('X').className = "btn btn-double btn-lg m-1";
-        document.getElementById('XX').className = "btn btn-redouble btn-lg m-1";
-        document.getElementById('pass').className = "btn btn-warning btn-lg m-1";
-    }
-
-    function setSuit(s) {
-        suit = s;
-        clearSuits();
-        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
-        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
-        document.getElementById('s' + suit).className = "btn btn-warning btn-lg m-1 p-1";
-    }
-
-    function setX() {
-        if (double != 'x') {
-            double = "x";
-            document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
-            document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
-            document.getElementById('X').className = "btn btn-warning btn-lg m-1";
-            document.getElementById('XX').className = "btn btn-redouble btn-lg m-1";
-        }
-        else {
-            double = "NONE";
-            document.getElementById('X').className = "btn btn-double btn-lg m-1";
-        }
-    }
-
-    function setXX() {
-        if (double != 'xx') {
-            double = "xx";
-            document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
-            document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
-            document.getElementById('XX').className = "btn btn-warning btn-lg m-1";
-            document.getElementById('X').className = "btn btn-double btn-lg m-1";
-        }
-        else {
-            double = "NONE";
-            document.getElementById('XX').className = "btn btn-redouble btn-lg m-1";
-        }
-    }
-
-    function setNSEW(d) {
-        NSEW = d;
-        clearNSEWs();
-        document.getElementById('pass').className = "btn btn-pass btn-lg m-1";
-        document.getElementById('skip').className = "btn btn-outline-danger btn-lg m-1";
-        document.getElementById('d' + NSEW).className = "btn btn-warning btn-lg m-1";
-    }
-
-    function validateOK() {
-        if (level == 0) {
-            if (!isSubmitted) {
-                isSubmitted = true;
-                location.href = '@Url.Action("OKButtonPass", "EnterContract")';
-            }
-        }
-        else if (level == -1) {
-            if (!isSubmitted) {
-                isSubmitted = true;
-                location.href = '@Url.Action("OKButtonSkip", "EnterContract")';
-            }
-        }
-        else if (level != -999 && suit != "" && NSEW != "") {
-            if (!isSubmitted) {
-                isSubmitted = true;
-                location.href = '@Url.Action("OKButtonContract", "EnterContract")?cLevel=' + level.toString() + '&cSuit=' + suit + '&cX=' + double + '&cNSEW=' + NSEW;
-            }
-        }
-        else {
-            $("#noContractModal").modal();
-        }
-    }
-
-    function backClick() {
-        if (!isSubmitted) {
-            isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowBoards")';
-        }
-    }
+    var level = @Model.ResultData.ContractLevel;
+    var suit = '@Model.ResultData.ContractSuit';
+    var double = '@Model.ResultData.ContractX';
+    var NSEW = '@Model.ResultData.DeclarerNSEW';
+    var urlOKButtonPass = '@Url.Action("OKButtonPass", "EnterContract")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+    var urlOKButtonSkip = '@Url.Action("OKButtonSkip", "EnterContract")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+    var urlOKButtonContract = '@Url.Action("OKButtonContract", "EnterContract")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+    var urlShowBoards = '@Url.Action("Index", "ShowBoards")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
 </script>
+<script src='@Url.Content("~/Scripts/EnterContract.js")' type="text/javascript"></script>

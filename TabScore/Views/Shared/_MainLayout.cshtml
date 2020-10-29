@@ -38,6 +38,9 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                     }
                 });
             }
+            if (typeof onFullPageLoad == 'function') {
+                onFullPageLoad();
+            }
         });
     </script>
 </head>
@@ -46,7 +49,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div id="headerRow" class="container-fluid fixed-top" style="min-height: 51px; background-color: bisque; border-bottom-style: solid">
         <div class="row my-2">
             <div id="header" class="col-12 my-auto">
-                <h5>@Html.Raw(Session["Header"])</h5>
+                <h5>@Html.Raw(ViewData["Header"])</h5>
             </div>
             <div id="battery" class="col-2 my-auto text-right" style="display:none">
                 <h3><span id="bl"></span></h3>
@@ -61,23 +64,29 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div id="footerRow" class="container-fluid fixed-bottom" style="background-color: bisque; border-top-style: solid">
         <div class="row">
             <div class="col-6">
-                @if (ViewData["BackButton"].ToString() == "TRUE")
-                {
-                    <button class="btn btn-danger btn-xl ml-2 my-2 float-left" style="font-size: 1.5rem" ontouchstart="backClick()">
-                        <span class="fa fa-chevron-circle-left"></span> Back
-                    </button>
-                }
-                else if (ViewData["BackButton"].ToString() == "REFRESH")
-                {
-                    <button class="btn btn-secondary btn-xl ml-2 my-2 float-left" style="font-size: 1.5rem" ontouchstart="refreshClick()">
-                        <span class="fa fa-refresh"></span> Refresh
-                    </button>
+                @{ 
+                    var buttonOptions = (TabScore.Models.ButtonOptions)ViewData["ButtonOptions"];
+                    if (buttonOptions == TabScore.Models.ButtonOptions.OKEnabledAndBack || buttonOptions == TabScore.Models.ButtonOptions.OKDisabledAndBack)
+                    {
+                        <button id="BackButton" class="btn btn-danger ml-2 my-2 float-left" style="font-size: 1.5rem">
+                            <span class="fa fa-chevron-circle-left"></span> Back
+                        </button>
+                    } 
                 }
             </div>
             <div class="col-6">
-                <button class="btn btn-success btn-xl mr-2 my-2 float-right" style="font-size: 1.5rem" ontouchstart="validateOK()">
-                    OK <span class="fa fa-chevron-circle-right"></span>
-                </button>
+                @if (buttonOptions == TabScore.Models.ButtonOptions.OKDisabled || buttonOptions == TabScore.Models.ButtonOptions.OKDisabledAndBack)
+                {
+                    <button id="OKButton" class="btn btn-success mr-2 my-2 float-right" style="font-size: 1.5rem" disabled>
+                        OK <span class="fa fa-chevron-circle-right"></span>
+                    </button>
+                }
+                else
+                {
+                    <button id="OKButton" class="btn btn-success mr-2 my-2 float-right" style="font-size: 1.5rem">
+                        OK <span class="fa fa-chevron-circle-right"></span>
+                    </button>
+                }
             </div>
         </div>
     </div>

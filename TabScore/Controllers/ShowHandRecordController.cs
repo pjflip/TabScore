@@ -8,17 +8,26 @@ namespace TabScore.Controllers
 {
     public class ShowHandRecordController : Controller
     {
-        public ActionResult Index(int boardNumber)
+        public ActionResult Index(int sectionID, int tableNumber, int boardNumber)
         {
-            int sectionID = (Session["SessionData"] as SessionData).SectionID;
-
-            HandRecord handRecord = new HandRecord(sectionID, boardNumber);
-            if (handRecord.NorthSpades == "###" && sectionID != 1)    // Use default Section 1 hand records)
+            HandRecord handRecord = HandRecords.HandRecordsList.Find(x => x.SectionID == sectionID && x.BoardNumber == boardNumber);
+            if (handRecord == null)     // Can't find matching hand record, so use default SectionID = 1
             {
-                handRecord = new HandRecord(1, boardNumber);
+                handRecord = HandRecords.HandRecordsList.Find(x => x.SectionID == 1 && x.BoardNumber == boardNumber);
             }
+            handRecord.TableNumber = tableNumber;
 
-            ViewData["BackButton"] = "FALSE";
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            ViewData["Title"] = $"Hand Record - {tableStatus.SectionTableString}";
+            if (AppData.IsIndividual)
+            {
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.PairNS}+{tableStatus.RoundData.South}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.PairEW}+{tableStatus.RoundData.West}")}";
+            }
+            else
+            {
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"NS {tableStatus.RoundData.PairNS}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"EW {tableStatus.RoundData.PairEW}")}";
+            }
+            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             return View(handRecord);
         }
     }

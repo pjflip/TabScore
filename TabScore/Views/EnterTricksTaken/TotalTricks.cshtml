@@ -1,12 +1,7 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.Result
-
-@{
-    ViewData["Title"] = "Enter Total Tricks Taken";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
+@model TabScore.Models.TableStatus
 
 <div id="noTricksModal" class="modal modal-dialog modal-lg">
     <div class="modal-content">
@@ -29,7 +24,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Model.BoardNumber: @Html.Raw(Model.DisplayContract())
+            Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.DisplayContract())
         </h3>
     </div>
 </div>
@@ -44,19 +39,19 @@
 
 <div class="row mt-4">
     <div class="col-12 text-center">
-        <button id="n0" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('0')">
+        <button id="n0" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('0')">
             0
         </button>
-        <button id="n1" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('1')">
+        <button id="n1" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('1')">
             1
         </button>
-        <button id="n2" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('2')">
+        <button id="n2" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('2')">
             2
         </button>
-        <button id="n3" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('3')">
+        <button id="n3" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('3')">
             3
         </button>
-        <button id="n4" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('4')">
+        <button id="n4" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('4')">
             4
         </button>
     </div>
@@ -64,19 +59,19 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="n5" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('5')">
+        <button id="n5" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('5')">
             5
         </button>
-        <button id="n6" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('6')">
+        <button id="n6" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('6')">
             6
         </button>
-        <button id="n7" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('7')">
+        <button id="n7" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('7')">
             7
         </button>
-        <button id="n8" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('8')">
+        <button id="n8" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('8')">
             8
         </button>
-        <button id="n9" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('9')">
+        <button id="n9" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('9')">
             9
         </button>
     </div>
@@ -84,69 +79,24 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="n10" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('10')">
+        <button id="n10" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('10')">
             10
         </button>
-        <button id="n11" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('11')">
+        <button id="n11" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('11')">
             11
         </button>
-        <button id="n12" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('12')">
+        <button id="n12" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('12')">
             12
         </button>
-        <button id="n13" class="btn btn-primary btn-lg m-1" style="width: 3em" ontouchstart="setNumTricks('13')">
+        <button id="n13" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setNumTricks('13')">
             13
         </button>
     </div>
 </div>
 
 <script>
-    var numTricks = '@Model.TricksTakenNumber';
-    var isSubmitted = false;
-
-    window.onload = setCurrentSelection();
-
-    function setCurrentSelection() {
-        if (numTricks != '-1') {
-            document.getElementById('n' + numTricks).className = "btn btn-warning btn-lg m-1";
-        }
-    }
-
-    function setNumTricks(n) {
-        numTricks = n;
-        document.getElementById('n0').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n1').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n2').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n3').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n4').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n5').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n6').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n7').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n8').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n9').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n10').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n11').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n12').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n13').className = "btn btn-primary btn-lg m-1";
-        document.getElementById('n' + numTricks).className = "btn btn-warning btn-lg m-1";
-    }
-
-    function validateOK() {
-        if (numTricks == '-1') {
-            $("#noTricksModal").modal();
-        }
-        else {
-            if (!isSubmitted) {
-                isSubmitted = true;
-                location.href = '@Url.Action("OKButtonClick", "EnterTricksTaken")?numTricks=' + numTricks;
-            }
-        }
-    }
-
-    function backClick() {
-        if (!isSubmitted) {
-            isSubmitted = true;
-            location.href = '@Url.Action("BackButtonClick", "EnterTricksTaken")';
-        }
-    }
+    var numTricks = '@Model.ResultData.TricksTakenNumber';
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterTricksTaken")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+    var urlBackButtonClick = '@Url.Action("BackButtonClick", "EnterTricksTaken")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
 </script>
-
+<script src='@Url.Content("~/Scripts/TotalTricks.js")' type="text/javascript"></script>

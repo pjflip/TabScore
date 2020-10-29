@@ -1,11 +1,6 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@{
-    ViewData["Title"] = "Error Screen";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
-
 <div class="row mt-5">
     <div class="col-12 text-center text-danger">
         <h2>
@@ -31,10 +26,10 @@
 <script>
     var isSubmitted = false;
 
-    function validateOK() {
+    $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("OKButtonClick", "ErrorScreen")';
         }
-    }
+    });
 </script>

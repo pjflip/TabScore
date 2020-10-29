@@ -17,8 +17,8 @@ namespace TabScoreStarter
         {
             Text = $"TabScoreStarter - Version {Assembly.GetExecutingAssembly().GetName().Version}";
             
-            String argsString = "", pathToDB = "";
-            String[] arguments = Environment.GetCommandLineArgs();
+            string argsString = "", pathToDB = "";
+            string[] arguments = Environment.GetCommandLineArgs();
 
             // Parse command line args correctly to get DB path
             foreach (string s in arguments)
@@ -165,8 +165,10 @@ namespace TabScoreStarter
 
         private void OptionsButton_Click(object sender, EventArgs e)
         {
-            OptionsForm frmOptions = new OptionsForm();
-            frmOptions.Tag = PathToDBLabel.Text;
+            OptionsForm frmOptions = new OptionsForm
+            {
+                Tag = PathToDBLabel.Text
+            };
             frmOptions.ShowDialog();
         }
     }
