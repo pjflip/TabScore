@@ -9,17 +9,21 @@ setTimeout(function () {
 
 function pollRankingListener() {
     rankingList = JSON.parse(this.responseText);
-    var new_tbodyNS = document.createElement("tbodyNS");
-    var new_tbodyEW = document.createElement("tbodyEW");
+    var new_tbodyNS = document.createElement("tbody");
+    var new_tbodyEW = document.createElement("tbody");
+    var iRowEW = 0;
+    var iRowNS = 0;
     for (var i = 0; i < rankingList.length; i++) {
         var row = null;
-        if (rankingList[i].Orientation = "E") {
-            row = new_tbodyEW.insertRow(i);
+        if (rankingList[i].Orientation == "E") {
+            row = new_tbodyEW.insertRow(iRowEW);
             if (rankingList[i].PairNo == pairEW) row.className = "table-warning";
+            iRowEW++;
         }
         else {
-            row = new_tbodyNS.insertRow(i);
+            row = new_tbodyNS.insertRow(iRowNS);
             if (rankingList[i].PairNo == pairNS) row.className = "table-success";
+            iRowNS++;
         }
         var cellRank = row.insertCell(0);
         var cellPairNumber = row.insertCell(1);
