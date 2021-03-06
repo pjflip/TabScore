@@ -124,7 +124,6 @@
     <Compile Include="Controllers\EnterLeadController.cs" />
     <Compile Include="Controllers\EnterPlayerNumberController.cs" />
     <Compile Include="Controllers\ErrorScreenController.cs" />
-    <Compile Include="Controllers\ShowFinalRankingListController.cs" />
     <Compile Include="Controllers\ShowHandRecordController.cs" />
     <Compile Include="Controllers\ShowPlayerNumbersController.cs" />
     <Compile Include="Controllers\EnterSectionController.cs" />
@@ -275,9 +274,9 @@
     <Content Include="Views\ShowMove\Individual.cshtml" />
     <Content Include="Views\ShowTraveller\Individual.cshtml" />
     <Content Include="Views\ShowTraveller\Pairs.cshtml" />
-    <Content Include="Views\Shared\IndividualRankingList.cshtml" />
-    <Content Include="Views\Shared\OneWinnerRankingList.cshtml" />
-    <Content Include="Views\Shared\TwoWinnersRankingList.cshtml" />
+    <Content Include="Views\ShowRankingList\Individual.cshtml" />
+    <Content Include="Views\ShowRankingList\OneWinner.cshtml" />
+    <Content Include="Views\ShowRankingList\TwoWinners.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>

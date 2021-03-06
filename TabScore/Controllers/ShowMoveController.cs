@@ -14,7 +14,7 @@ namespace TabScore.Controllers
             {
                 if (Settings.ShowRanking == 2)
                 {
-                    return RedirectToAction("Index", "ShowFinalRankingList", new { sectionID, tableNumber });
+                    return RedirectToAction("Final", "ShowRankingList", new { sectionID, tableNumber });
                 }
                 else
                 {

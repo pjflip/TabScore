@@ -25,20 +25,51 @@ namespace TabScore.Controllers
                         ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                         if (AppData.IsIndividual)
                         {
-                            return View("IndividualRankingList", rankingList);
+                            return View("Individual", rankingList);
                         }
                         else if (rankingList.Exists(x => x.Orientation == "E"))
                         {
-                            return View("TwoWinnersRankingList", rankingList);
+                            return View("TwoWinners", rankingList);
                         }
                         else
                         {
-                            return View("OneWinnerRankingList", rankingList);
+                            return View("OneWinner", rankingList);
                         }
                     }
                 }
             }
             return RedirectToAction("Index", "ShowMove", new { sectionID, tableNumber, newRoundNumber = tableStatus.RoundData.RoundNumber + 1 });
+        }
+
+        public ActionResult Final(int sectionID, int tableNumber)
+        {
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            RankingList rankingList = new RankingList(tableStatus);
+
+            // Only show the ranking list if it contains something meaningful
+            if (rankingList == null || rankingList.Count == 0 || rankingList[0].ScoreDecimal == 0 || rankingList[0].ScoreDecimal == 50)
+            {
+                return RedirectToAction("Index", "EndScreen", new { sectionID, tableNumber });
+            }
+            else
+            {
+                rankingList.FinalRankingList = true;
+                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber}";
+                ViewData["Title"] = $"Final Ranking List - {tableStatus.SectionTableString}";
+                ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+                if (AppData.IsIndividual)
+                {
+                    return View("Individual", rankingList);
+                }
+                else if (rankingList.Exists(x => x.Orientation == "E"))
+                {
+                    return View("TwoWinners", rankingList);
+                }
+                else
+                {
+                    return View("OneWinner", rankingList);
+                }
+            }
         }
 
         public JsonResult PollRanking(int sectionID, int tableNumber)
