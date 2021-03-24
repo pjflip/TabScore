@@ -1,7 +1,7 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.TableStatus
+@model TabScore.Models.RoundInfo
 
 <div class="row mt-5">
     <div class="col-12 text-center">
@@ -19,52 +19,77 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-12 text-center">
-        <h3 style="color:blue">
-            North: @Model.RoundData.PairNS & South: @Model.RoundData.South
-        </h3>
+@if (!Model.NSMissing)
+{
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h3 style="color:blue">
+                North: @Model.RoundData.NumberNorth & South: @Model.RoundData.NumberSouth
+            </h3>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-12 text-center">
-        <h4>
-            @Model.RoundData.NameNorth & @Model.RoundData.NameSouth
-        </h4>
+    <div class="row">
+        <div class="col-12 text-center">
+            <h4>
+                @Model.RoundData.NameNorth & @Model.RoundData.NameSouth
+            </h4>
+        </div>
     </div>
-</div>
+}
 
-<div class="row mt-4">
-    <div class="col-12 text-center">
-        <h3 style="color:blue">
-            East: @Model.RoundData.PairEW & West: @Model.RoundData.West
-        </h3>
+@if (!Model.EWMissing)
+{
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h3 style="color:blue">
+                East: @Model.RoundData.NumberEast & West: @Model.RoundData.NumberWest
+            </h3>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-12 text-center">
-        <h4>
-            @Model.RoundData.NameEast & @Model.RoundData.NameWest
-        </h4>
+    <div class="row">
+        <div class="col-12 text-center">
+            <h4>
+                @Model.RoundData.NameEast & @Model.RoundData.NameWest
+            </h4>
+        </div>
     </div>
-</div>
+}
+
+@if (Model.NSMissing || Model.EWMissing)
+{
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h3 style="color:red">
+                Sitting Out
+            </h3>
+        </div>
+    </div>
+}
 
 <script>
     var isSubmitted = false;
+    var sitOut = @Model.NSMissing.ToString().ToLower() || @Model.EWMissing.ToString().ToLower();
 
     $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowBoards")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+            if (sitOut)
+            {
+                location.href = '@Url.Action("Index", "ShowRankingList")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+            }
+            else
+            {
+                location.href = '@Url.Action("Index", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+            }
         }
     });
 
     $(document).on('touchstart', '#BackButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+            location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")?tabletDeviceNumber=@Model.TabletDeviceNumber';
         }
     });
 </script>

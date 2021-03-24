@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -8,45 +8,75 @@ namespace TabScore.Controllers
 {
     public class ShowPlayerNumbersController : Controller
     {
-        public ActionResult Index(int sectionID, int tableNumber)
+        public ActionResult Index(int tabletDeviceNumber, bool showWarning = false)
         {
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
-            Section section = AppData.SectionsList.Find(x => x.SectionID == sectionID);
-            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-            ViewData["Title"] = $"Show Player Numbers - {tableStatus.SectionTableString}";
-            ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber}";
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
 
-            if (tableStatus.RoundData.PairNS == 0 || tableStatus.RoundData.PairNS == section.MissingPair)
+            // Player numbers not needed if all names have already been entered and names are not being updated each round, or if this a sitout table
+            if ((!tableStatus.RoundData.BlankName && !Settings.NumberEntryEachRound) || tabletDeviceStatus.TableNumber == 0)
             {
-                if (AppData.IsIndividual)
+                return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
+            }
+
+            PlayerEntryList playerEntryList = new PlayerEntryList(tableStatus, tabletDeviceNumber);
+            playerEntryList.ShowWarning = showWarning;
+
+            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+            ViewData["Title"] = $"Show Player Numbers - {tabletDeviceStatus.Location}";
+            ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber}";
+
+            if (AppData.IsIndividual)
+            {
+                return View("Individual", playerEntryList);
+            }
+            else
+            {
+                return View("Pair", playerEntryList);
+            }
+        }
+
+        public ActionResult OKButtonClick(int tabletDeviceNumber)
+        {
+            // Check if other tablet devices at the same table have completed player number entry
+
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+            int missingPair = AppData.SectionsList.Find(x => x.SectionID == tabletDeviceStatus.SectionID).MissingPair;
+            Round round = tableStatus.RoundData;
+            
+            // Check if all required names have been entered, and if not go back and wait
+            if (round.NumberNorth == 0 || round.NumberNorth == missingPair)
+            {
+                if (round.NameEast == "" || round.NameWest == "")
                 {
-                    return View("NSMissingIndividual", tableStatus);
+                    return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber, showWarning = true });
                 }
                 else
                 {
-                    return View("NSMissing", tableStatus);
+                    return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
                 }
             }
-            else if (tableStatus.RoundData.PairEW == 0 || tableStatus.RoundData.PairEW == section.MissingPair)
+            else if (round.NumberEast == 0 || round.NumberEast == missingPair)
             {
-                if (AppData.IsIndividual)
+                if (round.NameNorth == "" || round.NameSouth == "")
                 {
-                    return View("EWMissingIndividual", tableStatus);
+                    return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber, showWarning = true });
                 }
                 else
                 {
-                    return View("EWMissing", tableStatus);
+                    return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
                 }
             }
             else
             {
-                if (AppData.IsIndividual)
+                if (round.NameNorth == "" || round.NameSouth == "" || round.NameEast == "" || round.NameWest == "")
                 {
-                    return View("Individual", tableStatus);
+                    return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber, showWarning = true });
                 }
                 else
                 {
-                   return View("Pair", tableStatus);
+                    return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
                 }
             }
         }

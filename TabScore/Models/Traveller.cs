@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -11,19 +11,22 @@ namespace TabScore.Models
     {
         public int SectionID { get; private set; }
         public int TableNumber { get; private set; }
+        public int TabletDeviceNumber { get; set; }
         public int BoardNumber { get; private set; }
         public bool HandRecord { get; private set; }
-        public int PairNS { get; private set; }
+        public int NumberNorth { get; private set; }
         public int PercentageNS { get; private set; }
+        public bool FromView { get; set; }
 
         private int currentScore;
 
-        public Traveller(TableStatus tableStatus)
+        public Traveller(TableStatus tableStatus, int tabletDeviceNumber)
         {
             SectionID = tableStatus.SectionID;
             TableNumber = tableStatus.TableNumber;
+            TabletDeviceNumber = tabletDeviceNumber;
             BoardNumber = tableStatus.ResultData.BoardNumber;
-            PairNS = tableStatus.RoundData.PairNS;
+            NumberNorth = tableStatus.RoundData.NumberNorth;
 
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
@@ -53,10 +56,10 @@ namespace TabScore.Models
                                 result = new Result()
                                 {
                                     BoardNumber = BoardNumber,
-                                    PairNS = reader.GetInt32(0),
-                                    PairEW = reader.GetInt32(1),
-                                    South = reader.GetInt32(2),
-                                    West = reader.GetInt32(3),
+                                    NumberNorth = reader.GetInt32(0),
+                                    NumberEast = reader.GetInt32(1),
+                                    NumberSouth = reader.GetInt32(2),
+                                    NumberWest = reader.GetInt32(3),
                                     DeclarerNSEW = reader.GetString(4),
                                     Contract = reader.GetString(5),
                                     LeadCard = reader.GetString(6),
@@ -68,8 +71,8 @@ namespace TabScore.Models
                                 result = new Result()
                                 {
                                     BoardNumber = BoardNumber,
-                                    PairNS = reader.GetInt32(0),
-                                    PairEW = reader.GetInt32(1),
+                                    NumberNorth = reader.GetInt32(0),
+                                    NumberEast = reader.GetInt32(1),
                                     DeclarerNSEW = reader.GetString(2),
                                     Contract = reader.GetString(3),
                                     LeadCard = reader.GetString(4),
@@ -80,7 +83,7 @@ namespace TabScore.Models
                             {
                                 result.CalculateScore();
                                 Add(result);
-                                if (result.PairNS == PairNS)  // Get score for current result for calculating percentages
+                                if (result.NumberNorth == NumberNorth)  // Get score for current result for calculating percentages
                                 {
                                     currentScore = result.Score;
                                 }

@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -9,15 +9,16 @@ namespace TabScore.Models
     public class Result
     {
         public int BoardNumber { get; set; }
-        public int PairNS { get; set; }
-        public int South { get; set; }
-        public int PairEW { get; set; }
-        public int West { get; set; }
+        public int NumberNorth { get; set; }
+        public int NumberEast { get; set; }
+        public int NumberSouth { get; set; }
+        public int NumberWest { get; set; }
         public string DeclarerNSEW { get; set; }
         public int ContractLevel { get; set; }
         public string ContractSuit { get; set; }
         public string ContractX { get; set; }
         public string LeadCard { get; set; }
+        public LeadValidationOptions LeadValidation { get; set; }
         public int Score { get; private set; }
         public int MatchpointsNS { get; set; }
         public int MatchpointsEW { get; set; }

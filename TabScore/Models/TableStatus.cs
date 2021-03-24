@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -10,16 +10,17 @@ namespace TabScore.Models
     {
         public int SectionID { get; private set; }
         public int TableNumber { get; private set; }
-        public string SectionTableString { get; private set; }
         public Round RoundData { get; set; }
         public Result ResultData { get; set; }
-        public LeadValidationOptions LeadValidation { get; set; }
+        public bool ReadyForNextRoundNorth { get; set; } = false;
+        public bool ReadyForNextRoundSouth { get; set; } = false;
+        public bool ReadyForNextRoundEast { get; set; } = false;
+        public bool ReadyForNextRoundWest { get; set; } = false;
 
         public TableStatus(int sectionID, int tableNumber, Round roundData)
         {
             SectionID = sectionID;
             TableNumber = tableNumber;
-            SectionTableString = AppData.SectionsList.Find(x => x.SectionID == sectionID).SectionLetter + TableNumber.ToString();
             RoundData = roundData;
         }
 
@@ -96,11 +97,11 @@ namespace TabScore.Models
             {
                 if (ResultData.DeclarerNSEW == "N" || ResultData.DeclarerNSEW == "S")
                 {
-                    declarer = RoundData.PairNS;
+                    declarer = RoundData.NumberNorth;
                 }
                 else
                 {
-                    declarer = RoundData.PairEW;
+                    declarer = RoundData.NumberEast;
                 }
             }
             string leadcard;
@@ -139,11 +140,11 @@ namespace TabScore.Models
                 }
                 if (AppData.IsIndividual)
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundData.RoundNumber}, {ResultData.BoardNumber}, {RoundData.PairNS}, {RoundData.PairEW}, {RoundData.South}, {RoundData.West}, {declarer}, '{ResultData.DeclarerNSEW}', '{ResultData.Contract}', '{ResultData.TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundData.RoundNumber}, {ResultData.BoardNumber}, {RoundData.NumberNorth}, {RoundData.NumberEast}, {RoundData.NumberSouth}, {RoundData.NumberWest}, {declarer}, '{ResultData.DeclarerNSEW}', '{ResultData.Contract}', '{ResultData.TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
                 }
                 else
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundData.RoundNumber}, {ResultData.BoardNumber}, {RoundData.PairNS}, {RoundData.PairEW}, {declarer}, '{ResultData.DeclarerNSEW}', '{ResultData.Contract}', '{ResultData.TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {TableNumber}, {RoundData.RoundNumber}, {ResultData.BoardNumber}, {RoundData.NumberNorth}, {RoundData.NumberEast}, {declarer}, '{ResultData.DeclarerNSEW}', '{ResultData.Contract}', '{ResultData.TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
                 }
                 OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
                 try

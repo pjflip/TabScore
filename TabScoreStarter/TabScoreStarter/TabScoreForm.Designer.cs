@@ -188,6 +188,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(525, 277);
+            this.MinimumSize = new System.Drawing.Size(525, 277);
             this.Name = "TabScoreForm";
             this.Text = "TabScoreStarter";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TabScoreForm_FormClosed);

@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -9,13 +9,14 @@ using System.IO;
 namespace TabScore.Models
 {
     // AppData is a global class that applies accross all sessions
-    // It includes a list of sections, a copy of the PlayerNames table (if it exists), and the current status of each table
+    // It includes a list of sections, a copy of the PlayerNames table (if it exists), and the current status of each table and each tablet device
     public static class AppData
     {
         public static string DBConnectionString { get; private set; }
         public static bool IsIndividual { get; private set; }
         public static List<Section> SectionsList = new List<Section>();
         public static List<TableStatus> TableStatusList = new List<TableStatus>();
+        public static List<TabletDeviceStatus> TabletDeviceStatusList = new List<TabletDeviceStatus>();
 
         private class PlayerRecord
         {
@@ -30,28 +31,18 @@ namespace TabScore.Models
         {
             if (File.Exists(PathToTabScoreDB))
             {
-                // Only do an update if TabScoreStarter has updated TabScoreDB.txt
+                // Only do an update if TabScoreStarter has updated TabScoreDB.txt - so complete restart required
                 DateTime lastWriteTime = File.GetLastWriteTime(PathToTabScoreDB);
                 if (lastWriteTime > TabScoreDBTime)
                 {
-                    // Clear table status list
+                    // Clear table status list and tablet device status list - all tablets will need to re-log on
                     TableStatusList.Clear();
+                    TabletDeviceStatusList.Clear();
 
-                    string pathToDB = File.ReadAllText(PathToTabScoreDB);
+                    DBConnectionString = File.ReadAllText(PathToTabScoreDB);
                     TabScoreDBTime = lastWriteTime;
-                    if (pathToDB == "")
+                    if (DBConnectionString != "")
                     {
-                        DBConnectionString = "";
-                    }
-                    else
-                    {
-                        // Set database connection string
-                        OdbcConnectionStringBuilder cs = new OdbcConnectionStringBuilder();
-                        cs.Driver = "Microsoft Access Driver (*.mdb)";
-                        cs.Add("Dbq", pathToDB);
-                        cs.Add("Uid", "Admin");
-                        DBConnectionString = cs.ToString();
-
                         using (OdbcConnection connection = new OdbcConnection(DBConnectionString))
                         {
                             connection.Open();
@@ -84,7 +75,7 @@ namespace TabScore.Models
                             }
 
                             // Create list of sections
-                            SQLString = "SELECT ID, Letter, Tables, MissingPair FROM Section";
+                            SQLString = "SELECT ID, Letter, Tables, MissingPair, ScoringType, Winners FROM Section";
                             SectionsList.Clear();
                             cmd = new OdbcCommand(SQLString, connection);
                             OdbcDataReader reader = null;
@@ -100,7 +91,9 @@ namespace TabScore.Models
                                             SectionID = reader.GetInt32(0),
                                             SectionLetter = reader.GetString(1),
                                             NumTables = reader.GetInt32(2),
-                                            MissingPair = reader.GetInt32(3)
+                                            MissingPair = reader.GetInt32(3),
+                                            ScoringType = reader.GetInt32(4),
+                                            Winners = reader.GetInt32(5)
                                         };
                                         SectionsList.Add(s);
                                     }
@@ -165,6 +158,25 @@ namespace TabScore.Models
             {
                 return player.Name;
             }
+        }
+
+        public static void SetTabletDevicesPerTable()
+        {
+            foreach (Section section in SectionsList)
+            {
+                // Default TabletDevicesPerTable = 1
+                if (Settings.TabletDevicesMove)
+                {
+                    if (IsIndividual)
+                    {
+                        section.TabletDevicesPerTable = 4;
+                    }
+                    else
+                    {
+                        if (section.Winners == 1) section.TabletDevicesPerTable = 2;
+                    }
+                }
+            } 
         }
     }
 }

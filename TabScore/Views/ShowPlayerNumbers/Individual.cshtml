@@ -1,7 +1,27 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.TableStatus
+@model TabScore.Models.PlayerEntryList
+
+<div id="notAllPlayerNumbersModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <p class="modal-title text-center">
+                    <h3>Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>Please wait until all the player numbers for this table have been entered</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    OK <span class="fa fa-check-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="notAllNamesModal" class="modal" data-backdrop="static">
     <div class="modal-dialog">
@@ -12,7 +32,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 </p>
             </div>
             <div class="modal-body">
-                <p>Please select a name or 'Unknown' for all 4 players</p>
+                <p>Please select a name or 'Unknown' for all players</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
@@ -31,145 +51,74 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
 </div>
 
-<div class="row mt-3">
-    <div class="col-12 text-center">
-        <h3 style="color:blue">
-            North: @Model.RoundData.PairNS
-        </h3>
+@foreach (var playerEntry in Model)
+{
+    <div class="row mt-3">
+        <div class="col-12 text-center">
+            <h3 style="color:blue">
+                @playerEntry.Direction: @playerEntry.Number
+            </h3>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-1">
+    <div class="row">
+        <div class="col-1">
+        </div>
+        <div class="col-3">
+            @if (playerEntry.Name == "")
+            {
+                <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerNumber('@playerEntry.Direction')">
+                    Enter
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-info btn-lg m-1" ontouchstart="EnterPlayerNumber('@playerEntry.Direction')">
+                    Edit
+                </button>
+            }
+        </div>
+        <div class="col-8 align-self-center">
+            <h4>
+                @playerEntry.Name
+            </h4>
+        </div>
     </div>
-    <div class="col-3">
-        @if (Model.RoundData.NameNorth == "")
-        {
-            <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerNumber('North')">
-                Enter
-            </button>
-        }
-        else
-        {
-            <button class="btn btn-info btn-lg m-1" ontouchstart="EnterPlayerNumber('North')">
-                Edit
-            </button>
-        }
-    </div>
-    <div class="col-8 align-self-center">
-        <h4>
-            @Model.RoundData.NameNorth
-        </h4>
-    </div>
-</div>
+}
 
-<div class="row mt-2">
-    <div class="col-12 text-center">
-        <h3 style="color:blue">
-            South: @Model.RoundData.South
-        </h3>
+@if (Model.ShowMessage)
+{
+    <div class="row mt-5">
+        <div class="col-1">
+        </div>
+        <div class="col-10 text-center">
+            <h5>
+                Please wait until all the player numbers for this table have been entered before pressing OK
+            </h5>
+        </div>
+        <div class="col-1">
+        </div>
     </div>
-</div>
+}
 
-<div class="row">
-    <div class="col-1">
-    </div>
-    <div class="col-3">
-        @if (Model.RoundData.NameSouth == "")
-        {
-            <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerNumber('South')">
-                Enter
-            </button>
-        }
-        else
-        {
-            <button class="btn btn-info btn-lg m-1" ontouchstart="EnterPlayerNumber('South')">
-                Edit
-            </button>
-        }
-    </div>
-    <div class="col-8 align-self-center">
-        <h4>
-            @Model.RoundData.NameSouth
-        </h4>
-    </div>
-</div>
-
-<div class="row mt-2">
-    <div class="col-12 text-center">
-        <h3 style="color:blue">
-            East: @Model.RoundData.PairEW
-        </h3>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-1">
-    </div>
-    <div class="col-3">
-        @if (Model.RoundData.NameEast == "")
-        {
-            <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerNumber('East')">
-                Enter
-            </button>
-        }
-        else
-        {
-            <button class="btn btn-info btn-lg m-1" ontouchstart="EnterPlayerNumber('East')">
-                Edit
-            </button>
-        }
-    </div>
-    <div class="col-8 align-self-center">
-        <h4>
-            @Model.RoundData.NameEast
-        </h4>
-    </div>
-</div>
-
-<div class="row mt-2">
-    <div class="col-12 text-center">
-        <h3 style="color:blue">
-            West: @Model.RoundData.West
-        </h3>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-1">
-    </div>
-    <div class="col-3">
-        @if (Model.RoundData.NameWest == "")
-        {
-            <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerNumber('West')">
-                Enter
-            </button>
-        }
-        else
-        {
-            <button class="btn btn-info btn-lg m-1" ontouchstart="EnterPlayerNumber('West')">
-                Edit
-            </button>
-        }
-    </div>
-    <div class="col-8 align-self-center">
-        <h4>
-            @Model.RoundData.NameWest
-        </h4>
-    </div>
-</div>
+@if (Model.ShowWarning)
+{
+    <script>
+        $("#notAllPlayerNumbersModal").modal("show");
+    </script>
+}
 
 <script>
     var isSubmitted = false;
 
     $(document).on('touchstart', '#OKButton:enabled', function () {
-        if ("@Model.RoundData.NameNorth" == "" || "@Model.RoundData.NameSouth" == "" || "@Model.RoundData.NameEast" == "" || "@Model.RoundData.NameWest" == "") {
+        if (@Model.NumberOfBlankEntries > 0) {
             $("#notAllNamesModal").modal("show");
         }
         else {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("Index", "ShowRoundInfo")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+                location.href = '@Url.Action("OKButtonClick", "ShowPlayerNumbers")?tabletDeviceNumber=@Model.TabletDeviceNumber';
             }
         }
     });
@@ -177,7 +126,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     function EnterPlayerNumber(direction) {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("Index", "EnterPlayerNumber")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=' + direction;
+                location.href = '@Url.Action("Index", "EnterPlayerNumber")?tabletDeviceNumber=@Model.TabletDeviceNumber&direction=' + direction;
             }
     }
 </script>

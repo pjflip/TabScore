@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -9,29 +9,39 @@ namespace TabScore.Models
 {
     public class RankingList : List<Ranking>
     {
-        public int SectionID { get; private set; }
-        public int TableNumber { get; private set; }
+        public int TabletDeviceNumber { get; set; }
         public int RoundNumber { get; set; }
-        public int PairNS { get; set; }   // Doubles as North player number for individuals
-        public int PairEW { get; set; }   // Doubles as East player number for individuals
-        public int South { get; set; }
-        public int West { get; set; }
+        public int NumberNorth { get; set; } = 0;
+        public int NumberEast { get; set; } = 0;
+        public int NumberSouth { get; set; } = 0;
+        public int NumberWest { get; set; } = 0;
         public bool FinalRankingList { get; set; } = false;
        
-        public RankingList(TableStatus tableStatus)
+        public RankingList(int tabletDeviceNumber)
         {
-            SectionID = tableStatus.SectionID;
-            TableNumber = tableStatus.TableNumber;
-            RoundNumber = tableStatus.RoundData.RoundNumber;
-            PairNS = tableStatus.RoundData.PairNS;
-            PairEW = tableStatus.RoundData.PairEW;
-            South = tableStatus.RoundData.South;
-            West = tableStatus.RoundData.West;
+            TabletDeviceNumber = tabletDeviceNumber;
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            RoundNumber = tabletDeviceStatus.RoundNumber;
+
+            // Set player numbers to highlight appropriate rows of ranking list
+            if (AppData.SectionsList.Find(x => x.SectionID == tabletDeviceStatus.SectionID).TabletDevicesPerTable == 1)
+            {
+                TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+                NumberNorth = tableStatus.RoundData.NumberNorth;
+                NumberEast = tableStatus.RoundData.NumberEast;
+                NumberSouth = tableStatus.RoundData.NumberSouth;
+                NumberWest = tableStatus.RoundData.NumberWest;
+            }
+            else  // More than one tablet device per table
+            {
+                // Only need to highlight one row entry, so use NumberNorth as proxy
+                NumberNorth = tabletDeviceStatus.PairNumber;
+            }
 
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
-                string SQLString = $"SELECT Orientation, Number, Score, Rank FROM Results WHERE Section={SectionID}";
+                string SQLString = $"SELECT Orientation, Number, Score, Rank FROM Results WHERE Section={tabletDeviceStatus.SectionID}";
 
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader1 = null;
@@ -71,11 +81,11 @@ namespace TabScore.Models
                 {
                     if (AppData.IsIndividual)
                     {
-                        InsertRange(0, CalculateIndividualRankingFromReceivedData(SectionID));
+                        InsertRange(0, CalculateIndividualRankingFromReceivedData(tabletDeviceStatus.SectionID));
                     }
                     else
                     {
-                        InsertRange(0, CalculateRankingFromReceivedData(SectionID));
+                        InsertRange(0, CalculateRankingFromReceivedData(tabletDeviceStatus.SectionID));
                     }
                 }
                 
@@ -97,31 +107,7 @@ namespace TabScore.Models
 
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
-                int Winners = 0;
-                connection.Open();
-
-                // Check Winners
-                object queryResult = null;
-                string SQLString = $"SELECT Winners FROM Section WHERE ID={sectionID}";
-                OdbcCommand cmd1 = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        queryResult = cmd1.ExecuteScalar();
-                    });
-                    Winners = Convert.ToInt32(queryResult);
-                }
-                catch (OdbcException)
-                {
-                    // If Winners column doesn't exist, or any other error, can't calculate ranking
-                    return null;
-                }
-                finally
-                {
-                    cmd1.Dispose();
-                }
-
+                int Winners = AppData.SectionsList.Find(x => x.SectionID == sectionID).Winners;
                 if (Winners == 0)
                 {
                     // Winners not set, so no chance of calculating ranking
@@ -129,21 +115,22 @@ namespace TabScore.Models
                 }
 
                 // No Results table and Winners = 1 or 2, so use ReceivedData to calculate ranking
-                SQLString = $"SELECT Board, PairNS, PairEW, [NS/EW], Contract, Result FROM ReceivedData WHERE Section={sectionID}";
-                OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                connection.Open();
+                string SQLString = $"SELECT Board, PairNS, PairEW, [NS/EW], Contract, Result FROM ReceivedData WHERE Section={sectionID}";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
                 try
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        reader = cmd2.ExecuteReader();
+                        reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
                             Result result = new Result()
                             {
                                 BoardNumber = reader.GetInt32(0),
-                                PairNS = reader.GetInt32(1),
-                                PairEW = reader.GetInt32(2),
+                                NumberNorth = reader.GetInt32(1),
+                                NumberEast = reader.GetInt32(2),
                                 DeclarerNSEW = reader.GetString(3),
                                 Contract = reader.GetString(4),
                                 TricksTakenSymbol = reader.GetString(5)
@@ -163,7 +150,7 @@ namespace TabScore.Models
                 finally
                 {
                     reader.Close();
-                    cmd2.Dispose();
+                    cmd.Dispose();
                 }
 
                 // Calculate MPs 
@@ -185,12 +172,12 @@ namespace TabScore.Models
                     // Add up MPs for each pair, creating Ranking List entries as we go
                     foreach (Result result in resList)
                     {
-                        Ranking rankingListFind = rankingList.Find(x => x.PairNo == result.PairNS);
+                        Ranking rankingListFind = rankingList.Find(x => x.PairNo == result.NumberNorth);
                         if (rankingListFind == null)
                         {
                             Ranking ranking = new Ranking()
                             {
-                                PairNo = result.PairNS,
+                                PairNo = result.NumberNorth,
                                 Orientation = "0",
                                 MP = result.MatchpointsNS,
                                 MPMax = result.MatchpointsMax
@@ -202,12 +189,12 @@ namespace TabScore.Models
                             rankingListFind.MP += result.MatchpointsNS;
                             rankingListFind.MPMax += result.MatchpointsMax;
                         }
-                        rankingListFind = rankingList.Find(x => x.PairNo == result.PairEW);
+                        rankingListFind = rankingList.Find(x => x.PairNo == result.NumberEast);
                         if (rankingListFind == null)
                         {
                             Ranking ranking = new Ranking()
                             {
-                                PairNo = result.PairEW,
+                                PairNo = result.NumberEast,
                                 Orientation = "0",
                                 MP = result.MatchpointsEW,
                                 MPMax = result.MatchpointsMax
@@ -250,12 +237,12 @@ namespace TabScore.Models
                     // Add up MPs for each pair, creating Ranking List entries as we go
                     foreach (Result result in resList)
                     {
-                        Ranking rankingListFind = rankingList.Find(x => x.PairNo == result.PairNS && x.Orientation == "N");
+                        Ranking rankingListFind = rankingList.Find(x => x.PairNo == result.NumberNorth && x.Orientation == "N");
                         if (rankingListFind == null)
                         {
                             Ranking ranking = new Ranking()
                             {
-                                PairNo = result.PairNS,
+                                PairNo = result.NumberNorth,
                                 Orientation = "N",
                                 MP = result.MatchpointsNS,
                                 MPMax = result.MatchpointsMax
@@ -267,12 +254,12 @@ namespace TabScore.Models
                             rankingListFind.MP += result.MatchpointsNS;
                             rankingListFind.MPMax += result.MatchpointsMax;
                         }
-                        rankingListFind = rankingList.Find(x => x.PairNo == result.PairEW && x.Orientation == "E");
+                        rankingListFind = rankingList.Find(x => x.PairNo == result.NumberEast && x.Orientation == "E");
                         if (rankingListFind == null)
                         {
                             Ranking ranking = new Ranking()
                             {
-                                PairNo = result.PairEW,
+                                PairNo = result.NumberEast,
                                 Orientation = "E",
                                 MP = result.MatchpointsEW,
                                 MPMax = result.MatchpointsMax
@@ -337,10 +324,10 @@ namespace TabScore.Models
                             Result result = new Result()
                             {
                                 BoardNumber = reader.GetInt32(0),
-                                PairNS = reader.GetInt32(1),
-                                PairEW = reader.GetInt32(2),
-                                South = reader.GetInt32(3),
-                                West = reader.GetInt32(4),
+                                NumberNorth = reader.GetInt32(1),
+                                NumberEast = reader.GetInt32(2),
+                                NumberSouth = reader.GetInt32(3),
+                                NumberWest = reader.GetInt32(4),
                                 DeclarerNSEW = reader.GetString(5),
                                 Contract = reader.GetString(6),
                                 TricksTakenSymbol = reader.GetString(7)
@@ -381,12 +368,12 @@ namespace TabScore.Models
             // Add up MPs for each pair, creating Ranking List entries as we go
             foreach (Result result in resList)
             {
-                Ranking rankingListFind = rankingList.Find(x => x.PairNo == result.PairNS);
+                Ranking rankingListFind = rankingList.Find(x => x.PairNo == result.NumberNorth);
                 if (rankingListFind == null)
                 {
                     Ranking ranking = new Ranking()
                     {
-                        PairNo = result.PairNS,
+                        PairNo = result.NumberNorth,
                         Orientation = "0",
                         MP = result.MatchpointsNS,
                         MPMax = result.MatchpointsMax
@@ -398,12 +385,12 @@ namespace TabScore.Models
                     rankingListFind.MP += result.MatchpointsNS;
                     rankingListFind.MPMax += result.MatchpointsMax;
                 }
-                rankingListFind = rankingList.Find(x => x.PairNo == result.PairEW);
+                rankingListFind = rankingList.Find(x => x.PairNo == result.NumberEast);
                 if (rankingListFind == null)
                 {
                     Ranking ranking = new Ranking()
                     {
-                        PairNo = result.PairEW,
+                        PairNo = result.NumberEast,
                         Orientation = "0",
                         MP = result.MatchpointsEW,
                         MPMax = result.MatchpointsMax
@@ -415,12 +402,12 @@ namespace TabScore.Models
                     rankingListFind.MP += result.MatchpointsEW;
                     rankingListFind.MPMax += result.MatchpointsMax;
                 }
-                rankingListFind = rankingList.Find(x => x.PairNo == result.South);
+                rankingListFind = rankingList.Find(x => x.PairNo == result.NumberSouth);
                 if (rankingListFind == null)
                 {
                     Ranking ranking = new Ranking()
                     {
-                        PairNo = result.South,
+                        PairNo = result.NumberSouth,
                         Orientation = "0",
                         MP = result.MatchpointsNS,
                         MPMax = result.MatchpointsMax
@@ -432,12 +419,12 @@ namespace TabScore.Models
                     rankingListFind.MP += result.MatchpointsNS;
                     rankingListFind.MPMax += result.MatchpointsMax;
                 }
-                rankingListFind = rankingList.Find(x => x.PairNo == result.West);
+                rankingListFind = rankingList.Find(x => x.PairNo == result.NumberWest);
                 if (rankingListFind == null)
                 {
                     Ranking ranking = new Ranking()
                     {
-                        PairNo = result.West,
+                        PairNo = result.NumberWest,
                         Orientation = "0",
                         MP = result.MatchpointsEW,
                         MPMax = result.MatchpointsMax

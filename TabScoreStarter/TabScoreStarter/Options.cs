@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Data.Odbc;
@@ -8,24 +8,25 @@ namespace TabScoreStarter
 {
     class Options
     {
-        public bool ShowTraveller {get; set;}
-        public bool ShowPercentage {get; set;}
-        public bool EnterLeadCard {get; set;}
-        public bool ValidateLeadCard {get; set;}
-        public int ShowRanking {get; set;}
-        public bool ShowHandRecord {get; set;}
-        public bool NumberEntryEachRound {get; set;}
-        public int NameSource {get; set;}
-        public int EnterResultsMethod {get; set;}
+        public bool ShowTraveller { get; set; }
+        public bool ShowPercentage { get; set; }
+        public bool EnterLeadCard { get; set; }
+        public bool ValidateLeadCard { get; set; }
+        public int ShowRanking { get; set; }
+        public bool ShowHandRecord { get; set; }
+        public bool NumberEntryEachRound { get; set; }
+        public int NameSource { get; set; }
+        public int EnterResultsMethod { get; set; }
+        public bool TabletsMove { get; set; }
 
         private readonly string dbConnectionString;
 
-        public Options(Database db)
+        public Options(OdbcConnectionStringBuilder connectionString)
         {
-            dbConnectionString = db.ConnectionString;
+            dbConnectionString = connectionString.ToString();
             using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
             {
-                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod FROM Settings";
+                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod, TabletsMove FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
                 OdbcDataReader reader = cmd.ExecuteReader();
@@ -40,6 +41,7 @@ namespace TabScoreStarter
                 NameSource = reader.GetInt32(7);
                 EnterResultsMethod = reader.GetInt32(8);
                 if (EnterResultsMethod != 1) EnterResultsMethod = 0;
+                TabletsMove = reader.GetBoolean(9);
                 reader.Close();
                 cmd.Dispose();
             }
@@ -101,7 +103,15 @@ namespace TabScoreStarter
                     SQLString.Append(" BM2NumberEntryEachRound=NO,");
                 }
                 SQLString.Append($" BM2NameSource={NameSource},");
-                SQLString.Append($" EnterResultsMethod={EnterResultsMethod}");
+                SQLString.Append($" EnterResultsMethod={EnterResultsMethod},");
+                if (TabletsMove)
+                {
+                    SQLString.Append(" TabletsMove=YES");
+                }
+                else
+                {
+                    SQLString.Append(" TabletsMove=NO");
+                }
                 OdbcCommand cmd = new OdbcCommand(SQLString.ToString(), connection);
                 connection.Open();
                 cmd.ExecuteNonQuery();
@@ -110,4 +120,3 @@ namespace TabScoreStarter
         }
     }
 }
-

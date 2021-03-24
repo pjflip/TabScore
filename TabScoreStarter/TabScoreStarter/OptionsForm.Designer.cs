@@ -45,11 +45,14 @@
             this.OKButton = new System.Windows.Forms.Button();
             this.EnterResultsMethodGroup = new System.Windows.Forms.GroupBox();
             this.EnterResultsMethodCombobox = new System.Windows.Forms.ComboBox();
+            this.TabletMovesGroupBox = new System.Windows.Forms.GroupBox();
+            this.TabletMovesCheckbox = new System.Windows.Forms.CheckBox();
             this.TravellerGroup.SuspendLayout();
             this.PlayersGroup.SuspendLayout();
             this.RankingListGroup.SuspendLayout();
             this.LeadCardGroup.SuspendLayout();
             this.EnterResultsMethodGroup.SuspendLayout();
+            this.TabletMovesGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // TravellerGroup
@@ -206,7 +209,7 @@
             // CanxButton
             // 
             this.CanxButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CanxButton.Location = new System.Drawing.Point(284, 212);
+            this.CanxButton.Location = new System.Drawing.Point(284, 253);
             this.CanxButton.Name = "CanxButton";
             this.CanxButton.Size = new System.Drawing.Size(75, 23);
             this.CanxButton.TabIndex = 10;
@@ -218,7 +221,7 @@
             // OKButton
             // 
             this.OKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OKButton.Location = new System.Drawing.Point(408, 212);
+            this.OKButton.Location = new System.Drawing.Point(408, 253);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(75, 23);
             this.OKButton.TabIndex = 11;
@@ -251,11 +254,35 @@
             this.EnterResultsMethodCombobox.TabIndex = 1;
             this.EnterResultsMethodCombobox.TabStop = false;
             // 
+            // TabletMovesGroupBox
+            // 
+            this.TabletMovesGroupBox.Controls.Add(this.TabletMovesCheckbox);
+            this.TabletMovesGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TabletMovesGroupBox.Location = new System.Drawing.Point(238, 179);
+            this.TabletMovesGroupBox.Name = "TabletMovesGroupBox";
+            this.TabletMovesGroupBox.Size = new System.Drawing.Size(251, 56);
+            this.TabletMovesGroupBox.TabIndex = 8;
+            this.TabletMovesGroupBox.TabStop = false;
+            this.TabletMovesGroupBox.Text = "Tablets Move";
+            // 
+            // TabletMovesCheckbox
+            // 
+            this.TabletMovesCheckbox.AutoSize = true;
+            this.TabletMovesCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TabletMovesCheckbox.Location = new System.Drawing.Point(6, 21);
+            this.TabletMovesCheckbox.Name = "TabletMovesCheckbox";
+            this.TabletMovesCheckbox.Size = new System.Drawing.Size(169, 19);
+            this.TabletMovesCheckbox.TabIndex = 6;
+            this.TabletMovesCheckbox.TabStop = false;
+            this.TabletMovesCheckbox.Text = "Tablets Move With Players";
+            this.TabletMovesCheckbox.UseVisualStyleBackColor = true;
+            // 
             // OptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(501, 249);
+            this.ClientSize = new System.Drawing.Size(501, 293);
+            this.Controls.Add(this.TabletMovesGroupBox);
             this.Controls.Add(this.EnterResultsMethodGroup);
             this.Controls.Add(this.OKButton);
             this.Controls.Add(this.CanxButton);
@@ -266,8 +293,11 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(517, 332);
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(517, 332);
             this.Name = "OptionsForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "TabScore Options";
             this.Load += new System.EventHandler(this.OptionsForm_Load);
             this.TravellerGroup.ResumeLayout(false);
@@ -278,6 +308,8 @@
             this.LeadCardGroup.ResumeLayout(false);
             this.LeadCardGroup.PerformLayout();
             this.EnterResultsMethodGroup.ResumeLayout(false);
+            this.TabletMovesGroupBox.ResumeLayout(false);
+            this.TabletMovesGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -299,5 +331,7 @@
         private System.Windows.Forms.Button OKButton;
         private System.Windows.Forms.GroupBox EnterResultsMethodGroup;
         private System.Windows.Forms.ComboBox EnterResultsMethodCombobox;
+        private System.Windows.Forms.GroupBox TabletMovesGroupBox;
+        private System.Windows.Forms.CheckBox TabletMovesCheckbox;
     }
 }

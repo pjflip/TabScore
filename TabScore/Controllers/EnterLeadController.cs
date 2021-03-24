@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -8,47 +8,50 @@ namespace TabScore.Controllers
 {
     public class EnterLeadController : Controller
     {
-        public ActionResult Index(int sectionID, int tableNumber, LeadValidationOptions leadValidation)
+        public ActionResult Index(int tabletDeviceNumber, LeadValidationOptions leadValidation)
         {
             if (!Settings.EnterLeadCard)
             {
-                return RedirectToAction("Index", "EnterTricksTaken");
+                return RedirectToAction("Index", "EnterTricksTaken", new { tabletDeviceNumber });
             }
 
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
             if (tableStatus.ResultData.LeadCard == "")  // Lead not set, so use leadValidation value as passed to controller
             {
-                tableStatus.LeadValidation = leadValidation;
+                tableStatus.ResultData.LeadValidation = leadValidation;
             }
             else  // Lead already set, so must be an edit (ie no validation and no warning)
             {
-                tableStatus.LeadValidation = LeadValidationOptions.NoWarning;
+                tableStatus.ResultData.LeadValidation = LeadValidationOptions.NoWarning;
             }
-            
+            ResultInfo resultInfo = new ResultInfo(tableStatus.ResultData, tabletDeviceNumber);
+
             if (AppData.IsIndividual)
             {
-                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.PairNS}+{tableStatus.RoundData.South}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.PairEW}+{tableStatus.RoundData.West}")}";
+                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
             }
             else
             {
-                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"NS {tableStatus.RoundData.PairNS}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"EW {tableStatus.RoundData.PairEW}")}";
+                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"NS {tableStatus.RoundData.NumberNorth}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"EW {tableStatus.RoundData.NumberEast}")}";
             }
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
-            ViewData["Title"] = $"Enter Lead - {tableStatus.SectionTableString}";
-            return View(tableStatus);
+            ViewData["Title"] = $"Enter Lead - {tabletDeviceStatus.Location}";
+            return View(resultInfo);
         }
 
-        public ActionResult OKButtonClick(int sectionID, int tableNumber, string card)
+        public ActionResult OKButtonClick(int tabletDeviceNumber, string card)
         {
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
-            if (tableStatus.LeadValidation != LeadValidationOptions.Validate || !Settings.ValidateLeadCard || Utilities.ValidateLead(tableStatus, card))
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+            if (tableStatus.ResultData.LeadValidation != LeadValidationOptions.Validate || !Settings.ValidateLeadCard || Utilities.ValidateLead(tableStatus, card))
             {
                 tableStatus.ResultData.LeadCard = card;
-                return RedirectToAction("Index", "EnterTricksTaken", new { sectionID, tableNumber });
+                return RedirectToAction("Index", "EnterTricksTaken", new { tabletDeviceNumber });
             }
             else
             {
-                return RedirectToAction("Index", "EnterLead", new { sectionID, tableNumber, leadValidation = LeadValidationOptions.Warning });
+                return RedirectToAction("Index", "EnterLead", new { tabletDeviceNumber, leadValidation = LeadValidationOptions.Warning });
             }
         }
     }

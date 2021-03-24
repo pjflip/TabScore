@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Collections.Generic;
@@ -28,12 +28,12 @@ namespace TabScore.Models
                                 Round round = new Round()
                                 {
                                     TableNumber = reader.GetInt32(0),
-                                    PairNS = reader.GetInt32(1),
-                                    PairEW = reader.GetInt32(2),
+                                    NumberNorth = reader.GetInt32(1),
+                                    NumberEast = reader.GetInt32(2),
                                     LowBoard = reader.GetInt32(3),
                                     HighBoard = reader.GetInt32(4),
-                                    South = reader.GetInt32(5),
-                                    West = reader.GetInt32(6)
+                                    NumberSouth = reader.GetInt32(5),
+                                    NumberWest = reader.GetInt32(6)
                                 };
                                 Add(round);
                             }
@@ -60,8 +60,8 @@ namespace TabScore.Models
                                 Round round = new Round()
                                 {
                                     TableNumber = reader.GetInt32(0),
-                                    PairNS = reader.GetInt32(1),
-                                    PairEW = reader.GetInt32(2),
+                                    NumberNorth = reader.GetInt32(1),
+                                    NumberEast = reader.GetInt32(2),
                                     LowBoard = reader.GetInt32(3),
                                     HighBoard = reader.GetInt32(4),
                                 };
@@ -85,16 +85,16 @@ namespace TabScore.Models
                 PairNumber = pairNumber,
                 Direction = direction
             };
-            Round round = new Round();
-            if (!AppData.IsIndividual)  // Pairs
+            Round round;
+            if (!AppData.IsIndividual)  // Pairs - if there is a sitout out pair (at an imaginary sitout table, eg a rover), it works like East
             {
-                if (direction == "NS")
+                if (direction == "North")
                 {
-                    round = Find(x => x.PairNS == pairNumber);
+                    round = Find(x => x.NumberNorth == pairNumber);
                 }
                 else
                 {
-                    round = Find(x => x.PairEW == pairNumber);
+                    round = Find(x => x.NumberEast == pairNumber);
                 }
                 if (round != null)
                 {
@@ -104,31 +104,31 @@ namespace TabScore.Models
                 else
                 {
                     // Pair changes Direction
-                    if (direction == "NS")
+                    if (direction == "North")
                     {
-                        round = Find(x => x.PairEW == pairNumber);
+                        round = Find(x => x.NumberEast == pairNumber);
                     }
                     else
                     {
-                        round = Find(x => x.PairNS == pairNumber);
+                        round = Find(x => x.NumberNorth == pairNumber);
                     }
 
                     if (round != null)
                     {
                         move.NewTableNumber = round.TableNumber;
-                        if (direction == "NS")
+                        if (direction == "North")
                         {
-                            move.NewDirection = "EW";
+                            move.NewDirection = "East";
                         }
                         else
                         {
-                            move.NewDirection = "NS";
+                            move.NewDirection = "North";
                         }
                     }
-                    else   // No move info found - move to sit out
+                    else   // No move info found - move to imaginary sitout table
                     {
                         move.NewTableNumber = 0;
-                        move.NewDirection = "";
+                        move.NewDirection = "Sitout";  
                     }
                 }
                 move.Stay = (move.NewTableNumber == tableNumber && move.NewDirection == direction);
@@ -137,7 +137,7 @@ namespace TabScore.Models
             else   // Individual
             {
                 // Try Direction = North
-                round = Find(x => x.PairNS == pairNumber);
+                round = Find(x => x.NumberNorth == pairNumber);
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
@@ -147,7 +147,7 @@ namespace TabScore.Models
                 }
 
                 // Try Direction = South
-                round = Find(x => x.South == pairNumber);
+                round = Find(x => x.NumberSouth == pairNumber);
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
@@ -157,7 +157,7 @@ namespace TabScore.Models
                 }
 
                 // Try Direction = East
-                round = Find(x => x.PairEW == pairNumber);
+                round = Find(x => x.NumberEast == pairNumber);
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
@@ -167,7 +167,7 @@ namespace TabScore.Models
                 }
 
                 // Try Direction = West
-                round = Find(x => x.West == pairNumber);
+                round = Find(x => x.NumberWest == pairNumber);
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
@@ -176,10 +176,10 @@ namespace TabScore.Models
                     return move;
                 }
 
-                else   // No move info found - move to sit out
+                else   // No move info found - move to imaginary sitout table
                 {
                     move.NewTableNumber = 0;
-                    move.NewDirection = "";
+                    move.NewDirection = "Sitout";
                     move.Stay = false;
                     return move;
                 }

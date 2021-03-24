@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -7,23 +7,35 @@ using System.Windows.Forms;
 
 namespace TabScoreStarter
 {
-    class Database
+    static class Database
     {
-        public string ConnectionString { get; private set; }
-
-        public Database (string pathToDB)
+        public static OdbcConnectionStringBuilder ConnectionString(string pathToDB)
         {
             OdbcConnectionStringBuilder cs = new OdbcConnectionStringBuilder();
             cs.Driver = "Microsoft Access Driver (*.mdb)";
             cs.Add("Dbq", pathToDB);
             cs.Add("Uid", "Admin");
             cs.Add("Pwd", "");
-            ConnectionString = cs.ToString();
+            return cs;
         }
 
-        public bool Initialize()
+        public static string PathToDB(string connectionString)
         {
-            using (OdbcConnection connection = new OdbcConnection(ConnectionString))
+            OdbcConnectionStringBuilder cs = new OdbcConnectionStringBuilder(connectionString);
+            if (cs.TryGetValue("Dbq", out object builderReturnValue))
+            {
+                return builderReturnValue.ToString();
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public static bool Initialize(OdbcConnectionStringBuilder connectionString)
+        {
+            if (connectionString == null) return false;
+            using (OdbcConnection connection = new OdbcConnection(connectionString.ToString()))
             {
                 try
                 {
@@ -321,6 +333,29 @@ namespace TabScoreStarter
                     {
                         cmd.ExecuteNonQuery();
                         SQLString = "UPDATE Settings SET ShowResults=0";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "ALTER TABLE Settings ADD TabletsMove YESNO";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        if (Properties.Settings.Default.TabletsMove)
+                        {
+                            SQLString = "UPDATE Settings SET TabletsMove=YES";
+                        }
+                        else
+                        {
+                            SQLString = "UPDATE Settings SET TabletsMove=NO";
+                        }
                         cmd = new OdbcCommand(SQLString, connection);
                         cmd.ExecuteNonQuery();
                     }

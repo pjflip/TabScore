@@ -1,7 +1,7 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.TableStatus
+@model TabScore.Models.ResultInfo
 
 <style>
     .btn-suit {
@@ -150,9 +150,9 @@
     var suit = '@Model.ResultData.ContractSuit';
     var double = '@Model.ResultData.ContractX';
     var NSEW = '@Model.ResultData.DeclarerNSEW';
-    var urlOKButtonPass = '@Url.Action("OKButtonPass", "EnterContract")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
-    var urlOKButtonSkip = '@Url.Action("OKButtonSkip", "EnterContract")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
-    var urlOKButtonContract = '@Url.Action("OKButtonContract", "EnterContract")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
-    var urlShowBoards = '@Url.Action("Index", "ShowBoards")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+    var urlOKButtonPass = '@Url.Action("OKButtonPass", "EnterContract")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlOKButtonSkip = '@Url.Action("OKButtonSkip", "EnterContract")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlOKButtonContract = '@Url.Action("OKButtonContract", "EnterContract")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlShowBoards = '@Url.Action("Index", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
 </script>
 <script src='@Url.Content("~/Scripts/EnterContract.js")' type="text/javascript"></script>

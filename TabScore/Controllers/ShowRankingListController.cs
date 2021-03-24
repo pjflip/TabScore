@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -8,20 +8,20 @@ namespace TabScore.Controllers
 {
     public class ShowRankingListController : Controller
     {
-        public ActionResult Index(int sectionID, int tableNumber)
+        public ActionResult Index(int tabletDeviceNumber)
         {
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
-            if (tableStatus.RoundData.RoundNumber > 1)  // Show ranking list only from round 2 onwards
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            if (tabletDeviceStatus.RoundNumber > 1)  // Show ranking list only from round 2 onwards
             {
                 if (Settings.ShowRanking == 1)
                 {
-                    RankingList rankingList = new RankingList(tableStatus);
+                    RankingList rankingList = new RankingList(tabletDeviceNumber);
                     
                     // Only show the ranking list if it contains something meaningful
                     if (rankingList != null && rankingList.Count != 0 && rankingList[0].ScoreDecimal != 0 && rankingList[0].ScoreDecimal != 50)
                     {
-                        ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber}";
-                        ViewData["Title"] = $"Ranking List - {tableStatus.SectionTableString}";
+                        ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber}";
+                        ViewData["Title"] = $"Ranking List - {tabletDeviceStatus.Location}";
                         ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                         if (AppData.IsIndividual)
                         {
@@ -38,24 +38,24 @@ namespace TabScore.Controllers
                     }
                 }
             }
-            return RedirectToAction("Index", "ShowMove", new { sectionID, tableNumber, newRoundNumber = tableStatus.RoundData.RoundNumber + 1 });
+            return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber = tabletDeviceStatus.RoundNumber + 1 });
         }
 
-        public ActionResult Final(int sectionID, int tableNumber)
+        public ActionResult Final(int tabletDeviceNumber)
         {
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
-            RankingList rankingList = new RankingList(tableStatus);
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            RankingList rankingList = new RankingList(tabletDeviceNumber);
 
             // Only show the ranking list if it contains something meaningful
             if (rankingList == null || rankingList.Count == 0 || rankingList[0].ScoreDecimal == 0 || rankingList[0].ScoreDecimal == 50)
             {
-                return RedirectToAction("Index", "EndScreen", new { sectionID, tableNumber });
+                return RedirectToAction("Index", "EndScreen", new { tabletDeviceNumber });
             }
             else
             {
                 rankingList.FinalRankingList = true;
-                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber}";
-                ViewData["Title"] = $"Final Ranking List - {tableStatus.SectionTableString}";
+                ViewData["Header"] = $"Table {tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber}";
+                ViewData["Title"] = $"Final Ranking List - {tabletDeviceStatus.Location}";
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 if (AppData.IsIndividual)
                 {
@@ -72,10 +72,12 @@ namespace TabScore.Controllers
             }
         }
 
-        public JsonResult PollRanking(int sectionID, int tableNumber)
+        public JsonResult PollRanking(int tabletDeviceNumber)
         {
             HttpContext.Response.AppendHeader("Connection", "close");
-            return Json(new RankingList(AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber)), JsonRequestBehavior.AllowGet);
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            RankingList rankingList = new RankingList(tabletDeviceNumber);
+            return Json(rankingList, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.RankingList
@@ -24,7 +24,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             <tbody id="tableBody">
                 @foreach (var Result in Model)
                 {
-                    if (Model.PairNS == Result.PairNo)
+                    if (Model.NumberNorth == Result.PairNo)
                     {
                         <tr class="table-success">
                             <td>@Result.Rank</td>
@@ -32,7 +32,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                             <td>@Result.Score%</td>
                         </tr>
                     }
-                    else if (Model.South == Result.PairNo)
+                    else if (Model.NumberSouth == Result.PairNo)
                     {
                         <tr class="table-warning">
                             <td>@Result.Rank</td>
@@ -40,7 +40,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                             <td>@Result.Score%</td>
                         </tr>
                     }
-                    else if (Model.PairEW == Result.PairNo)
+                    else if (Model.NumberEast == Result.PairNo)
                     {
                         <tr class="table-danger">
                             <td>@Result.Rank</td>
@@ -48,7 +48,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                             <td>@Result.Score%</td>
                         </tr>
                     }
-                    else if (Model.West == Result.PairNo)
+                    else if (Model.NumberWest == Result.PairNo)
                     {
                         <tr class="table-info">
                             <td>@Result.Rank</td>
@@ -71,13 +71,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 </div>
 
 <script>
-    var urlPollRanking = '@Url.Action("PollRanking", "ShowRankingList")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
-    var urlEndScreen = '@Url.Action("Index", "EndScreen")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
-    var urlShowMove = '@Url.Action("Index", "ShowMove")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&newRoundNumber=' + (@Model.RoundNumber + 1).toString();
+    var urlPollRanking = '@Url.Action("PollRanking", "ShowRankingList")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlEndScreen = '@Url.Action("Index", "EndScreen")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlShowMove = '@Url.Action("Index", "ShowMove")?tabletDeviceNumber=@Model.TabletDeviceNumber&newRoundNumber=' + (@Model.RoundNumber + 1).toString();
     var finalRankingList = @Model.FinalRankingList.ToString().ToLower();
-    var pairNS = @Model.PairNS;
-    var pairEW = @Model.PairEW;
-    var south = @Model.South;
-    var west = @Model.West;
+    var pairNS = @Model.NumberNorth;
+    var pairEW = @Model.NumberEast;
+    var south = @Model.NumberSouth;
+    var west = @Model.NumberWest;
 </script>
 <script src='@Url.Content("~/Scripts/IndividualRankingList.js")' type="text/javascript"></script>

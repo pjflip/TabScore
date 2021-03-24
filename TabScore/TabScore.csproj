@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TabScore</RootNamespace>
     <AssemblyName>TabScore</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -27,6 +27,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -69,13 +70,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -94,9 +95,7 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -111,6 +110,7 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
@@ -123,6 +123,7 @@
     <Compile Include="Controllers\EnterContractController.cs" />
     <Compile Include="Controllers\EnterLeadController.cs" />
     <Compile Include="Controllers\EnterPlayerNumberController.cs" />
+    <Compile Include="Controllers\EnterDirectionController.cs" />
     <Compile Include="Controllers\ErrorScreenController.cs" />
     <Compile Include="Controllers\ShowHandRecordController.cs" />
     <Compile Include="Controllers\ShowPlayerNumbersController.cs" />
@@ -139,12 +140,18 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppData.cs" />
+    <Compile Include="Models\PlayerEntryList.cs" />
+    <Compile Include="Models\PlayerEntry.cs" />
     <Compile Include="Models\EnterPlayerNumber.cs" />
     <Compile Include="Models\HandRecords.cs" />
     <Compile Include="Models\MovesList.cs" />
     <Compile Include="Models\ResultsList.cs" />
+    <Compile Include="Models\ResultInfo.cs" />
     <Compile Include="Models\RoundsList.cs" />
-    <Compile Include="Models\EnterTableNumber.cs" />
+    <Compile Include="Models\EnterTableNumberDirection.cs" />
+    <Compile Include="Models\RoundInfo.cs" />
+    <Compile Include="Models\SitoutRoundInfo.cs" />
+    <Compile Include="Models\TabletDeviceStatus.cs" />
     <Compile Include="Models\TableStatus.cs" />
     <Compile Include="Models\Utilities.cs" />
     <Compile Include="Models\ODBCRetryHelper.cs" />
@@ -249,27 +256,19 @@
     <Content Include="Views\EnterContract\Index.cshtml" />
     <Content Include="Views\EnterLead\Index.cshtml" />
     <Content Include="Views\EnterTricksTaken\TotalTricks.cshtml" />
-    <Content Include="Views\ShowBoards\Index.cshtml" />
+    <Content Include="Views\ShowBoards\Scoring.cshtml" />
     <Content Include="Views\ShowMove\Pair.cshtml" />
     <Content Include="Views\ShowRoundInfo\Pair.cshtml" />
     <Content Include="Views\StartScreen\Index.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\EnterTableNumber\Index.cshtml" />
     <Content Include="Views\EnterSection\Index.cshtml" />
-    <Content Include="Views\ShowRoundInfo\NSMissing.cshtml" />
-    <Content Include="Views\ShowRoundInfo\EWMissing.cshtml" />
     <Content Include="Views\ShowHandRecord\Index.cshtml" />
-    <Content Include="Views\ShowPlayerNumbers\EWMissing.cshtml" />
     <Content Include="Views\ShowPlayerNumbers\Pair.cshtml" />
-    <Content Include="Views\ShowPlayerNumbers\NSMissing.cshtml" />
     <Content Include="Views\EnterPlayerNumber\Index.cshtml" />
     <Content Include="Views\EnterTricksTaken\TricksPlusMinus.cshtml" />
     <Content Include="Views\ErrorScreen\Index.cshtml" />
     <Content Include="Views\ShowPlayerNumbers\Individual.cshtml" />
-    <Content Include="Views\ShowPlayerNumbers\EWMissingIndividual.cshtml" />
-    <Content Include="Views\ShowPlayerNumbers\NSMissingIndividual.cshtml" />
-    <Content Include="Views\ShowRoundInfo\EWMissingIndividual.cshtml" />
-    <Content Include="Views\ShowRoundInfo\NSMissingIndividual.cshtml" />
     <Content Include="Views\ShowRoundInfo\Individual.cshtml" />
     <Content Include="Views\ShowMove\Individual.cshtml" />
     <Content Include="Views\ShowTraveller\Individual.cshtml" />
@@ -278,6 +277,9 @@
     <Content Include="Views\ShowRankingList\OneWinner.cshtml" />
     <Content Include="Views\ShowRankingList\TwoWinners.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\EnterDirection\Index.cshtml" />
+    <Content Include="Views\ShowBoards\ViewOnly.cshtml" />
+    <Content Include="Views\ShowRoundInfo\Sitout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

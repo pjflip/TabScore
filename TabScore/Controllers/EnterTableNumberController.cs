@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -8,56 +8,73 @@ namespace TabScore.Controllers
 {
     public class EnterTableNumberController : Controller
     {
-        public ActionResult Index(int sectionID, int tableNumber) 
+        public ActionResult Index(int sectionID, int tableNumber = 0, bool confirm = false) 
         {
             Section section = AppData.SectionsList.Find(x => x.SectionID == sectionID);
             ViewData["Title"] = $"Enter Table Number - Section {section.SectionLetter}";
             ViewData["Header"] = $"Section {section.SectionLetter}";
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            EnterTableNumber tableNumberData = new EnterTableNumber
+            EnterTableNumberDirection tableNumberData = new EnterTableNumberDirection
             {
                 SectionID = sectionID,
-                TableNumber = tableNumber,   // At this stage, TableNumber > 0 means we've already tried to log on and need to confirm
-                NumTables = section.NumTables
+                TableNumber = tableNumber,
+                NumTables = section.NumTables,
+                Confirm = confirm
             };
             return View(tableNumberData);   
         }
 
-        public ActionResult OKButtonClick(int sectionID, int tableNumber, string confirm)
+        public ActionResult OKButtonClick(int sectionID, int tableNumber, bool confirm)
         {
-            if (confirm == "FALSE")
-            {
-                if (Utilities.TableLogonStatus(sectionID, tableNumber) == 1)  // Table is already logged on, so need to confirm
-                {
-                    return RedirectToAction("Index", "EnterTableNumber", new { sectionID, tableNumber });
-                }
-                else
-                {
-                    Utilities.LogonTable(sectionID, tableNumber);
-                }
-            }
+            // Log on table in database
+            Utilities.LogonTable(sectionID, tableNumber);
 
-            // Check if results data exist - set round number accordingly, create round info and table status
-            int lastRoundWithResults = Utilities.GetLastRoundWithResults(sectionID, tableNumber);
-            Round round = new Round(sectionID, tableNumber, lastRoundWithResults);
+            // Check if table status has already been created.  If not, get round info and set table status accordingly
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
             if (tableStatus == null)
             {
+                int lastRoundWithResults = Utilities.GetLastRoundWithResults(sectionID, tableNumber);
+                Round round = new Round(sectionID, tableNumber, lastRoundWithResults);
                 tableStatus = new TableStatus(sectionID, tableNumber, round);
                 AppData.TableStatusList.Add(tableStatus);
             }
-            else
-            {
-                tableStatus.RoundData = round;
-            }
 
-            if (lastRoundWithResults == 1 || Settings.NumberEntryEachRound)
+            if (AppData.SectionsList.Find(x => x.SectionID == sectionID).TabletDevicesPerTable == 1)
             {
-                return RedirectToAction("Index", "ShowPlayerNumbers", new { sectionID, tableNumber });
+                // One tablet device per table, so direction is North
+                TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber && x.Direction == "North");
+
+                // Check if tablet device is already registered for this location, and if so confirm
+                if (tabletDeviceStatus != null && !confirm)
+                {
+                    return RedirectToAction("Index", "EnterTableNumber", new { sectionID, tableNumber, confirm = true });
+                }
+                else if (tabletDeviceStatus == null)  
+                {
+                    // Not on list, so need to add it
+                    tabletDeviceStatus = new TabletDeviceStatus(sectionID, tableNumber, "North", 0, tableStatus.RoundData.RoundNumber);
+                    AppData.TabletDeviceStatusList.Add(tabletDeviceStatus);
+                }
+                
+                // tabletDeviceNumber is the key for identifying this particular tablet device and is used throughout the rest of the application
+                int tabletDeviceNumber = AppData.TabletDeviceStatusList.LastIndexOf(tabletDeviceStatus);
+
+                if (tableStatus.ReadyForNextRoundNorth)
+                {
+                    return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNummber = tableStatus.RoundData.RoundNumber + 1 });
+                }
+                else if (tableStatus.RoundData.RoundNumber == 1 || Settings.NumberEntryEachRound)
+                {
+                    return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber });
+                }
+                else
+                {
+                    return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
+                } 
             }
-            else
+            else   // TabletDevicesPerTable > 1
             {
-                return RedirectToAction("Index", "ShowRoundInfo", new { sectionID, tableNumber });
+                return RedirectToAction("Index", "EnterDirection", new { sectionID, tableNumber });
             }
         }
     }

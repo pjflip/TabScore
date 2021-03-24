@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -10,16 +10,17 @@ namespace TabScore.Models
     {
         public int TableNumber { get; set; }
         public int RoundNumber { get; private set; }
-        public int PairNS { get; set; }   // Doubles as North player number for individuals
-        public int PairEW { get; set; }   // Doubles as East player number for individuals
-        public int LowBoard { get; set; }
-        public int HighBoard { get; set; }
-        public int South { get; set; }
-        public int West { get; set; }
+        public int NumberNorth { get; set; }   // Applies to NS pair in pairs and teams
+        public int NumberEast { get; set; }   // Applies to EW pair in pairs and teams
+        public int NumberSouth { get; set; }
+        public int NumberWest { get; set; }
         public string NameNorth { get; private set; }
         public string NameSouth { get; private set; }
         public string NameEast { get; private set; }
         public string NameWest { get; private set; }
+        public bool BlankName { get; private set; }
+        public int LowBoard { get; set; }
+        public int HighBoard { get; set; }
 
         // Constructor used for creating lists
         public Round() { }
@@ -31,7 +32,7 @@ namespace TabScore.Models
 
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
-                PairNS = 0;
+                NumberNorth = 0;
                 connection.Open();
                 CheckTabScorePairNos(connection);
                 if (AppData.IsIndividual)
@@ -46,10 +47,10 @@ namespace TabScore.Models
                             reader = cmd.ExecuteReader();
                             if (reader.Read())
                             {
-                                PairNS = reader.GetInt32(0);
-                                PairEW = reader.GetInt32(1);
-                                South = reader.GetInt32(2);
-                                West = reader.GetInt32(3);
+                                NumberNorth = reader.GetInt32(0);
+                                NumberEast = reader.GetInt32(1);
+                                NumberSouth = reader.GetInt32(2);
+                                NumberWest = reader.GetInt32(3);
                                 LowBoard = reader.GetInt32(4);
                                 HighBoard = reader.GetInt32(5);
                             }
@@ -60,10 +61,10 @@ namespace TabScore.Models
                         reader.Close();
                         cmd.Dispose();
                     }
-                    NameNorth = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, PairNS);
-                    NameSouth = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, South);
-                    NameEast = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, PairEW);
-                    NameWest = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, West);
+                    NameNorth = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, NumberNorth);
+                    NameSouth = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, NumberSouth);
+                    NameEast = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, NumberEast);
+                    NameWest = GetNameFromPlayerNumbersTableIndividual(connection, sectionID, roundNumber, NumberWest);
                 }
                 else  // Not individual
                 {
@@ -77,8 +78,8 @@ namespace TabScore.Models
                             reader = cmd.ExecuteReader();
                             if (reader.Read())
                             {
-                                PairNS = reader.GetInt32(0);
-                                PairEW = reader.GetInt32(1);
+                                NumberNorth = reader.GetInt32(0);
+                                NumberEast = reader.GetInt32(1);
                                 LowBoard = reader.GetInt32(2);
                                 HighBoard = reader.GetInt32(3);
                             }
@@ -89,12 +90,13 @@ namespace TabScore.Models
                         reader.Close();
                         cmd.Dispose();
                     }
-                    NameNorth = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, PairNS, "N");
-                    NameSouth = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, PairNS, "S");
-                    NameEast = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, PairEW, "E");
-                    NameWest = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, PairEW, "W");
+                    NameNorth = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, NumberNorth, "N");
+                    NameSouth = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, NumberNorth, "S");
+                    NameEast = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, NumberEast, "E");
+                    NameWest = GetNameFromPlayerNumbersTable(connection, sectionID, roundNumber, NumberEast, "W");
                 }
             }
+            BlankName = NameNorth == "" || NameEast == "" || NameSouth == "" || NameWest == "";
             return;
         }
 
@@ -444,19 +446,19 @@ namespace TabScore.Models
                 {
                     case "N":
                         NameNorth = playerName;
-                        pairNumber = PairNS;
+                        pairNumber = NumberNorth;
                         break;
                     case "S":
                         NameSouth = playerName;
-                        pairNumber = South;
+                        pairNumber = NumberSouth;
                         break;
                     case "E":
                         NameEast = playerName;
-                        pairNumber = PairEW;
+                        pairNumber = NumberEast;
                         break;
                     case "W":
                         NameWest = playerName;
-                        pairNumber = West;
+                        pairNumber = NumberWest;
                         break;
                 }
             }
@@ -466,19 +468,19 @@ namespace TabScore.Models
                 {
                     case "N":
                         NameNorth = playerName;
-                        pairNumber = PairNS;
+                        pairNumber = NumberNorth;
                         break;
                     case "S":
                         NameSouth = playerName;
-                        pairNumber = PairNS;
+                        pairNumber = NumberNorth;
                         break;
                     case "E":
                         NameEast = playerName;
-                        pairNumber = PairEW;
+                        pairNumber = NumberEast;
                         break;
                     case "W":
                         NameWest = playerName;
-                        pairNumber = PairEW;
+                        pairNumber = NumberEast;
                         break;
                 }
             }

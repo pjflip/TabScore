@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -8,17 +8,17 @@ namespace TabScore.Controllers
 {
     public class ShowTravellerController : Controller
     {
-        public ActionResult Index(int sectionID, int tableNumber, int boardNumber)
+        public ActionResult Index(int tabletDeviceNumber, int boardNumber, bool fromView = false)
         {
             if (!Settings.ShowResults)
             {
-                return RedirectToAction("Index", "ShowBoards");
+                return RedirectToAction("Index", "ShowBoards", new { tabletDeviceNumber });
             }
 
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
-            if (tableStatus.ResultData == null)
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+            if (fromView)
             {
-                // No result data for this board, so must have come from ShowBoards screen View button
                 tableStatus.ResultData = new Result() { BoardNumber = boardNumber };
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             }
@@ -27,16 +27,18 @@ namespace TabScore.Controllers
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             }
 
-            Traveller traveller = new Traveller(tableStatus);
-            ViewData["Title"] = $"Traveller - {tableStatus.SectionTableString}";
+            Traveller traveller = new Traveller(tableStatus, tabletDeviceNumber);
+            traveller.FromView = fromView;
+
+            ViewData["Title"] = $"Traveller - {tabletDeviceStatus.Location}";
             if (AppData.IsIndividual)
             {
-                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.PairNS}+{tableStatus.RoundData.South}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.PairEW}+{tableStatus.RoundData.West}")}";
+                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
                 return View("Individual", traveller);
             }
             else
             {
-                ViewData["Header"] = $"Table {tableStatus.SectionTableString} - Round {tableStatus.RoundData.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"NS {tableStatus.RoundData.PairNS}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"EW {tableStatus.RoundData.PairEW}")}";
+                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"NS {tableStatus.RoundData.NumberNorth}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"EW {tableStatus.RoundData.NumberEast}")}";
                 return View("Pairs", traveller);
             }
         }

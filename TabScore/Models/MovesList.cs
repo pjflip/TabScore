@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Collections.Generic;
@@ -7,54 +7,75 @@ namespace TabScore.Models
 {
     public class MovesList : List<Move>
     {
-        public int SectionID { get; private set; }
-        public int TableNumber { get; private set; }
+        public int TabletDeviceNumber { get; set; }
+        public string Direction { get; private set; }
         public int NewRoundNumber { get; private set; }
         public int LowBoard { get; private set; }
         public int HighBoard { get; private set; }
         public int BoardsNewTable { get; private set; }
+        public int TabletDevicesPerTable { get; private set; }
+        public int TableNotReadyNumber { get; private set; }
 
-        public MovesList(TableStatus tableStatus, int newRoundNumber)
+        public MovesList(int tabletDeviceNumber, int newRoundNumber, int tableNotReadyNumber)
         {
-            SectionID = tableStatus.SectionID;
-            TableNumber = tableStatus.TableNumber;
+            TabletDeviceNumber = tabletDeviceNumber;
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            Direction = tabletDeviceStatus.Direction;
             NewRoundNumber = newRoundNumber;
-            LowBoard = tableStatus.RoundData.LowBoard;
-            HighBoard = tableStatus.RoundData.HighBoard;
+            TableNotReadyNumber = tableNotReadyNumber;
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
 
-            RoundsList roundsList = new RoundsList(SectionID, newRoundNumber);
-            if (AppData.IsIndividual)
+            RoundsList roundsList = new RoundsList(tabletDeviceStatus.SectionID, newRoundNumber);
+            int missingPair = (AppData.SectionsList.Find(x => x.SectionID == tabletDeviceStatus.SectionID)).MissingPair;
+            if (AppData.SectionsList.Find(x => x.SectionID == AppData.TabletDeviceStatusList[tabletDeviceNumber].SectionID).TabletDevicesPerTable == 1)
             {
-                if (tableStatus.RoundData.PairNS != 0)
+                if (AppData.IsIndividual)
                 {
-                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.PairNS, "North"));
+                    if (tableStatus.RoundData.NumberNorth != 0)
+                    {
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, "North"));
+                    }
+                    if (tableStatus.RoundData.NumberSouth != 0)
+                    {
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberSouth, "South"));
+                    }
+                    if (tableStatus.RoundData.NumberEast != 0)
+                    {
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberEast, "East"));
+                    }
+                    if (tableStatus.RoundData.NumberWest != 0)
+                    {
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberWest, "West"));
+                    }
                 }
-                if (tableStatus.RoundData.South != 0)
+                else  // Not individual
                 {
-                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.South, "South"));
-                }
-                if (tableStatus.RoundData.PairEW != 0)
-                {
-                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.PairEW, "East"));
-                }
-                if (tableStatus.RoundData.West != 0)
-                {
-                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.West, "West"));
+                    if (tableStatus.RoundData.NumberNorth != 0 && tableStatus.RoundData.NumberNorth != missingPair)
+                    {
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, "North"));
+                    }
+                    if (tableStatus.RoundData.NumberEast != 0 && tableStatus.RoundData.NumberEast != missingPair)
+                    {
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberEast, "East"));
+                    }
                 }
             }
-            else
+            else  // TabletDevicesPerTable > 1, so only need move for single player/pair
             {
-                int missingPair = (AppData.SectionsList.Find(x => x.SectionID == SectionID)).MissingPair;
-                if (tableStatus.RoundData.PairNS != 0 && tableStatus.RoundData.PairNS != missingPair)
+                Add(roundsList.GetMove(tabletDeviceStatus.TableNumber, tabletDeviceStatus.PairNumber, Direction));
+            }
+
+            BoardsNewTable = -999;
+            if (tableStatus != null)
+            {
+                // Show boards move to North unless North is missing, in which case show to East
+                LowBoard = tableStatus.RoundData.LowBoard;
+                HighBoard = tableStatus.RoundData.HighBoard;
+                if (Direction == "North" || ((tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == missingPair) && Direction == "East"))
                 {
-                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.PairNS, "NS"));
-                }
-               if (tableStatus.RoundData.PairEW != 0 && tableStatus.RoundData.PairEW != missingPair)
-                {
-                    Add(roundsList.GetMove(TableNumber, tableStatus.RoundData.PairEW, "EW"));
+                    BoardsNewTable = roundsList.GetBoardsNewTableNumber(tableStatus.TableNumber, tableStatus.RoundData.LowBoard);
                 }
             }
-            BoardsNewTable = roundsList.GetBoardsNewTableNumber(TableNumber, tableStatus.RoundData.LowBoard);
         }
     }
 }

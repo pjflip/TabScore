@@ -13,7 +13,7 @@ namespace TabScoreStarter
 
         private void OptionsForm_Load(object sender, EventArgs e)
         {
-            Options opt = new Options(new Database(Tag.ToString()));
+            Options opt = new Options(Database.ConnectionString(Tag.ToString()));
 
             ShowTravellerCheckbox.Checked = opt.ShowTraveller;
             ShowPercentageCheckbox.Checked = opt.ShowPercentage;
@@ -24,6 +24,7 @@ namespace TabScoreStarter
             NameSourceCombobox.SelectedIndex = opt.NameSource;
             NumberEntryEachRoundCheckbox.Checked = opt.NumberEntryEachRound;
             EnterResultsMethodCombobox.SelectedIndex = opt.EnterResultsMethod;
+            TabletMovesCheckbox.Checked = opt.TabletsMove;
 
             ShowPercentageCheckbox.Enabled = ShowTravellerCheckbox.Checked;
             ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
@@ -37,7 +38,7 @@ namespace TabScoreStarter
 
         private void OKButton_Click(object sender, EventArgs e)
         {
-            Options opt = new Options(new Database(Tag.ToString()))
+            Options opt = new Options(Database.ConnectionString(Tag.ToString()))
             {
                 ShowTraveller = ShowTravellerCheckbox.Checked,
                 ShowPercentage = ShowPercentageCheckbox.Checked,
@@ -47,9 +48,12 @@ namespace TabScoreStarter
                 ValidateLeadCard = ValidateLeadCardCheckbox.Checked,
                 NameSource = NameSourceCombobox.SelectedIndex,
                 NumberEntryEachRound = NumberEntryEachRoundCheckbox.Checked,
-                EnterResultsMethod = EnterResultsMethodCombobox.SelectedIndex
+                EnterResultsMethod = EnterResultsMethodCombobox.SelectedIndex,
+                TabletsMove = TabletMovesCheckbox.Checked
             };
             opt.UpdateDB();
+            Properties.Settings.Default.TabletsMove = opt.TabletsMove;
+            Properties.Settings.Default.Save();
             Close();
         }
 

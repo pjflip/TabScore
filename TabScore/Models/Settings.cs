@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -18,6 +18,7 @@ namespace TabScore.Models
         public static bool ShowHandRecord { get; private set; }
         public static bool NumberEntryEachRound { get; private set; }
         public static int NameSource { get; private set; }
+        public static bool TabletDevicesMove { get; private set; }
 
         private static DateTime UpdateTime;
 
@@ -29,7 +30,7 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
-                string SQLString = "SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, EnterResultsMethod, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource FROM Settings";
+                string SQLString = "SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, EnterResultsMethod, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, TabletsMove FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
                 try
@@ -48,6 +49,7 @@ namespace TabScore.Models
                             ShowHandRecord = reader.GetBoolean(6);
                             NumberEntryEachRound = reader.GetBoolean(7);
                             NameSource = reader.GetInt32(8);
+                            TabletDevicesMove = reader.GetBoolean(9);
                         }
                     });
                 }
@@ -62,6 +64,7 @@ namespace TabScore.Models
                     ShowHandRecord = true;
                     NumberEntryEachRound = true;
                     NameSource = 0;
+                    TabletDevicesMove = false;
                 }
                 finally
                 {

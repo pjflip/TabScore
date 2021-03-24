@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data.Odbc;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -35,19 +36,20 @@ namespace TabScoreStarter
                 }
             }
 
-            Database db = new Database(pathToDB);
-            if (pathToDB == "" || !db.Initialize())
+            OdbcConnectionStringBuilder connectionString = null;
+            if (pathToDB != "") connectionString = Database.ConnectionString(pathToDB);
+            if (!Database.Initialize(connectionString))
             {
                 AddDatabaseFileButton.Visible = true;   // No valid database in arguments
             }
             else
             {
-                SetDBFilePath(pathToDB);
+                SetDBFile(pathToDB);
                 SessionStatusLabel.Text = "Session Running";
                 SessionStatusLabel.ForeColor = Color.Green;
                 OptionsButton.Visible = true;
 
-                HandsList handsList = new HandsList(db);
+                HandsList handsList = new HandsList(connectionString);
                 if (handsList.Count == 0)
                 {
                     AddHandRecordFileButton.Visible = true;    // No hand records in database, so let user add them
@@ -68,16 +70,16 @@ namespace TabScoreStarter
             if (DatabaseFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string pathToDB = DatabaseFileDialog.FileName;
-                Database db = new Database(pathToDB);
-                if (db.Initialize())
+                OdbcConnectionStringBuilder connectionString = Database.ConnectionString(pathToDB);
+                if (Database.Initialize(connectionString))
                 {
                     AddDatabaseFileButton.Enabled = false;
-                    SetDBFilePath(pathToDB);
+                    SetDBFile(pathToDB);
                     SessionStatusLabel.Text = "Session Running";
                     SessionStatusLabel.ForeColor = Color.Green;
                     OptionsButton.Visible = true;
 
-                    HandsList handsList = new HandsList(db);
+                    HandsList handsList = new HandsList(connectionString);
                     if (handsList.Count == 0)
                     {
                         AddHandRecordFileButton.Visible = true;    // No hand records in database, so let user add them
@@ -106,7 +108,7 @@ namespace TabScoreStarter
                 }
                 else
                 {
-                    handsList.WriteToDB(new Database(PathToDBLabel.Text));
+                    handsList.WriteToDB(Database.ConnectionString(PathToDBLabel.Text));
                     AddHandRecordFileButton.Enabled = false;
                     AnalysingLabel.Text = "Analysing...";
                     AnalysingLabel.Visible = true;
@@ -118,17 +120,17 @@ namespace TabScoreStarter
 
         private void TabScoreForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ClearDBFilePath();
+            ClearDBFile();
         }
 
-        public void SetDBFilePath(string pathToDB)
+        public void SetDBFile(string pathToDB)
         {
             PathToDBLabel.Text = pathToDB;
             string pathToTabScoreDB = Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
-            System.IO.File.WriteAllText(pathToTabScoreDB, pathToDB);
+            System.IO.File.WriteAllText(pathToTabScoreDB, Database.ConnectionString(pathToDB).ToString());
         }
 
-        public void ClearDBFilePath()
+        public void ClearDBFile()
         {
             PathToDBLabel.Text = "";
             string pathToTabScoreDB = Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
@@ -138,9 +140,9 @@ namespace TabScoreStarter
         private void AnalysisCalculation_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            Database db = new Database(PathToDBLabel.Text);
-            HandsList handsList = new HandsList(db);
-            HandEvaluationsList handEvaluationsList = new HandEvaluationsList(db);
+            OdbcConnectionStringBuilder connectionString = Database.ConnectionString(PathToDBLabel.Text);
+            HandsList handsList = new HandsList(connectionString);
+            HandEvaluationsList handEvaluationsList = new HandEvaluationsList(connectionString);
             int counter = 0;
             foreach (Hand hand in handsList)
             {
@@ -165,9 +167,11 @@ namespace TabScoreStarter
 
         private void OptionsButton_Click(object sender, EventArgs e)
         {
+            Point mainFormLocation = Location;
             OptionsForm frmOptions = new OptionsForm
             {
-                Tag = PathToDBLabel.Text
+                Tag = PathToDBLabel.Text,
+                Location = new Point(mainFormLocation.X + 30, mainFormLocation.Y + 30)
             };
             frmOptions.ShowDialog();
         }

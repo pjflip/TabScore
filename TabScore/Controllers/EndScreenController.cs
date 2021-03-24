@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -8,27 +8,28 @@ namespace TabScore.Controllers
 {
     public class EndScreenController : Controller
     {
-        public ActionResult Index(int sectionID, int tableNumber)
+        public ActionResult Index(int tabletDeviceNumber)
         {
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
-            ViewData["Header"] = $"Table {tableStatus.SectionTableString}";
-            ViewData["Title"] = $"Show Move - {tableStatus.SectionTableString}";
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            ViewData["Header"] = $"{tabletDeviceStatus.Location}";
+            ViewData["Title"] = $"Show Move - {tabletDeviceStatus.Location}";
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-            return View(tableStatus);
+            ViewData["TabletDeviceNumber"] = tabletDeviceNumber;
+            return View();
         }
 
-        public ActionResult OKButtonClick(int sectionID, int tableNumber)
+        public ActionResult OKButtonClick(int tabletDeviceNumber)
         {
             // Check if new round has been added; can't apply to individuals
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
-            if (tableStatus.RoundData.RoundNumber == Utilities.NumberOfRoundsInEvent(sectionID))  
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            if (tabletDeviceStatus.RoundNumber == Utilities.NumberOfRoundsInEvent(tabletDeviceStatus.SectionID))  
             {
                 // Final round, so no new rounds added
-                return RedirectToAction("Index", "EndScreen", new { sectionID, tableNumber });
+                return RedirectToAction("Index", "EndScreen", new { tabletDeviceNumber });
             }
             else
             {
-                return RedirectToAction("Index", "ShowMove", new { sectionID, tableNumber, newRoundNumber = tableStatus.RoundData.RoundNumber + 1 });
+                return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber = tabletDeviceStatus.RoundNumber + 1 });
             }
         }
     }
