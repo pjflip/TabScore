@@ -6,11 +6,10 @@ It requires a server PC and some sort of table-top device with a browser on
 each table (tablet, phone, etc). It uses a Bridgemate .bws standard Access 
 database, so is a direct replacement for BridgeTab (or Bridgemate, BridgePad 
 etc).  It should work with any bridge scoring program that can create a .bws 
-database, but has been built with EBUScore and Jeff Smith's scoring programs 
-in mind.
+database, but has been built with EBUScore in mind.
 
 TabScore is designed for use on a PC with Windows 10 (which includes Internet
-Information Services (IIS) 10), .NET Framework 4.6.1 and ASP.NET 4.7.  It has
+Information Services (IIS) 10), .NET Framework 4.7.2 and ASP.NET 4.7.  It has
 been installed and run successfully (but not fully tested) on Windows 7.
 
 IMPORTANT: Please ensure you have completed all the installation steps in the 
@@ -20,8 +19,13 @@ To upgrade TabScore from a previous installation, please read the section in
 the User Guide on Upgrading TabScore.
 
 TabScore is currently limited to 4 sections (A, B, C and D in that order) and 
-30 tables per section.  It can be used for pairs, teams, or Swiss events; it 
-can also be used for individual events with EBUScore.
+30 tables per section.  It can be used for pairs, teams, Swiss events, and  
+individual events (provided the scoring program supports them).
+
+TabScore can operate in 2 modes: Traditional Mode with one table-top device 
+per table (like Bridgemate); or Personal Mode where the table-top devices
+move with players.  Personal mode allows players to use their own tablets or 
+phones, avoiding the need for bridge clubs to invest in hardware.
 
 TabScore implements a range of display options which can be set by the
 scoring program, or from TabScoreStarter.  See the User Guide for more

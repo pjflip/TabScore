@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.HandRecord
@@ -186,7 +186,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowTraveller")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&boardNumber=@Model.BoardNumber';
+            location.href = '@Url.Action("Index", "ShowTraveller")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber&fromView=@Model.FromView.ToString().ToLower()';
         }
     });
 </script>

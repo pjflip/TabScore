@@ -1,7 +1,47 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.MovesList
+
+<div id="newTableNotReadyModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <p class="modal-title text-center">
+                    <h3>Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>Table @Model.TableNotReadyNumber.ToString() is not yet ready.  Please wait</p>
+            </div>
+            <div class="modal-footer" style="justify-content:space-between">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    OK <span class="fa fa-times-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="roundNotReadyModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <p class="modal-title text-center">
+                    <h3>Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>Please wait for the previous round to finish before trying to move to the next round</p>
+            </div>
+            <div class="modal-footer" style="justify-content:space-between">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    OK <span class="fa fa-times-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row mt-5">
     <div class="col-12 text-center">
@@ -15,7 +55,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 {
     <div class="row mt-3">
         <div class="col-12 text-center">
-            @if (move.Direction == "NS")
+            @if (move.Direction == "North")
             {
                 <h3 style="color:blue">
                     North/South: @move.PairNumber
@@ -57,30 +97,70 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
 }
 
-<div class="row mt-4">
-    <div class="col-12 text-center">
-        <h3 style="color:green">
-            Boards: @Model.LowBoard to @Model.HighBoard
-        </h3>
+@if (Model.BoardsNewTable >= 0)
+{
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h3 style="color:green">
+                Boards: @Model.LowBoard to @Model.HighBoard
+            </h3>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-12 text-center">
-        @if (Model.BoardsNewTable == 0)
-        {
-            <h4>
-                Pass to Relay Table
-            </h4>
-        }
-        else
-        {
-            <h4>
-                Pass to Table @Model.BoardsNewTable
-            </h4>
-        }
+    <div class="row">
+        <div class="col-12 text-center">
+            @if (Model.BoardsNewTable == 0)
+            {
+                <h4>
+                    Pass to Relay Table
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    Pass to Table @Model.BoardsNewTable
+                </h4>
+            }
+        </div>
     </div>
-</div>
+}
+
+@if (Model.TabletDevicesPerTable > 1)
+{
+    <div class="row mt-4">
+        <div class="col-2">
+        </div>
+        <div class="col-8 text-center">
+            @if (Model[0].Stay)
+            {
+                <h5>
+                    Please wait until the Director calls the move and this table is ready to start before pressing OK
+                </h5>
+            }
+            else
+            {
+                <h5>
+                    Please wait until the Director calls the move, and then move to the next table before pressing OK
+                </h5>
+            }
+        </div>
+        <div class="col-2">
+        </div>
+    </div>
+}
+
+@if (Model.TableNotReadyNumber == 0)
+{
+    <script>
+        $("#roundNotReadyModal").modal("show");
+    </script>
+}
+else if (Model.TableNotReadyNumber > 0)
+{
+    <script>
+        $("#newTableNotReadyModal").modal("show");
+    </script>
+}
 
 <script>
     var isSubmitted = false;
@@ -88,7 +168,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "ShowMove")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&newRoundNumber=@Model.NewRoundNumber';
+            location.href = '@Url.Action("OKButtonClick", "ShowMove")?tabletDeviceNumber=@Model.TabletDeviceNumber&newRoundNumber=@Model.NewRoundNumber';
         }
     });
 </script>

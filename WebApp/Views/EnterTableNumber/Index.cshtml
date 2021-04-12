@@ -1,9 +1,9 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.EnterTableNumber
+@model TabScore.Models.EnterTableNumberDirection
 
-<div id="tableLoggedOnModal" class="modal" data-backdrop="static">
+<div id="tableRegisteredModal" class="modal" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
@@ -12,11 +12,11 @@
                 </p>
             </div>
             <div class="modal-body">
-                <p>Table @Model.TableNumber is already logged on.  Do not press Log On unless you intend to log back on to your current table</p>
+                <p>Table @Model.TableNumber is already registered.  Do not press Register unless you intend to log back on to your current table</p>
             </div>
             <div class="modal-footer" style="justify-content:space-between">
                 <button class="btn btn-lg btn-danger" ontouchstart="modalLogOn()">
-                    <span class="fa fa-play-circle"></span> Log On
+                    <span class="fa fa-play-circle"></span> Register
                 </button>
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
                     Cancel <span class="fa fa-times-circle"></span>
@@ -114,10 +114,10 @@
     </div>
 }
 
-@if (Model.TableNumber > 0)
+@if (Model.Confirm)
 {
     <script>
-        $("#tableLoggedOnModal").modal("show");
+        $("#tableRegisteredModal").modal("show");
     </script>
 }
 
@@ -137,14 +137,14 @@
     $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?sectionID=@Model.SectionID&tableNumber=' + tableNumber + '&confirm=FALSE';
+            location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?sectionID=@Model.SectionID&tableNumber=' + tableNumber + '&confirm=false';
         }
     });
 
     function modalLogOn() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&confirm=TRUE';
+            location.href = '@Url.Action("OKButtonClick", "EnterTableNumber")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&confirm=true';
         }
     }
 </script>

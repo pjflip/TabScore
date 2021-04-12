@@ -46,7 +46,8 @@
             this.EnterResultsMethodGroup = new System.Windows.Forms.GroupBox();
             this.EnterResultsMethodCombobox = new System.Windows.Forms.ComboBox();
             this.TabletMovesGroupBox = new System.Windows.Forms.GroupBox();
-            this.TabletMovesCheckbox = new System.Windows.Forms.CheckBox();
+            this.TabletModePersonalRadioButton = new System.Windows.Forms.RadioButton();
+            this.TabletModeTraditionalRadioButton = new System.Windows.Forms.RadioButton();
             this.TravellerGroup.SuspendLayout();
             this.PlayersGroup.SuspendLayout();
             this.RankingListGroup.SuspendLayout();
@@ -209,7 +210,7 @@
             // CanxButton
             // 
             this.CanxButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CanxButton.Location = new System.Drawing.Point(284, 253);
+            this.CanxButton.Location = new System.Drawing.Point(133, 258);
             this.CanxButton.Name = "CanxButton";
             this.CanxButton.Size = new System.Drawing.Size(75, 23);
             this.CanxButton.TabIndex = 10;
@@ -221,7 +222,7 @@
             // OKButton
             // 
             this.OKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OKButton.Location = new System.Drawing.Point(408, 253);
+            this.OKButton.Location = new System.Drawing.Point(12, 258);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(75, 23);
             this.OKButton.TabIndex = 11;
@@ -256,26 +257,39 @@
             // 
             // TabletMovesGroupBox
             // 
-            this.TabletMovesGroupBox.Controls.Add(this.TabletMovesCheckbox);
+            this.TabletMovesGroupBox.Controls.Add(this.TabletModePersonalRadioButton);
+            this.TabletMovesGroupBox.Controls.Add(this.TabletModeTraditionalRadioButton);
             this.TabletMovesGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TabletMovesGroupBox.Location = new System.Drawing.Point(238, 179);
             this.TabletMovesGroupBox.Name = "TabletMovesGroupBox";
-            this.TabletMovesGroupBox.Size = new System.Drawing.Size(251, 56);
+            this.TabletMovesGroupBox.Size = new System.Drawing.Size(251, 73);
             this.TabletMovesGroupBox.TabIndex = 8;
             this.TabletMovesGroupBox.TabStop = false;
-            this.TabletMovesGroupBox.Text = "Tablets Move";
+            this.TabletMovesGroupBox.Text = "Table-top Device Mode";
             // 
-            // TabletMovesCheckbox
+            // TabletModePersonalRadioButton
             // 
-            this.TabletMovesCheckbox.AutoSize = true;
-            this.TabletMovesCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TabletMovesCheckbox.Location = new System.Drawing.Point(6, 21);
-            this.TabletMovesCheckbox.Name = "TabletMovesCheckbox";
-            this.TabletMovesCheckbox.Size = new System.Drawing.Size(169, 19);
-            this.TabletMovesCheckbox.TabIndex = 6;
-            this.TabletMovesCheckbox.TabStop = false;
-            this.TabletMovesCheckbox.Text = "Tablets Move With Players";
-            this.TabletMovesCheckbox.UseVisualStyleBackColor = true;
+            this.TabletModePersonalRadioButton.AutoSize = true;
+            this.TabletModePersonalRadioButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TabletModePersonalRadioButton.Location = new System.Drawing.Point(8, 45);
+            this.TabletModePersonalRadioButton.Name = "TabletModePersonalRadioButton";
+            this.TabletModePersonalRadioButton.Size = new System.Drawing.Size(220, 19);
+            this.TabletModePersonalRadioButton.TabIndex = 8;
+            this.TabletModePersonalRadioButton.TabStop = true;
+            this.TabletModePersonalRadioButton.Text = "Personal - tablets move with players";
+            this.TabletModePersonalRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // TabletModeTraditionalRadioButton
+            // 
+            this.TabletModeTraditionalRadioButton.AutoSize = true;
+            this.TabletModeTraditionalRadioButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TabletModeTraditionalRadioButton.Location = new System.Drawing.Point(8, 21);
+            this.TabletModeTraditionalRadioButton.Name = "TabletModeTraditionalRadioButton";
+            this.TabletModeTraditionalRadioButton.Size = new System.Drawing.Size(184, 19);
+            this.TabletModeTraditionalRadioButton.TabIndex = 7;
+            this.TabletModeTraditionalRadioButton.TabStop = true;
+            this.TabletModeTraditionalRadioButton.Text = "Traditional - 1 tablet per table";
+            this.TabletModeTraditionalRadioButton.UseVisualStyleBackColor = true;
             // 
             // OptionsForm
             // 
@@ -332,6 +346,7 @@
         private System.Windows.Forms.GroupBox EnterResultsMethodGroup;
         private System.Windows.Forms.ComboBox EnterResultsMethodCombobox;
         private System.Windows.Forms.GroupBox TabletMovesGroupBox;
-        private System.Windows.Forms.CheckBox TabletMovesCheckbox;
+        private System.Windows.Forms.RadioButton TabletModePersonalRadioButton;
+        private System.Windows.Forms.RadioButton TabletModeTraditionalRadioButton;
     }
 }

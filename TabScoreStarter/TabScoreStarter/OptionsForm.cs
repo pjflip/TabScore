@@ -24,7 +24,7 @@ namespace TabScoreStarter
             NameSourceCombobox.SelectedIndex = opt.NameSource;
             NumberEntryEachRoundCheckbox.Checked = opt.NumberEntryEachRound;
             EnterResultsMethodCombobox.SelectedIndex = opt.EnterResultsMethod;
-            TabletMovesCheckbox.Checked = opt.TabletsMove;
+            TabletModePersonalRadioButton.Checked = opt.TabletsMove;
 
             ShowPercentageCheckbox.Enabled = ShowTravellerCheckbox.Checked;
             ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
@@ -49,7 +49,7 @@ namespace TabScoreStarter
                 NameSource = NameSourceCombobox.SelectedIndex,
                 NumberEntryEachRound = NumberEntryEachRoundCheckbox.Checked,
                 EnterResultsMethod = EnterResultsMethodCombobox.SelectedIndex,
-                TabletsMove = TabletMovesCheckbox.Checked
+                TabletsMove = TabletModePersonalRadioButton.Checked
             };
             opt.UpdateDB();
             Properties.Settings.Default.TabletsMove = opt.TabletsMove;

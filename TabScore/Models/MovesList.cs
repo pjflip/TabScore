@@ -24,10 +24,12 @@ namespace TabScore.Models
             NewRoundNumber = newRoundNumber;
             TableNotReadyNumber = tableNotReadyNumber;
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+            Section section = AppData.SectionsList.Find(x => x.SectionID == tabletDeviceStatus.SectionID);
+            TabletDevicesPerTable = section.TabletDevicesPerTable;
 
             RoundsList roundsList = new RoundsList(tabletDeviceStatus.SectionID, newRoundNumber);
-            int missingPair = (AppData.SectionsList.Find(x => x.SectionID == tabletDeviceStatus.SectionID)).MissingPair;
-            if (AppData.SectionsList.Find(x => x.SectionID == AppData.TabletDeviceStatusList[tabletDeviceNumber].SectionID).TabletDevicesPerTable == 1)
+            int missingPair = section.MissingPair;
+            if (TabletDevicesPerTable == 1)
             {
                 if (AppData.IsIndividual)
                 {

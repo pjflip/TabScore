@@ -11,11 +11,16 @@ namespace TabScore.Controllers
         public ActionResult Index(int tabletDeviceNumber, bool showWarning = false)
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-
-            // Player numbers not needed if all names have already been entered and names are not being updated each round, or if this a sitout table
-            if ((!tableStatus.RoundData.BlankName && !Settings.NumberEntryEachRound) || tabletDeviceStatus.TableNumber == 0)
+            if (tabletDeviceStatus.TableNumber == 0)
             {
+                // This a sitout table, so no player number entry
+                return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
+            }
+
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+            if (!tableStatus.RoundData.BlankName && !Settings.NumberEntryEachRound)
+            {
+                // Player numbers not needed if all names have already been entered and names are not being updated each round
                 return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
             }
 

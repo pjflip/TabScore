@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2020 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.Traveller
@@ -89,11 +89,11 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                     {
                         ScoreEW = (-Result.Score).ToString();
                     }
-                    if (Model.PairNS == Result.PairNS)
+                    if (Model.NumberNorth == Result.NumberNorth)
                     {
                         <tr class="table-success">
-                            <td>@Result.PairNS+@Result.South</td>
-                            <td>@Result.PairEW+@Result.West</td>
+                            <td>@Result.NumberNorth+@Result.NumberSouth</td>
+                            <td>@Result.NumberEast+@Result.NumberWest</td>
                             <td>@Html.Raw(Result.DisplayTravellerContract())</td>
                             <td>@Result.DeclarerNSEW</td>
                             <td>@Html.Raw(Result.DisplayLeadCard())</td>
@@ -105,8 +105,8 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                     else
                     {
                         <tr>
-                            <td>@Result.PairNS+@Result.South</td>
-                            <td>@Result.PairEW+@Result.West</td>
+                            <td>@Result.NumberNorth+@Result.NumberSouth</td>
+                            <td>@Result.NumberEast+@Result.NumberWest</td>
                             <td>@Html.Raw(Result.DisplayTravellerContract())</td>
                             <td>@Result.DeclarerNSEW</td>
                             <td>@Html.Raw(Result.DisplayLeadCard())</td>
@@ -127,21 +127,21 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowBoards")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+            location.href = '@Url.Action("Index", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
         }
     });
 
     function handRecordClick() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowHandRecord")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&boardNumber=@Model.BoardNumber';
+            location.href = '@Url.Action("Index", "ShowHandRecord")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber&fromView=@Model.FromView.ToString().ToLower()';
         }
     }
 
     $(document).on('touchstart', '#BackButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ConfirmResult")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber';
+            location.href = '@Url.Action("Index", "ConfirmResult")?tabletDeviceNumber=@Model.TabletDeviceNumber';
         }
     });
 </script>
