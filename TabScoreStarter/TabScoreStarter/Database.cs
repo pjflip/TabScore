@@ -19,19 +19,6 @@ namespace TabScoreStarter
             return cs;
         }
 
-        public static string PathToDB(string connectionString)
-        {
-            OdbcConnectionStringBuilder cs = new OdbcConnectionStringBuilder(connectionString);
-            if (cs.TryGetValue("Dbq", out object builderReturnValue))
-            {
-                return builderReturnValue.ToString();
-            }
-            else
-            {
-                return "";
-            }
-        }
-
         public static bool Initialize(OdbcConnectionStringBuilder connectionString)
         {
             if (connectionString == null) return false;
@@ -54,13 +41,13 @@ namespace TabScoreStarter
                         if (sectionID < 1 || sectionID > 4 || (sectionLetter != "A" && sectionLetter != "B" && sectionLetter != "C" && sectionLetter != "D"))
                         {
                             reader.Close();
-                            MessageBox.Show("Database countains incorrect Sections.  Maximum 4 Sections labelled A, B, C, D", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Database contains incorrect Sections.  Maximum 4 Sections labelled A, B, C, D", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }
                         if (numTables > 30)
                         {
                             reader.Close();
-                            MessageBox.Show("Database countains > 30 Tables in a Section", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Database contains > 30 Tables in a Section", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }
                     }

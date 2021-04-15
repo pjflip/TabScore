@@ -11,35 +11,34 @@
 
     <MediaTemplate EmbedCab="yes"/>
 
+    <UIRef Id="WixUI_Minimal" />
+    <WixVariable Id="WixUILicenseRtf" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\InstallerNotice TabScoreIISSetup.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\TabScore 493x58.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\TabScore 493x312.bmp" />
+
     <!-- Empty Directory, Component and Feature without which MSI doesn't seem to work properly -->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Component Id="EmptyComponent" Guid="{EDBC12F7-D726-4B3A-857B-D74ABCC45CD1}" />
     </Directory>
     <Feature Id="Feature" Title="Feature" Level="1">
       <ComponentRef Id="EmptyComponent" />
-      <ComponentRef Id="SetFirewallPortComponent"/>
+      <ComponentRef Id="SetFirewallPortComponent" />
     </Feature>
 
-    <!-- IIS-DefaultDocument -->
     <CustomAction Id='AddIISDefaultDocument' Property='IISDefaultDocument' Value='"[system64folder]dism.exe" /norestart /quiet /online /enable-feature /featurename:IIS-DefaultDocument /all' Execute='immediate'/>
     <CustomAction Id="IISDefaultDocument" BinaryKey="WixCA" DllEntry="CAQuietExec64" Execute="deferred" Return="ignore" Impersonate="no" />
-    <!-- IIS-DefaultDocument -->
     <CustomAction Id='AddIISManagementConsole' Property='IISManagementConsole' Value='"[system64folder]dism.exe" /norestart /quiet /online /enable-feature /featurename:IIS-ManagementConsole /all' Execute='immediate'/>
     <CustomAction Id="IISManagementConsole" BinaryKey="WixCA" DllEntry="CAQuietExec64" Execute="deferred" Return="ignore" Impersonate="no" />
-    <!-- IIS-ASPNET45 - this requires reboot -->
     <CustomAction Id='AddIISASPNET45' Property='IISASPNET45' Value='"[system64folder]dism.exe" /norestart /quiet /online /enable-feature /featurename:IIS-ASPNET45 /all' Execute='immediate'/>
     <CustomAction Id="IISASPNET45" BinaryKey="WixCA" DllEntry="CAQuietExec64" Execute="deferred" Return="ignore" Impersonate="no" />
        
     <InstallExecuteSequence>
-      <!-- IIS-DefaultDocument -->
       <Custom Action="AddIISDefaultDocument" After="CostFinalize" />
-      <Custom Action="IISDefaultDocument" After="InstallInitialize"></Custom>
-      <!-- IIS-DefaultDocument -->
+      <Custom Action="IISDefaultDocument" After="InstallInitialize" />
       <Custom Action="AddIISManagementConsole" After="CostFinalize" />
-      <Custom Action="IISManagementConsole" After="InstallInitialize"></Custom>
-      <!-- IIS-ASPNET45 - this requires reboot -->
+      <Custom Action="IISManagementConsole" After="InstallInitialize" />
       <Custom Action="AddIISASPNET45" After="CostFinalize" />
-      <Custom Action="IISASPNET45" After="InstallInitialize"></Custom>
+      <Custom Action="IISASPNET45" After="InstallInitialize" />
     </InstallExecuteSequence>
 
     <Component Id="SetFirewallPortComponent" Directory="TARGETDIR" Guid="{0FC9E126-E677-42D7-B5D8-859C85C9FA12}">

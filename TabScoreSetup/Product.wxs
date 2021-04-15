@@ -14,6 +14,11 @@
 
     <MediaTemplate EmbedCab="yes" />
 
+    <UIRef Id="WixUI_Minimal" />
+    <WixVariable Id="WixUILicenseRtf" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\InstallerNotice TabScoreSetup.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\TabScore 493x58.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\TabScore 493x312.bmp" />
+
     <!-- Common documents folder for TabScoreDB.txt install -->
     <SetDirectory Id="UsersPublicFolder" Value="[%PUBLIC]" Sequence="both" />
 

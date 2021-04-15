@@ -10,8 +10,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7589BEA4-87AE-4993-94B6-09AA51FD0250}"
 	ProjectSection(SolutionItems) = preProject
 		HarvestWebApp.bat = HarvestWebApp.bat
+		TabScore Documents\InstallerNotice TabScoreIISSetup.rtf = TabScore Documents\InstallerNotice TabScoreIISSetup.rtf
+		TabScore Documents\InstallerNotice TabScoreSetup.rtf = TabScore Documents\InstallerNotice TabScoreSetup.rtf
 		TabScore Documents\LICENSE = TabScore Documents\LICENSE
 		TabScore Documents\NOTICE = TabScore Documents\NOTICE
+		TabScore Documents\TabScore 493x312.bmp = TabScore Documents\TabScore 493x312.bmp
+		TabScore Documents\TabScore 493x58.bmp = TabScore Documents\TabScore 493x58.bmp
 		TabScore Documents\TabScore ReadMe 1.5.0.txt = TabScore Documents\TabScore ReadMe 1.5.0.txt
 		TabScore Documents\TabScore User Guide 1.5.0.odt = TabScore Documents\TabScore User Guide 1.5.0.odt
 		TabScore Documents\TabScore.png = TabScore Documents\TabScore.png
