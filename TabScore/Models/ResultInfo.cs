@@ -8,10 +8,10 @@ namespace TabScore.Models
         public Result ResultData { get; private set; }
         public int TabletDeviceNumber { get; private set; }
 
-        public ResultInfo(Result resultData, int tabletDeviceNumber)
+        public ResultInfo(int tabletDeviceNumber, TableStatus tableStatus)
         {
-            ResultData = resultData;
             TabletDeviceNumber = tabletDeviceNumber;
+            ResultData = tableStatus.ResultData;
         }
     }
 }

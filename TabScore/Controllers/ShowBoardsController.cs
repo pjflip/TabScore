@@ -12,16 +12,16 @@ namespace TabScore.Controllers
        {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            ResultsList resultsList = new ResultsList(tableStatus, tabletDeviceNumber);
+            ResultsList resultsList = new ResultsList(tabletDeviceNumber, tableStatus);
             tableStatus.ResultData = null;  // No board selected yet
 
             if (AppData.IsIndividual)
             {
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
+                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
             }
             else
             {
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - NS {tableStatus.RoundData.NumberNorth} v EW {tableStatus.RoundData.NumberEast}";
+                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - NS {tableStatus.RoundData.NumberNorth} v EW {tableStatus.RoundData.NumberEast}";
             }
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             ViewData["Title"] = $"Show Boards - {tabletDeviceStatus.Location}";
@@ -42,18 +42,18 @@ namespace TabScore.Controllers
             // Only used by ViewOnly view, for tablet device that is not being used for scoring, to check if result has been entered for this board
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            ResultsList resultsList = new ResultsList(tableStatus, tabletDeviceNumber);
+            ResultsList resultsList = new ResultsList(tabletDeviceNumber, tableStatus);
             Result result = resultsList.Find(x => x.BoardNumber == boardNumber);
             if (result == null || result.ContractLevel < 0)
             {
                 resultsList.Message = "NORESULT";
                 if (AppData.IsIndividual)
                 {
-                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
+                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
                 }
                 else
                 {
-                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - NS {tableStatus.RoundData.NumberNorth} v EW {tableStatus.RoundData.NumberEast}";
+                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - NS {tableStatus.RoundData.NumberNorth} v EW {tableStatus.RoundData.NumberEast}";
                 }
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 ViewData["Title"] = $"Show Boards - {tabletDeviceStatus.Location}";
@@ -71,17 +71,17 @@ namespace TabScore.Controllers
             // Only used by ViewOnly view, for tablet device that is not being used for scoring, to check if all results have been entered
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            ResultsList resultsList = new ResultsList(tableStatus, tabletDeviceNumber);
+            ResultsList resultsList = new ResultsList(tabletDeviceNumber, tableStatus);
             if (!resultsList.GotAllResults)
             {
                 resultsList.Message = "NOTALLRESULTS";
                 if (AppData.IsIndividual)
                 {
-                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
+                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
                 }
                 else
                 {
-                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - NS {tableStatus.RoundData.NumberNorth} v EW {tableStatus.RoundData.NumberEast}";
+                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - NS {tableStatus.RoundData.NumberNorth} v EW {tableStatus.RoundData.NumberEast}";
                 }
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 ViewData["Title"] = $"Show Boards - {tabletDeviceStatus.Location}";

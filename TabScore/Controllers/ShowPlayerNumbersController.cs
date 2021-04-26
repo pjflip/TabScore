@@ -11,20 +11,21 @@ namespace TabScore.Controllers
         public ActionResult Index(int tabletDeviceNumber, bool showWarning = false)
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
-            if (tabletDeviceStatus.TableNumber == 0)
-            {
-                // This a sitout table, so no player number entry
-                return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+
+            if (tabletDeviceStatus.NamesUpdateRequired) {
+                tableStatus.RoundData.UpdateNames(tableStatus);  // Update names from database if not done very recently
             }
 
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            if (!tableStatus.RoundData.BlankName && !Settings.NumberEntryEachRound)
+            if (tableStatus.RoundData.GotAllNames && tabletDeviceStatus.RoundNumber > 1 && !Settings.NumberEntryEachRound)
             {
                 // Player numbers not needed if all names have already been entered and names are not being updated each round
+                tabletDeviceStatus.NamesUpdateRequired = false;  // No round update required in RoundInfo as it's just been done
                 return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
             }
+            tabletDeviceStatus.NamesUpdateRequired = true;  // We'll now need to update when we get to RoundInfo in case names change in the mean time
 
-            PlayerEntryList playerEntryList = new PlayerEntryList(tableStatus, tabletDeviceNumber);
+            PlayerEntryList playerEntryList = new PlayerEntryList(tabletDeviceNumber, tableStatus);
             playerEntryList.ShowWarning = showWarning;
 
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
@@ -43,46 +44,19 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(int tabletDeviceNumber)
         {
-            // Check if other tablet devices at the same table have completed player number entry
-
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            int missingPair = AppData.SectionsList.Find(x => x.SectionID == tabletDeviceStatus.SectionID).MissingPair;
-            Round round = tableStatus.RoundData;
-            
+            tableStatus.RoundData.UpdateNames(tableStatus);
+            tabletDeviceStatus.NamesUpdateRequired = false;  // No names update required on next screen as it's only just been done
+
             // Check if all required names have been entered, and if not go back and wait
-            if (round.NumberNorth == 0 || round.NumberNorth == missingPair)
+            if (tableStatus.RoundData.GotAllNames)
             {
-                if (round.NameEast == "" || round.NameWest == "")
-                {
-                    return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber, showWarning = true });
-                }
-                else
-                {
-                    return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
-                }
-            }
-            else if (round.NumberEast == 0 || round.NumberEast == missingPair)
-            {
-                if (round.NameNorth == "" || round.NameSouth == "")
-                {
-                    return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber, showWarning = true });
-                }
-                else
-                {
-                    return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
-                }
+                return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
             }
             else
             {
-                if (round.NameNorth == "" || round.NameSouth == "" || round.NameEast == "" || round.NameWest == "")
-                {
-                    return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber, showWarning = true });
-                }
-                else
-                {
-                    return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
-                }
+                return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber, showWarning = true });
             }
         }
     }

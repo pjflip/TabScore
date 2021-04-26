@@ -7,10 +7,11 @@ namespace TabScore.Models
     {
         public int SectionID { get; private set; }
         public int TableNumber { get; set; }
-        public int PairNumber { get; set; }  // Only used if tablet device is moving
+        public int PairNumber { get; set; }
         public string Direction { get; set; }
         public string Location { get; set; }
         public int RoundNumber { get; set; }
+        public bool NamesUpdateRequired { get; set; } = true;
 
         public TabletDeviceStatus(int sectionID, int tableNumber, string direction, int pairNumber, int roundNumber)
         {
@@ -29,18 +30,19 @@ namespace TabScore.Models
                 Location = "Table " + AppData.SectionsList.Find(x => x.SectionID == sectionID).SectionLetter + tableNumber.ToString();
             }
         }
-
-        public void Update(int sectionID, int tableNumber, string direction, int roundNumber)
+        public void Update(int tableNumber, string direction, int roundNumber)
         {
             TableNumber = tableNumber;
             Direction = direction;
             RoundNumber = roundNumber;
-            if (tableNumber == 0 ) {
-                Location = AppData.SectionsList.Find(x => x.SectionID == sectionID).SectionLetter + " Sitout";
+            Section section = AppData.SectionsList.Find(x => x.SectionID == SectionID);
+            if (tableNumber == 0)
+            {
+                Location = AppData.SectionsList.Find(x => x.SectionID == SectionID).SectionLetter + " Sitout";
             }
             else
             {
-                Location = AppData.SectionsList.Find(x => x.SectionID == sectionID).SectionLetter + tableNumber.ToString() + " " + direction;
+                Location = AppData.SectionsList.Find(x => x.SectionID == SectionID).SectionLetter + tableNumber.ToString() + " " + direction;
             }
         }
     }

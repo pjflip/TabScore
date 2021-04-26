@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
+using System.Data.Odbc;
 using System.Text;
 
 namespace TabScore.Models
@@ -23,6 +24,76 @@ namespace TabScore.Models
         public int MatchpointsNS { get; set; }
         public int MatchpointsEW { get; set; }
         public int MatchpointsMax { get; set; }
+
+        // Default constructor for lists
+        public Result() { }
+
+        // Database read constructor
+        public Result(TableStatus tableStatus, int boardNumber)
+        {
+            NumberNorth = tableStatus.RoundData.NumberNorth;
+            NumberSouth = tableStatus.RoundData.NumberSouth;
+            NumberEast = tableStatus.RoundData.NumberEast;
+            NumberWest = tableStatus.RoundData.NumberWest;
+            BoardNumber = boardNumber;
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
+            {
+                connection.Open();
+                string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard, Remarks FROM ReceivedData WHERE Section={tableStatus.SectionID} AND [Table]={tableStatus.TableNumber} AND Round={tableStatus.RoundNumber} AND Board={BoardNumber}";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader = null;
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            if (reader.GetString(4) == "Not played")
+                            {
+                                ContractLevel = -1;
+                                ContractSuit = "";
+                                ContractX = "";
+                                DeclarerNSEW = "";
+                                TricksTakenNumber = -1;
+                                LeadCard = "";
+                            }
+                            else
+                            {
+                                string temp = reader.GetString(1);
+                                Contract = temp;   // Sets ContractLevel, etc
+                                if (ContractLevel == 0)  // Passed out
+                                {
+                                    DeclarerNSEW = "";
+                                    TricksTakenNumber = -1;
+                                    LeadCard = "";
+                                }
+                                else
+                                {
+                                    DeclarerNSEW = reader.GetString(0);
+                                    TricksTakenSymbol = reader.GetString(2);
+                                    LeadCard = reader.GetString(3);
+                                }
+                            }
+                        }
+                        else  // No result in database
+                        {
+                            ContractLevel = -999;
+                            ContractSuit = "";
+                            ContractX = "";
+                            DeclarerNSEW = "";
+                            TricksTakenNumber = -1;
+                            LeadCard = "";
+                        }
+                    });
+                }
+                finally
+                {
+                    reader.Close();
+                    cmd.Dispose();
+                }
+            }
+        }
 
         public string Contract
         {
@@ -371,6 +442,81 @@ namespace TabScore.Models
                 }
             }
             if (DeclarerNSEW == "E" || DeclarerNSEW == "W") Score = -Score;
+        }
+
+        public void UpdateDB(TableStatus tableStatus)
+        {
+            int declarer;
+            if (ContractLevel <= 0)
+            {
+                declarer = 0;
+            }
+            else
+            {
+                if (DeclarerNSEW == "N" || DeclarerNSEW == "S")
+                {
+                    declarer = NumberNorth;
+                }
+                else
+                {
+                    declarer = NumberEast;
+                }
+            }
+            string leadcard;
+            if (LeadCard == null || LeadCard == "" || LeadCard == "SKIP")
+            {
+                leadcard = "";
+            }
+            else
+            {
+                leadcard = LeadCard;
+            }
+
+            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
+            {
+                // Delete any previous result
+                connection.Open();
+                string SQLString = $"DELETE FROM ReceivedData WHERE Section={tableStatus.SectionID} AND [Table]={tableStatus.TableNumber} AND Round={tableStatus.RoundNumber} AND Board={BoardNumber}";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        cmd.ExecuteNonQuery();
+                    });
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+
+                // Add new result
+                string remarks = "";
+                if (ContractLevel == -1)
+                {
+                    remarks = "Not played";
+                }
+                if (AppData.IsIndividual)
+                {
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({tableStatus.SectionID}, {tableStatus.TableNumber}, {tableStatus.RoundNumber}, {BoardNumber}, {NumberNorth}, {NumberEast}, {NumberSouth}, {NumberWest}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
+                }
+                else
+                {
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({tableStatus.SectionID}, {tableStatus.TableNumber}, {tableStatus.RoundNumber}, {BoardNumber}, {NumberNorth}, {NumberEast}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
+                }
+                OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        cmd2.ExecuteNonQuery();
+                    });
+                }
+                finally
+                {
+                    cmd2.Dispose();
+                }
+            }
         }
     }
 }

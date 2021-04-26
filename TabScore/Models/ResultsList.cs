@@ -9,15 +9,13 @@ namespace TabScore.Models
     public class ResultsList : List<Result>
     {
         public int TabletDeviceNumber { get; set; }
-        public int RoundNumber { get; set; }
         public bool GotAllResults { get; private set; }
         public bool ShowViewButton { get; private set; }
         public string Message { get; set; } = "";
 
-        public ResultsList(TableStatus tableStatus, int tabletDeviceNumber)
+        public ResultsList(int tabletDeviceNumber, TableStatus tableStatus)
         {
             TabletDeviceNumber = tabletDeviceNumber;
-            RoundNumber = tableStatus.RoundData.RoundNumber;
             GotAllResults = true;
             ShowViewButton = Settings.ShowResults;
 
@@ -29,7 +27,7 @@ namespace TabScore.Models
                 OdbcDataReader reader = null;
                 try
                 {
-                    SQLString = $"SELECT Board, [NS/EW], Contract, Result, Remarks FROM ReceivedData WHERE Section={tableStatus.SectionID} AND [Table]={tableStatus.TableNumber} AND Round={RoundNumber} AND Board>={tableStatus.RoundData.LowBoard} AND Board<={tableStatus.RoundData.HighBoard}";
+                    SQLString = $"SELECT Board, [NS/EW], Contract, Result, Remarks FROM ReceivedData WHERE Section={tableStatus.SectionID} AND [Table]={tableStatus.TableNumber} AND Round={tableStatus.RoundNumber} AND Board>={tableStatus.RoundData.LowBoard} AND Board<={tableStatus.RoundData.HighBoard}";
                     cmd = new OdbcCommand(SQLString, connection);
                     ODBCRetryHelper.ODBCRetry(() =>
                     {

@@ -8,24 +8,24 @@ namespace TabScore.Controllers
 {
     public class EnterDirectionController : Controller
     {
-        public ActionResult Index(int sectionID, int tableNumber, string direction = "", bool confirm = false) 
+        public ActionResult Index(int sectionID, int tableNumber, int roundNumber, string direction = "", bool confirm = false) 
         {
             Section section = AppData.SectionsList.Find(x => x.SectionID == sectionID);
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
-            Round round = tableStatus.RoundData;
             EnterTableNumberDirection tableNumberData = new EnterTableNumberDirection
             {
                 SectionID = sectionID,
                 TableNumber = tableNumber,
                 Direction = direction,
+                RoundNumber = roundNumber,
                 Confirm = confirm
             };
-            if (round.NumberNorth == 0 || round.NumberNorth == section.MissingPair)
+            if (tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == section.MissingPair)
             {
                 tableNumberData.NorthMissing = true;
                 tableNumberData.SouthMissing = true;
             }
-            else if (round.NumberEast == 0 || round.NumberEast == section.MissingPair)
+            else if (tableStatus.RoundData.NumberEast == 0 || tableStatus.RoundData.NumberEast == section.MissingPair)
             {
                 tableNumberData.EastMissing = true;
                 tableNumberData.WestMissing = true;
@@ -42,15 +42,14 @@ namespace TabScore.Controllers
             return View("Index", tableNumberData);
         }
 
-        public ActionResult OKButtonClick(int sectionID, int tableNumber, string direction, bool confirm)
+        public ActionResult OKButtonClick(int sectionID, int tableNumber, string direction, int roundNumber, bool confirm)
         {
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
-
             // Check if tablet device is already registered for this location, and if so confirm
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber && x.Direction == direction);
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
             if (tabletDeviceStatus != null && !confirm)
             {
-                return RedirectToAction("Index", "EnterDirection", new { sectionID, tableNumber, direction, confirm = true });
+                return RedirectToAction("Index", "EnterDirection", new { sectionID, tableNumber, roundNumber, direction, confirm = true });
             }
             else if (tabletDeviceStatus == null)
             {
@@ -72,7 +71,7 @@ namespace TabScore.Controllers
                 {
                     pairNumber = tableStatus.RoundData.NumberWest;
                 }
-                tabletDeviceStatus = new TabletDeviceStatus(sectionID, tableNumber, direction, pairNumber, tableStatus.RoundData.RoundNumber);
+                tabletDeviceStatus = new TabletDeviceStatus(sectionID, tableNumber, direction, pairNumber, roundNumber);
                 AppData.TabletDeviceStatusList.Add(tabletDeviceStatus);
             }
 
@@ -81,7 +80,7 @@ namespace TabScore.Controllers
 
             if ((direction == "North" && tableStatus.ReadyForNextRoundNorth) || (direction == "South" && tableStatus.ReadyForNextRoundSouth) || (direction == "East" && tableStatus.ReadyForNextRoundEast) || (direction == "West" && tableStatus.ReadyForNextRoundWest))
             {
-                return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber = tableStatus.RoundData.RoundNumber + 1 });
+                return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber = roundNumber + 1 });
             }
             else
             {

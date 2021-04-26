@@ -9,8 +9,6 @@ namespace TabScore.Models
 {
     public class Traveller : List<Result>
     {
-        public int SectionID { get; private set; }
-        public int TableNumber { get; private set; }
         public int TabletDeviceNumber { get; set; }
         public int BoardNumber { get; private set; }
         public bool HandRecord { get; private set; }
@@ -20,10 +18,8 @@ namespace TabScore.Models
 
         private int currentScore;
 
-        public Traveller(TableStatus tableStatus, int tabletDeviceNumber)
+        public Traveller(int tabletDeviceNumber, TableStatus tableStatus)
         {
-            SectionID = tableStatus.SectionID;
-            TableNumber = tableStatus.TableNumber;
             TabletDeviceNumber = tabletDeviceNumber;
             BoardNumber = tableStatus.ResultData.BoardNumber;
             NumberNorth = tableStatus.RoundData.NumberNorth;
@@ -38,11 +34,11 @@ namespace TabScore.Models
                 {
                     if (AppData.IsIndividual)
                     {
-                        SQLString = $"SELECT PairNS, PairEW, South, West, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={SectionID} AND Board={BoardNumber}";
+                        SQLString = $"SELECT PairNS, PairEW, South, West, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={tableStatus.SectionID} AND Board={BoardNumber}";
                     }
                     else
                     {
-                        SQLString = $"SELECT PairNS, PairEW, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={SectionID} AND Board={BoardNumber}";
+                        SQLString = $"SELECT PairNS, PairEW, [NS/EW], Contract, LeadCard, Result FROM ReceivedData WHERE Section={tableStatus.SectionID} AND Board={BoardNumber}";
                     }
                     cmd = new OdbcCommand(SQLString, connection);
                     ODBCRetryHelper.ODBCRetry(() =>
@@ -121,7 +117,7 @@ namespace TabScore.Models
             HandRecord = false;
             if (Settings.ShowHandRecord && HandRecords.HandRecordsList.Count > 0)
             {
-                HandRecord handRecord = HandRecords.HandRecordsList.Find(x => x.SectionID == SectionID && x.BoardNumber == BoardNumber);
+                HandRecord handRecord = HandRecords.HandRecordsList.Find(x => x.SectionID == tableStatus.SectionID && x.BoardNumber == BoardNumber);
                 if (handRecord != null)     
                 {
                     HandRecord = true;

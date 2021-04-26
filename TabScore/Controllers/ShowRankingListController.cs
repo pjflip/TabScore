@@ -75,7 +75,6 @@ namespace TabScore.Controllers
         public JsonResult PollRanking(int tabletDeviceNumber)
         {
             HttpContext.Response.AppendHeader("Connection", "close");
-            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             RankingList rankingList = new RankingList(tabletDeviceNumber);
             return Json(rankingList, JsonRequestBehavior.AllowGet);
         }

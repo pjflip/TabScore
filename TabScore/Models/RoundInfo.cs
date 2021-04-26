@@ -5,15 +5,18 @@ namespace TabScore.Models
 {
     public class RoundInfo
     {
-        public Round RoundData { get; private set; }
         public int TabletDeviceNumber { get; private set; }
+        public int RoundNumber { get; private set; }
+        public Round RoundData { get; private set; }
         public bool NSMissing { get; set; } = false;
         public bool EWMissing { get; set; } = false;
 
-        public RoundInfo(Round roundData, int tabletDeviceNumber)
+        public RoundInfo(int tabletDeviceNumber, TableStatus tableStatus)
         {
-            RoundData = roundData;
             TabletDeviceNumber = tabletDeviceNumber;
+            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            RoundNumber = tabletDeviceStatus.RoundNumber;
+            RoundData = tableStatus.RoundData;
         }
     }
 }

@@ -26,7 +26,8 @@ namespace TabScore.Controllers
         {
             // Update Round with new player
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
-            AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber).RoundData.UpdatePlayer(tabletDeviceStatus.SectionID, tabletDeviceStatus.TableNumber, direction, playerNumber);
+            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+            tableStatus.RoundData.UpdatePlayer(tabletDeviceStatus.SectionID, tabletDeviceStatus.TableNumber, direction, tabletDeviceStatus.RoundNumber, playerNumber);
             
             return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber });
         }

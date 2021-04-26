@@ -21,8 +21,12 @@ namespace TabScore.Controllers
                 return View("Sitout", sitoutRoundInfo);
             }
 
+            // Update player names if not just immediately done in ShowPlayerNumbers
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            RoundInfo roundInfo = new RoundInfo(tableStatus.RoundData, tabletDeviceNumber);
+            if (tabletDeviceStatus.NamesUpdateRequired) tableStatus.RoundData.UpdateNames(tableStatus);
+            tabletDeviceStatus.NamesUpdateRequired = true;
+
+            RoundInfo roundInfo = new RoundInfo(tabletDeviceNumber, tableStatus);
             Section section = AppData.SectionsList.Find(x => x.SectionID == tabletDeviceStatus.SectionID);
             if (tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == section.MissingPair)
             {
@@ -58,12 +62,13 @@ namespace TabScore.Controllers
 
         public ActionResult BackButtonClick(int tabletDeviceNumber)
         {
-            // Reset to the previous round; RoundNumber > 1 else no Back button and cannot get here
+            // Only for one tablet device per table.  Reset to the previous round; RoundNumber > 1 else no Back button and cannot get here
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            int roundNumber = tableStatus.RoundData.RoundNumber;
-            tableStatus.RoundData =  new Round(tabletDeviceStatus.SectionID, tabletDeviceStatus.TableNumber, roundNumber - 1);
-            return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber = roundNumber });
+            tabletDeviceStatus.RoundNumber--;
+            tableStatus.RoundNumber--;
+            tableStatus.RoundData =  new Round(tableStatus);
+            return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber = tabletDeviceStatus.RoundNumber + 1 });
         }
     }
 }

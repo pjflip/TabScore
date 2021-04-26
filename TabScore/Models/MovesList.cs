@@ -16,20 +16,19 @@ namespace TabScore.Models
         public int TabletDevicesPerTable { get; private set; }
         public int TableNotReadyNumber { get; private set; }
 
-        public MovesList(int tabletDeviceNumber, int newRoundNumber, int tableNotReadyNumber)
+        public MovesList(int tabletDeviceNumber, TableStatus tableStatus, int newRoundNumber, int tableNotReadyNumber)
         {
             TabletDeviceNumber = tabletDeviceNumber;
-            TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
+            TabletDeviceStatus tabletDeviceStatus= AppData.TabletDeviceStatusList[tabletDeviceNumber];
             Direction = tabletDeviceStatus.Direction;
             NewRoundNumber = newRoundNumber;
             TableNotReadyNumber = tableNotReadyNumber;
-            TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
             Section section = AppData.SectionsList.Find(x => x.SectionID == tabletDeviceStatus.SectionID);
             TabletDevicesPerTable = section.TabletDevicesPerTable;
+            int missingPair = section.MissingPair;
 
             RoundsList roundsList = new RoundsList(tabletDeviceStatus.SectionID, newRoundNumber);
-            int missingPair = section.MissingPair;
-            if (TabletDevicesPerTable == 1)
+            if (TabletDevicesPerTable == 1)  // tableStatus cannot be null
             {
                 if (AppData.IsIndividual)
                 {
@@ -62,13 +61,13 @@ namespace TabScore.Models
                     }
                 }
             }
-            else  // TabletDevicesPerTable > 1, so only need move for single player/pair
+            else  // TabletDevicesPerTable > 1, so only need move for single player/pair.  tableStatus could be null (at phantom table), so use tabletDeviceStatus
             {
                 Add(roundsList.GetMove(tabletDeviceStatus.TableNumber, tabletDeviceStatus.PairNumber, Direction));
             }
 
             BoardsNewTable = -999;
-            if (tableStatus != null)
+            if (tableStatus != null)  // tableStatus==null => phantom table, so no boards to worry about
             {
                 // Show boards move to North unless North is missing, in which case show to East
                 LowBoard = tableStatus.RoundData.LowBoard;

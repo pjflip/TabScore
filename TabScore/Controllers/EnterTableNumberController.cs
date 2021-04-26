@@ -28,17 +28,15 @@ namespace TabScore.Controllers
         {
             // Log on table in database
             Utilities.LogonTable(sectionID, tableNumber);
-
-            // Check if table status has already been created.  If not, get round info and set table status accordingly
+            
+            // Check if table status has already been created
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
             if (tableStatus == null)
             {
-                int lastRoundWithResults = Utilities.GetLastRoundWithResults(sectionID, tableNumber);
-                Round round = new Round(sectionID, tableNumber, lastRoundWithResults);
-                tableStatus = new TableStatus(sectionID, tableNumber, round);
+                tableStatus = new TableStatus(sectionID, tableNumber, Utilities.GetLastRoundWithResults(sectionID, tableNumber));
                 AppData.TableStatusList.Add(tableStatus);
             }
-
+            
             if (AppData.SectionsList.Find(x => x.SectionID == sectionID).TabletDevicesPerTable == 1)
             {
                 // One tablet device per table, so direction is North
@@ -52,7 +50,7 @@ namespace TabScore.Controllers
                 else if (tabletDeviceStatus == null)  
                 {
                     // Not on list, so need to add it
-                    tabletDeviceStatus = new TabletDeviceStatus(sectionID, tableNumber, "North", 0, tableStatus.RoundData.RoundNumber);
+                    tabletDeviceStatus = new TabletDeviceStatus(sectionID, tableNumber, "North", tableStatus.RoundData.NumberNorth, tableStatus.RoundNumber);
                     AppData.TabletDeviceStatusList.Add(tabletDeviceStatus);
                 }
                 
@@ -61,9 +59,9 @@ namespace TabScore.Controllers
 
                 if (tableStatus.ReadyForNextRoundNorth)
                 {
-                    return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNummber = tableStatus.RoundData.RoundNumber + 1 });
+                    return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNummber = tableStatus.RoundNumber + 1 });
                 }
-                else if (tableStatus.RoundData.RoundNumber == 1 || Settings.NumberEntryEachRound)
+                else if (tabletDeviceStatus.RoundNumber == 1 || Settings.NumberEntryEachRound)
                 {
                     return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber });
                 }
@@ -74,7 +72,7 @@ namespace TabScore.Controllers
             }
             else   // TabletDevicesPerTable > 1
             {
-                return RedirectToAction("Index", "EnterDirection", new { sectionID, tableNumber });
+                return RedirectToAction("Index", "EnterDirection", new { sectionID, tableNumber, tableStatus.RoundNumber });
             }
         }
     }

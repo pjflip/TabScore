@@ -125,7 +125,7 @@ namespace TabScore.Models
                             move.NewDirection = "North";
                         }
                     }
-                    else   // No move info found - move to imaginary sitout table
+                    else   // No move info found - move to phantom table
                     {
                         move.NewTableNumber = 0;
                         move.NewDirection = "Sitout";  
@@ -176,7 +176,7 @@ namespace TabScore.Models
                     return move;
                 }
 
-                else   // No move info found - move to imaginary sitout table
+                else   // No move info found - move to phantom table
                 {
                     move.NewTableNumber = 0;
                     move.NewDirection = "Sitout";

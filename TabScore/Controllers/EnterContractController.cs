@@ -12,16 +12,18 @@ namespace TabScore.Controllers
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            if (tableStatus.ResultData == null) tableStatus.GetDbResult(boardNumber);
-            ResultInfo resultInfo = new ResultInfo(tableStatus.ResultData, tabletDeviceNumber);
+            if (tableStatus.ResultData == null) {
+                tableStatus.ResultData = new Result(tableStatus, boardNumber);
+            }
+            ResultInfo resultInfo = new ResultInfo(tabletDeviceNumber, tableStatus);
 
             if (AppData.IsIndividual)
             {
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
+                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
             }
             else
             {
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"NS {tableStatus.RoundData.NumberNorth}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"EW {tableStatus.RoundData.NumberEast}")}";
+                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"NS {tableStatus.RoundData.NumberNorth}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"EW {tableStatus.RoundData.NumberEast}")}";
             }
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             ViewData["Title"] = $"Enter Contract - {tabletDeviceStatus.Location}";
@@ -57,13 +59,14 @@ namespace TabScore.Controllers
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            tableStatus.ResultData.ContractLevel = -1;
-            tableStatus.ResultData.ContractSuit = "";
-            tableStatus.ResultData.ContractX = "";
-            tableStatus.ResultData.DeclarerNSEW = "";
-            tableStatus.ResultData.LeadCard = "";
-            tableStatus.ResultData.TricksTakenNumber = -1;
-            tableStatus.UpdateDbResult();
+            Result result = tableStatus.ResultData;
+            result.ContractLevel = -1;
+            result.ContractSuit = "";
+            result.ContractX = "";
+            result.DeclarerNSEW = "";
+            result.LeadCard = "";
+            result.TricksTakenNumber = -1;
+            result.UpdateDB(tableStatus);
             return RedirectToAction("Index", "ShowBoards", new { tabletDeviceNumber });
         }
     }
