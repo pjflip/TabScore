@@ -64,18 +64,6 @@ namespace TabScore.Controllers
         public ActionResult OKButtonClick(int tabletDeviceNumber, int newRoundNumber)
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
-
-            // Check if trying to advance to next round too quickly (ie before previous round is complete)
-            int minRoundNumber = 999;
-            foreach (TabletDeviceStatus iTabletDeviceStatus in AppData.TabletDeviceStatusList)
-            {
-                if (iTabletDeviceStatus.TableNumber > 0 && iTabletDeviceStatus.RoundNumber < minRoundNumber) minRoundNumber = iTabletDeviceStatus.RoundNumber;
-            }
-            if (newRoundNumber > minRoundNumber + 1)
-            {
-                return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber, tableNotReadyNumber = 0 });
-            }
-
             Section section = AppData.SectionsList.Find(x => x.SectionID == tabletDeviceStatus.SectionID);
             if (section.TabletDevicesPerTable > 1)  // Tablet devices are moving, so need to check if new table is ready
             {
@@ -89,7 +77,7 @@ namespace TabScore.Controllers
                     return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
                 }
 
-                // Check if move-to table is ready.  Expanded code here to make it easier to understand
+                // Check if the new table (the one we're trying to move to) is ready.  Expanded code here to make it easier to understand
                 bool newTableReady;
                 TableStatus newTableStatus = AppData.TableStatusList.Find(x => x.SectionID == section.SectionID && x.TableNumber == move.NewTableNumber);
                 if (newTableStatus == null)
@@ -98,11 +86,16 @@ namespace TabScore.Controllers
                 }
                 else if (newTableStatus.RoundNumber == newRoundNumber)
                 {
-                    newTableReady = true;  // Move-to table has already been advanced to next round by another tablet device, so is ready
+                    newTableReady = true;  // New table has already been advanced to next round by another tablet device, so is ready
+                }
+                else if (newTableStatus.RoundNumber < newRoundNumber - 1)
+                {
+                    newTableReady = false;  // New table hasn't yet reached the previous round (unlikely but possible)
                 }
                 else
                 {
-                    // A table is ready if all tablet device locations are ready.  Sitout locations were set to 'ready' previously 
+                    // New table is on the previous round
+                    // It is ready for the move if all tablet device locations are ready.  Sitout locations were set to 'ready' previously 
                     if (section.TabletDevicesPerTable == 2 && newTableStatus.ReadyForNextRoundNorth && newTableStatus.ReadyForNextRoundEast)
                     {
                         newTableReady = true;

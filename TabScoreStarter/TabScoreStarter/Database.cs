@@ -354,7 +354,7 @@ namespace TabScoreStarter
                         }
                     }
 
-                    // Check if any previous results in database
+                    /* Check if any previous results in database
                     object Result;
                     SQLString = "SELECT * FROM ReceivedData";
                     cmd = new OdbcCommand(SQLString, connection);
@@ -364,6 +364,7 @@ namespace TabScoreStarter
                         MessageBox.Show("Database contains previous results", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     cmd.Dispose();
+                    */
                 }
                 catch (Exception e)
                 {
