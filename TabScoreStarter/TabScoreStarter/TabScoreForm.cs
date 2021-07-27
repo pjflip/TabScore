@@ -54,14 +54,11 @@ namespace TabScoreStarter
                 SessionStatusLabel.Text = "Session Running";
                 SessionStatusLabel.ForeColor = Color.Green;
                 OptionsButton.Visible = true;
-
+                AddHandRecordFileButton.Visible = true;
                 HandsList handsList = new HandsList(connectionString);
-                if (handsList.Count == 0)
+                if (handsList.Count > 0)
                 {
-                    AddHandRecordFileButton.Visible = true;    // No hand records in database, so let user add them
-                }
-                else
-                {
+                    AddHandRecordFileButton.Enabled = false;
                     PathToHandRecordFileLabel.Text = "Included in Scoring Database";
                     AnalysingLabel.Text = "Analysing...";
                     AnalysingLabel.Visible = true;
@@ -84,14 +81,11 @@ namespace TabScoreStarter
                     SessionStatusLabel.Text = "Session Running";
                     SessionStatusLabel.ForeColor = Color.Green;
                     OptionsButton.Visible = true;
-
+                    AddHandRecordFileButton.Visible = true;
                     HandsList handsList = new HandsList(connectionString);
-                    if (handsList.Count == 0)
+                    if (handsList.Count > 0)
                     {
-                        AddHandRecordFileButton.Visible = true;    // No hand records in database, so let user add them
-                    }
-                    else
-                    {
+                        AddHandRecordFileButton.Enabled = false;
                         PathToHandRecordFileLabel.Text = "Included in Scoring Database";
                         AnalysingLabel.Text = "Analysing...";
                         AnalysingLabel.Visible = true;
@@ -169,6 +163,8 @@ namespace TabScoreStarter
         {
             AnalysingProgressBar.Value = 100;
             AnalysingLabel.Text = "Analysis Complete";
+            AddHandRecordFileButton.Text = "Change hand record file...";
+            AddHandRecordFileButton.Enabled = true;
         }
 
         private void OptionsButton_Click(object sender, EventArgs e)
