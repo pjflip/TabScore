@@ -53,7 +53,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 
 @foreach (var playerEntry in Model)
 {
-    if (playerEntry.Direction == "North")
+    if (playerEntry.Direction == TabScore.Models.Direction.North)
     {
         <div class="row mt-3">
             <div class="col-12 text-center">
@@ -63,7 +63,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             </div>
         </div>
     }
-    else if (playerEntry.Direction == "East")
+    else if (playerEntry.Direction == TabScore.Models.Direction.East)
     {
         <div class="row mt-3">
             <div class="col-12 text-center">

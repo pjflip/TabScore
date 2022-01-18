@@ -21,34 +21,19 @@ namespace TabScore.Models
         OKDisabledAndBack
     }
 
+    public enum Direction
+    {
+        Sitout,
+        North,
+        East,
+        South,
+        West,
+        Null
+    }
+
     public static class Utilities
     {
-        // Find out how many rounds there are in the event
-        // Need to re-query database in case rounds are added/removed by scoring program
-        public static int TableLogonStatus(int sectionID, int tableNumber)
-        {
-            object queryResult = null;
-            using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
-            {
-                connection.Open();
-                string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section={sectionID} AND [Table]={tableNumber}";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    ODBCRetryHelper.ODBCRetry(() =>
-                    {
-                        queryResult = cmd.ExecuteScalar();
-                    });
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
-            }
-            return Convert.ToInt32(queryResult);
-        }
-
-        public static void LogonTable(int sectionID, int tableNumber)
+        public static void RegisterTable(int sectionID, int tableNumber)
         {
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
@@ -69,6 +54,8 @@ namespace TabScore.Models
             }
         }
 
+        // Find out how many rounds there are in the event
+        // Need to re-query database in case rounds are added/removed by scoring program
         public static int NumberOfRoundsInEvent(int sectionID)
         {
             object queryResult = null;
@@ -93,13 +80,13 @@ namespace TabScore.Models
         }
 
         // Get the last round that has any results entered for it
-        public static int GetLastRoundWithResults(int sectionID, int table)
+        public static int GetLastRoundWithResults(int sectionID)
         {
             object queryResult = null;
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
-                string SQLString = $"SELECT MAX(Round) FROM ReceivedData WHERE Section={sectionID} AND [Table]={table}";
+                string SQLString = $"SELECT MAX(Round) FROM ReceivedData WHERE Section={sectionID}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {

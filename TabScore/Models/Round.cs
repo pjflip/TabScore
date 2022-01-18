@@ -404,11 +404,11 @@ namespace TabScore.Models
             }
         }
 
-        public void UpdatePlayer(int sectionID, int tableNumber, string direction, int roundNumber, int playerNumber)
+        public void UpdatePlayer(int sectionID, int tableNumber, Direction direction, int roundNumber, int playerNumber)
         {
             // First get name, and update the Round
             string playerName = "";
-            string dir = direction.Substring(0, 1);    // Need just N, S, E or W
+            string directionLetter = Enum.GetName(typeof(Direction), direction).Substring(0, 1);    // Need just N, S, E or W
             
             if (playerNumber == 0)
             {
@@ -440,7 +440,7 @@ namespace TabScore.Models
             int pairNumber = 0;
             if (AppData.IsIndividual)
             {
-                switch (dir)
+                switch (directionLetter)
                 {
                     case "N":
                         NameNorth = playerName;
@@ -462,7 +462,7 @@ namespace TabScore.Models
             }
             else
             {
-                switch (dir)
+                switch (directionLetter)
                 {
                     case "N":
                         NameNorth = playerName;
@@ -501,7 +501,7 @@ namespace TabScore.Models
                 object queryResult = null;
 
                 // Check if PlayerNumbers entry exists already; if it does update it, if not create it
-                string SQLString = $"SELECT Section FROM PlayerNumbers WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Direction='{dir}'";
+                string SQLString = $"SELECT Section FROM PlayerNumbers WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Direction='{directionLetter}'";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
@@ -516,11 +516,11 @@ namespace TabScore.Models
                 }
                 if (queryResult == null)
                 {
-                    SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({sectionID}, {tableNumber}, '{dir}', '{playerNumber}', '{playerName}', {roundNumber}, False, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, {pairNumber})";
+                    SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({sectionID}, {tableNumber}, '{directionLetter}', '{playerNumber}', '{playerName}', {roundNumber}, False, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, {pairNumber})";
                 }
                 else
                 {
-                    SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerNumber}', [Name]='{playerName}', Processed=False, TimeLog=#{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, TabScorePairNo={pairNumber} WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Direction='{dir}'";
+                    SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerNumber}', [Name]='{playerName}', Processed=False, TimeLog=#{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, TabScorePairNo={pairNumber} WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Direction='{directionLetter}'";
                 }
                 OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
                 try

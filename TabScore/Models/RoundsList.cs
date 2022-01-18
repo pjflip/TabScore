@@ -1,6 +1,8 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+
+using System;
 using System.Collections.Generic;
 using System.Data.Odbc;
 
@@ -78,33 +80,93 @@ namespace TabScore.Models
             }
         }
 
-        public Move GetMove(int tableNumber, int pairNumber, string direction)
+        public Move GetMove(int tableNumber, int pairNumber, Direction direction)
         {
             Move move = new Move()
             {
                 PairNumber = pairNumber,
-                Direction = direction
             };
             Round round;
-            if (!AppData.IsIndividual)  // Pairs - if there is a sitout out pair (at an imaginary sitout table, eg a rover), it works like East
+            if (AppData.IsIndividual)
             {
-                if (direction == "North")
+                move.DisplayDirection = Enum.GetName(typeof(Direction), direction);
+
+                // Try Direction = North
+                round = Find(x => x.NumberNorth == pairNumber);
+                if (round != null)
+                {
+                    move.NewTableNumber = round.TableNumber;
+                    move.NewDirection = Direction.North;
+                    move.DisplayNewDirection = "North";
+                    move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.North);
+                    return move;
+                }
+
+                // Try Direction = South
+                round = Find(x => x.NumberSouth == pairNumber);
+                if (round != null)
+                {
+                    move.NewTableNumber = round.TableNumber;
+                    move.NewDirection = Direction.South;
+                    move.DisplayNewDirection = "South";
+                    move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.South);
+                    return move;
+                }
+
+                // Try Direction = East
+                round = Find(x => x.NumberEast == pairNumber);
+                if (round != null)
+                {
+                    move.NewTableNumber = round.TableNumber;
+                    move.NewDirection = Direction.East;
+                    move.DisplayNewDirection = "East";
+                    move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.East);
+                    return move;
+                }
+
+                // Try Direction = West
+                round = Find(x => x.NumberWest == pairNumber);
+                if (round != null)
+                {
+                    move.NewTableNumber = round.TableNumber;
+                    move.NewDirection = Direction.West;
+                    move.DisplayNewDirection = "West";
+                    move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.West);
+                    return move;
+                }
+
+                else   // No move info found - move to phantom table
+                {
+                    move.NewTableNumber = 0;
+                    move.NewDirection = Direction.Sitout;
+                    move.DisplayNewDirection = "Sitout";
+                    move.Stay = false;
+                    return move;
+                }
+            }
+            else   // Pairs - if there is a sitout pair (at an imaginary sitout table, eg a rover), it works like East
+            {
+                if (direction == Direction.North)
                 {
                     round = Find(x => x.NumberNorth == pairNumber);
+                    move.DisplayDirection = "North/South";
                 }
                 else
                 {
                     round = Find(x => x.NumberEast == pairNumber);
+                    move.DisplayDirection = "East/West";
                 }
+
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = direction;
+                    move.DisplayNewDirection = move.DisplayDirection;
                 }
                 else
                 {
                     // Pair changes Direction
-                    if (direction == "North")
+                    if (direction == Direction.North)
                     {
                         round = Find(x => x.NumberEast == pairNumber);
                     }
@@ -116,73 +178,26 @@ namespace TabScore.Models
                     if (round != null)
                     {
                         move.NewTableNumber = round.TableNumber;
-                        if (direction == "North")
+                        if (direction == Direction.North)
                         {
-                            move.NewDirection = "East";
+                            move.NewDirection = Direction.East;
+                            move.DisplayNewDirection = "East/West";
                         }
                         else
                         {
-                            move.NewDirection = "North";
+                            move.NewDirection = Direction.North;
+                            move.DisplayNewDirection = "North/South";
                         }
                     }
                     else   // No move info found - move to phantom table
                     {
                         move.NewTableNumber = 0;
-                        move.NewDirection = "Sitout";  
+                        move.NewDirection = Direction.Sitout;
+                        move.DisplayNewDirection = "Sitout";
                     }
                 }
                 move.Stay = (move.NewTableNumber == tableNumber && move.NewDirection == direction);
                 return move;
-            }
-            else   // Individual
-            {
-                // Try Direction = North
-                round = Find(x => x.NumberNorth == pairNumber);
-                if (round != null)
-                {
-                    move.NewTableNumber = round.TableNumber;
-                    move.NewDirection = "North";
-                    move.Stay = (move.NewTableNumber == tableNumber && move.NewDirection == direction);
-                    return move;
-                }
-
-                // Try Direction = South
-                round = Find(x => x.NumberSouth == pairNumber);
-                if (round != null)
-                {
-                    move.NewTableNumber = round.TableNumber;
-                    move.NewDirection = "South";
-                    move.Stay = (move.NewTableNumber == tableNumber && move.NewDirection == direction);
-                    return move;
-                }
-
-                // Try Direction = East
-                round = Find(x => x.NumberEast == pairNumber);
-                if (round != null)
-                {
-                    move.NewTableNumber = round.TableNumber;
-                    move.NewDirection = "East";
-                    move.Stay = (move.NewTableNumber == tableNumber && move.NewDirection == direction);
-                    return move;
-                }
-
-                // Try Direction = West
-                round = Find(x => x.NumberWest == pairNumber);
-                if (round != null)
-                {
-                    move.NewTableNumber = round.TableNumber;
-                    move.NewDirection = "West";
-                    move.Stay = (move.NewTableNumber == tableNumber && move.NewDirection == direction);
-                    return move;
-                }
-
-                else   // No move info found - move to phantom table
-                {
-                    move.NewTableNumber = 0;
-                    move.NewDirection = "Sitout";
-                    move.Stay = false;
-                    return move;
-                }
             }
         }
 

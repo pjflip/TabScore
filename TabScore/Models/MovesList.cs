@@ -8,7 +8,7 @@ namespace TabScore.Models
     public class MovesList : List<Move>
     {
         public int TabletDeviceNumber { get; set; }
-        public string Direction { get; private set; }
+        public Direction Direction { get; private set; }
         public int NewRoundNumber { get; private set; }
         public int LowBoard { get; private set; }
         public int HighBoard { get; private set; }
@@ -34,30 +34,30 @@ namespace TabScore.Models
                 {
                     if (tableStatus.RoundData.NumberNorth != 0)
                     {
-                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, "North"));
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, Direction.North));
                     }
                     if (tableStatus.RoundData.NumberSouth != 0)
                     {
-                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberSouth, "South"));
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberSouth, Direction.South));
                     }
                     if (tableStatus.RoundData.NumberEast != 0)
                     {
-                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberEast, "East"));
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberEast, Direction.East));
                     }
                     if (tableStatus.RoundData.NumberWest != 0)
                     {
-                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberWest, "West"));
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberWest, Direction.West));
                     }
                 }
                 else  // Not individual
                 {
                     if (tableStatus.RoundData.NumberNorth != 0 && tableStatus.RoundData.NumberNorth != missingPair)
                     {
-                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, "North"));
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, Direction.North));
                     }
                     if (tableStatus.RoundData.NumberEast != 0 && tableStatus.RoundData.NumberEast != missingPair)
                     {
-                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberEast, "East"));
+                        Add(roundsList.GetMove(tableStatus.TableNumber, tableStatus.RoundData.NumberEast, Direction.East));
                     }
                 }
             }
@@ -69,10 +69,10 @@ namespace TabScore.Models
             BoardsNewTable = -999;
             if (tableStatus != null)  // tableStatus==null => phantom table, so no boards to worry about
             {
-                // Show boards move to North unless North is missing, in which case show to East
+                // Show boards move only to North (or North/South) unless missing, in which case only show to East (or East/West)
                 LowBoard = tableStatus.RoundData.LowBoard;
                 HighBoard = tableStatus.RoundData.HighBoard;
-                if (Direction == "North" || ((tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == missingPair) && Direction == "East"))
+                if (Direction == Direction.North || ((tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == missingPair) && Direction == Direction.East))
                 {
                     BoardsNewTable = roundsList.GetBoardsNewTableNumber(tableStatus.TableNumber, tableStatus.RoundData.LowBoard);
                 }

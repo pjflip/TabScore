@@ -35,7 +35,7 @@ namespace TabScore.Models
                 DateTime lastWriteTime = File.GetLastWriteTime(PathToTabScoreDB);
                 if (lastWriteTime > TabScoreDBTime)
                 {
-                    // Clear table status list and tablet device status list - all tablets will need to re-log on
+                    // Clear table status list and tablet device status list - all tablets will need to re-register
                     TableStatusList.Clear();
                     TabletDeviceStatusList.Clear();
 

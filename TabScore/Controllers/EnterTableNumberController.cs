@@ -14,33 +14,27 @@ namespace TabScore.Controllers
             ViewData["Title"] = $"Enter Table Number - Section {section.SectionLetter}";
             ViewData["Header"] = $"Section {section.SectionLetter}";
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            EnterTableNumberDirection tableNumberData = new EnterTableNumberDirection
-            {
-                SectionID = sectionID,
-                TableNumber = tableNumber,
-                NumTables = section.NumTables,
-                Confirm = confirm
-            };
-            return View(tableNumberData);   
+            EnterTableNumber enterTableNumber = new EnterTableNumber(section, tableNumber, confirm);
+            return View(enterTableNumber);   
         }
 
         public ActionResult OKButtonClick(int sectionID, int tableNumber, bool confirm)
         {
-            // Log on table in database
-            Utilities.LogonTable(sectionID, tableNumber);
+            // Register table in database
+            Utilities.RegisterTable(sectionID, tableNumber);
             
-            // Check if table status has already been created
+            // Check if table status has already been created; if not, add it to the list
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
             if (tableStatus == null)
             {
-                tableStatus = new TableStatus(sectionID, tableNumber, Utilities.GetLastRoundWithResults(sectionID, tableNumber));
+                tableStatus = new TableStatus(sectionID, tableNumber, Utilities.GetLastRoundWithResults(sectionID));
                 AppData.TableStatusList.Add(tableStatus);
             }
             
             if (AppData.SectionsList.Find(x => x.SectionID == sectionID).TabletDevicesPerTable == 1)
             {
-                // One tablet device per table, so direction is North
-                TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber && x.Direction == "North");
+                // One tablet device per table
+                TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
 
                 // Check if tablet device is already registered for this location, and if so confirm
                 if (tabletDeviceStatus != null && !confirm)
@@ -49,8 +43,8 @@ namespace TabScore.Controllers
                 }
                 else if (tabletDeviceStatus == null)  
                 {
-                    // Not on list, so need to add it
-                    tabletDeviceStatus = new TabletDeviceStatus(sectionID, tableNumber, "North", tableStatus.RoundData.NumberNorth, tableStatus.RoundNumber);
+                    // Not on list, so need to add it.  Direction is fixed as North as only one tablet per table
+                    tabletDeviceStatus = new TabletDeviceStatus(sectionID, tableNumber, Direction.North, tableStatus.RoundData.NumberNorth, tableStatus.RoundNumber);
                     AppData.TabletDeviceStatusList.Add(tabletDeviceStatus);
                 }
                 
@@ -70,7 +64,7 @@ namespace TabScore.Controllers
                     return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
                 } 
             }
-            else   // TabletDevicesPerTable > 1
+            else   // More than one tablet device per table, so need to know direction for this tablet device
             {
                 return RedirectToAction("Index", "EnterDirection", new { sectionID, tableNumber, tableStatus.RoundNumber });
             }

@@ -33,20 +33,11 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 
 @foreach (var move in Model)
 {
-    <div class="row mt-3">
+    <div class="row mt-2">
         <div class="col-12 text-center">
-            @if (move.Direction == "North")
-            {
-                <h3 style="color:blue">
-                    North/South: @move.PairNumber
-                </h3>
-            }
-            else
-            {
-                <h3 style="color:blue">
-                    East/West: @move.PairNumber
-                </h3>
-            }
+            <h3 style="color:blue">
+                @move.DisplayDirection: @move.PairNumber
+            </h3>
         </div>
     </div>
 
@@ -63,13 +54,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 if (move.Stay)
                 {
                     <h4>
-                        Stay at Table @move.NewTableNumber @move.NewDirection
+                        Stay at Table @move.NewTableNumber @move.DisplayNewDirection
                     </h4>
                 }
                 else
                 {
                     <h4>
-                        Move to Table @move.NewTableNumber @move.NewDirection
+                        Move to Table @move.NewTableNumber @move.DisplayNewDirection
                     </h4>
                 }
             }

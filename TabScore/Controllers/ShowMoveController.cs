@@ -27,19 +27,19 @@ namespace TabScore.Controllers
             if (tableStatus != null && tableStatus.RoundNumber < newRoundNumber)
             {
                 // No tablet device has yet advanced this table to the next round, so show that this one is ready to do so
-                if (tabletDeviceStatus.Direction == "North")
+                if (tabletDeviceStatus.Direction == Direction.North)
                 {
                     tableStatus.ReadyForNextRoundNorth = true;
                 }
-                else if (tabletDeviceStatus.Direction == "East")
+                else if (tabletDeviceStatus.Direction == Direction.East)
                 {
                     tableStatus.ReadyForNextRoundEast = true;
                 }
-                else if (tabletDeviceStatus.Direction == "South")
+                else if (tabletDeviceStatus.Direction == Direction.South)
                 {
                     tableStatus.ReadyForNextRoundSouth = true;
                 }
-                else if (tabletDeviceStatus.Direction == "West")
+                else if (tabletDeviceStatus.Direction == Direction.West)
                 {
                     tableStatus.ReadyForNextRoundWest = true;
                 }
@@ -51,14 +51,7 @@ namespace TabScore.Controllers
             ViewData["Title"] = $"Show Move - {tabletDeviceStatus.Location}";
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
 
-            if (AppData.IsIndividual)
-            {
-                return View("Individual", movesList);
-            }
-            else
-            {
-                return View("Pair", movesList);
-            }
+            return View(movesList);
         }
 
         public ActionResult OKButtonClick(int tabletDeviceNumber, int newRoundNumber)
@@ -73,7 +66,7 @@ namespace TabScore.Controllers
 
                 if (move.NewTableNumber == 0)  // Move is to phantom table, so go straight to RoundInfo
                 {
-                    tabletDeviceStatus.Update(0, "Sitout", newRoundNumber);
+                    tabletDeviceStatus.Update(0, Direction.Sitout, newRoundNumber);
                     return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
                 }
 

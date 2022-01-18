@@ -26,7 +26,7 @@ namespace TabScore.Controllers
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             ViewData["Title"] = $"Show Boards - {tabletDeviceStatus.Location}";
 
-            if (tabletDeviceStatus.Direction == "North")
+            if (tabletDeviceStatus.Direction == Direction.North)
             {
                 return View("Scoring", resultsList);
             }

@@ -22,26 +22,26 @@ namespace TabScore.Models
             {
                 if (tableStatus.RoundData.NumberNorth != 0 && tableStatus.RoundData.NumberNorth != section.MissingPair)
                 {
-                    Add(new PlayerEntry(tableStatus.RoundData, "North"));
-                    Add(new PlayerEntry(tableStatus.RoundData, "South"));
+                    Add(new PlayerEntry(tableStatus.RoundData, Direction.North));
+                    Add(new PlayerEntry(tableStatus.RoundData, Direction.South));
                 }
                 if (tableStatus.RoundData.NumberEast != 0 && tableStatus.RoundData.NumberEast != section.MissingPair)
                 {
-                    Add(new PlayerEntry(tableStatus.RoundData, "East"));
-                    Add(new PlayerEntry(tableStatus.RoundData, "West"));
+                    Add(new PlayerEntry(tableStatus.RoundData, Direction.East));
+                    Add(new PlayerEntry(tableStatus.RoundData, Direction.West));
                 }
             }
             else if (section.TabletDevicesPerTable == 2)
             {
-                if (tabletDeviceStatus.Direction == "North")
+                if (tabletDeviceStatus.Direction == Direction.North)
                 {
-                    Add(new PlayerEntry(tableStatus.RoundData, "North"));
-                    Add(new PlayerEntry(tableStatus.RoundData, "South"));
+                    Add(new PlayerEntry(tableStatus.RoundData, Direction.North));
+                    Add(new PlayerEntry(tableStatus.RoundData, Direction.South));
                 }
                 else
                 {
-                    Add(new PlayerEntry(tableStatus.RoundData, "East"));
-                    Add(new PlayerEntry(tableStatus.RoundData, "West"));
+                    Add(new PlayerEntry(tableStatus.RoundData, Direction.East));
+                    Add(new PlayerEntry(tableStatus.RoundData, Direction.West));
                 }
             }
             else  // tabletDevicesPerTable == 4

@@ -7,7 +7,7 @@
   <?define TabScoreStarterSourceDir = "C:\Users\Peter\source\repos\TabScore\TabScoreStarter\TabScoreStarter\bin\Release" ?>
   <?define TabScoreDocumentsSourceDir = "C:\Users\Peter\source\repos\TabScore\TabScore Documents" ?>
 
-  <Product Id="{3c146288-31a8-4eec-a6b6-e53d90c5ff28}" Name="TabScore" Language="1033" Version="1.5.0" Manufacturer="TabScore" UpgradeCode="{910e14b2-1e97-47d0-9f52-40f18959a936}">
+  <Product Id="{3c146288-31a8-4eec-a6b6-e53d90c5ff28}" Name="TabScore" Language="1033" Version="1.5.1" Manufacturer="TabScore" UpgradeCode="{910e14b2-1e97-47d0-9f52-40f18959a936}">
     <Package Id="*" InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A later version of TabScore is already installed"/>

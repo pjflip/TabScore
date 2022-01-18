@@ -140,6 +140,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppData.cs" />
+    <Compile Include="Models\EnterTableNumber.cs" />
     <Compile Include="Models\PlayerEntryList.cs" />
     <Compile Include="Models\PlayerEntry.cs" />
     <Compile Include="Models\EnterPlayerNumber.cs" />
@@ -148,7 +149,7 @@
     <Compile Include="Models\ResultsList.cs" />
     <Compile Include="Models\ResultInfo.cs" />
     <Compile Include="Models\RoundsList.cs" />
-    <Compile Include="Models\EnterTableNumberDirection.cs" />
+    <Compile Include="Models\EnterDirection.cs" />
     <Compile Include="Models\RoundInfo.cs" />
     <Compile Include="Models\SitoutRoundInfo.cs" />
     <Compile Include="Models\TabletDeviceStatus.cs" />
@@ -257,7 +258,6 @@
     <Content Include="Views\EnterLead\Index.cshtml" />
     <Content Include="Views\EnterTricksTaken\TotalTricks.cshtml" />
     <Content Include="Views\ShowBoards\Scoring.cshtml" />
-    <Content Include="Views\ShowMove\Pair.cshtml" />
     <Content Include="Views\ShowRoundInfo\Pair.cshtml" />
     <Content Include="Views\StartScreen\Index.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
@@ -270,16 +270,17 @@
     <Content Include="Views\ErrorScreen\Index.cshtml" />
     <Content Include="Views\ShowPlayerNumbers\Individual.cshtml" />
     <Content Include="Views\ShowRoundInfo\Individual.cshtml" />
-    <Content Include="Views\ShowMove\Individual.cshtml" />
+    <Content Include="Views\ShowMove\Index.cshtml" />
     <Content Include="Views\ShowTraveller\Individual.cshtml" />
     <Content Include="Views\ShowTraveller\Pairs.cshtml" />
     <Content Include="Views\ShowRankingList\Individual.cshtml" />
     <Content Include="Views\ShowRankingList\OneWinner.cshtml" />
     <Content Include="Views\ShowRankingList\TwoWinners.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\EnterDirection\Index.cshtml" />
+    <Content Include="Views\EnterDirection\Individual.cshtml" />
     <Content Include="Views\ShowBoards\ViewOnly.cshtml" />
     <Content Include="Views\ShowRoundInfo\Sitout.cshtml" />
+    <Content Include="Views\EnterDirection\Pair.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,7 +1,7 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.EnterTableNumberDirection
+@model TabScore.Models.EnterDirection
 
 <div id="tableDirectionRegisteredModal" class="modal" data-backdrop="static">
     <div class="modal-dialog">
@@ -36,13 +36,13 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (!Model.NorthMissing)
+        @if (!Model.NorthSouthMissing)
         {
             <button id="dNorth" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="selectDirection('North')">
                 North
             </button>
         }
-        @if (!Model.EastMissing)
+        @if (!Model.EastWestMissing)
         {
             <button id="dEast" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="selectDirection('East')">
                 East
@@ -53,13 +53,13 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (!Model.SouthMissing)
+        @if (!Model.NorthSouthMissing)
         {
             <button id="dSouth" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="selectDirection('South')">
                 South
             </button>
         }
-        @if (!Model.WestMissing)
+        @if (!Model.EastWestMissing)
         {
             <button id="dWest" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="selectDirection('West')">
                 West
@@ -76,14 +76,14 @@
 }
 
 <script>
-    var direction = "";
+    var direction = "Null";
     var isSubmitted = false;
 
     function selectDirection(d) {
-        if (document.getElementById("dNorth")) document.getElementById("dNorth").className = "btn btn-secondary btn-lg m-1"; 
-        if (document.getElementById("dSouth")) document.getElementById("dSouth").className = "btn btn-secondary btn-lg m-1"; 
-        if (document.getElementById("dEast")) document.getElementById("dEast").className = "btn btn-secondary btn-lg m-1"; 
-        if (document.getElementById("dWest")) document.getElementById("dWest").className = "btn btn-secondary btn-lg m-1"; 
+        if (document.getElementById("dNorth")) document.getElementById("dNorth").className = "btn btn-secondary btn-lg m-1";
+        if (document.getElementById("dSouth")) document.getElementById("dSouth").className = "btn btn-secondary btn-lg m-1";
+        if (document.getElementById("dEast")) document.getElementById("dEast").className = "btn btn-secondary btn-lg m-1";
+        if (document.getElementById("dWest")) document.getElementById("dWest").className = "btn btn-secondary btn-lg m-1";
         document.getElementById("d" + d).className = "btn btn-warning btn-lg m-1";
         direction = d;
         document.getElementById("OKButton").disabled = false;

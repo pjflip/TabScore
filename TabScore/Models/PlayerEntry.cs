@@ -4,22 +4,22 @@
     {
         public string Name { get; set; }
         public int Number { get; set; }
-        public string Direction { get; set; }
+        public Direction Direction { get; set; }
 
-        public PlayerEntry (Round round, string direction)
+        public PlayerEntry (Round round, Direction direction)
         {
             Direction = direction;
-            if (direction == "North")
+            if (direction == Models.Direction.North)
             {
                 Name = round.NameNorth;
                 Number = round.NumberNorth;
             }
-            else if (direction == "East")
+            else if (direction == Models.Direction.East)
             {
                 Name = round.NameEast;
                 Number = round.NumberEast;
             }
-            else if (direction == "South")
+            else if (direction == Models.Direction.South)
             {
                 Name = round.NameSouth;
                 Number = round.NumberSouth;

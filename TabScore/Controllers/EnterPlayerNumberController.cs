@@ -1,6 +1,7 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using System;
 using System.Web.Mvc;
 using TabScore.Models;
 
@@ -8,7 +9,7 @@ namespace TabScore.Controllers
 {
     public class EnterPlayerNumberController : Controller
     {
-        public ActionResult Index(int tabletDeviceNumber, string direction)
+        public ActionResult Index(int tabletDeviceNumber, Direction direction)
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
@@ -17,12 +18,13 @@ namespace TabScore.Controllers
             EnterPlayerNumber enterPlayerNumber = new EnterPlayerNumber()
             {
                 TabletDeviceNumber = tabletDeviceNumber,
-                Direction = direction
+                Direction = direction,
+                DisplayDirection = Enum.GetName(typeof(Direction), direction)
             };
             return View(enterPlayerNumber);
         }
 
-        public ActionResult OKButtonClick(int tabletDeviceNumber, string direction, int playerNumber)
+        public ActionResult OKButtonClick(int tabletDeviceNumber, Direction direction, int playerNumber)
         {
             // Update Round with new player
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
