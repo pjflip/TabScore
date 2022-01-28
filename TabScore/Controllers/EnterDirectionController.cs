@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -17,6 +17,7 @@ namespace TabScore.Controllers
             ViewData["Title"] = $"Enter Direction - {section.SectionLetter}{tableNumber}";
             ViewData["Header"] = $"Table {section.SectionLetter}{tableNumber}";
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
+            ViewData["TimerSeconds"] = -1;
             if (AppData.IsIndividual)
             {
                 return View("Individual", enterDirection);

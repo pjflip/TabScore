@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Data.Odbc;
@@ -18,6 +18,9 @@ namespace TabScoreStarter
         public int NameSource { get; set; }
         public int EnterResultsMethod { get; set; }
         public bool TabletsMove { get; set; }
+        public bool ShowTimer { get; set; }
+        public decimal MinutesPerBoard { get; set; }
+        public decimal AdditionalMinutesPerRound { get; set; }
 
         private readonly string dbConnectionString;
 
@@ -26,7 +29,7 @@ namespace TabScoreStarter
             dbConnectionString = connectionString.ToString();
             using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
             {
-                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod, TabletsMove FROM Settings";
+                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod, TabletsMove, ShowTimer, MinutesPerBoard, AdditionalMinutesPerRound FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
                 OdbcDataReader reader = cmd.ExecuteReader();
@@ -42,6 +45,9 @@ namespace TabScoreStarter
                 EnterResultsMethod = reader.GetInt32(8);
                 if (EnterResultsMethod != 1) EnterResultsMethod = 0;
                 TabletsMove = reader.GetBoolean(9);
+                ShowTimer = reader.GetBoolean(10);
+                MinutesPerBoard = reader.GetDecimal(11);
+                AdditionalMinutesPerRound = reader.GetDecimal(12);
                 reader.Close();
                 cmd.Dispose();
             }
@@ -106,12 +112,22 @@ namespace TabScoreStarter
                 SQLString.Append($" EnterResultsMethod={EnterResultsMethod},");
                 if (TabletsMove)
                 {
-                    SQLString.Append(" TabletsMove=YES");
+                    SQLString.Append(" TabletsMove=YES,");
                 }
                 else
                 {
-                    SQLString.Append(" TabletsMove=NO");
+                    SQLString.Append(" TabletsMove=NO,");
                 }
+                if (ShowTimer)
+                {
+                    SQLString.Append(" ShowTimer=YES,");
+                }
+                else
+                {
+                    SQLString.Append(" ShowTimer=NO,");
+                }
+                SQLString.Append($" MinutesPerBoard={MinutesPerBoard},");
+                SQLString.Append($" AdditionalMinutesPerRound={AdditionalMinutesPerRound}");
                 OdbcCommand cmd = new OdbcCommand(SQLString.ToString(), connection);
                 connection.Open();
                 cmd.ExecuteNonQuery();

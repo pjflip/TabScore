@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -353,18 +353,61 @@ namespace TabScoreStarter
                             throw e;
                         }
                     }
-
-                    /* Check if any previous results in database
-                    object Result;
-                    SQLString = "SELECT * FROM ReceivedData";
+                    SQLString = "ALTER TABLE Settings ADD ShowTimer YESNO";
                     cmd = new OdbcCommand(SQLString, connection);
-                    Result = cmd.ExecuteScalar();
-                    if (Result != null)
+                    try
                     {
-                        MessageBox.Show("Database contains previous results", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        cmd.ExecuteNonQuery();
+                        if (Properties.Settings.Default.ShowTimer)
+                        {
+                            SQLString = "UPDATE Settings SET ShowTimer=YES";
+                        }
+                        else
+                        {
+                            SQLString = "UPDATE Settings SET ShowTimer=NO";
+                        }
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
                     }
-                    cmd.Dispose();
-                    */
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "ALTER TABLE Settings ADD MinutesPerBoard DOUBLE";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        SQLString = "UPDATE Settings SET MinutesPerBoard=" + Properties.Settings.Default.MinutesPerBoard.ToString();
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
+                    SQLString = "ALTER TABLE Settings ADD AdditionalMinutesPerRound DOUBLE";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        SQLString = "UPDATE Settings SET AdditionalMinutesPerRound=" + Properties.Settings.Default.AdditionalMinutesPerRound.ToString();
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
                 }
                 catch (Exception e)
                 {

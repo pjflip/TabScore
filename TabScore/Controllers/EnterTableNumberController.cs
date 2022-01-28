@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -11,10 +11,11 @@ namespace TabScore.Controllers
         public ActionResult Index(int sectionID, int tableNumber = 0, bool confirm = false) 
         {
             Section section = AppData.SectionsList.Find(x => x.SectionID == sectionID);
+            EnterTableNumber enterTableNumber = new EnterTableNumber(section, tableNumber, confirm);
             ViewData["Title"] = $"Enter Table Number - Section {section.SectionLetter}";
             ViewData["Header"] = $"Section {section.SectionLetter}";
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            EnterTableNumber enterTableNumber = new EnterTableNumber(section, tableNumber, confirm);
+            ViewData["TimerSeconds"] = -1;
             return View(enterTableNumber);   
         }
 

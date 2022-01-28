@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -9,7 +9,7 @@ using System.IO;
 namespace TabScore.Models
 {
     // AppData is a global class that applies accross all sessions
-    // It includes a list of sections, a copy of the PlayerNames table (if it exists), and the current status of each table and each tablet device
+    // It includes a list of sections, a copy of the PlayerNames table (if it exists), the start time for each round, and the current status of each table and each tablet device
     public static class AppData
     {
         public static string DBConnectionString { get; private set; }
@@ -18,12 +18,21 @@ namespace TabScore.Models
         public static List<TableStatus> TableStatusList = new List<TableStatus>();
         public static List<TabletDeviceStatus> TabletDeviceStatusList = new List<TabletDeviceStatus>();
 
+        public class RoundStartTime
+        {
+            public int SectionID;
+            public int RoundNumber;
+            public DateTime StartTime;
+        }
+        public static readonly List<RoundStartTime> RoundStartTimesList = new List<RoundStartTime>();
+
         private class PlayerRecord
         {
             public string Name;
             public int Number;
         }
         private static readonly List<PlayerRecord> PlayerNamesTable = new List<PlayerRecord>();
+
         private static readonly string PathToTabScoreDB = Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
         private static DateTime TabScoreDBTime;
 

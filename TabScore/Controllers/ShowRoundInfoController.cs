@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -50,6 +50,7 @@ namespace TabScore.Controllers
                 // Back button needed if one tablet device per table, in case EW need to check their move details 
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             }
+            ViewData["TimerSeconds"] = -1; 
             if (AppData.IsIndividual)
             {
                 return View("Individual", roundInfo);

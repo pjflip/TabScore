@@ -1,6 +1,7 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2021 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using System;
 using System.Web.Mvc;
 using TabScore.Models;
 
@@ -14,6 +15,17 @@ namespace TabScore.Controllers
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
             ResultInfo resultInfo = new ResultInfo(tabletDeviceNumber, tableStatus);
 
+            if (Settings.ShowTimer)
+            {
+                DateTime StartTime = AppData.RoundStartTimesList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber).StartTime;
+                int TimerSeconds = tableStatus.TotalSecondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(StartTime).TotalSeconds);
+                if (TimerSeconds < 0) TimerSeconds = 0;
+                ViewData["TimerSeconds"] = TimerSeconds;
+            }
+            else
+            {
+                ViewData["TimerSeconds"] = -1;
+            }
             if (AppData.IsIndividual)
             {
                 ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
