@@ -54,7 +54,7 @@ namespace TabScore.Controllers
 
                 if (tableStatus.ReadyForNextRoundNorth)
                 {
-                    return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNummber = tableStatus.RoundNumber + 1 });
+                    return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber = tableStatus.RoundNumber + 1 });
                 }
                 else if (tabletDeviceStatus.RoundNumber == 1 || Settings.NumberEntryEachRound)
                 {
