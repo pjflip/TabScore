@@ -20,8 +20,8 @@ namespace TabScore.Models
         public static int NameSource { get; private set; }
         public static bool TabletDevicesMove { get; private set; }
         public static bool ShowTimer { get; private set; }
-        public static decimal MinutesPerBoard { get; private set; }
-        public static decimal AdditionalMinutesPerRound { get; private set; }
+        public static double MinutesPerBoard { get; private set; }
+        public static double AdditionalMinutesPerRound { get; private set; }
 
         private static DateTime UpdateTime;
 
@@ -54,8 +54,8 @@ namespace TabScore.Models
                             NameSource = reader.GetInt32(8);
                             TabletDevicesMove = reader.GetBoolean(9);
                             ShowTimer = reader.GetBoolean(10);
-                            MinutesPerBoard = reader.GetDecimal(11);
-                            AdditionalMinutesPerRound = reader.GetDecimal(12);
+                            MinutesPerBoard = reader.GetDouble(11);
+                            AdditionalMinutesPerRound = reader.GetDouble(12);
                         }
                     });
                 }
@@ -72,7 +72,7 @@ namespace TabScore.Models
                     NameSource = 0;
                     TabletDevicesMove = false;
                     ShowTimer = false;
-                    MinutesPerBoard = 7;
+                    MinutesPerBoard = 6.5;
                     AdditionalMinutesPerRound = 1;
                 }
                 finally

@@ -17,14 +17,8 @@ namespace TabScore.Models
         public static List<Section> SectionsList = new List<Section>();
         public static List<TableStatus> TableStatusList = new List<TableStatus>();
         public static List<TabletDeviceStatus> TabletDeviceStatusList = new List<TabletDeviceStatus>();
-
-        public class RoundStartTime
-        {
-            public int SectionID;
-            public int RoundNumber;
-            public DateTime StartTime;
-        }
-        public static readonly List<RoundStartTime> RoundStartTimesList = new List<RoundStartTime>();
+        public static List<RoundTimer> RoundTimerList = new List<RoundTimer>();
+        public static bool PermanentDBError = false;
 
         private class PlayerRecord
         {
@@ -32,124 +26,143 @@ namespace TabScore.Models
             public int Number;
         }
         private static readonly List<PlayerRecord> PlayerNamesTable = new List<PlayerRecord>();
+        private static readonly string PathToTabScoreDBtxt = Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
+        private static DateTime TabScoreDBTime = DateTime.MinValue;
 
-        private static readonly string PathToTabScoreDB = Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
-        private static DateTime TabScoreDBTime;
-
-        public static void Refresh()
+        public static string Refresh()
         {
-            if (File.Exists(PathToTabScoreDB))
+            if (!File.Exists(PathToTabScoreDBtxt)) return "File TabScoreDB.txt doesn't exist.  Please re-start TabScoreStarter.exe";
+            DBConnectionString = File.ReadAllText(PathToTabScoreDBtxt);
+            if (DBConnectionString == "") return "No Scoring Database selected; please wait until the Tournament Director tells you to start";
+
+            DateTime lastTabScoreDBtxtUpdateTime = File.GetLastWriteTime(PathToTabScoreDBtxt);
+            if (TabScoreDBTime == lastTabScoreDBtxtUpdateTime)  // TabScoreDB.txt has not changed since the last run of AppData.Refresh()
             {
-                // Only do an update if TabScoreStarter has updated TabScoreDB.txt - so complete restart required
-                DateTime lastWriteTime = File.GetLastWriteTime(PathToTabScoreDB);
-                if (lastWriteTime > TabScoreDBTime)
+                if (PermanentDBError)
                 {
-                    // Clear table status list and tablet device status list - all tablets will need to re-register
-                    TableStatusList.Clear();
-                    TabletDeviceStatusList.Clear();
+                    // Once a permanent database error has occurred, it needs a re-start of TabScoreStarter.exe to update TabScoreDB.txt 
+                    return "Permanent database connection error.  Please check format and access permissions for Scoring Database file, and re-start TabScoreStarter.exe";
+                }
+                else
+                {
+                    // No refresh required as it has already been done by another tablet device
+                    return "";
+                }
+            }
 
-                    DBConnectionString = File.ReadAllText(PathToTabScoreDB);
-                    TabScoreDBTime = lastWriteTime;
-                    if (DBConnectionString != "")
+            // TabScoreStarter.exe has updated TabScoreDB.txt with a new database connection string, so hopefully any error has been resolved.
+            PermanentDBError = false;
+            TabScoreDBTime = lastTabScoreDBtxtUpdateTime;
+
+            // Clear all application-wide lists
+            TableStatusList.Clear();
+            TabletDeviceStatusList.Clear();
+            RoundTimerList.Clear();
+            SectionsList.Clear();
+            PlayerNamesTable.Clear();
+
+            try
+            {
+                using (OdbcConnection connection = new OdbcConnection(DBConnectionString))
+                {
+                    connection.Open();
+
+                    // Check if new event is an individual (in which case there will be a field 'South' in the RoundData table)
+                    string SQLString = $"SELECT TOP 1 South FROM RoundData";
+                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                    try
                     {
-                        using (OdbcConnection connection = new OdbcConnection(DBConnectionString))
+                        ODBCRetryHelper.ODBCRetry(() =>
                         {
-                            connection.Open();
-
-                            // Check if new event is an individual (in which case there will be a field 'South' in the RoundData table)
-                            string SQLString = $"SELECT TOP 1 South FROM RoundData";
-                            OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                            try
-                            {
-                                ODBCRetryHelper.ODBCRetry(() =>
-                                {
-                                    cmd.ExecuteScalar();
-                                    IsIndividual = true;
-                                });
-                            }
-                            catch (OdbcException e)
-                            {
-                                if (e.Errors.Count > 1 || e.Errors[0].SQLState != "07002")   // Error other than field 'South' doesn't exist
-                                {
-                                    throw (e);
-                                }
-                                else
-                                {
-                                    IsIndividual = false;
-                                }
-                            }
-                            finally
-                            {
-                                cmd.Dispose();
-                            }
-
-                            // Create list of sections
-                            SQLString = "SELECT ID, Letter, Tables, MissingPair, ScoringType, Winners FROM Section";
-                            SectionsList.Clear();
-                            cmd = new OdbcCommand(SQLString, connection);
-                            OdbcDataReader reader = null;
-                            try
-                            {
-                                ODBCRetryHelper.ODBCRetry(() =>
-                                {
-                                    reader = cmd.ExecuteReader();
-                                    while (reader.Read())
-                                    {
-                                        Section s = new Section
-                                        {
-                                            SectionID = reader.GetInt32(0),
-                                            SectionLetter = reader.GetString(1),
-                                            NumTables = reader.GetInt32(2),
-                                            MissingPair = reader.GetInt32(3),
-                                            ScoringType = reader.GetInt32(4),
-                                            Winners = reader.GetInt32(5)
-                                        };
-                                        SectionsList.Add(s);
-                                    }
-                                });
-                            }
-                            finally
-                            {
-                                reader.Close();
-                                cmd.Dispose();
-                            }
-
-                            // Retrieve global PlayerNames table
-                            SQLString = $"SELECT Name, ID FROM PlayerNames";
-                            PlayerNamesTable.Clear();
-                            cmd = new OdbcCommand(SQLString, connection);
-                            try
-                            {
-                                ODBCRetryHelper.ODBCRetry(() =>
-                                {
-                                    reader = cmd.ExecuteReader();
-                                    while (reader.Read())
-                                    {
-                                        PlayerRecord playerRecord = new PlayerRecord
-                                        {
-                                            Name = reader.GetString(0),
-                                            Number = reader.GetInt32(1)
-                                        };
-                                        PlayerNamesTable.Add(playerRecord);
-                                    };
-                                });
-                            }
-                            catch (OdbcException e)
-                            {
-                                if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Error other than PlayerNames table does not exist
-                                {
-                                    throw (e);
-                                }
-                            }
-                            finally
-                            {
-                                reader.Close();
-                                cmd.Dispose();
-                            }
+                            cmd.ExecuteScalar();
+                            IsIndividual = true;
+                        });
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count > 1 || e.Errors[0].SQLState != "07002")   // Error other than field 'South' doesn't exist
+                        {
+                            throw (e);
                         }
+                        else
+                        {
+                            IsIndividual = false;
+                        }
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                    }
+
+                    // Create list of sections
+                    SQLString = "SELECT ID, Letter, Tables, MissingPair, ScoringType, Winners FROM Section";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    OdbcDataReader reader = null;
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            reader = cmd.ExecuteReader();
+                            while (reader.Read())
+                            {
+                                Section s = new Section
+                                {
+                                    SectionID = reader.GetInt32(0),
+                                    SectionLetter = reader.GetString(1),
+                                    NumTables = reader.GetInt32(2),
+                                    MissingPair = reader.GetInt32(3),
+                                    ScoringType = reader.GetInt32(4),
+                                    Winners = reader.GetInt32(5)
+                                };
+                                SectionsList.Add(s);
+                            }
+                        });
+                    }
+                    finally
+                    {
+                        reader.Close();
+                        cmd.Dispose();
+                    }
+
+                    // Retrieve global PlayerNames table
+                    SQLString = $"SELECT Name, ID FROM PlayerNames";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            reader = cmd.ExecuteReader();
+                            while (reader.Read())
+                            {
+                                PlayerRecord playerRecord = new PlayerRecord
+                                {
+                                    Name = reader.GetString(0),
+                                    Number = reader.GetInt32(1)
+                                };
+                                PlayerNamesTable.Add(playerRecord);
+                            };
+                        });
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Error other than PlayerNames table does not exist
+                        {
+                            throw (e);
+                        }
+                    }
+                    finally
+                    {
+                        reader.Close();
+                        cmd.Dispose();
                     }
                 }
             }
+            catch
+            {
+                PermanentDBError = true;
+                return "Permanent database connection error.  Please check format and access permissions for Scoring Database file, and re-start TabScoreStarter.exe";
+            }
+            return "";  // Successful refresh
         }
 
         public static string GetNameFromPlayerNamesTable(int playerNumber)
@@ -167,25 +180,6 @@ namespace TabScore.Models
             {
                 return player.Name;
             }
-        }
-
-        public static void SetTabletDevicesPerTable()
-        {
-            foreach (Section section in SectionsList)
-            {
-                // Default TabletDevicesPerTable = 1
-                if (Settings.TabletDevicesMove)
-                {
-                    if (IsIndividual)
-                    {
-                        section.TabletDevicesPerTable = 4;
-                    }
-                    else
-                    {
-                        if (section.Winners == 1) section.TabletDevicesPerTable = 2;
-                    }
-                }
-            } 
         }
     }
 }

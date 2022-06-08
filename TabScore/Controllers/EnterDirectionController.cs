@@ -17,7 +17,6 @@ namespace TabScore.Controllers
             ViewData["Title"] = $"Enter Direction - {section.SectionLetter}{tableNumber}";
             ViewData["Header"] = $"Table {section.SectionLetter}{tableNumber}";
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            ViewData["TimerSeconds"] = -1;
             if (AppData.IsIndividual)
             {
                 return View("Individual", enterDirection);

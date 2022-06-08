@@ -32,7 +32,6 @@ namespace TabScore.Controllers
             ViewData["Title"] = $"Show Player Numbers - {tabletDeviceStatus.Location}";
             ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber}";
 
-            ViewData["TimerSeconds"] = -1;
             if (AppData.IsIndividual)
             {
                 return View("Individual", playerEntryList);

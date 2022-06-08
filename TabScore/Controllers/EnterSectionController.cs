@@ -21,7 +21,6 @@ namespace TabScore.Controllers
                 ViewData["Title"] = "Enter Section";
                 ViewData["Header"] = "";
                 ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-                ViewData["TimerSeconds"] = -1;
                 return View(AppData.SectionsList);
             }
         }

@@ -14,7 +14,6 @@ namespace TabScore.Models
         public bool ReadyForNextRoundSouth { get; set; } = false;
         public bool ReadyForNextRoundEast { get; set; } = false;
         public bool ReadyForNextRoundWest { get; set; } = false;
-        public int TotalSecondsPerRound { get; set; }
 
         public TableStatus(int sectionID, int tableNumber, int roundNumber)
         {

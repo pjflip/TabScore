@@ -23,7 +23,6 @@ namespace TabScore.Controllers
                         ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber}";
                         ViewData["Title"] = $"Ranking List - {tabletDeviceStatus.Location}";
                         ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-                        ViewData["TimerSeconds"] = -1;
                         if (AppData.IsIndividual)
                         {
                             return View("Individual", rankingList);

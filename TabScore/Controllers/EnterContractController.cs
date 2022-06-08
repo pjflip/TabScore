@@ -20,14 +20,10 @@ namespace TabScore.Controllers
 
             if (Settings.ShowTimer)
             {
-                DateTime StartTime = AppData.RoundStartTimesList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber).StartTime;
-                int TimerSeconds = tableStatus.TotalSecondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(StartTime).TotalSeconds);
-                if (TimerSeconds < 0) TimerSeconds = 0;
-                ViewData["TimerSeconds"] = TimerSeconds;
-            }
-            else
-            {
-                ViewData["TimerSeconds"] = -1;
+                RoundTimer roundTimer = AppData.RoundTimerList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber);
+                int timerSeconds = roundTimer.SecondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(roundTimer.StartTime).TotalSeconds);
+                if (timerSeconds < 0) timerSeconds = 0;
+                ViewData["TimerSeconds"] = timerSeconds;
             }
             if (AppData.IsIndividual)
             {

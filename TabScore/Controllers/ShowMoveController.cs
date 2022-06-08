@@ -50,7 +50,6 @@ namespace TabScore.Controllers
             ViewData["Header"] = $"{tabletDeviceStatus.Location}";
             ViewData["Title"] = $"Show Move - {tabletDeviceStatus.Location}";
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-            ViewData["TimerSeconds"] = -1;
 
             return View(movesList);
         }

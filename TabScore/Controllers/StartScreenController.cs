@@ -11,24 +11,23 @@ namespace TabScore.Controllers
     {
         public ActionResult Index()
         {
-            ViewData["Header"] = "";
             ViewData["Title"] = "Start Screen";
+            ViewData["Header"] = ""; 
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             ViewData["Version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            ViewData["TimerSeconds"] = -1;
             return View();
         }
 
         public ActionResult OKButtonClick()
         {
-            AppData.Refresh();
-            if (AppData.DBConnectionString == "")
+            string errorString = AppData.Refresh();
+            if (errorString != "")
             {
-                TempData["warningMessage"] = "Scoring database not yet selected";
+                TempData["warningMessage"] = errorString;
                 return RedirectToAction("Index", "StartScreen");
             }
             Settings.Refresh();
-            AppData.SetTabletDevicesPerTable();
+            Utilities.SetTabletDevicesPerTable();
             if (Settings.ShowHandRecord || Settings.ValidateLeadCard)
             {
                 HandRecords.Refresh();

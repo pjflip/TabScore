@@ -13,27 +13,25 @@ namespace TabScore.Controllers
             ViewData["Header"] = "";
             ViewData["Title"] = "Error Screen";
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-            ViewData["TimerSeconds"] = -1;
             return View();
         }
 
         public ActionResult OKButtonClick()
         {
-            AppData.Refresh();
-            if (AppData.DBConnectionString == "")
-            {
-                TempData["warningMessage"] = "Scoring database not yet started";
-                return RedirectToAction("Index", "StartScreen");
-            }
-            else
+           if (Utilities.IsDatabaseOK())  // Successful database read/write, so must have been a temporary glitch
             {
                 Settings.Refresh();
-                AppData.SetTabletDevicesPerTable();
                 if (Settings.ShowHandRecord || Settings.ValidateLeadCard)
                 {
                     HandRecords.Refresh();
                 }
-                return RedirectToAction("Index", "EnterSection");
+                return RedirectToAction("Index", "EnterSection");  // Need to re-establish Section/TableNumber/Direction for this tablet device
+            }
+            else  // Can't read/write to database after the error, so pass error to StartScreen and await database update 
+            {
+                AppData.PermanentDBError = true;
+                TempData["warningMessage"] = "Permanent database connection error.  Please check format and access permissions for Scoring Database file, and re-start TabScoreStarter.exe";
+                return RedirectToAction("Index", "StartScreen");
             }
         }
     }

@@ -50,7 +50,6 @@ namespace TabScore.Controllers
                 // Back button needed if one tablet device per table, in case EW need to check their move details 
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             }
-            ViewData["TimerSeconds"] = -1; 
             if (AppData.IsIndividual)
             {
                 return View("Individual", roundInfo);

@@ -12,7 +12,7 @@ namespace TabScoreStarter.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.2.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -49,10 +49,10 @@ namespace TabScoreStarter.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("7")]
-        public decimal MinutesPerBoard {
+        [global::System.Configuration.DefaultSettingValueAttribute("6.5")]
+        public double MinutesPerBoard {
             get {
-                return ((decimal)(this["MinutesPerBoard"]));
+                return ((double)(this["MinutesPerBoard"]));
             }
             set {
                 this["MinutesPerBoard"] = value;
@@ -62,9 +62,9 @@ namespace TabScoreStarter.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public decimal AdditionalMinutesPerRound {
+        public double AdditionalMinutesPerRound {
             get {
-                return ((decimal)(this["AdditionalMinutesPerRound"]));
+                return ((double)(this["AdditionalMinutesPerRound"]));
             }
             set {
                 this["AdditionalMinutesPerRound"] = value;

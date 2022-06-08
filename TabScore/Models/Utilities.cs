@@ -33,6 +33,7 @@ namespace TabScore.Models
 
     public static class Utilities
     {
+        // Set table status in "Tables" table.  Not needed in TabScore, but complies with BridgeMate spec
         public static void RegisterTable(int sectionID, int tableNumber)
         {
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
@@ -53,6 +54,43 @@ namespace TabScore.Models
                 }
             }
         }
+        
+        // Test read and write to the scoring database
+        public static bool IsDatabaseOK()
+        {
+            try
+            {
+                using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
+                {
+                    connection.Open();
+                    int logOnOff = 0;
+                    string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section=1 AND [Table]=1";
+                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            logOnOff = Convert.ToInt32(cmd.ExecuteScalar());
+                        });
+                        SQLString = $"UPDATE Tables SET LogOnOff={logOnOff} WHERE Section=1 AND [Table]=1";
+                        cmd = new OdbcCommand(SQLString, connection);
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            cmd.ExecuteNonQuery();
+                        });
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
 
         // Find out how many rounds there are in the event
         // Need to re-query database in case rounds are added/removed by scoring program
@@ -62,7 +100,7 @@ namespace TabScore.Models
             using(OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
-                string SQLString = SQLString = $"SELECT MAX(Round) FROM RoundData WHERE Section={sectionID}";
+                string SQLString = $"SELECT MAX(Round) FROM RoundData WHERE Section={sectionID}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
@@ -254,5 +292,27 @@ namespace TabScore.Models
             }
             return false;
         }
+
+        // Set the number of tablet devices per table - possibly different for each section depending on the movements
+        public static void SetTabletDevicesPerTable()
+        {
+            foreach (Section section in AppData.SectionsList)
+            {
+                // Default TabletDevicesPerTable = 1
+                if (Settings.TabletDevicesMove)
+                {
+                    if (AppData.IsIndividual)
+                    {
+                        section.TabletDevicesPerTable = 4;
+                    }
+                    else
+                    {
+                        if (section.Winners == 1) section.TabletDevicesPerTable = 2;
+                    }
+                }
+            }
+        }
+
+
     }
 }

@@ -4,6 +4,7 @@ using System.Data.Odbc;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Windows.Forms;
 
 namespace TabScoreStarter
@@ -42,6 +43,7 @@ namespace TabScoreStarter
                 MessageBox.Show("Database passed in parameter string either does not exist or is not accessible", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 pathToDB = "";
             }
+
             OdbcConnectionStringBuilder connectionString = null;
             if (pathToDB != "") connectionString = Database.ConnectionString(pathToDB);
             if (!Database.Initialize(connectionString))

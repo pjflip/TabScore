@@ -15,7 +15,6 @@ namespace TabScore.Controllers
             ViewData["Title"] = $"Enter Table Number - Section {section.SectionLetter}";
             ViewData["Header"] = $"Section {section.SectionLetter}";
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            ViewData["TimerSeconds"] = -1;
             return View(enterTableNumber);   
         }
 

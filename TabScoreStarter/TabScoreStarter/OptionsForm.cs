@@ -25,9 +25,10 @@ namespace TabScoreStarter
             NumberEntryEachRoundCheckbox.Checked = opt.NumberEntryEachRound;
             EnterResultsMethodCombobox.SelectedIndex = opt.EnterResultsMethod;
             TabletModePersonalRadioButton.Checked = opt.TabletsMove;
+            TabletModeTraditionalRadioButton.Checked = !opt.TabletsMove;
             ShowTimerCheckbox.Checked = opt.ShowTimer;
-            MinutesPerBoardNud.Value = opt.MinutesPerBoard;
-            AdditionalMinutesPerRoundNud.Value = opt.AdditionalMinutesPerRound;
+            MinutesPerBoardNud.Value = Convert.ToDecimal(opt.MinutesPerBoard);
+            AdditionalMinutesPerRoundNud.Value = Convert.ToDecimal(opt.AdditionalMinutesPerRound);
 
             ShowPercentageCheckbox.Enabled = ShowTravellerCheckbox.Checked;
             ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
@@ -58,8 +59,8 @@ namespace TabScoreStarter
                 EnterResultsMethod = EnterResultsMethodCombobox.SelectedIndex,
                 TabletsMove = TabletModePersonalRadioButton.Checked,
                 ShowTimer = ShowTimerCheckbox.Checked,
-                MinutesPerBoard = MinutesPerBoardNud.Value,
-                AdditionalMinutesPerRound = AdditionalMinutesPerRoundNud.Value
+                MinutesPerBoard = Convert.ToDouble(MinutesPerBoardNud.Value),
+                AdditionalMinutesPerRound = Convert.ToDouble(AdditionalMinutesPerRoundNud.Value)
             };
             opt.UpdateDB();
             Properties.Settings.Default.TabletsMove = opt.TabletsMove;

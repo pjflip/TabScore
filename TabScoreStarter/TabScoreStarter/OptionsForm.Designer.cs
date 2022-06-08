@@ -380,10 +380,10 @@
             this.MinutesPerBoardNud.TabIndex = 71;
             this.MinutesPerBoardNud.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.MinutesPerBoardNud.Value = new decimal(new int[] {
-            7,
+            65,
             0,
             0,
-            0});
+            65536});
             // 
             // ShowTimerCheckbox
             // 

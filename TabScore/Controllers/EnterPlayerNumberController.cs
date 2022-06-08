@@ -15,7 +15,6 @@ namespace TabScore.Controllers
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
             ViewData["Title"] = $"Enter Player Number - {tabletDeviceStatus.Location}";
             ViewData["Header"] = $"{tabletDeviceStatus.Location}";
-            ViewData["TimerSeconds"] = -1;
             EnterPlayerNumber enterPlayerNumber = new EnterPlayerNumber()
             {
                 TabletDeviceNumber = tabletDeviceNumber,

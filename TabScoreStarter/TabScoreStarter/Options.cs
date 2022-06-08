@@ -19,8 +19,8 @@ namespace TabScoreStarter
         public int EnterResultsMethod { get; set; }
         public bool TabletsMove { get; set; }
         public bool ShowTimer { get; set; }
-        public decimal MinutesPerBoard { get; set; }
-        public decimal AdditionalMinutesPerRound { get; set; }
+        public double MinutesPerBoard { get; set; }
+        public double AdditionalMinutesPerRound { get; set; }
 
         private readonly string dbConnectionString;
 
@@ -46,8 +46,8 @@ namespace TabScoreStarter
                 if (EnterResultsMethod != 1) EnterResultsMethod = 0;
                 TabletsMove = reader.GetBoolean(9);
                 ShowTimer = reader.GetBoolean(10);
-                MinutesPerBoard = reader.GetDecimal(11);
-                AdditionalMinutesPerRound = reader.GetDecimal(12);
+                MinutesPerBoard = reader.GetDouble(11);
+                AdditionalMinutesPerRound = reader.GetDouble(12);
                 reader.Close();
                 cmd.Dispose();
             }

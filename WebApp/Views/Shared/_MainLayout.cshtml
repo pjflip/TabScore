@@ -44,7 +44,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 }
             </div>
             <div class="col-4 text-center">
-                @if ((int)ViewData["TimerSeconds"] >= 0)
+                @if (ViewData.ContainsKey("TimerSeconds") && (int)ViewData["TimerSeconds"] >= 0)
                 {
                     <button id="timerButton" class="btn my-2" style="font-size: 1.5rem">
                         <span class="fa fa-clock-o"></span><span id="timerValue"></span>
@@ -58,7 +58,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         OK <span class="fa fa-chevron-circle-right"></span>
                     </button>
                 }
-                else
+                else if (buttonOptions == TabScore.Models.ButtonOptions.OKEnabled || buttonOptions == TabScore.Models.ButtonOptions.OKEnabledAndBack)
                 {
                     <button id="OKButton" class="btn btn-success mr-2 my-2 float-right" style="font-size: 1.5rem">
                         OK <span class="fa fa-chevron-circle-right"></span>
@@ -68,9 +68,18 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         </div>
     </div>
 
-    <script>
-        var timerSeconds = @ViewData["TimerSeconds"];
-    </script>
+    @if (ViewData.ContainsKey("TimerSeconds"))
+    {
+        <script>
+            var timerSeconds = @ViewData["TimerSeconds"];
+        </script>
+    }
+    else
+    {
+        <script>
+            var timerSeconds = -1;
+        </script>
+    }
     <script src='@Url.Content("~/Scripts/MainLayout.js")' type="text/javascript"></script>
 </body>
 

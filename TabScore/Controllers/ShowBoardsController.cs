@@ -18,31 +18,30 @@ namespace TabScore.Controllers
             
             if (Settings.ShowTimer)
             {
-                DateTime StartTime;
-                if (AppData.RoundStartTimesList.Exists(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber))
+                DateTime startTime;
+                int secondsPerRound;
+                RoundTimer roundTimer = AppData.RoundTimerList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber);
+                if (roundTimer == null)  // Round not yet started, so create timer data for this section and round 
                 {
-                    StartTime = AppData.RoundStartTimesList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber).StartTime;
-                }
-                else
-                {
-                    StartTime = DateTime.Now;
-                    AppData.RoundStartTimesList.Add(new AppData.RoundStartTime
+                    startTime = DateTime.Now;
+                    secondsPerRound = Convert.ToInt32((resultsList.Count * Settings.MinutesPerBoard + Settings.AdditionalMinutesPerRound) * 60);
+                    AppData.RoundTimerList.Add(new RoundTimer
                     {
                         SectionID = tabletDeviceStatus.SectionID,
                         RoundNumber = tabletDeviceStatus.RoundNumber,
-                        StartTime = StartTime
+                        StartTime = startTime,
+                        SecondsPerRound = secondsPerRound
                     });
                 }
-                // Set total time for this round in seconds.  This is used by other Controllers/Views
-                tableStatus.TotalSecondsPerRound = Convert.ToInt32((resultsList.Count * Settings.MinutesPerBoard + Settings.AdditionalMinutesPerRound) * 60);
+                else
+                {
+                    startTime = roundTimer.StartTime;
+                    secondsPerRound = roundTimer.SecondsPerRound;
+                }
                 // Calculate how many seconds remaining for the round
-                int TimerSeconds = tableStatus.TotalSecondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(StartTime).TotalSeconds);
-                if (TimerSeconds < 0) TimerSeconds = 0;
-                ViewData["TimerSeconds"] = TimerSeconds;
-            }
-            else
-            {
-                ViewData["TimerSeconds"] = -1;
+                int timerSeconds = secondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(startTime).TotalSeconds);
+                if (timerSeconds < 0) timerSeconds = 0;
+                ViewData["TimerSeconds"] = timerSeconds;
             }
             if (AppData.IsIndividual)
             {
