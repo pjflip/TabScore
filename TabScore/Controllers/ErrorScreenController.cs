@@ -11,7 +11,7 @@ namespace TabScore.Controllers
         public ActionResult Index()
         {
             ViewData["Header"] = "";
-            ViewData["Title"] = "Error Screen";
+            ViewData["Title"] = "ErrorScreen";
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             return View();
         }

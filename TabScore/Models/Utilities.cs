@@ -178,22 +178,22 @@ namespace TabScore.Models
             {
                 if (NSVulnerability[(boardNo - 1) % 16])
                 {
-                    PairString = $"<a style=\"color:red\">{pair}</a>";
+                    PairString = $"<span style=\"color:red\">{pair}</span>";
                 }
                 else
                 {
-                    PairString = $"<a style=\"color:green\">{pair}</a>";
+                    PairString = $"<span style=\"color:green\">{pair}</span>";
                 }
             }
             else
             {
                 if (EWVulnerability[(boardNo - 1) % 16])
                 {
-                    PairString = $"<a style=\"color:red\">{pair}</a>";
+                    PairString = $"<span style=\"color:red\">{pair}</span>";
                 }
                 else
                 {
-                    PairString = $"<a style=\"color:green\">{pair}</a>";
+                    PairString = $"<span style=\"color:green\">{pair}</span>";
                 }
             }
             return PairString;

@@ -21,16 +21,16 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-3">
         <div class="row">
-            <h5><a style="color:black">&spades;</a>@Model.NorthSpades</h5>
+            <h5><span style="color:black">&spades;</span>@Model.NorthSpades</h5>
         </div>
         <div class="row">
-            <h5><a style="color:red">&hearts;</a>@Model.NorthHearts</h5>
+            <h5><span style="color:red">&hearts;</span>@Model.NorthHearts</h5>
         </div>
         <div class="row">
-            <h5><a style="color:lightsalmon">&diams;</a>@Model.NorthDiamonds</h5>
+            <h5><span style="color:lightsalmon">&diams;</span>@Model.NorthDiamonds</h5>
         </div>
         <div class="row">
-            <h5><a style="color:lightslategrey">&clubs;</a>@Model.NorthClubs</h5>
+            <h5><span style="color:lightslategrey">&clubs;</span>@Model.NorthClubs</h5>
         </div>
     </div>
     <div class="col-4">
@@ -40,34 +40,34 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row">
     <div class="col-4 pl-4">
         <div class="row">
-            <h5><a style="color:black">&spades;</a>@Model.WestSpades</h5>
+            <h5><span style="color:black">&spades;</span>@Model.WestSpades</h5>
         </div>
         <div class="row">
-            <h5><a style="color:red">&hearts;</a>@Model.WestHearts</h5>
+            <h5><span style="color:red">&hearts;</span>@Model.WestHearts</h5>
         </div>
         <div class="row">
-            <h5><a style="color:lightsalmon">&diams;</a>@Model.WestDiamonds</h5>
+            <h5><span style="color:lightsalmon">&diams;</span>@Model.WestDiamonds</h5>
         </div>
         <div class="row">
-            <h5><a style="color:lightslategrey">&clubs;</a>@Model.WestClubs</h5>
+            <h5><span style="color:lightslategrey">&clubs;</span>@Model.WestClubs</h5>
         </div>
     </div>
-    <div class="col-4 px-3 py-2" style="background-color:green">
+    <div class="col-4 px-3 py-2" style="color: aqua; background-color:green">
         @if (Model.EvalNorthNT == "###")
         {
             <div class="row h-25">
-                <div class="col-12 text-center" style="color:aqua">
+                <div class="col-12 text-center">
                     N
                 </div>
             </div>
             <div class="row h-25 mt-3">
-                <div class="col-12" style="color:aqua; display: inline-block; vertical-align: middle;">
-                    <a class="float-left">W</a>
-                    <a class="float-right">E</a>
+                <div class="col-12" style="display: inline-block; vertical-align: middle;">
+                    <span class="float-left">W</span>
+                    <span class="float-right">E</span>
                 </div>
             </div>
             <div class="row h-25 mt-3">
-                <div class="col-12 text-center" style="color:aqua">
+                <div class="col-12 text-center">
                     S
                 </div>
             </div>
@@ -75,18 +75,18 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         else
         {
             <div class="row h-25">
-                <div class="col-12 text-center" style="color:aqua">
+                <div class="col-12 text-center">
                     N (@Model.HCPNorth)
                 </div>
             </div>
             <div class="row h-25 mt-3">
-                <div class="col-12" style="color:aqua; display: inline-block; vertical-align: middle;">
-                    <a class="float-left">W (@Model.HCPWest)</a>
-                    <a class="float-right">(@Model.HCPEast) E</a>
+                <div class="col-12" style="display: inline-block; vertical-align: middle;">
+                    <span class="float-left">W (@Model.HCPWest)</span>
+                    <span class="float-right">(@Model.HCPEast) E</span>
                 </div>
             </div>
             <div class="row h-25 mt-3">
-                <div class="col-12 text-center" style="color:aqua">
+                <div class="col-12 text-center">
                     S (@Model.HCPSouth)
                 </div>
             </div>
@@ -94,16 +94,16 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-4 pl-4">
         <div class="row">
-            <h5><a style="color:black">&spades;</a>@Model.EastSpades</h5>
+            <h5><span style="color:black">&spades;</span>@Model.EastSpades</h5>
         </div>
         <div class="row">
-            <h5><a style="color:red">&hearts;</a>@Model.EastHearts</h5>
+            <h5><span style="color:red">&hearts;</span>@Model.EastHearts</h5>
         </div>
         <div class="row">
-            <h5><a style="color:lightsalmon">&diams;</a>@Model.EastDiamonds</h5>
+            <h5><span style="color:lightsalmon">&diams;</span>@Model.EastDiamonds</h5>
         </div>
         <div class="row">
-            <h5><a style="color:lightslategrey">&clubs;</a>@Model.EastClubs</h5>
+            <h5><span style="color:lightslategrey">&clubs;</span>@Model.EastClubs</h5>
         </div>
     </div>
 </div>
@@ -164,16 +164,16 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-3">
         <div class="row">
-            <h5><a style="color:black">&spades;</a>@Model.SouthSpades</h5>
+            <h5><span style="color:black">&spades;</span>@Model.SouthSpades</h5>
         </div>
         <div class="row">
-            <h5><a style="color:red">&hearts;</a>@Model.SouthHearts</h5>
+            <h5><span style="color:red">&hearts;</span>@Model.SouthHearts</h5>
         </div>
         <div class="row">
-            <h5><a style="color:lightsalmon">&diams;</a>@Model.SouthDiamonds</h5>
+            <h5><span style="color:lightsalmon">&diams;</span>@Model.SouthDiamonds</h5>
         </div>
         <div class="row">
-            <h5><a style="color:lightslategrey">&clubs;</a>@Model.SouthClubs</h5>
+            <h5><span style="color:lightslategrey">&clubs;</span>@Model.SouthClubs</h5>
         </div>
     </div>
     <div class="col-4">

@@ -202,11 +202,11 @@ namespace TabScore.Models
             }
             else if (ContractLevel == -1)  // Board not played
             {
-                return "<a style=\"color:red\">Not played</a>";
+                return "<span style=\"color:red\">Not played</span>";
             }
             else if (ContractLevel == 0)
             {
-                return "<a style=\"color:darkgreen\">PASSed Out</a>";
+                return "<span style=\"color:darkgreen\">PASSed Out</span>";
             }
             StringBuilder s = new StringBuilder("");
             s.Append(ContractLevel);
@@ -216,16 +216,16 @@ namespace TabScore.Models
                     s.Append("NT");
                     break;
                 case "S":
-                    s.Append("<a style=\"color:black\">&spades;</a>");
+                    s.Append("<span style=\"color:black\">&spades;</span>");
                     break;
                 case "H":
-                    s.Append("<a style=\"color:red\">&hearts;</a>");
+                    s.Append("<span style=\"color:red\">&hearts;</span>");
                     break;
                 case "D":
-                    s.Append("<a style=\"color:lightsalmon\">&diams;</a>");
+                    s.Append("<span style=\"color:lightsalmon\">&diams;</span>");
                     break;
                 case "C":
-                    s.Append("<a style=\"color:lightslategrey\">&clubs;</a>");
+                    s.Append("<span style=\"color:lightslategrey\">&clubs;</span>");
                     break;
             }
             s.Append(ContractX);
@@ -237,30 +237,30 @@ namespace TabScore.Models
         {
             string s = LeadCard;
             if (s == null || s == "" || s == "SKIP") return "";
-            s = s.Replace("S", "<a style=\"color:black\">&spades;</a>");
-            s = s.Replace("H", "<a style=\"color:red\">&hearts;</a>");
-            s = s.Replace("D", "<a style=\"color:lightsalmon\">&diams;</a>");
-            s = s.Replace("C", "<a style=\"color:lightslategrey\">&clubs;</a>");
+            s = s.Replace("S", "<span style=\"color:black\">&spades;</span>");
+            s = s.Replace("H", "<span style=\"color:red\">&hearts;</span>");
+            s = s.Replace("D", "<span style=\"color:lightsalmon\">&diams;</span>");
+            s = s.Replace("C", "<span style=\"color:lightslategrey\">&clubs;</span>");
             s = s.Replace("10", "T");
             return s;
         }
 
         public string DisplayTravellerContract()
         {
-            if (ContractLevel == 0) return "<a style=\"color:darkgreen\">PASS</a>";
+            if (ContractLevel == 0) return "<span style=\"color:darkgreen\">PASS</span>";
             StringBuilder s = new StringBuilder(ContractLevel.ToString());
             switch (ContractSuit) {
                 case "S":
-                    s.Append("<a style=\"color:black\">&spades;</a>");
+                    s.Append("<span style=\"color:black\">&spades;</span>");
                     break;
                 case "H":
-                    s.Append("<a style=\"color:red\">&hearts;</a>");
+                    s.Append("<span style=\"color:red\">&hearts;</span>");
                     break;
                 case "D":
-                    s.Append("<a style=\"color:lightsalmon\">&diams;</a>");
+                    s.Append("<span style=\"color:lightsalmon\">&diams;</span>");
                     break;
                 case "C":
-                    s.Append("<a style=\"color:lightslategrey\">&clubs;</a>");
+                    s.Append("<span style=\"color:lightslategrey\">&clubs;</span>");
                     break;
                 case "NT":
                     s.Append("NT");
