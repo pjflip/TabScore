@@ -296,6 +296,7 @@
     <Content Include="Scripts\src\utils\setAttributes.js" />
     <Content Include="Scripts\src\utils\setStyles.js" />
     <Content Include="Scripts\src\utils\setupEventListeners.js" />
+    <Content Include="Scripts\ShowHandRecord.js" />
     <Content Include="Scripts\TotalTricks.js" />
     <Content Include="Scripts\TricksPlusMinus.js" />
     <Content Include="Scripts\TwoWinnersRankingList.js" />

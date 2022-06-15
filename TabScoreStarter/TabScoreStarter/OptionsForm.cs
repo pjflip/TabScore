@@ -18,6 +18,7 @@ namespace TabScoreStarter
             ShowTravellerCheckbox.Checked = opt.ShowTraveller;
             ShowPercentageCheckbox.Checked = opt.ShowPercentage;
             ShowHandRecordCheckbox.Checked = opt.ShowHandRecord;
+            HandRecordReversePerspectiveCheckbox.Checked = opt.HandRecordReversePerspective;
             ShowRankingCombobox.SelectedIndex = opt.ShowRanking;
             EnterLeadCardCheckbox.Checked = opt.EnterLeadCard;
             ValidateLeadCardCheckbox.Checked = opt.ValidateLeadCard;
@@ -32,6 +33,7 @@ namespace TabScoreStarter
 
             ShowPercentageCheckbox.Enabled = ShowTravellerCheckbox.Checked;
             ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
+            HandRecordReversePerspectiveCheckbox.Enabled = ShowTravellerCheckbox.Checked && ShowHandRecordCheckbox.Checked;
             ValidateLeadCardCheckbox.Enabled = EnterLeadCardCheckbox.Checked;
             MinutesPerBoardNud.Enabled = ShowTimerCheckbox.Checked;
             AdditionalMinutesPerRoundNud.Enabled = ShowTimerCheckbox.Checked;
@@ -51,6 +53,7 @@ namespace TabScoreStarter
                 ShowTraveller = ShowTravellerCheckbox.Checked,
                 ShowPercentage = ShowPercentageCheckbox.Checked,
                 ShowHandRecord = ShowHandRecordCheckbox.Checked,
+                HandRecordReversePerspective = HandRecordReversePerspectiveCheckbox.Checked,
                 ShowRanking = ShowRankingCombobox.SelectedIndex,
                 EnterLeadCard = EnterLeadCardCheckbox.Checked,
                 ValidateLeadCard = ValidateLeadCardCheckbox.Checked,
@@ -64,6 +67,7 @@ namespace TabScoreStarter
             };
             opt.UpdateDB();
             Properties.Settings.Default.TabletsMove = opt.TabletsMove;
+            Properties.Settings.Default.HandRecordReversePerspective = opt.HandRecordReversePerspective;
             Properties.Settings.Default.ShowTimer = opt.ShowTimer;
             Properties.Settings.Default.MinutesPerBoard = opt.MinutesPerBoard;
             Properties.Settings.Default.AdditionalMinutesPerRound = opt.AdditionalMinutesPerRound;
@@ -75,6 +79,12 @@ namespace TabScoreStarter
         {
             ShowPercentageCheckbox.Enabled = ShowTravellerCheckbox.Checked;
             ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
+            HandRecordReversePerspectiveCheckbox.Enabled = ShowTravellerCheckbox.Checked && ShowHandRecordCheckbox.Checked;
+        }
+
+        private void ShowHandRecord_CheckedChanged(object sender, EventArgs e)
+        {
+            HandRecordReversePerspectiveCheckbox.Enabled = ShowTravellerCheckbox.Checked && ShowHandRecordCheckbox.Checked;
         }
 
         private void EnterLeadCard_CheckedChanged(object sender, EventArgs e)

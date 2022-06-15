@@ -10,6 +10,8 @@ namespace TabScore.Models
         public int TabletDeviceNumber;
         public string Dealer;
         public bool FromView = false;
+        public string PerspectiveDirection;
+        public HandRecordPerspectiveButtonOptions PerspectiveButtonOption;
 
         public string NorthSpades;
         public string NorthHearts;

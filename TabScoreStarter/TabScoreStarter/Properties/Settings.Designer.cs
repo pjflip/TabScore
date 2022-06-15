@@ -70,5 +70,17 @@ namespace TabScoreStarter.Properties {
                 this["AdditionalMinutesPerRound"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HandRecordReversePerspective {
+            get {
+                return ((bool)(this["HandRecordReversePerspective"]));
+            }
+            set {
+                this["HandRecordReversePerspective"] = value;
+            }
+        }
     }
 }

@@ -20,7 +20,9 @@ namespace TabScore.Controllers
             }
             handRecord.TabletDeviceNumber = tabletDeviceNumber;
             handRecord.FromView = fromView;
-
+            handRecord.PerspectiveDirection = tabletDeviceStatus.PerspectiveDirection.ToString();
+            handRecord.PerspectiveButtonOption = tabletDeviceStatus.PerspectiveButtonOption;
+            
             ViewData["Title"] = $"Hand Record - {tabletDeviceStatus.Location}";
             if (Settings.ShowTimer)
             {

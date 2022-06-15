@@ -30,6 +30,13 @@ namespace TabScore.Models
         West,
         Null
     }
+    public enum HandRecordPerspectiveButtonOptions
+    {
+        None,
+        NSEW,
+        NS,
+        EW
+    }
 
     public static class Utilities
     {

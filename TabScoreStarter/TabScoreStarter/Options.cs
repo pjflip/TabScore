@@ -18,6 +18,7 @@ namespace TabScoreStarter
         public int NameSource { get; set; }
         public int EnterResultsMethod { get; set; }
         public bool TabletsMove { get; set; }
+        public bool HandRecordReversePerspective { get; set; }
         public bool ShowTimer { get; set; }
         public double MinutesPerBoard { get; set; }
         public double AdditionalMinutesPerRound { get; set; }
@@ -29,7 +30,7 @@ namespace TabScoreStarter
             dbConnectionString = connectionString.ToString();
             using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
             {
-                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod, TabletsMove, ShowTimer, MinutesPerBoard, AdditionalMinutesPerRound FROM Settings";
+                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod, TabletsMove, HandRecordReversePerspective, ShowTimer, MinutesPerBoard, AdditionalMinutesPerRound FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
                 OdbcDataReader reader = cmd.ExecuteReader();
@@ -45,9 +46,10 @@ namespace TabScoreStarter
                 EnterResultsMethod = reader.GetInt32(8);
                 if (EnterResultsMethod != 1) EnterResultsMethod = 0;
                 TabletsMove = reader.GetBoolean(9);
-                ShowTimer = reader.GetBoolean(10);
-                MinutesPerBoard = reader.GetDouble(11);
-                AdditionalMinutesPerRound = reader.GetDouble(12);
+                HandRecordReversePerspective = reader.GetBoolean(10);
+                ShowTimer = reader.GetBoolean(11);
+                MinutesPerBoard = reader.GetDouble(12);
+                AdditionalMinutesPerRound = reader.GetDouble(13);
                 reader.Close();
                 cmd.Dispose();
             }
@@ -117,6 +119,14 @@ namespace TabScoreStarter
                 else
                 {
                     SQLString.Append(" TabletsMove=NO,");
+                }
+                if (HandRecordReversePerspective)
+                {
+                    SQLString.Append(" HandRecordReversePerspective=YES,");
+                }
+                else
+                {
+                    SQLString.Append(" HandRecordReversePerspective=NO,");
                 }
                 if (ShowTimer)
                 {

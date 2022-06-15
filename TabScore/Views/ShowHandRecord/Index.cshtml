@@ -21,16 +21,16 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-3">
         <div class="row">
-            <h5><span style="color:black">&spades;</span>@Model.NorthSpades</h5>
+            <h5><span style="color:black">&spades;</span><span id="TS"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:red">&hearts;</span>@Model.NorthHearts</h5>
+            <h5><span style="color:red">&hearts;</span><span id="TH"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:lightsalmon">&diams;</span>@Model.NorthDiamonds</h5>
+            <h5><span style="color:lightsalmon">&diams;</span><span id="TD"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:lightslategrey">&clubs;</span>@Model.NorthClubs</h5>
+            <h5><span style="color:lightslategrey">&clubs;</span><span id="TC"></span></h5>
         </div>
     </div>
     <div class="col-4">
@@ -40,70 +40,44 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row">
     <div class="col-4 pl-4">
         <div class="row">
-            <h5><span style="color:black">&spades;</span>@Model.WestSpades</h5>
+            <h5><span style="color:black">&spades;</span><span id="LS"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:red">&hearts;</span>@Model.WestHearts</h5>
+            <h5><span style="color:red">&hearts;</span><span id="LH"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:lightsalmon">&diams;</span>@Model.WestDiamonds</h5>
+            <h5><span style="color:lightsalmon">&diams;</span><span id="LD"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:lightslategrey">&clubs;</span>@Model.WestClubs</h5>
+            <h5><span style="color:lightslategrey">&clubs;</span><span id="LC"></span></h5>
         </div>
     </div>
     <div class="col-4 px-3 py-2" style="color: aqua; background-color:green">
-        @if (Model.EvalNorthNT == "###")
-        {
-            <div class="row h-25">
-                <div class="col-12 text-center">
-                    N
-                </div>
+        <div class="row h-25">
+            <div id ="T" class="col-12 text-center"></div>
+        </div>
+        <div class="row h-25 mt-3">
+            <div class="col-12" style="display: inline-block; vertical-align: middle;">
+                <span id="L" class="float-left"></span>
+                <span id="R" class="float-right"></span>
             </div>
-            <div class="row h-25 mt-3">
-                <div class="col-12" style="display: inline-block; vertical-align: middle;">
-                    <span class="float-left">W</span>
-                    <span class="float-right">E</span>
-                </div>
-            </div>
-            <div class="row h-25 mt-3">
-                <div class="col-12 text-center">
-                    S
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="row h-25">
-                <div class="col-12 text-center">
-                    N (@Model.HCPNorth)
-                </div>
-            </div>
-            <div class="row h-25 mt-3">
-                <div class="col-12" style="display: inline-block; vertical-align: middle;">
-                    <span class="float-left">W (@Model.HCPWest)</span>
-                    <span class="float-right">(@Model.HCPEast) E</span>
-                </div>
-            </div>
-            <div class="row h-25 mt-3">
-                <div class="col-12 text-center">
-                    S (@Model.HCPSouth)
-                </div>
-            </div>
-        }
+        </div>
+        <div class="row h-25 mt-3">
+            <div id="B" class="col-12 text-center"></div>
+        </div>
     </div>
     <div class="col-4 pl-4">
         <div class="row">
-            <h5><span style="color:black">&spades;</span>@Model.EastSpades</h5>
+            <h5><span style="color:black">&spades;</span><span id="RS"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:red">&hearts;</span>@Model.EastHearts</h5>
+            <h5><span style="color:red">&hearts;</span><span id="RH"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:lightsalmon">&diams;</span>@Model.EastDiamonds</h5>
+            <h5><span style="color:lightsalmon">&diams;</span><span id="RD"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:lightslategrey">&clubs;</span>@Model.EastClubs</h5>
+            <h5><span style="color:lightslategrey">&clubs;</span><span id="RC"></span></h5>
         </div>
     </div>
 </div>
@@ -164,25 +138,51 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-3">
         <div class="row">
-            <h5><span style="color:black">&spades;</span>@Model.SouthSpades</h5>
+            <h5><span style="color:black">&spades;</span><span id="BS"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:red">&hearts;</span>@Model.SouthHearts</h5>
+            <h5><span style="color:red">&hearts;</span><span id="BH"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:lightsalmon">&diams;</span>@Model.SouthDiamonds</h5>
+            <h5><span style="color:lightsalmon">&diams;</span><span id="BD"></span></h5>
         </div>
         <div class="row">
-            <h5><span style="color:lightslategrey">&clubs;</span>@Model.SouthClubs</h5>
+            <h5><span style="color:lightslategrey">&clubs;</span><span id="BC"></span></h5>
         </div>
     </div>
     <div class="col-4">
     </div>
 </div>
 
-<script>
-    var isSubmitted = false;
+<div class="row mt-2">
+    <div class="col-12 text-center">
+        @if (Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NS)
+        {
+            <button id="btnNorth" class="btn btn-secondary m-1" ontouchstart="setNSEW('North')">
+                N
+            </button>
+            <button id="btnSouth" class="btn btn-secondary m-1" ontouchstart="setNSEW('South')">
+                S
+            </button>
+        }
+        @if (Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.EW)
+        {
+            <button id="btnEast" class="btn btn-secondary m-1" ontouchstart="setNSEW('East')">
+                E
+            </button>
+            <button id="btnWest" class="btn btn-secondary m-1" ontouchstart="setNSEW('West')">
+                W
+            </button>
+        }
+    </div>
+</div>
 
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    var isSubmitted = false;
+</script>
+<script src='@Url.Content("~/Scripts/ShowHandRecord.js")' type="text/javascript"></script>
+<script>
     $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;

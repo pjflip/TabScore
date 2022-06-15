@@ -353,6 +353,29 @@ namespace TabScoreStarter
                             throw e;
                         }
                     }
+                    SQLString = "ALTER TABLE Settings ADD HandRecordReversePerspective YESNO";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        if (Properties.Settings.Default.HandRecordReversePerspective)
+                        {
+                            SQLString = "UPDATE Settings SET HandRecordReversePerspective=YES";
+                        }
+                        else
+                        {
+                            SQLString = "UPDATE Settings SET HandRecordReversePerspective=NO";
+                        }
+                        cmd = new OdbcCommand(SQLString, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (OdbcException e)
+                    {
+                        if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                        {
+                            throw e;
+                        }
+                    }
                     SQLString = "ALTER TABLE Settings ADD ShowTimer YESNO";
                     cmd = new OdbcCommand(SQLString, connection);
                     try
