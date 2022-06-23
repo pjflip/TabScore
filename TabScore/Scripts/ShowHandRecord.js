@@ -69,7 +69,7 @@ function setNSEW(direction) {
         else {
             document.getElementById('T').innerHTML = "N (" + model.HCPNorth + ")";
             document.getElementById('L').innerHTML = "W (" + model.HCPWest + ")";
-            document.getElementById('R').innerHTML = "(" + model.HCPNorth + ") E";
+            document.getElementById('R').innerHTML = "(" + model.HCPEast + ") E";
             document.getElementById('B').innerHTML = "S (" + model.HCPSouth + ")";
         }
     }
