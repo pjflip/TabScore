@@ -62,6 +62,7 @@ namespace TabScore.Models
                             ranking.ScoreDecimal = Convert.ToDouble(ranking.Score);
                             Add(ranking);
                         }
+                        reader1.Close();
                     });
                 }
                 catch (OdbcException e)
@@ -73,7 +74,6 @@ namespace TabScore.Models
                 }
                 finally
                 {
-                    reader1.Close();
                     cmd.Dispose();
                 }
 

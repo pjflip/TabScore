@@ -4,7 +4,6 @@ using System.Data.Odbc;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using System.Security.AccessControl;
 using System.Windows.Forms;
 
 namespace TabScoreStarter
@@ -144,7 +143,7 @@ namespace TabScoreStarter
             BackgroundWorker worker = sender as BackgroundWorker;
             OdbcConnectionStringBuilder connectionString = Database.ConnectionString(PathToDBLabel.Text);
             HandsList handsList = new HandsList(connectionString);
-            HandEvaluationsList handEvaluationsList = new HandEvaluationsList(connectionString);
+            HandEvaluationsList handEvaluationsList = new HandEvaluationsList();
             int counter = 0;
             foreach (Hand hand in handsList)
             {
@@ -153,7 +152,7 @@ namespace TabScoreStarter
                 counter++;
                 worker.ReportProgress((int)((float)counter / (float)handsList.Count * 100.0));
             }
-            handEvaluationsList.WriteToDB();
+            handEvaluationsList.WriteToDB(connectionString);
         }
 
         private void AnalysisCalculation_ProgressChanged(object sender, ProgressChangedEventArgs e)

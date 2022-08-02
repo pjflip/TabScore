@@ -95,7 +95,7 @@ namespace TabScore.Models
                     }
 
                     // Create list of sections
-                    SQLString = "SELECT ID, Letter, Tables, MissingPair, ScoringType, Winners FROM Section";
+                    SQLString = "SELECT ID, Letter, Tables, MissingPair, Winners FROM Section";
                     cmd = new OdbcCommand(SQLString, connection);
                     OdbcDataReader reader = null;
                     try
@@ -111,8 +111,7 @@ namespace TabScore.Models
                                     SectionLetter = reader.GetString(1),
                                     NumTables = reader.GetInt32(2),
                                     MissingPair = reader.GetInt32(3),
-                                    ScoringType = reader.GetInt32(4),
-                                    Winners = reader.GetInt32(5)
+                                    Winners = reader.GetInt32(4)
                                 };
                                 SectionsList.Add(s);
                             }

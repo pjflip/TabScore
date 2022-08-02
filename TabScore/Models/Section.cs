@@ -10,7 +10,6 @@ namespace TabScore.Models
         public int NumTables { get; set; }
         public int MissingPair { get; set; }
         public int Winners { get; set; }
-        public int ScoringType { get; set; }
         public int TabletDevicesPerTable { get; set; } = 1;
     }
 }

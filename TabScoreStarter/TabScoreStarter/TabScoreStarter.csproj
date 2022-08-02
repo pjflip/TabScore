@@ -102,6 +102,7 @@
     <Compile Include="HandEvaluation.cs" />
     <Compile Include="HandEvaluationsList.cs" />
     <Compile Include="HandsList.cs" />
+    <Compile Include="Section.cs" />
     <Compile Include="TabScoreForm.cs">
       <SubType>Form</SubType>
     </Compile>

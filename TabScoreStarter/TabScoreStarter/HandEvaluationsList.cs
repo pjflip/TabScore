@@ -10,30 +10,7 @@ namespace TabScoreStarter
     {
         private readonly string dbConnectionString;
 
-        public HandEvaluationsList(OdbcConnectionStringBuilder connectionString)
-        {
-            dbConnectionString = connectionString.ToString();
-            using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
-            {
-                connection.Open();
-                string SQLString = "CREATE TABLE HandEvaluation (Section SHORT, Board SHORT, NorthSpades SHORT, NorthHearts SHORT, NorthDiamonds SHORT, NorthClubs SHORT, NorthNoTrump SHORT, EastSpades SHORT, EastHearts SHORT, EastDiamonds SHORT, EastClubs SHORT, EastNoTrump SHORT, SouthSpades SHORT, SouthHearts SHORT, SouthDiamonds SHORT, SouthClubs SHORT, SouthNotrump SHORT, WestSpades SHORT, WestHearts SHORT, WestDiamonds SHORT, WestClubs SHORT, WestNoTrump SHORT, NorthHcp SHORT, EastHcp SHORT, SouthHcp SHORT, WestHcp SHORT)";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (OdbcException e)
-                {
-                    if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S01")  // Error other than HandEvaluation table already exists
-                    {
-                        throw e;
-                    }
-                }
-                cmd.Dispose();
-            }
-        }
-
-        public void WriteToDB()
+        public void WriteToDB(OdbcConnectionStringBuilder connectionString)
         {
             using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
             {

@@ -11,15 +11,16 @@ namespace TabScore.Models
     public static class HandRecords
     {
         private static DateTime UpdateTime;
+        private static bool InitialUpdateComplete = false;
 
-        public static readonly List<HandRecord> HandRecordsList = new List<HandRecord>();
+        public static List<HandRecord> HandRecordsList = new List<HandRecord>();
 
         public static void Refresh()
         {
-            if (DateTime.Now.Subtract(UpdateTime).TotalMinutes < 1.0) return;  // Hand records updated recently, so don't bother
+            if (InitialUpdateComplete && DateTime.Now.Subtract(UpdateTime).TotalMinutes < 1.0) return;  // Hand records updated recently, so don't bother
             UpdateTime = DateTime.Now;
 
-            HandRecordsList.Clear();
+            List<HandRecord> TempHandRecordsList = new List<HandRecord>();
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 string SQLString = $"SELECT Section, Board, NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs FROM HandRecord";
@@ -55,7 +56,7 @@ namespace TabScore.Models
                                 WestClubs = reader.GetString(17)
                             };
                             handRecord.Dealer = Utilities.GetDealerForBoard(handRecord.BoardNumber);
-                            HandRecordsList.Add(handRecord);
+                            TempHandRecordsList.Add(handRecord);
                         }
                     });
                 }
@@ -85,7 +86,7 @@ namespace TabScore.Models
                         reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            HandRecord handRecord = HandRecordsList.Find(x => x.SectionID == reader.GetInt16(0) && x.BoardNumber == reader.GetInt16(1));
+                            HandRecord handRecord = TempHandRecordsList.Find(x => x.SectionID == reader.GetInt16(0) && x.BoardNumber == reader.GetInt16(1));
                             if (handRecord != null)
                             {
                                 if (reader.GetInt16(2) > 6) handRecord.EvalNorthSpades = (reader.GetInt16(2) - 6).ToString(); else handRecord.EvalNorthSpades = "";
@@ -130,6 +131,8 @@ namespace TabScore.Models
                     cmd.Dispose();
                 }
             }
+            HandRecordsList = TempHandRecordsList;
+            InitialUpdateComplete = true;
             return;
         }
     }
