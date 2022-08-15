@@ -2,11 +2,12 @@
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.HandRecord
+@using Resources
 
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3>
-            Board @Model.BoardNumber
+            @Strings.Board @Model.BoardNumber
         </h3>
     </div>
 </div>
@@ -16,7 +17,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-4">
         <h5>
-            Dealer: @Model.Dealer
+            @Strings.Dealer @Model.Dealer
         </h5>
     </div>
     <div class="col-3">
@@ -90,7 +91,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 <thead>
                     <tr>
                         <th></th>
-                        <th>NT</th>
+                        <th>@Strings.NT</th>
                         <th style="color:black">&spades;</th>
                         <th style="color:red">&hearts;</th>
                         <th style="color:lightsalmon">&diams;</th>
@@ -99,7 +100,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 </thead>
                 <tbody>
                     <tr>
-                        <td>N</td>
+                        <td>@Strings.N</td>
                         <td>@Model.EvalNorthNT</td>
                         <td>@Model.EvalNorthSpades</td>
                         <td>@Model.EvalNorthHearts</td>
@@ -107,7 +108,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         <td>@Model.EvalNorthClubs</td>
                     </tr>
                     <tr>
-                        <td>S</td>
+                        <td>@Strings.S</td>
                         <td>@Model.EvalSouthNT</td>
                         <td>@Model.EvalSouthSpades</td>
                         <td>@Model.EvalSouthHearts</td>
@@ -115,7 +116,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         <td>@Model.EvalSouthClubs</td>
                     </tr>
                     <tr>
-                        <td>E</td>
+                        <td>@Strings.E</td>
                         <td>@Model.EvalEastNT</td>
                         <td>@Model.EvalEastSpades</td>
                         <td>@Model.EvalEastHearts</td>
@@ -123,7 +124,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         <td>@Model.EvalEastClubs</td>
                     </tr>
                     <tr>
-                        <td>W</td>
+                        <td>@Strings.W</td>
                         <td>@Model.EvalWestNT</td>
                         <td>@Model.EvalWestSpades</td>
                         <td>@Model.EvalWestHearts</td>
@@ -159,19 +160,19 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         @if (Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NS)
         {
             <button id="btnNorth" class="btn btn-secondary m-1" ontouchstart="setNSEW('North')">
-                N
+                @Strings.N
             </button>
             <button id="btnSouth" class="btn btn-secondary m-1" ontouchstart="setNSEW('South')">
-                S
+                @Strings.S
             </button>
         }
         @if (Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.EW)
         {
             <button id="btnEast" class="btn btn-secondary m-1" ontouchstart="setNSEW('East')">
-                E
+                @Strings.E
             </button>
             <button id="btnWest" class="btn btn-secondary m-1" ontouchstart="setNSEW('West')">
-                W
+                @Strings.W
             </button>
         }
     </div>

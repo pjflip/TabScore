@@ -4,6 +4,7 @@
 using System;
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
@@ -22,23 +23,10 @@ namespace TabScore.Controllers
             handRecord.FromView = fromView;
             handRecord.PerspectiveDirection = tabletDeviceStatus.PerspectiveDirection.ToString();
             handRecord.PerspectiveButtonOption = tabletDeviceStatus.PerspectiveButtonOption;
-            
-            ViewData["Title"] = $"Hand Record - {tabletDeviceStatus.Location}";
-            if (Settings.ShowTimer)
-            {
-                RoundTimer roundTimer = AppData.RoundTimerList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber);
-                int timerSeconds = roundTimer.SecondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(roundTimer.StartTime).TotalSeconds);
-                if (timerSeconds < 0) timerSeconds = 0;
-                ViewData["TimerSeconds"] = timerSeconds;
-            }
-            if (AppData.IsIndividual)
-            {
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
-            }
-            else
-            {
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", boardNumber, $"NS {tableStatus.RoundData.NumberNorth}")} v {Utilities.ColourPairByVulnerability("EW", boardNumber, $"EW {tableStatus.RoundData.NumberEast}")}";
-            }
+
+            if (Settings.ShowTimer) ViewData["TimerSeconds"] = Utilities.SetTimerSeconds(tabletDeviceStatus);
+            ViewData["Title"] = $"{Strings.ShowHandRecord} - {tabletDeviceStatus.Location}";
+            ViewData["Header"] = Utilities.HeaderString(tabletDeviceStatus, tableStatus, boardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             return View(handRecord);
         }

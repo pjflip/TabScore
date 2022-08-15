@@ -49,25 +49,25 @@ namespace TabScoreStarter.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("6.5")]
-        public double MinutesPerBoard {
+        [global::System.Configuration.DefaultSettingValueAttribute("390")]
+        public int SecondsPerBoard {
             get {
-                return ((double)(this["MinutesPerBoard"]));
+                return ((int)(this["SecondsPerBoard"]));
             }
             set {
-                this["MinutesPerBoard"] = value;
+                this["SecondsPerBoard"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public double AdditionalMinutesPerRound {
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int AdditionalSecondsPerRound {
             get {
-                return ((double)(this["AdditionalMinutesPerRound"]));
+                return ((int)(this["AdditionalSecondsPerRound"]));
             }
             set {
-                this["AdditionalMinutesPerRound"] = value;
+                this["AdditionalSecondsPerRound"] = value;
             }
         }
         

@@ -2,21 +2,22 @@
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.MovesList
+@using Resources
 
 <div id="newTableNotReadyModal" class="modal" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>Warning</h3>
+                    <h3>@Strings.Warning</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>Table @Model.TableNotReadyNumber.ToString() is not yet ready.  Please wait</p>
+                <p>@Strings.ErrorTableNotReady1 @Model.TableNotReadyNumber.ToString() @Strings.ErrorTableNotReady2</p>
             </div>
             <div class="modal-footer" style="justify-content:space-between">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    OK <span class="fa fa-times-circle"></span>
+                    @Strings.OK <span class="fa fa-times-circle"></span>
                 </button>
             </div>
         </div>
@@ -26,7 +27,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Move for Round @Model.NewRoundNumber
+            @Strings.MoveForRound @Model.NewRoundNumber
         </h3>
     </div>
 </div>
@@ -46,7 +47,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             @if (move.NewTableNumber == 0)
             {
                 <h4>
-                    Move to Sit Out
+                    @Strings.MoveToSitOut
                 </h4>
             }
             else
@@ -54,13 +55,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 if (move.Stay)
                 {
                     <h4>
-                        Stay at Table @move.NewTableNumber @move.DisplayNewDirection
+                        @Strings.StayAtTable @move.NewTableNumber @move.DisplayNewDirection
                     </h4>
                 }
                 else
                 {
                     <h4>
-                        Move to Table @move.NewTableNumber @move.DisplayNewDirection
+                        @Strings.MoveToTable @move.NewTableNumber @move.DisplayNewDirection
                     </h4>
                 }
             }
@@ -72,9 +73,18 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 {
     <div class="row mt-4">
         <div class="col-12 text-center">
-            <h3 style="color:green">
-                Boards: @Model.LowBoard to @Model.HighBoard
-            </h3>
+            @if (Model.LowBoard == Model.HighBoard)
+            {
+                <h3 style="color:green">
+                    @Strings.Board @Model.LowBoard
+                </h3>
+            }
+            else
+            {
+                <h3 style="color:green">
+                    @Strings.Boards @Model.LowBoard - @Model.HighBoard
+                </h3>
+            }
         </div>
     </div>
 
@@ -83,13 +93,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             @if (Model.BoardsNewTable == 0)
             {
                 <h4>
-                    Pass to Relay Table
+                    @Strings.PassToRelayTable
                 </h4>
             }
             else
             {
                 <h4>
-                    Pass to Table @Model.BoardsNewTable
+                    @Strings.PassToTable @Model.BoardsNewTable
                 </h4>
             }
         </div>
@@ -105,13 +115,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             @if (Model[0].Stay)
             {
                 <h5>
-                    Please wait until the Director calls the move and this table is ready to start before pressing OK
+                    @Strings.WaitThisTable
                 </h5>
             }
             else
             {
                 <h5>
-                    Please wait until the Director calls the move, and then move to the next table before pressing OK
+                    @Strings.WaitNextTable
                 </h5>
             }
         </div>

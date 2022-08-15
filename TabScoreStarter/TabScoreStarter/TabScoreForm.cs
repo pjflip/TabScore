@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Data.Odbc;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -10,6 +9,8 @@ namespace TabScoreStarter
 {
     public partial class TabScoreForm : Form
     {
+        private string connectionString = "";
+
         public TabScoreForm()
         {
             InitializeComponent();
@@ -39,22 +40,19 @@ namespace TabScoreStarter
 
             if (pathToDB != "" && !File.Exists(pathToDB))
             {
-                MessageBox.Show("Database passed in parameter string either does not exist or is not accessible", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Database passed in parameter string does not exist", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 pathToDB = "";
             }
 
-            OdbcConnectionStringBuilder connectionString = null;
-            if (pathToDB != "") connectionString = Database.ConnectionString(pathToDB);
-            if (!Database.Initialize(connectionString))
+            connectionString = Database.ConnectionString(pathToDB);
+            if (pathToDB != "" && Database.Initialize(connectionString))
             {
-                AddDatabaseFileButton.Visible = true;   // No valid database in arguments
-            }
-            else
-            {
-                SetDBFile(pathToDB);
+                PathToDBLabel.Text = pathToDB;
+                File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt"), connectionString);
                 SessionStatusLabel.Text = "Session Running";
                 SessionStatusLabel.ForeColor = Color.Green;
                 OptionsButton.Visible = true;
+                ResultsViewerButton.Visible = true;
                 AddHandRecordFileButton.Visible = true;
                 HandsList handsList = new HandsList(connectionString);
                 if (handsList.Count > 0)
@@ -67,6 +65,10 @@ namespace TabScoreStarter
                     AnalysisCalculationBackgroundWorker.RunWorkerAsync();
                 }
             }
+            else
+            {
+                AddDatabaseFileButton.Visible = true;   // No valid database in arguments
+            }
         }
 
         private void AddDatabaseFileButton_Click(object sender, EventArgs e)
@@ -74,14 +76,16 @@ namespace TabScoreStarter
             if (DatabaseFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string pathToDB = DatabaseFileDialog.FileName;
-                OdbcConnectionStringBuilder connectionString = Database.ConnectionString(pathToDB);
+                connectionString = Database.ConnectionString(pathToDB);
                 if (Database.Initialize(connectionString))
                 {
                     AddDatabaseFileButton.Enabled = false;
-                    SetDBFile(pathToDB);
+                    PathToDBLabel.Text = pathToDB;
+                    File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt"), connectionString);
                     SessionStatusLabel.Text = "Session Running";
                     SessionStatusLabel.ForeColor = Color.Green;
                     OptionsButton.Visible = true;
+                    ResultsViewerButton.Visible = true;
                     AddHandRecordFileButton.Visible = true;
                     HandsList handsList = new HandsList(connectionString);
                     if (handsList.Count > 0)
@@ -94,6 +98,10 @@ namespace TabScoreStarter
                         AnalysisCalculationBackgroundWorker.RunWorkerAsync();
                     }
                 }
+                else
+                {
+                    MessageBox.Show("Database does not meet TabScore specification", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -102,14 +110,15 @@ namespace TabScoreStarter
             if (HandRecordFileDialog.ShowDialog() == DialogResult.OK)
             {
                 PathToHandRecordFileLabel.Text = HandRecordFileDialog.FileName;
-                HandsList handsList = new HandsList(HandRecordFileDialog.FileName);
+                StreamReader file = new StreamReader(HandRecordFileDialog.FileName);
+                HandsList handsList = new HandsList(file);
                 if (handsList.Count == 0)
                 {
                     MessageBox.Show("File contains no hand records", "TabScoreStarter", MessageBoxButtons.OK);
                 }
                 else
                 {
-                    handsList.WriteToDB(Database.ConnectionString(PathToDBLabel.Text));
+                    handsList.WriteToDB(connectionString);
                     AddHandRecordFileButton.Enabled = false;
                     AnalysingLabel.Text = "Analysing...";
                     AnalysingLabel.Visible = true;
@@ -121,27 +130,12 @@ namespace TabScoreStarter
 
         private void TabScoreForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ClearDBFile();
-        }
-
-        public void SetDBFile(string pathToDB)
-        {
-            PathToDBLabel.Text = pathToDB;
-            string pathToTabScoreDB = Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
-            System.IO.File.WriteAllText(pathToTabScoreDB, Database.ConnectionString(pathToDB).ToString());
-        }
-
-        public void ClearDBFile()
-        {
-            PathToDBLabel.Text = "";
-            string pathToTabScoreDB = Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
-            System.IO.File.WriteAllText(pathToTabScoreDB, "");
+            File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt"), "");
         }
 
         private void AnalysisCalculation_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            OdbcConnectionStringBuilder connectionString = Database.ConnectionString(PathToDBLabel.Text);
             HandsList handsList = new HandsList(connectionString);
             HandEvaluationsList handEvaluationsList = new HandEvaluationsList();
             int counter = 0;
@@ -170,13 +164,14 @@ namespace TabScoreStarter
 
         private void OptionsButton_Click(object sender, EventArgs e)
         {
-            Point mainFormLocation = Location;
-            OptionsForm frmOptions = new OptionsForm
-            {
-                Tag = PathToDBLabel.Text,
-                Location = new Point(mainFormLocation.X + 30, mainFormLocation.Y + 30)
-            };
+            OptionsForm frmOptions = new OptionsForm(connectionString, new Point(Location.X + 30, Location.Y + 30));
             frmOptions.ShowDialog();
+        }
+
+        private void ResultsViewerButton_Click(object sender, EventArgs e)
+        {
+            ViewResultsForm frmResultsViewer = new ViewResultsForm(connectionString, new Point(Location.X + 30, Location.Y + 30));
+            frmResultsViewer.ShowDialog();
         }
     }
 }

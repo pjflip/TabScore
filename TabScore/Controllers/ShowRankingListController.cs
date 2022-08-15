@@ -1,8 +1,10 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using System;
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
@@ -11,30 +13,29 @@ namespace TabScore.Controllers
         public ActionResult Index(int tabletDeviceNumber)
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
-            if (tabletDeviceStatus.RoundNumber > 1)  // Show ranking list only from round 2 onwards
+            if (Settings.ShowRanking == 1 && tabletDeviceStatus.RoundNumber > 1)  // Show ranking list only from round 2 onwards
             {
-                if (Settings.ShowRanking == 1)
-                {
-                    RankingList rankingList = new RankingList(tabletDeviceNumber);
+                RankingList rankingList = new RankingList(tabletDeviceNumber);
                     
-                    // Only show the ranking list if it contains something meaningful
-                    if (rankingList != null && rankingList.Count != 0 && rankingList[0].ScoreDecimal != 0 && rankingList[0].ScoreDecimal != 50)
+                // Only show the ranking list if it contains something meaningful
+                if (rankingList != null && rankingList.Count > 0 && rankingList[0].ScoreDecimal != 0.0 && rankingList[0].ScoreDecimal != 50.0)
+                {
+                    if (Settings.ShowTimer) ViewData["TimerSeconds"] = Utilities.SetTimerSeconds(tabletDeviceStatus);
+                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tabletDeviceStatus.RoundNumber}";
+                    ViewData["Title"] = $"{Strings.ShowRankingList} - {tabletDeviceStatus.Location}";
+                    ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+
+                    if (AppData.IsIndividual)
                     {
-                        ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber}";
-                        ViewData["Title"] = $"Ranking List - {tabletDeviceStatus.Location}";
-                        ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-                        if (AppData.IsIndividual)
-                        {
-                            return View("Individual", rankingList);
-                        }
-                        else if (rankingList.Exists(x => x.Orientation == "E"))
-                        {
-                            return View("TwoWinners", rankingList);
-                        }
-                        else
-                        {
-                            return View("OneWinner", rankingList);
-                        }
+                        return View("Individual", rankingList);
+                    }
+                    else if (rankingList.Exists(x => x.Orientation == "E"))
+                    {
+                        return View("TwoWinners", rankingList);
+                    }
+                    else
+                    {
+                        return View("OneWinner", rankingList);
                     }
                 }
             }
@@ -54,10 +55,9 @@ namespace TabScore.Controllers
             else
             {
                 rankingList.FinalRankingList = true;
-                ViewData["Header"] = $"Table {tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber}";
-                ViewData["Title"] = $"Final Ranking List - {tabletDeviceStatus.Location}";
+                ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tabletDeviceStatus.RoundNumber}";
+                ViewData["Title"] = $"{Strings.ShowFinalRankingList} - {tabletDeviceStatus.Location}";
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-                ViewData["TimerSeconds"] = -1;
                 if (AppData.IsIndividual)
                 {
                     return View("Individual", rankingList);

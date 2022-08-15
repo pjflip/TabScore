@@ -3,6 +3,7 @@
 
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
@@ -12,7 +13,7 @@ namespace TabScore.Controllers
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
 
-            ViewData["Title"] = $"Show Round Info - {tabletDeviceStatus.Location}";
+            ViewData["Title"] = $"{Strings.ShowRoundInfo} - {tabletDeviceStatus.Location}";
             ViewData["Header"] = $"{tabletDeviceStatus.Location}";
             if (tabletDeviceStatus.TableNumber == 0)
             {
@@ -21,7 +22,7 @@ namespace TabScore.Controllers
                 return View("Sitout", sitoutRoundInfo);
             }
 
-            // Update player names if not just immediately done in ShowPlayerNumbers
+            // Update player names if not just immediately done in ShowPlayerIDs
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
             if (tabletDeviceStatus.NamesUpdateRequired) tableStatus.RoundData.UpdateNames(tableStatus);
             tabletDeviceStatus.NamesUpdateRequired = true;

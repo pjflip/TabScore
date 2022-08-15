@@ -3,10 +3,11 @@
 
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
-    public class ShowPlayerNumbersController : Controller
+    public class ShowPlayerIDsController : Controller
     {
         public ActionResult Index(int tabletDeviceNumber, bool showWarning = false)
         {
@@ -29,8 +30,8 @@ namespace TabScore.Controllers
             playerEntryList.ShowWarning = showWarning;
 
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-            ViewData["Title"] = $"Show Player Numbers - {tabletDeviceStatus.Location}";
-            ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tabletDeviceStatus.RoundNumber}";
+            ViewData["Title"] = $"{Strings.ShowPlayerIDs} - {tabletDeviceStatus.Location}";
+            ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tabletDeviceStatus.RoundNumber}";
 
             if (AppData.IsIndividual)
             {
@@ -56,7 +57,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber, showWarning = true });
+                return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber, showWarning = true });
             }
         }
     }

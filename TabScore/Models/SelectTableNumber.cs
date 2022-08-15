@@ -3,14 +3,14 @@
 
 namespace TabScore.Models
 {
-    public class EnterTableNumber
+    public class SelectTableNumber
     {
         public int SectionID { get; set; }
         public int TableNumber { get; set; }
         public int NumTables { get; set; }
         public bool Confirm { get; set; }
 
-        public EnterTableNumber(Section section, int tableNumber, bool confirm)
+        public SelectTableNumber(Section section, int tableNumber, bool confirm)
         {
             SectionID = section.SectionID;
             TableNumber = tableNumber;

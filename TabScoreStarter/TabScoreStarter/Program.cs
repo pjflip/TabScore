@@ -13,6 +13,13 @@ namespace TabScoreStarter
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Check if TabScoreStarter is already running
+            if (System.Diagnostics.Process.GetProcessesByName("TabScoreStarter").Length > 1)
+            {
+                MessageBox.Show("TabScoreStarter is already running", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             Application.Run(new TabScoreForm());
         }
     }

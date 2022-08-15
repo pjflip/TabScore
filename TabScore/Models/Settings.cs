@@ -21,8 +21,8 @@ namespace TabScore.Models
         public static int NameSource { get; private set; }
         public static bool TabletDevicesMove { get; private set; }
         public static bool ShowTimer { get; private set; }
-        public static double MinutesPerBoard { get; private set; }
-        public static double AdditionalMinutesPerRound { get; private set; }
+        public static int SecondsPerBoard { get; private set; }
+        public static int AdditionalSecondsPerRound { get; private set; }
 
         private static DateTime UpdateTime;
 
@@ -34,7 +34,7 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
-                string SQLString = "SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, EnterResultsMethod, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, TabletsMove, HandRecordReversePerspective, ShowTimer, MinutesPerBoard, AdditionalMinutesPerRound FROM Settings";
+                string SQLString = "SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, EnterResultsMethod, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, TabletsMove, HandRecordReversePerspective, ShowTimer, SecondsPerBoard, AdditionalSecondsPerRound FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
                 try
@@ -56,9 +56,10 @@ namespace TabScore.Models
                             TabletDevicesMove = reader.GetBoolean(9);
                             HandRecordReversePerspective = reader.GetBoolean(10);
                             ShowTimer = reader.GetBoolean(11);
-                            MinutesPerBoard = reader.GetDouble(12);
-                            AdditionalMinutesPerRound = reader.GetDouble(13);
+                            SecondsPerBoard = reader.GetInt32(12);
+                            AdditionalSecondsPerRound = reader.GetInt32(13);
                         }
+                        reader.Close();
                     });
                 }
                 catch
@@ -75,12 +76,11 @@ namespace TabScore.Models
                     TabletDevicesMove = false;
                     HandRecordReversePerspective = true;
                     ShowTimer = false;
-                    MinutesPerBoard = 6.5;
-                    AdditionalMinutesPerRound = 1;
+                    SecondsPerBoard = 390;
+                    AdditionalSecondsPerRound = 60;
                 }
                 finally
                 {
-                    reader.Close();
                     cmd.Dispose();
                 }
             }

@@ -1,6 +1,7 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using Resources;
 using System;
 using System.Collections.Generic;
 using System.Data.Odbc;
@@ -31,9 +32,9 @@ namespace TabScore.Models
 
         public static string Refresh()
         {
-            if (!File.Exists(PathToTabScoreDBtxt)) return "File TabScoreDB.txt doesn't exist.  Please re-start TabScoreStarter.exe";
+            if (!File.Exists(PathToTabScoreDBtxt)) return Strings.ErrorNoTabScoreDBtxt;
             DBConnectionString = File.ReadAllText(PathToTabScoreDBtxt);
-            if (DBConnectionString == "") return "No Scoring Database selected; please wait until the Tournament Director tells you to start";
+            if (DBConnectionString == "") return Strings.ErrorNoDBSelected;
 
             DateTime lastTabScoreDBtxtUpdateTime = File.GetLastWriteTime(PathToTabScoreDBtxt);
             if (TabScoreDBTime == lastTabScoreDBtxtUpdateTime)  // TabScoreDB.txt has not changed since the last run of AppData.Refresh()
@@ -41,7 +42,7 @@ namespace TabScore.Models
                 if (PermanentDBError)
                 {
                     // Once a permanent database error has occurred, it needs a re-start of TabScoreStarter.exe to update TabScoreDB.txt 
-                    return "Permanent database connection error.  Please check format and access permissions for Scoring Database file, and re-start TabScoreStarter.exe";
+                    return Strings.ErrorPermanentDB;
                 }
                 else
                 {
@@ -89,10 +90,6 @@ namespace TabScore.Models
                             IsIndividual = false;
                         }
                     }
-                    finally
-                    {
-                        cmd.Dispose();
-                    }
 
                     // Create list of sections
                     SQLString = "SELECT ID, Letter, Tables, MissingPair, Winners FROM Section";
@@ -120,7 +117,6 @@ namespace TabScore.Models
                     finally
                     {
                         reader.Close();
-                        cmd.Dispose();
                     }
 
                     // Retrieve global PlayerNames table
@@ -159,7 +155,7 @@ namespace TabScore.Models
             catch
             {
                 PermanentDBError = true;
-                return "Permanent database connection error.  Please check format and access permissions for Scoring Database file, and re-start TabScoreStarter.exe";
+                return Strings.ErrorPermanentDB;
             }
             return "";  // Successful refresh
         }

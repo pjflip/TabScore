@@ -4,34 +4,35 @@
 using System;
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
-    public class EnterPlayerNumberController : Controller
+    public class EnterPlayerIDController : Controller
     {
         public ActionResult Index(int tabletDeviceNumber, Direction direction)
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            ViewData["Title"] = $"Enter Player Number - {tabletDeviceStatus.Location}";
+            ViewData["Title"] = $"{Strings.EnterPlayerIDs} - {tabletDeviceStatus.Location}";
             ViewData["Header"] = $"{tabletDeviceStatus.Location}";
-            EnterPlayerNumber enterPlayerNumber = new EnterPlayerNumber()
+            EnterPlayerID enterPlayerID = new EnterPlayerID()
             {
                 TabletDeviceNumber = tabletDeviceNumber,
                 Direction = direction,
                 DisplayDirection = Enum.GetName(typeof(Direction), direction)
             };
-            return View(enterPlayerNumber);
+            return View(enterPlayerID);
         }
 
-        public ActionResult OKButtonClick(int tabletDeviceNumber, Direction direction, int playerNumber)
+        public ActionResult OKButtonClick(int tabletDeviceNumber, Direction direction, int playerID)
         {
             // Update Round with new player
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            tableStatus.RoundData.UpdatePlayer(tabletDeviceStatus.SectionID, tabletDeviceStatus.TableNumber, direction, tabletDeviceStatus.RoundNumber, playerNumber);
+            tableStatus.RoundData.UpdatePlayer(tabletDeviceStatus.SectionID, tabletDeviceStatus.TableNumber, direction, tabletDeviceStatus.RoundNumber, playerID);
             
-            return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber });
+            return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber });
         }
     }
 }

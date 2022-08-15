@@ -127,13 +127,13 @@
     <Compile Include="Controllers\EndScreenController.cs" />
     <Compile Include="Controllers\EnterContractController.cs" />
     <Compile Include="Controllers\EnterLeadController.cs" />
-    <Compile Include="Controllers\EnterPlayerNumberController.cs" />
-    <Compile Include="Controllers\EnterDirectionController.cs" />
+    <Compile Include="Controllers\EnterPlayerIDController.cs" />
+    <Compile Include="Controllers\SelectDirectionController.cs" />
     <Compile Include="Controllers\ErrorScreenController.cs" />
     <Compile Include="Controllers\ShowHandRecordController.cs" />
-    <Compile Include="Controllers\ShowPlayerNumbersController.cs" />
-    <Compile Include="Controllers\EnterSectionController.cs" />
-    <Compile Include="Controllers\EnterTableNumberController.cs" />
+    <Compile Include="Controllers\ShowPlayerIDsController.cs" />
+    <Compile Include="Controllers\SelectSectionController.cs" />
+    <Compile Include="Controllers\SelectTableNumberController.cs" />
     <Compile Include="Controllers\EnterTricksTakenController.cs" />
     <Compile Include="Controllers\ShowBoardsController.cs" />
     <Compile Include="Controllers\ShowMoveController.cs" />
@@ -145,17 +145,19 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppData.cs" />
-    <Compile Include="Models\EnterTableNumber.cs" />
+    <Compile Include="Models\EnterPlayerID.cs" />
+    <Compile Include="Models\TravellerResult.cs" />
+    <Compile Include="Models\SelectTableNumber.cs" />
     <Compile Include="Models\PlayerEntryList.cs" />
     <Compile Include="Models\PlayerEntry.cs" />
-    <Compile Include="Models\EnterPlayerNumber.cs" />
     <Compile Include="Models\HandRecords.cs" />
     <Compile Include="Models\MovesList.cs" />
-    <Compile Include="Models\ResultsList.cs" />
+    <Compile Include="Models\BoardsList.cs" />
     <Compile Include="Models\ResultInfo.cs" />
     <Compile Include="Models\RoundsList.cs" />
-    <Compile Include="Models\EnterDirection.cs" />
+    <Compile Include="Models\SelectDirection.cs" />
     <Compile Include="Models\RoundInfo.cs" />
+    <Compile Include="Models\ResultsPerBoard.cs" />
     <Compile Include="Models\RoundTimer.cs" />
     <Compile Include="Models\SitoutRoundInfo.cs" />
     <Compile Include="Models\TabletDeviceStatus.cs" />
@@ -172,10 +174,18 @@
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Traveller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Strings.Designer.cs">
+      <DependentUpon>Strings.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Strings.es.designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Cards Logo.png" />
-    <Content Include="Chequered Flag Logo.png" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -187,13 +197,14 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Resources\Chequered Flag Logo.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\EnterContract.js" />
     <Content Include="Scripts\EnterLead.js" />
-    <Content Include="Scripts\EnterPlayerNumber.js" />
+    <Content Include="Scripts\EnterPlayerID.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -304,6 +315,7 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Resources\Cards Logo.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -325,14 +337,13 @@
     <Content Include="Views\ShowRoundInfo\Pair.cshtml" />
     <Content Include="Views\StartScreen\Index.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
-    <Content Include="Views\EnterTableNumber\Index.cshtml" />
-    <Content Include="Views\EnterSection\Index.cshtml" />
+    <Content Include="Views\SelectTableNumber\Index.cshtml" />
+    <Content Include="Views\SelectSection\Index.cshtml" />
     <Content Include="Views\ShowHandRecord\Index.cshtml" />
-    <Content Include="Views\ShowPlayerNumbers\Pair.cshtml" />
-    <Content Include="Views\EnterPlayerNumber\Index.cshtml" />
+    <Content Include="Views\EnterPlayerID\Index.cshtml" />
     <Content Include="Views\EnterTricksTaken\TricksPlusMinus.cshtml" />
     <Content Include="Views\ErrorScreen\Index.cshtml" />
-    <Content Include="Views\ShowPlayerNumbers\Individual.cshtml" />
+    <Content Include="Views\ShowPlayerIDs\Individual.cshtml" />
     <Content Include="Views\ShowRoundInfo\Individual.cshtml" />
     <Content Include="Views\ShowMove\Index.cshtml" />
     <Content Include="Views\ShowTraveller\Individual.cshtml" />
@@ -341,10 +352,10 @@
     <Content Include="Views\ShowRankingList\OneWinner.cshtml" />
     <Content Include="Views\ShowRankingList\TwoWinners.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\EnterDirection\Individual.cshtml" />
+    <Content Include="Views\SelectDirection\Individual.cshtml" />
     <Content Include="Views\ShowBoards\ViewOnly.cshtml" />
     <Content Include="Views\ShowRoundInfo\Sitout.cshtml" />
-    <Content Include="Views\EnterDirection\Pair.cshtml" />
+    <Content Include="Views\SelectDirection\Pair.cshtml" />
     <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.6.0.min.map" />
     <Content Include="Scripts\umd\popper.min.js.map" />
@@ -353,9 +364,7 @@
     <Content Include="Scripts\README.md" />
     <Content Include="Scripts\popper.min.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Content Include="Views\ShowPlayerIDs\Pair.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -366,12 +375,28 @@
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -415,6 +440,10 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

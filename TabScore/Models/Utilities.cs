@@ -1,6 +1,7 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using Resources;
 using System;
 using System.Data.Odbc;
 
@@ -55,10 +56,8 @@ namespace TabScore.Models
                         cmd.ExecuteNonQuery();
                     });
                 }
-                finally
-                {
-                    cmd.Dispose();
-                }
+                catch { }
+                cmd.Dispose();
             }
         }
         
@@ -73,23 +72,17 @@ namespace TabScore.Models
                     int logOnOff = 0;
                     string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section=1 AND [Table]=1";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                    try
+                    ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        ODBCRetryHelper.ODBCRetry(() =>
-                        {
-                            logOnOff = Convert.ToInt32(cmd.ExecuteScalar());
-                        });
-                        SQLString = $"UPDATE Tables SET LogOnOff={logOnOff} WHERE Section=1 AND [Table]=1";
-                        cmd = new OdbcCommand(SQLString, connection);
-                        ODBCRetryHelper.ODBCRetry(() =>
-                        {
-                            cmd.ExecuteNonQuery();
-                        });
-                    }
-                    finally
+                        logOnOff = Convert.ToInt32(cmd.ExecuteScalar());
+                    });
+                    SQLString = $"UPDATE Tables SET LogOnOff={logOnOff} WHERE Section=1 AND [Table]=1";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        cmd.Dispose();
-                    }
+                        cmd.ExecuteNonQuery();
+                    });
+                    cmd.Dispose();
                 }
             }
             catch
@@ -116,10 +109,8 @@ namespace TabScore.Models
                         queryResult = cmd.ExecuteScalar();
                     });
                 }
-                finally
-                {
-                    cmd.Dispose();
-                }
+                catch { }
+                cmd.Dispose();
             }
             return Convert.ToInt32(queryResult);
         }
@@ -140,10 +131,8 @@ namespace TabScore.Models
                         queryResult = cmd.ExecuteScalar();
                     });
                 }
-                finally
-                {
-                    cmd.Dispose();
-                }
+                catch { }
+                cmd.Dispose();
             }
             if (queryResult == DBNull.Value || queryResult == null)
             {
@@ -204,6 +193,61 @@ namespace TabScore.Models
                 }
             }
             return PairString;
+        }
+
+        // Set the header for views
+        public static string HeaderString(TabletDeviceStatus tabletDeviceStatus, TableStatus tableStatus, int boardNumber = 0)
+        {
+            if (boardNumber == -1)  // At ShowBoards, so don't colour header string
+            {
+                if (AppData.IsIndividual)
+                {
+                    return $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
+                }
+                else
+                {
+                    return $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {Strings.N}{Strings.S} {tableStatus.RoundData.NumberNorth} v {Strings.E}{Strings.W} {tableStatus.RoundData.NumberEast}";
+                }
+            }
+            else
+            {
+                if (boardNumber == 0) boardNumber = tableStatus.ResultData.BoardNumber;  // Board number not specified, so get it from table status
+                if (AppData.IsIndividual)
+                {
+                    return $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
+                }
+                else
+                {
+                    return $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {ColourPairByVulnerability("NS", boardNumber, $"{Strings.N}{Strings.S} {tableStatus.RoundData.NumberNorth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{Strings.E}{Strings.W} {tableStatus.RoundData.NumberEast}")}";
+                }
+            }
+        }
+
+        // Calculate the number of seconds to chow on the round timer 
+        public static int SetTimerSeconds(TabletDeviceStatus tabletDeviceStatus)
+        {
+            RoundTimer roundTimer = AppData.RoundTimerList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber);
+            if (roundTimer == null)  // Round not yet started, so create initial timer data for this section and round 
+            {
+                DateTime startTime = DateTime.Now;
+                TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+                if (tableStatus == null) return -1;  // No data, so don't show timer
+                int secondsPerRound = (tableStatus.RoundData.HighBoard - tableStatus.RoundData.LowBoard + 1) * Settings.SecondsPerBoard + Settings.AdditionalSecondsPerRound;
+                AppData.RoundTimerList.Add(new RoundTimer
+                {
+                    SectionID = tabletDeviceStatus.SectionID,
+                    RoundNumber = tabletDeviceStatus.RoundNumber,
+                    StartTime = startTime,
+                    SecondsPerRound = secondsPerRound
+                });
+                return secondsPerRound;  // Timer shows full time for the round
+            }
+            else
+            {
+                int timerSeconds = roundTimer.SecondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(roundTimer.StartTime).TotalSeconds);
+                if (timerSeconds < 0) timerSeconds = 0;
+                return timerSeconds;  // Timer shows time remaining in this round 
+            }
         }
 
         // Validate the lead card against the hand record
@@ -319,7 +363,5 @@ namespace TabScore.Models
                 }
             }
         }
-
-
     }
 }

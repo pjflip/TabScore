@@ -2,11 +2,12 @@
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model List<TabScore.Models.Section>
+@using Resources
 
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Select Section:
+            @Strings.SelectSection
         </h3>
     </div>
 </div>
@@ -38,7 +39,7 @@
     $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "EnterTableNumber")?sectionID=' + section;
+            location.href = '@Url.Action("Index", "SelectTableNumber")?sectionID=' + section;
         }
     });
 </script>

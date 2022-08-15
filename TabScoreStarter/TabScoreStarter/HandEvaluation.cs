@@ -7,7 +7,6 @@ namespace TabScoreStarter
     {
         public int SectionID{ get; private set;}
         public int BoardNumber{ get; private set;}
-
         public int NorthSpades{ get; private set;}
         public int NorthHearts{ get; private set;}
         public int NorthDiamonds{ get; private set;}
@@ -28,7 +27,6 @@ namespace TabScoreStarter
         public int WestDiamonds{ get; private set;}
         public int WestClubs{ get; private set;}
         public int WestNotrump{ get; private set;}
-
         public int NorthHcp{ get; private set;}
         public int SouthHcp{ get; private set;}
         public int EastHcp{ get; private set;}

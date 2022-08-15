@@ -1,8 +1,10 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using System;
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
@@ -48,8 +50,9 @@ namespace TabScore.Controllers
             MovesList movesList = new MovesList(tabletDeviceNumber, tableStatus, newRoundNumber, tableNotReadyNumber);
 
             ViewData["Header"] = $"{tabletDeviceStatus.Location}";
-            ViewData["Title"] = $"Show Move - {tabletDeviceStatus.Location}";
+            ViewData["Title"] = $"{Strings.ShowMove} - {tabletDeviceStatus.Location}";
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+            if (Settings.ShowTimer) ViewData["TimerSeconds"] = Utilities.SetTimerSeconds(tabletDeviceStatus);
 
             return View(movesList);
         }
@@ -126,7 +129,7 @@ namespace TabScore.Controllers
             {
                 HandRecords.Refresh();
             }
-            return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber });
+            return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber });
         }
     }
 }

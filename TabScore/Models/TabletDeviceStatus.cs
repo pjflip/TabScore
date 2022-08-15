@@ -1,7 +1,7 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using System;
+using Resources;
 
 namespace TabScore.Models
 {
@@ -24,38 +24,7 @@ namespace TabScore.Models
             Direction = direction;
             PairNumber = pairNumber;
             RoundNumber = roundNumber;
-            Section section = AppData.SectionsList.Find(x => x.SectionID == sectionID);
-            Location = AppData.SectionsList.Find(x => x.SectionID == sectionID).SectionLetter + tableNumber.ToString();
-            if (section.TabletDevicesPerTable == 4)
-            {
-                Location += " " + Enum.GetName(typeof(Direction), direction);
-                PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.None;
-                PerspectiveDirection = Direction;
-            }
-            else if (section.TabletDevicesPerTable == 2)
-            {
-                if (direction == Direction.North)
-                {
-                    Location += " NS"; 
-                    PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.NS;
-                    if (Settings.HandRecordReversePerspective) PerspectiveDirection = Direction.South;
-                    else PerspectiveDirection = Direction.North;
-                }
-                else
-                {
-                    Location += " EW"; 
-                    PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.EW;
-                    if (Settings.HandRecordReversePerspective) PerspectiveDirection = Direction.West;
-                    else PerspectiveDirection = Direction.East;
-                }
-            }
-            else  // TabletDevicesPerTable == 1
-            {
-                Location = "Table " + Location;
-                PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.NSEW;
-                if (Settings.HandRecordReversePerspective) PerspectiveDirection = Direction.South;
-                else PerspectiveDirection = Direction.North;
-            }
+            SetLocation();
         }
 
         public void Update(int tableNumber, Direction direction, int roundNumber)
@@ -63,31 +32,61 @@ namespace TabScore.Models
             TableNumber = tableNumber;
             Direction = direction;
             RoundNumber = roundNumber;
+            SetLocation();
+        }
+
+        private void SetLocation()
+        {
             Section section = AppData.SectionsList.Find(x => x.SectionID == SectionID);
-            Location = AppData.SectionsList.Find(x => x.SectionID == SectionID).SectionLetter + tableNumber.ToString();
+            Location = AppData.SectionsList.Find(x => x.SectionID == SectionID).SectionLetter + TableNumber.ToString();
             if (section.TabletDevicesPerTable == 4)
             {
-                Location += " " + Enum.GetName(typeof(Direction), direction);
-                if (Settings.HandRecordReversePerspective) PerspectiveDirection = Direction.South;
-                else PerspectiveDirection = Direction.North;
-            }
-            else
-            {
-                if (direction == Direction.North)
+                Location += " ";
+                switch (Direction)
                 {
-                    Location += " NS";
+                    case Direction.North:
+                        Location += Strings.North;
+                        break;
+                    case Direction.South:
+                        Location += Strings.South;
+                        break;
+                    case Direction.East:
+                        Location += Strings.East;
+                        break;
+                    case Direction.West:
+                        Location += Strings.West;
+                        break;
+                    case Direction.Sitout:
+                        Location += Strings.Sitout;
+                        break;
+                }
+                PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.None;
+                PerspectiveDirection = Direction;
+            }
+            else if (section.TabletDevicesPerTable == 2)
+            {
+                if (Direction == Direction.North)
+                {
+                    Location += $" {Strings.N}{Strings.S}";
                     PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.NS;
                     if (Settings.HandRecordReversePerspective) PerspectiveDirection = Direction.South;
                     else PerspectiveDirection = Direction.North;
                 }
-                else if (direction == Direction.East)
+                else if (Direction == Direction.East)
                 {
-                    Location += " EW";
+                    Location += $" {Strings.E}{Strings.W}";
                     PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.EW;
                     if (Settings.HandRecordReversePerspective) PerspectiveDirection = Direction.West;
                     else PerspectiveDirection = Direction.East;
                 }
-                else Location += " Sitout";
+                else Location += $" {Strings.Sitout}";
+            }
+            else  // TabletDevicesPerTable == 1
+            {
+                Location = $"{Strings.Table} " + Location;
+                PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.NSEW;
+                if (Settings.HandRecordReversePerspective) PerspectiveDirection = Direction.South;
+                else PerspectiveDirection = Direction.North;
             }
         }
     }

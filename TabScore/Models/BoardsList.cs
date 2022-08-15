@@ -6,14 +6,14 @@ using System.Data.Odbc;
 
 namespace TabScore.Models
 {
-    public class ResultsList : List<Result>
+    public class BoardsList : List<Result>
     {
         public int TabletDeviceNumber { get; set; }
         public bool GotAllResults { get; private set; }
         public bool ShowViewButton { get; private set; }
         public string Message { get; set; } = "";
 
-        public ResultsList(int tabletDeviceNumber, TableStatus tableStatus)
+        public BoardsList(int tabletDeviceNumber, TableStatus tableStatus)
         {
             TabletDeviceNumber = tabletDeviceNumber;
             GotAllResults = true;
@@ -34,19 +34,15 @@ namespace TabScore.Models
                         reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            Result result = new Result() { BoardNumber = reader.GetInt32(0) };
-                            if (reader.GetString(4) == "Not played")
+                            Result result = new Result() { 
+                                BoardNumber = reader.GetInt32(0),
+                                Remarks = reader.GetString(4)
+                            };
+                            string tempContract = reader.GetString(2);
+
+                            if ((result.Remarks == "" || result.Remarks == "Wrong direction") && tempContract.Length > 2)
                             {
-                                result.ContractLevel = -1;
-                                result.ContractSuit = "";
-                                result.ContractX = "";
-                                result.DeclarerNSEW = "";
-                                result.TricksTakenNumber = -1;
-                            }
-                            else
-                            {
-                                string temp = reader.GetString(2);
-                                result.Contract = temp;   // Sets ContractLevel, etc
+                                result.Contract = tempContract;   // Sets ContractLevel, etc
                                 if (result.ContractLevel == 0)  // Passed out
                                 {
                                     result.DeclarerNSEW = "";
@@ -57,6 +53,14 @@ namespace TabScore.Models
                                     result.DeclarerNSEW = reader.GetString(1);
                                     result.TricksTakenSymbol = reader.GetString(3);
                                 }
+                            }
+                            else  // Not played or arbitral result
+                            {
+                                result.ContractLevel = -1;
+                                result.ContractSuit = "";
+                                result.ContractX = "";
+                                result.DeclarerNSEW = "";
+                                result.TricksTakenNumber = -1;
                             }
                             Add(result);
                         }

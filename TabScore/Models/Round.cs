@@ -374,9 +374,9 @@ namespace TabScore.Models
             }
             finally
             {
-                cmd.Dispose();
                 reader.Close();
             }
+            cmd.Dispose(); 
             return FormatName(name, number);
         }
 
@@ -404,13 +404,13 @@ namespace TabScore.Models
             }
         }
 
-        public void UpdatePlayer(int sectionID, int tableNumber, Direction direction, int roundNumber, int playerNumber)
+        public void UpdatePlayer(int sectionID, int tableNumber, Direction direction, int roundNumber, int playerID)
         {
             // First get name, and update the Round
             string playerName = "";
             string directionLetter = Enum.GetName(typeof(Direction), direction).Substring(0, 1);    // Need just N, S, E or W
             
-            if (playerNumber == 0)
+            if (playerID == 0)
             {
                 playerName = "Unknown";
             }
@@ -419,19 +419,19 @@ namespace TabScore.Models
                 switch (Settings.NameSource)
                 {
                     case 0:
-                        playerName = AppData.GetNameFromPlayerNamesTable(playerNumber);
+                        playerName = AppData.GetNameFromPlayerNamesTable(playerID);
                         break;
                     case 1:
-                        playerName = GetNameFromExternalDatabase(playerNumber);
+                        playerName = GetNameFromExternalDatabase(playerID);
                         break;
                     case 2:
                         playerName = "";
                         break;
                     case 3:
-                        playerName = AppData.GetNameFromPlayerNamesTable(playerNumber);
+                        playerName = AppData.GetNameFromPlayerNamesTable(playerID);
                         if (playerName == "" || playerName.Substring(0, 1) == "#" || (playerName.Length >= 7 && playerName.Substring(0, 7) == "Unknown"))
                         {
-                            playerName = GetNameFromExternalDatabase(playerNumber);
+                            playerName = GetNameFromExternalDatabase(playerID);
                         }
                         break;
                 }
@@ -489,7 +489,7 @@ namespace TabScore.Models
             {
                 roundNumber = 0;
             }
-            if (playerNumber == 0)
+            if (playerID == 0)
             {
                 playerName = "";
             }
@@ -510,30 +510,25 @@ namespace TabScore.Models
                         queryResult = cmd.ExecuteScalar();
                     });
                 }
-                finally
-                {
-                    cmd.Dispose();
-                }
+                catch { }
                 if (queryResult == null)
                 {
-                    SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({sectionID}, {tableNumber}, '{directionLetter}', '{playerNumber}', '{playerName}', {roundNumber}, False, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, {pairNumber})";
+                    SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({sectionID}, {tableNumber}, '{directionLetter}', '{playerID}', '{playerName}', {roundNumber}, False, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, {pairNumber})";
                 }
                 else
                 {
-                    SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerNumber}', [Name]='{playerName}', Processed=False, TimeLog=#{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, TabScorePairNo={pairNumber} WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Direction='{directionLetter}'";
+                    SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerID}', [Name]='{playerName}', Processed=False, TimeLog=#{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, TabScorePairNo={pairNumber} WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Direction='{directionLetter}'";
                 }
-                OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        cmd2.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
                     });
                 }
-                finally
-                {
-                    cmd2.Dispose();
-                }
+                catch { }
+                cmd.Dispose();
             }
             return;
         }

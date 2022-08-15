@@ -8,11 +8,9 @@ namespace TabScoreStarter
 {
     class HandEvaluationsList : List<HandEvaluation>
     {
-        private readonly string dbConnectionString;
-
-        public void WriteToDB(OdbcConnectionStringBuilder connectionString)
+        public void WriteToDB(string connectionString)
         {
-            using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
+            using (OdbcConnection connection = new OdbcConnection(connectionString))
             {
                 connection.Open();
                 string SQLString = "DELETE FROM HandEvaluation";

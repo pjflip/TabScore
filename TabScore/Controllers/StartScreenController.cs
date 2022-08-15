@@ -33,7 +33,7 @@ namespace TabScore.Controllers
                 HandRecords.Refresh();
             }
 
-            return RedirectToAction("Index", "EnterSection");
+            return RedirectToAction("Index", "SelectSection");
         }
     }
 }

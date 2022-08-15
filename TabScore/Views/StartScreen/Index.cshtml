@@ -1,12 +1,13 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+@using Resources
 
 <div id="warningModal" class="modal" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>Warning</h3>
+                    <h3>@Strings.Warning</h3>
                 </p>
             </div>
             <div class="modal-body">
@@ -14,7 +15,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    OK <span class="fa fa-check-circle"></span>
+                    @Strings.OK <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -24,14 +25,14 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h2>
-            Welcome
+            @Strings.Welcome
         </h2>
     </div>
 </div>
 <div class="row">
     <div class="col-12 text-center">
         <h3>
-            to
+            @Strings.To
         </h3>
     </div>
 </div>
@@ -45,7 +46,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row">
     <div class="col-12 text-center">
         <h6>
-            (Version @ViewData["Version"])
+            (@Strings.Version @ViewData["Version"])
         </h6>
     </div>
 </div>
@@ -54,7 +55,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-6 text-center">
         <h5>
-            Please wait until the Tournament Director tells you to start, and then press OK
+            @Strings.WaitTD
         </h5>
     </div>
     <div class="col">

@@ -4,6 +4,7 @@
 using System;
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
@@ -28,23 +29,10 @@ namespace TabScore.Controllers
             }
             ResultInfo resultInfo = new ResultInfo(tabletDeviceNumber, tableStatus);
 
-            if (Settings.ShowTimer)
-            {
-                RoundTimer roundTimer = AppData.RoundTimerList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber);
-                int timerSeconds = roundTimer.SecondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(roundTimer.StartTime).TotalSeconds);
-                if (timerSeconds < 0) timerSeconds = 0;
-                ViewData["TimerSeconds"] = timerSeconds;
-            }
-            if (AppData.IsIndividual)
-            {
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
-            }
-            else
-            {
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {Utilities.ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, $"NS {tableStatus.RoundData.NumberNorth}")} v {Utilities.ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, $"EW {tableStatus.RoundData.NumberEast}")}";
-            }
+            if (Settings.ShowTimer) ViewData["TimerSeconds"] = Utilities.SetTimerSeconds(tabletDeviceStatus);
+            ViewData["Title"] = $"{Strings.EnterLead} - {tabletDeviceStatus.Location}";
+            ViewData["Header"] = Utilities.HeaderString(tabletDeviceStatus, tableStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
-            ViewData["Title"] = $"Enter Lead - {tabletDeviceStatus.Location}";
             return View(resultInfo);
         }
 

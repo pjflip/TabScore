@@ -3,6 +3,7 @@
 
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
@@ -11,7 +12,7 @@ namespace TabScore.Controllers
         public ActionResult Index()
         {
             ViewData["Header"] = "";
-            ViewData["Title"] = "ErrorScreen";
+            ViewData["Title"] = Strings.ErrorScreen;
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             return View();
         }
@@ -25,12 +26,12 @@ namespace TabScore.Controllers
                 {
                     HandRecords.Refresh();
                 }
-                return RedirectToAction("Index", "EnterSection");  // Need to re-establish Section/TableNumber/Direction for this tablet device
+                return RedirectToAction("Index", "SelectSection");  // Need to re-establish Section/TableNumber/Direction for this tablet device
             }
             else  // Can't read/write to database after the error, so pass error to StartScreen and await database update 
             {
                 AppData.PermanentDBError = true;
-                TempData["warningMessage"] = "Permanent database connection error.  Please check format and access permissions for Scoring Database file, and re-start TabScoreStarter.exe";
+                TempData["warningMessage"] = Strings.ErrorPermanentDB;
                 return RedirectToAction("Index", "StartScreen");
             }
         }

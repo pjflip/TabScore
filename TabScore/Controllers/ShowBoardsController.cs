@@ -4,6 +4,7 @@
 using System;
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
@@ -13,55 +14,22 @@ namespace TabScore.Controllers
        {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            ResultsList resultsList = new ResultsList(tabletDeviceNumber, tableStatus);
+            BoardsList boardsList = new BoardsList(tabletDeviceNumber, tableStatus);
             tableStatus.ResultData = null;  // No board selected yet
             
-            if (Settings.ShowTimer)
-            {
-                DateTime startTime;
-                int secondsPerRound;
-                RoundTimer roundTimer = AppData.RoundTimerList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber);
-                if (roundTimer == null)  // Round not yet started, so create timer data for this section and round 
-                {
-                    startTime = DateTime.Now;
-                    secondsPerRound = Convert.ToInt32((resultsList.Count * Settings.MinutesPerBoard + Settings.AdditionalMinutesPerRound) * 60);
-                    AppData.RoundTimerList.Add(new RoundTimer
-                    {
-                        SectionID = tabletDeviceStatus.SectionID,
-                        RoundNumber = tabletDeviceStatus.RoundNumber,
-                        StartTime = startTime,
-                        SecondsPerRound = secondsPerRound
-                    });
-                }
-                else
-                {
-                    startTime = roundTimer.StartTime;
-                    secondsPerRound = roundTimer.SecondsPerRound;
-                }
-                // Calculate how many seconds remaining for the round
-                int timerSeconds = secondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(startTime).TotalSeconds);
-                if (timerSeconds < 0) timerSeconds = 0;
-                ViewData["TimerSeconds"] = timerSeconds;
-            }
-            if (AppData.IsIndividual)
-            {
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
-            }
-            else
-            {
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - NS {tableStatus.RoundData.NumberNorth} v EW {tableStatus.RoundData.NumberEast}";
-            }
+            if (Settings.ShowTimer) ViewData["TimerSeconds"] = Utilities.SetTimerSeconds(tabletDeviceStatus);
+            ViewData["Title"] = $"{Strings.ShowBoards} - {tabletDeviceStatus.Location}";
+            ViewData["Header"] = Utilities.HeaderString(tabletDeviceStatus, tableStatus, -1);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-            ViewData["Title"] = $"Show Boards - {tabletDeviceStatus.Location}";
 
             if (tabletDeviceStatus.Direction == Direction.North)
             {
-                return View("Scoring", resultsList);
+                return View("Scoring", boardsList);
             }
             else
             {
-                resultsList.Message = "NOMESSAGE";
-                return View("ViewOnly", resultsList);
+                boardsList.Message = "NOMESSAGE";
+                return View("ViewOnly", boardsList);
             }
        }
 
@@ -70,23 +38,23 @@ namespace TabScore.Controllers
             // Only used by ViewOnly view, for tablet device that is not being used for scoring, to check if result has been entered for this board
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            ResultsList resultsList = new ResultsList(tabletDeviceNumber, tableStatus);
-            Result result = resultsList.Find(x => x.BoardNumber == boardNumber);
+            BoardsList boardsList = new BoardsList(tabletDeviceNumber, tableStatus);
+            Result result = boardsList.Find(x => x.BoardNumber == boardNumber);
             if (result == null || result.ContractLevel < 0)
             {
-                resultsList.Message = "NORESULT";
+                boardsList.Message = "NORESULT";
                 if (AppData.IsIndividual)
                 {
-                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
+                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
                 }
                 else
                 {
-                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - NS {tableStatus.RoundData.NumberNorth} v EW {tableStatus.RoundData.NumberEast}";
+                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {Strings.N}{Strings.S} {tableStatus.RoundData.NumberNorth} v {Strings.E}{Strings.W} {tableStatus.RoundData.NumberEast}";
                 }
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-                ViewData["Title"] = $"Show Boards - {tabletDeviceStatus.Location}";
+                ViewData["Title"] = $"{Strings.ShowBoards} - {tabletDeviceStatus.Location}";
                 ViewData["TabletDeviceNumber"] = tabletDeviceNumber;
-                return View("ViewOnly", resultsList);
+                return View("ViewOnly", boardsList);
             }
             else
             {
@@ -99,22 +67,22 @@ namespace TabScore.Controllers
             // Only used by ViewOnly view, for tablet device that is not being used for scoring, to check if all results have been entered
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            ResultsList resultsList = new ResultsList(tabletDeviceNumber, tableStatus);
-            if (!resultsList.GotAllResults)
+            BoardsList boardsList = new BoardsList(tabletDeviceNumber, tableStatus);
+            if (!boardsList.GotAllResults)
             {
-                resultsList.Message = "NOTALLRESULTS";
+                boardsList.Message = "NOTALLRESULTS";
                 if (AppData.IsIndividual)
                 {
-                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
+                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
                 }
                 else
                 {
-                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - Round {tableStatus.RoundNumber} - NS {tableStatus.RoundData.NumberNorth} v EW {tableStatus.RoundData.NumberEast}";
+                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {Strings.N}{Strings.S} {tableStatus.RoundData.NumberNorth} v {Strings.E}{Strings.W} {tableStatus.RoundData.NumberEast}";
                 }
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-                ViewData["Title"] = $"Show Boards - {tabletDeviceStatus.Location}";
+                ViewData["Title"] = $"{Strings.ShowBoards}  - {tabletDeviceStatus.Location}";
                 ViewData["TabletDeviceNumber"] = tabletDeviceNumber;
-                return View("ViewOnly", resultsList);
+                return View("ViewOnly", boardsList);
             }
             else
             {

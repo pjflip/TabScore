@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 
 namespace TabScoreStarter
 {
     public partial class OptionsForm : Form
     {
-        public OptionsForm()
+        private readonly string connectionString;
+
+        public OptionsForm(string connectionString, Point location)
         {
             InitializeComponent();
+            this.connectionString = connectionString;
+            Location = location;
         }
 
         private void OptionsForm_Load(object sender, EventArgs e)
         {
-            Options opt = new Options(Database.ConnectionString(Tag.ToString()));
+            Options opt = new Options(connectionString);
 
             ShowTravellerCheckbox.Checked = opt.ShowTraveller;
             ShowPercentageCheckbox.Checked = opt.ShowPercentage;
@@ -28,8 +33,8 @@ namespace TabScoreStarter
             TabletModePersonalRadioButton.Checked = opt.TabletsMove;
             TabletModeTraditionalRadioButton.Checked = !opt.TabletsMove;
             ShowTimerCheckbox.Checked = opt.ShowTimer;
-            MinutesPerBoardNud.Value = Convert.ToDecimal(opt.MinutesPerBoard);
-            AdditionalMinutesPerRoundNud.Value = Convert.ToDecimal(opt.AdditionalMinutesPerRound);
+            MinutesPerBoardNud.Value = Convert.ToDecimal(opt.SecondsPerBoard) / 60;
+            AdditionalMinutesPerRoundNud.Value = Convert.ToDecimal(opt.AdditionalSecondsPerRound) / 60;
 
             ShowPercentageCheckbox.Enabled = ShowTravellerCheckbox.Checked;
             ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
@@ -46,9 +51,9 @@ namespace TabScoreStarter
             Close();
         }
 
-        private void OKButton_Click(object sender, EventArgs e)
+        private void SaveButton_Click(object sender, EventArgs e)
         {
-            Options opt = new Options(Database.ConnectionString(Tag.ToString()))
+            Options opt = new Options()
             {
                 ShowTraveller = ShowTravellerCheckbox.Checked,
                 ShowPercentage = ShowPercentageCheckbox.Checked,
@@ -62,15 +67,15 @@ namespace TabScoreStarter
                 EnterResultsMethod = EnterResultsMethodCombobox.SelectedIndex,
                 TabletsMove = TabletModePersonalRadioButton.Checked,
                 ShowTimer = ShowTimerCheckbox.Checked,
-                MinutesPerBoard = Convert.ToDouble(MinutesPerBoardNud.Value),
-                AdditionalMinutesPerRound = Convert.ToDouble(AdditionalMinutesPerRoundNud.Value)
+                SecondsPerBoard = Convert.ToInt32(MinutesPerBoardNud.Value * 60),
+                AdditionalSecondsPerRound = Convert.ToInt32(AdditionalMinutesPerRoundNud.Value * 60)
             };
-            opt.UpdateDB();
+            opt.UpdateDB(connectionString);
             Properties.Settings.Default.TabletsMove = opt.TabletsMove;
             Properties.Settings.Default.HandRecordReversePerspective = opt.HandRecordReversePerspective;
             Properties.Settings.Default.ShowTimer = opt.ShowTimer;
-            Properties.Settings.Default.MinutesPerBoard = opt.MinutesPerBoard;
-            Properties.Settings.Default.AdditionalMinutesPerRound = opt.AdditionalMinutesPerRound;
+            Properties.Settings.Default.SecondsPerBoard = opt.SecondsPerBoard;
+            Properties.Settings.Default.AdditionalSecondsPerRound = opt.AdditionalSecondsPerRound;
             Properties.Settings.Default.Save();
             Close();
         }

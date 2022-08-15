@@ -2,21 +2,22 @@
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.ResultInfo
+@using Resources
 
 <style>
     .btn-plus {
-        background-color: lightgreen;
+        background-color: rgb(136, 255, 77)
     }
 
     .btn-minus {
-        background-color: lightcoral;
+        background-color: rgb(255, 92, 51)
     }
 </style>
 
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.DisplayContract())
+            @Strings.Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.DisplayContract())
         </h3>
     </div>
 </div>
@@ -24,60 +25,27 @@
 <div class="row mb-4">
     <div class="col-12 text-center">
         <h3>
-            Enter result:
+            @Strings.EnterTricksTaken
         </h3>
     </div>
 </div>
 
-@if (Model.ResultData.ContractLevel > 4)
+@if (Model.ResultData.ContractLevel == 1)
 {
     <div class="row">
         <div class="col-12 text-center">
-            @for (int i = Model.ResultData.ContractLevel + 6; i > 10; i--)
-            {
-                <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width:3em" ontouchstart="setMinusTricks(@i)">
-                    -@i
-                </button>
-            }
+            <button id="plus6" class="btn btn-plus btn-lg m-1" style="width:3em" ontouchstart="setPlusTricks(6)">
+                +6
+            </button>
         </div>
     </div>
 }
-
-<div class="row">
-    <div class="col-12 text-center">
-        @for (int i = ((Model.ResultData.ContractLevel > 3) ? 10 : (Model.ResultData.ContractLevel + 6)); i > 5; i--)
-        {
-            <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width:3em" ontouchstart="setMinusTricks(@i)">
-                -@i
-            </button>
-        }
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12 text-center">
-        @for (int i = 5; i > 0; i--)
-        {
-            <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width:3em" ontouchstart="setMinusTricks(@i)">
-                -@i
-            </button>
-        }
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12 text-center">
-        <button id="equals" class="btn btn-primary btn-lg m-1" style="width: 8em" ontouchstart="setEqualsTricks()">
-            =
-        </button>
-    </div>
-</div>
 
 @if (Model.ResultData.ContractLevel < 7)
 {
     <div class="row">
         <div class="col-12 text-center">
-            @for (int i = 1; i < ((Model.ResultData.ContractLevel < 3) ? 6 : (8 - Model.ResultData.ContractLevel)); i++)
+            @for (int i = 7 - Model.ResultData.ContractLevel; i >= 1; i--)
             {
                 <button id="plus@(i)" class="btn btn-plus btn-lg m-1" style="width:3em" ontouchstart="setPlusTricks(@i)">
                     +@i
@@ -87,13 +55,46 @@
     </div>
 }
 
-@if (Model.ResultData.ContractLevel == 1)
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="equals" class="btn btn-primary btn-lg m-1" style="width: 8em" ontouchstart="setEqualsTricks()">
+            =
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @for (int i = 1; i <= 5; i++)
+        {
+            <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width:3em" ontouchstart="setMinusTricks(@i)">
+                -@i
+            </button>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        @for (int i = 6; i <= ((Model.ResultData.ContractLevel > 3) ? 10 : (Model.ResultData.ContractLevel + 6)); i++)
+        {
+            <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width:3em" ontouchstart="setMinusTricks(@i)">
+                -@i
+            </button>
+        }
+    </div>
+</div>
+
+@if (Model.ResultData.ContractLevel >= 5)
 {
     <div class="row">
         <div class="col-12 text-center">
-            <button id="plus6" class="btn btn-plus btn-lg m-1" style="width:3em" ontouchstart="setPlusTricks(6)">
-                +6
-            </button>
+            @for (int i = 11; i <= Model.ResultData.ContractLevel + 6; i++)
+            {
+                <button id="minus@(i)" class="btn btn-minus btn-lg m-1" style="width:3em" ontouchstart="setMinusTricks(@i)">
+                    -@i
+                </button>
+            }
         </div>
     </div>
 }

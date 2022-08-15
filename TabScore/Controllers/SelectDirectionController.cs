@@ -1,29 +1,29 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using System;
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
-    public class EnterDirectionController : Controller
+    public class SelectDirectionController : Controller
     {
         public ActionResult Index(int sectionID, int tableNumber, int roundNumber, Direction direction = Direction.Null, bool confirm = false) 
         {
             Section section = AppData.SectionsList.Find(x => x.SectionID == sectionID);
-            EnterDirection enterDirection = new EnterDirection(section, tableNumber, direction, roundNumber, confirm);
+            SelectDirection selectDirection = new SelectDirection(section, tableNumber, direction, roundNumber, confirm);
 
-            ViewData["Title"] = $"Enter Direction - {section.SectionLetter}{tableNumber}";
-            ViewData["Header"] = $"Table {section.SectionLetter}{tableNumber}";
+            ViewData["Title"] = $"{Strings.SelectDirection} - {section.SectionLetter}{tableNumber}";
+            ViewData["Header"] = $"{Strings.Table} {section.SectionLetter}{tableNumber}";
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
             if (AppData.IsIndividual)
             {
-                return View("Individual", enterDirection);
+                return View("Individual", selectDirection);
             }
             else
             {
-                return View("Pair", enterDirection);
+                return View("Pair", selectDirection);
             }
         }
 
@@ -34,7 +34,7 @@ namespace TabScore.Controllers
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
             if (tabletDeviceStatus != null && !confirm)
             {
-                return RedirectToAction("Index", "EnterDirection", new { sectionID, tableNumber, roundNumber, direction, confirm = true });
+                return RedirectToAction("Index", "SelectDirection", new { sectionID, tableNumber, roundNumber, direction, confirm = true });
             }
             else if (tabletDeviceStatus == null)
             {
@@ -69,7 +69,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber });
+                return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber });
             }
         }
     }

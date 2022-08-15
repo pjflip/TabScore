@@ -6,11 +6,11 @@ namespace TabScore.Models
     public class Ranking
     {
         public string Orientation {get; set;}
-        public int PairNo {get; set;}
+        public int PairNo {get; set;}  // Doubles as player number for individuals
         public string Score {get; set;}
         public double ScoreDecimal {get; set;}
         public string Rank {get; set;}
-        public int MP {get; set;}
+        public double MP {get; set;}
         public int MPMax {get; set;}
     }
 }

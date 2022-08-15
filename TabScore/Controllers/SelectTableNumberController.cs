@@ -3,19 +3,20 @@
 
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
-    public class EnterTableNumberController : Controller
+    public class SelectTableNumberController : Controller
     {
         public ActionResult Index(int sectionID, int tableNumber = 0, bool confirm = false) 
         {
             Section section = AppData.SectionsList.Find(x => x.SectionID == sectionID);
-            EnterTableNumber enterTableNumber = new EnterTableNumber(section, tableNumber, confirm);
-            ViewData["Title"] = $"Enter Table Number - Section {section.SectionLetter}";
-            ViewData["Header"] = $"Section {section.SectionLetter}";
+            SelectTableNumber selectTableNumber = new SelectTableNumber(section, tableNumber, confirm);
+            ViewData["Title"] = $"{Strings.SelectTableNumber} - {Strings.Section} {section.SectionLetter}";
+            ViewData["Header"] = $"{Strings.Section} {section.SectionLetter}";
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            return View(enterTableNumber);   
+            return View(selectTableNumber);   
         }
 
         public ActionResult OKButtonClick(int sectionID, int tableNumber, bool confirm)
@@ -39,7 +40,7 @@ namespace TabScore.Controllers
                 // Check if tablet device is already registered for this location, and if so confirm
                 if (tabletDeviceStatus != null && !confirm)
                 {
-                    return RedirectToAction("Index", "EnterTableNumber", new { sectionID, tableNumber, confirm = true });
+                    return RedirectToAction("Index", "SelectTableNumber", new { sectionID, tableNumber, confirm = true });
                 }
                 else if (tabletDeviceStatus == null)  
                 {
@@ -57,7 +58,7 @@ namespace TabScore.Controllers
                 }
                 else if (tabletDeviceStatus.RoundNumber == 1 || Settings.NumberEntryEachRound)
                 {
-                    return RedirectToAction("Index", "ShowPlayerNumbers", new { tabletDeviceNumber });
+                    return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber });
                 }
                 else
                 {
@@ -66,7 +67,7 @@ namespace TabScore.Controllers
             }
             else   // More than one tablet device per table, so need to know direction for this tablet device
             {
-                return RedirectToAction("Index", "EnterDirection", new { sectionID, tableNumber, tableStatus.RoundNumber });
+                return RedirectToAction("Index", "SelectDirection", new { sectionID, tableNumber, tableStatus.RoundNumber });
             }
         }
     }

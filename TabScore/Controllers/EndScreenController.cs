@@ -3,6 +3,7 @@
 
 using System.Web.Mvc;
 using TabScore.Models;
+using Resources;
 
 namespace TabScore.Controllers
 {
@@ -12,7 +13,7 @@ namespace TabScore.Controllers
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             ViewData["Header"] = $"{tabletDeviceStatus.Location}";
-            ViewData["Title"] = $"Show Move - {tabletDeviceStatus.Location}";
+            ViewData["Title"] = $"{Strings.EndScreen} - {tabletDeviceStatus.Location}";
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             ViewData["TabletDeviceNumber"] = tabletDeviceNumber;
             return View();

@@ -9,7 +9,6 @@ namespace TabScoreStarter
     {
         public int SectionID { get; set; }
         public int BoardNumber { get; set;}
-
         public string NorthSpades { get; set;}
         public string NorthHearts { get; set;}
         public string NorthDiamonds { get; set;}

@@ -2,6 +2,7 @@
     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.ResultInfo
+@using Resources
 
 <style>
     .btn-suit {
@@ -39,7 +40,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Model.ResultData.BoardNumber
+            @Strings.Board @Model.ResultData.BoardNumber
         </h3>
     </div>
 </div>
@@ -47,7 +48,7 @@
 <div class="row">
     <div class="col-12 text-center">
         <h3>
-            Enter contract:
+            @Strings.EnterContract
         </h3>
     </div>
 </div>
@@ -55,10 +56,10 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <button id="skip" class="btn btn-lg btn-outline-danger m-1" ontouchstart="setSkip()">
-            Skip
+            @Strings.Skip
         </button>
         <button id="pass" class="btn btn-lg btn-pass m-1" ontouchstart="setPass()">
-            PASS Out
+            @Strings.AllPass
         </button>
         <button id="n1" class="btn btn-lg btn-primary m-1" style="width:3em" ontouchstart="setLevel(1)">
             1
@@ -92,7 +93,7 @@
 <div class="row">
     <div class="col-12 text-center">
         <button id="sNT" class="btn btn-lg btn-suit m-1 p-1" style="width:3em; height:3em" ontouchstart="setSuit('NT')">
-            NT
+            @Strings.NT
         </button>
         <button id="sS" class="btn btn-lg btn-suit m-1 p-1" style="width:3em; height:3em" ontouchstart="setSuit('S')">
             <div style="font-size: 2rem; color: black">&spades;</div>
@@ -123,7 +124,7 @@
 <div class="row mt-2">
     <div class="col-12 text-center">
         <h3>
-            by:
+            @Strings.by
         </h3>
     </div>
 </div>
@@ -131,16 +132,16 @@
 <div class="row mt-2">
     <div class="col-12 text-center">
         <button id="dN" class="btn btn-lg btn-secondary m-1" ontouchstart="setNSEW('N')">
-            North
+            @Strings.North
         </button>
         <button id="dS" class="btn btn-lg btn-secondary m-1" ontouchstart="setNSEW('S')">
-            South
+            @Strings.South
         </button>
         <button id="dE" class="btn btn-lg btn-secondary m-1" ontouchstart="setNSEW('E')">
-            East
+            @Strings.East
         </button>
         <button id="dW" class="btn btn-lg btn-secondary m-1" ontouchstart="setNSEW('W')">
-            West
+            @Strings.West
         </button>
     </div>
 </div>

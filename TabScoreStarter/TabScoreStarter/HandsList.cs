@@ -10,13 +10,13 @@ namespace TabScoreStarter
 {
     class HandsList : List<Hand>
     {
-        public HandsList(OdbcConnectionStringBuilder connectionString)
+        public HandsList(string connectionString)
         {
-            using (OdbcConnection connection = new OdbcConnection(connectionString.ToString()))
+            using (OdbcConnection connection = new OdbcConnection(connectionString))
             {
+                connection.Open();
                 string SQLString = $"SELECT Section, Board, NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs FROM HandRecord";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                connection.Open();
                 try
                 {
                     OdbcDataReader reader = cmd.ExecuteReader();
@@ -58,7 +58,7 @@ namespace TabScoreStarter
             }
         }
 
-        public HandsList(string pathToPbnFile)
+        public HandsList(StreamReader file)
         {
             bool newBoard = false;
             string line = null;
@@ -66,7 +66,6 @@ namespace TabScoreStarter
 
             Clear();
 
-            StreamReader file = new StreamReader(pathToPbnFile);
             if (!file.EndOfStream)
             {
                 line = file.ReadLine();
@@ -110,9 +109,9 @@ namespace TabScoreStarter
             file.Close();
         }
 
-        public void WriteToDB(OdbcConnectionStringBuilder connectionString)
+        public void WriteToDB(string connectionString)
         {
-            using (OdbcConnection connection = new OdbcConnection(connectionString.ToString()))
+            using (OdbcConnection connection = new OdbcConnection(connectionString))
             {
                 connection.Open();
                 string SQLString = "DELETE FROM HandRecord";

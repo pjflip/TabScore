@@ -1,25 +1,26 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.EnterDirection
+@model TabScore.Models.SelectDirection
+@using Resources
 
 <div id="tableDirectionRegisteredModal" class="modal" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>Warning</h3>
+                    <h3>@Strings.Warning</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>Table @Model.TableNumber and Direction @Model.Direction is already registered.  Do not press Register unless you intend to re-register a tablet device at your current location</p>
+                <p>@Strings.ErrorTableRegistered1 @Model.TableNumber @Strings.ErrorTableRegistered2 @Model.Direction @Strings.ErrorTableRegistered3</p>
             </div>
             <div class="modal-footer" style="justify-content:space-between">
                 <button class="btn btn-lg btn-danger" ontouchstart="modalLogOn()">
-                    <span class="fa fa-play-circle"></span> Register
+                    <span class="fa fa-play-circle"></span> @Strings.Register
                 </button>
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    Cancel <span class="fa fa-times-circle"></span>
+                    @Strings.Cancel <span class="fa fa-times-circle"></span>
                 </button>
             </div>
         </div>
@@ -29,7 +30,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Select Direction:
+            @Strings.SelectDirection
         </h3>
     </div>
 </div>
@@ -39,13 +40,13 @@
         @if (!Model.NorthSouthMissing)
         {
             <button id="dNorth" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="selectDirection('North')">
-                North
+                @Strings.North
             </button>
         }
         @if (!Model.EastWestMissing)
         {
             <button id="dEast" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="selectDirection('East')">
-                East
+                @Strings.East
             </button>
         }
     </div>
@@ -56,13 +57,13 @@
         @if (!Model.NorthSouthMissing)
         {
             <button id="dSouth" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="selectDirection('South')">
-                South
+                @Strings.South
             </button>
         }
         @if (!Model.EastWestMissing)
         {
             <button id="dWest" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="selectDirection('West')">
-                West
+                @Strings.West
             </button>
         }
     </div>
@@ -92,14 +93,14 @@
     $(document).on('touchstart', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "EnterDirection")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=' + direction + '&roundNumber=@Model.RoundNumber&confirm=false';
+            location.href = '@Url.Action("OKButtonClick", "SelectDirection")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=' + direction + '&roundNumber=@Model.RoundNumber&confirm=false';
         }
     });
 
     function modalLogOn() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "EnterDirection")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=@Model.Direction&roundNumber=@Model.RoundNumber&confirm=true';
+            location.href = '@Url.Action("OKButtonClick", "SelectDirection")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=@Model.Direction&roundNumber=@Model.RoundNumber&confirm=true';
         }
     }
 </script>

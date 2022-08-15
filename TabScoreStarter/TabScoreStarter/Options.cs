@@ -20,19 +20,18 @@ namespace TabScoreStarter
         public bool TabletsMove { get; set; }
         public bool HandRecordReversePerspective { get; set; }
         public bool ShowTimer { get; set; }
-        public double MinutesPerBoard { get; set; }
-        public double AdditionalMinutesPerRound { get; set; }
+        public int SecondsPerBoard { get; set; }
+        public int AdditionalSecondsPerRound { get; set; }
 
-        private readonly string dbConnectionString;
+        public Options() { }
 
-        public Options(OdbcConnectionStringBuilder connectionString)
+        public Options(string connectionString)
         {
-            dbConnectionString = connectionString.ToString();
-            using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
+            using (OdbcConnection connection = new OdbcConnection(connectionString))
             {
-                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod, TabletsMove, HandRecordReversePerspective, ShowTimer, MinutesPerBoard, AdditionalMinutesPerRound FROM Settings";
-                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 connection.Open();
+                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod, TabletsMove, HandRecordReversePerspective, ShowTimer, SecondsPerBoard, AdditionalSecondsPerRound FROM Settings";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = cmd.ExecuteReader();
                 reader.Read();
                 ShowTraveller = reader.GetBoolean(0);
@@ -48,16 +47,16 @@ namespace TabScoreStarter
                 TabletsMove = reader.GetBoolean(9);
                 HandRecordReversePerspective = reader.GetBoolean(10);
                 ShowTimer = reader.GetBoolean(11);
-                MinutesPerBoard = reader.GetDouble(12);
-                AdditionalMinutesPerRound = reader.GetDouble(13);
+                SecondsPerBoard = reader.GetInt32(12);
+                AdditionalSecondsPerRound = reader.GetInt32(13);
                 reader.Close();
                 cmd.Dispose();
             }
         }
 
-        public void UpdateDB()
+        public void UpdateDB(string connectionString)
         {
-            using (OdbcConnection connection = new OdbcConnection(dbConnectionString))
+            using (OdbcConnection connection = new OdbcConnection(connectionString))
             {
                 StringBuilder SQLString = new StringBuilder();
                 SQLString.Append($"UPDATE Settings SET");
@@ -136,10 +135,10 @@ namespace TabScoreStarter
                 {
                     SQLString.Append(" ShowTimer=NO,");
                 }
-                SQLString.Append($" MinutesPerBoard={MinutesPerBoard},");
-                SQLString.Append($" AdditionalMinutesPerRound={AdditionalMinutesPerRound}");
-                OdbcCommand cmd = new OdbcCommand(SQLString.ToString(), connection);
+                SQLString.Append($" SecondsPerBoard={SecondsPerBoard},");
+                SQLString.Append($" AdditionalSecondsPerRound={AdditionalSecondsPerRound}");
                 connection.Open();
+                OdbcCommand cmd = new OdbcCommand(SQLString.ToString(), connection);
                 cmd.ExecuteNonQuery();
                 cmd.Dispose();
             }

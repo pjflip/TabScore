@@ -8,11 +8,11 @@
     <Setting Name="ShowTimer" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="MinutesPerBoard" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">6.5</Value>
+    <Setting Name="SecondsPerBoard" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">390</Value>
     </Setting>
-    <Setting Name="AdditionalMinutesPerRound" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1</Value>
+    <Setting Name="AdditionalSecondsPerRound" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
     </Setting>
     <Setting Name="HandRecordReversePerspective" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

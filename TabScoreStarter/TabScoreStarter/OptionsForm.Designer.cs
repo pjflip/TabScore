@@ -43,7 +43,7 @@
             this.ValidateLeadCardCheckbox = new System.Windows.Forms.CheckBox();
             this.EnterLeadCardCheckbox = new System.Windows.Forms.CheckBox();
             this.CanxButton = new System.Windows.Forms.Button();
-            this.OKButton = new System.Windows.Forms.Button();
+            this.SaveButton = new System.Windows.Forms.Button();
             this.EnterResultsMethodGroup = new System.Windows.Forms.GroupBox();
             this.EnterResultsMethodCombobox = new System.Windows.Forms.ComboBox();
             this.TabletMovesGroupBox = new System.Windows.Forms.GroupBox();
@@ -233,16 +233,16 @@
             this.CanxButton.UseVisualStyleBackColor = true;
             this.CanxButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
-            // OKButton
+            // SaveButton
             // 
-            this.OKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OKButton.Location = new System.Drawing.Point(339, 315);
-            this.OKButton.Name = "OKButton";
-            this.OKButton.Size = new System.Drawing.Size(75, 23);
-            this.OKButton.TabIndex = 80;
-            this.OKButton.Text = "OK";
-            this.OKButton.UseVisualStyleBackColor = true;
-            this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
+            this.SaveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveButton.Location = new System.Drawing.Point(252, 314);
+            this.SaveButton.Name = "SaveButton";
+            this.SaveButton.Size = new System.Drawing.Size(139, 23);
+            this.SaveButton.TabIndex = 80;
+            this.SaveButton.Text = "Save and Close";
+            this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // EnterResultsMethodGroup
             // 
@@ -419,7 +419,7 @@
             this.Controls.Add(this.RoundTimerGroupBox);
             this.Controls.Add(this.TabletMovesGroupBox);
             this.Controls.Add(this.EnterResultsMethodGroup);
-            this.Controls.Add(this.OKButton);
+            this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.CanxButton);
             this.Controls.Add(this.PlayersGroup);
             this.Controls.Add(this.RankingListGroup);
@@ -466,7 +466,7 @@
         private System.Windows.Forms.CheckBox ValidateLeadCardCheckbox;
         private System.Windows.Forms.CheckBox EnterLeadCardCheckbox;
         private System.Windows.Forms.Button CanxButton;
-        private System.Windows.Forms.Button OKButton;
+        private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.GroupBox EnterResultsMethodGroup;
         private System.Windows.Forms.ComboBox EnterResultsMethodCombobox;
         private System.Windows.Forms.GroupBox TabletMovesGroupBox;

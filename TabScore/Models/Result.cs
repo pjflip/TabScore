@@ -4,6 +4,7 @@
 using System;
 using System.Data.Odbc;
 using System.Text;
+using Resources;
 
 namespace TabScore.Models
 {
@@ -12,18 +13,18 @@ namespace TabScore.Models
         public int BoardNumber { get; set; }
         public int NumberNorth { get; set; }
         public int NumberEast { get; set; }
-        public int NumberSouth { get; set; }
-        public int NumberWest { get; set; }
+        public int NumberSouth { get; set; } = 0;
+        public int NumberWest { get; set; } = 0;
         public string DeclarerNSEW { get; set; }
         public int ContractLevel { get; set; }
         public string ContractSuit { get; set; }
         public string ContractX { get; set; }
         public string LeadCard { get; set; }
+        public string Remarks { get; set; }
         public LeadValidationOptions LeadValidation { get; set; }
         public int Score { get; private set; }
-        public int MatchpointsNS { get; set; }
-        public int MatchpointsEW { get; set; }
-        public int MatchpointsMax { get; set; }
+        public double MatchpointsNS { get; set; }
+        public double MatchpointsEW { get; set; }
 
         // Default constructor for lists
         public Result() { }
@@ -49,19 +50,11 @@ namespace TabScore.Models
                         reader = cmd.ExecuteReader();
                         if (reader.Read())
                         {
-                            if (reader.GetString(4) == "Not played")
+                            Remarks = reader.GetString(4);
+                            string tempContract = reader.GetString(1);
+                            if ((Remarks == "" || Remarks == "Wrong direction") && tempContract.Length > 2)
                             {
-                                ContractLevel = -1;
-                                ContractSuit = "";
-                                ContractX = "";
-                                DeclarerNSEW = "";
-                                TricksTakenNumber = -1;
-                                LeadCard = "";
-                            }
-                            else
-                            {
-                                string temp = reader.GetString(1);
-                                Contract = temp;   // Sets ContractLevel, etc
+                                Contract = tempContract;   // Sets ContractLevel, etc
                                 if (ContractLevel == 0)  // Passed out
                                 {
                                     DeclarerNSEW = "";
@@ -75,6 +68,15 @@ namespace TabScore.Models
                                     LeadCard = reader.GetString(3);
                                 }
                             }
+                            else
+                            {
+                                ContractLevel = -1;
+                                ContractSuit = "";
+                                ContractX = "";
+                                DeclarerNSEW = "";
+                                TricksTakenNumber = -1;
+                                LeadCard = "";
+                            }
                         }
                         else  // No result in database
                         {
@@ -84,6 +86,7 @@ namespace TabScore.Models
                             DeclarerNSEW = "";
                             TricksTakenNumber = -1;
                             LeadCard = "";
+                            Remarks = "";
                         }
                     });
                 }
@@ -200,20 +203,33 @@ namespace TabScore.Models
             {
                 return "";
             }
-            else if (ContractLevel == -1)  // Board not played
+            else if (ContractLevel == -1)  // Board not played or arbitral result of some kind
             {
-                return "<span style=\"color:red\">Not played</span>";
+                if (Remarks == "Not played")
+                {
+                    return $"<span style=\"color:red\">{Strings.NotPlayed}</span>";
+                }
+                else if (Remarks == "Arbitral score")
+                {
+                    return $"<span style=\"color:red\">{Strings.ArbitralScore}</span>";
+                }
+                else
+                {
+                    return $"<span style=\"color:red\">{Remarks}</span>";
+                }
             }
             else if (ContractLevel == 0)
             {
-                return "<span style=\"color:darkgreen\">PASSed Out</span>";
+                return $"<span style=\"color:darkgreen\">{Strings.AllPass}</span>";
             }
+            
+            //Normal contract and result
             StringBuilder s = new StringBuilder("");
             s.Append(ContractLevel);
             switch (ContractSuit)
             {
                 case "NT":
-                    s.Append("NT");
+                    s.Append(Strings.NT);
                     break;
                 case "S":
                     s.Append("<span style=\"color:black\">&spades;</span>");
@@ -229,7 +245,22 @@ namespace TabScore.Models
                     break;
             }
             s.Append(ContractX);
-            s.Append($"{TricksTakenSymbol} by {DeclarerNSEW}");
+            s.Append($"{TricksTakenSymbol} {Strings.by} ");
+            switch (DeclarerNSEW)
+            {
+                case "N":
+                    s.Append(Strings.N);
+                    break;
+                case "S":
+                    s.Append(Strings.S);
+                    break;
+                case "E":
+                    s.Append(Strings.E);
+                    break;
+                case "W":
+                    s.Append(Strings.W);
+                    break;
+            }
             return s.ToString();
         }
 
@@ -241,13 +272,14 @@ namespace TabScore.Models
             s = s.Replace("H", "<span style=\"color:red\">&hearts;</span>");
             s = s.Replace("D", "<span style=\"color:lightsalmon\">&diams;</span>");
             s = s.Replace("C", "<span style=\"color:lightslategrey\">&clubs;</span>");
-            s = s.Replace("10", "T");
+            s = s.Replace("10", Strings.TenShorthand);
             return s;
         }
 
         public string DisplayTravellerContract()
         {
-            if (ContractLevel == 0) return "<span style=\"color:darkgreen\">PASS</span>";
+            if (ContractLevel < 0) return "";
+            if (ContractLevel == 0) return $"<span style=\"color:darkgreen\">{Strings.Pass}</span>";
             StringBuilder s = new StringBuilder(ContractLevel.ToString());
             switch (ContractSuit) {
                 case "S":
@@ -263,7 +295,7 @@ namespace TabScore.Models
                     s.Append("<span style=\"color:lightslategrey\">&clubs;</span>");
                     break;
                 case "NT":
-                    s.Append("NT");
+                    s.Append(Strings.NT);
                     break;
             }
             s.Append(ContractX);
@@ -453,7 +485,7 @@ namespace TabScore.Models
             }
             else
             {
-                if (DeclarerNSEW == "N" || DeclarerNSEW == "S")
+                if (DeclarerNSEW == "N" || DeclarerNSEW == "S" || DeclarerNSEW == "NS")
                 {
                     declarer = NumberNorth;
                 }
@@ -485,10 +517,7 @@ namespace TabScore.Models
                         cmd.ExecuteNonQuery();
                     });
                 }
-                finally
-                {
-                    cmd.Dispose();
-                }
+                catch { }
 
                 // Add new result
                 string remarks = "";
@@ -504,18 +533,16 @@ namespace TabScore.Models
                 {
                     SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({tableStatus.SectionID}, {tableStatus.TableNumber}, {tableStatus.RoundNumber}, {BoardNumber}, {NumberNorth}, {NumberEast}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTakenSymbol}', '{leadcard}', '{remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
                 }
-                OdbcCommand cmd2 = new OdbcCommand(SQLString, connection);
+                cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        cmd2.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
                     });
                 }
-                finally
-                {
-                    cmd2.Dispose();
-                }
+                catch { }
+                cmd.Dispose();
             }
         }
     }

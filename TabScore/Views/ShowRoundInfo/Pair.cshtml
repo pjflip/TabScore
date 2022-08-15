@@ -2,20 +2,30 @@
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.RoundInfo
+@using Resources
 
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Round: @Model.RoundNumber
+            @Strings.Round @Model.RoundNumber
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        <h3 style="color:green">
-            Boards: @Model.RoundData.LowBoard to @Model.RoundData.HighBoard
-        </h3>
+        @if (Model.RoundData.LowBoard == Model.RoundData.HighBoard)
+        {
+            <h3 style="color:green">
+                @Strings.Board @Model.RoundData.LowBoard
+            </h3>
+        }
+        else
+        {
+            <h3 style="color:green">
+                @Strings.Boards @Model.RoundData.LowBoard - @Model.RoundData.HighBoard
+            </h3>
+        }
     </div>
 </div>
 
@@ -24,7 +34,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                North/South: @Model.RoundData.NumberNorth
+                @Strings.North/@Strings.South: @Model.RoundData.NumberNorth
             </h3>
         </div>
     </div>
@@ -43,7 +53,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                East/West: @Model.RoundData.NumberEast
+                @Strings.East/@Strings.West: @Model.RoundData.NumberEast
             </h3>
         </div>
     </div>
@@ -62,7 +72,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:red">
-                Sitting Out
+                @Strings.SittingOut
             </h3>
         </div>
     </div>

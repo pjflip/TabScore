@@ -4,7 +4,7 @@
 using System;
 namespace TabScore.Models
 {
-    public class EnterDirection
+    public class SelectDirection
     {
         public int SectionID { get; set; }
         public int TableNumber { get; set; }
@@ -15,7 +15,7 @@ namespace TabScore.Models
         public bool EastWestMissing { get; set; }
         public bool Confirm { get; set; }
 
-        public EnterDirection(Section section, int tableNumber, Direction direction, int roundNumber, bool confirm)
+        public SelectDirection(Section section, int tableNumber, Direction direction, int roundNumber, bool confirm)
         {
             SectionID = section.SectionID;
             TableNumber = tableNumber;

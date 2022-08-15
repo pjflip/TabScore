@@ -42,6 +42,7 @@
             this.HandRecordFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.AnalysisCalculationBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.OptionsButton = new System.Windows.Forms.Button();
+            this.ResultsViewerButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ScoringDatabaseLabel
@@ -50,7 +51,7 @@
             this.ScoringDatabaseLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ScoringDatabaseLabel.Location = new System.Drawing.Point(15, 17);
             this.ScoringDatabaseLabel.Name = "ScoringDatabaseLabel";
-            this.ScoringDatabaseLabel.Size = new System.Drawing.Size(137, 16);
+            this.ScoringDatabaseLabel.Size = new System.Drawing.Size(136, 16);
             this.ScoringDatabaseLabel.TabIndex = 0;
             this.ScoringDatabaseLabel.Text = "Scoring Database:";
             // 
@@ -82,7 +83,7 @@
             this.HandRecordFileLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HandRecordFileLabel.Location = new System.Drawing.Point(15, 93);
             this.HandRecordFileLabel.Name = "HandRecordFileLabel";
-            this.HandRecordFileLabel.Size = new System.Drawing.Size(134, 16);
+            this.HandRecordFileLabel.Size = new System.Drawing.Size(133, 16);
             this.HandRecordFileLabel.TabIndex = 0;
             this.HandRecordFileLabel.Text = "Hand Record File:";
             // 
@@ -131,7 +132,7 @@
             this.AnalysingLabel.ForeColor = System.Drawing.SystemColors.ControlText;
             this.AnalysingLabel.Location = new System.Drawing.Point(15, 151);
             this.AnalysingLabel.Name = "AnalysingLabel";
-            this.AnalysingLabel.Size = new System.Drawing.Size(120, 16);
+            this.AnalysingLabel.Size = new System.Drawing.Size(119, 16);
             this.AnalysingLabel.TabIndex = 0;
             this.AnalysingLabel.Text = "Analysis Complete";
             this.AnalysingLabel.Visible = false;
@@ -171,10 +172,24 @@
             this.OptionsButton.Visible = false;
             this.OptionsButton.Click += new System.EventHandler(this.OptionsButton_Click);
             // 
+            // ResultsViewerButton
+            // 
+            this.ResultsViewerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ResultsViewerButton.Location = new System.Drawing.Point(387, 189);
+            this.ResultsViewerButton.Name = "ResultsViewerButton";
+            this.ResultsViewerButton.Size = new System.Drawing.Size(106, 34);
+            this.ResultsViewerButton.TabIndex = 4;
+            this.ResultsViewerButton.TabStop = false;
+            this.ResultsViewerButton.Text = "View Results";
+            this.ResultsViewerButton.UseVisualStyleBackColor = true;
+            this.ResultsViewerButton.Visible = false;
+            this.ResultsViewerButton.Click += new System.EventHandler(this.ResultsViewerButton_Click);
+            // 
             // TabScoreForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(505, 234);
+            this.Controls.Add(this.ResultsViewerButton);
             this.Controls.Add(this.OptionsButton);
             this.Controls.Add(this.AnalysingProgressBar);
             this.Controls.Add(this.AnalysingLabel);
@@ -214,5 +229,6 @@
         private System.Windows.Forms.OpenFileDialog HandRecordFileDialog;
         private System.ComponentModel.BackgroundWorker AnalysisCalculationBackgroundWorker;
         private System.Windows.Forms.Button OptionsButton;
+        private System.Windows.Forms.Button ResultsViewerButton;
     }
 }
