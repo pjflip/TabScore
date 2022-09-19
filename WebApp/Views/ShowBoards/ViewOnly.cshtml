@@ -1,22 +1,23 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.ResultsList
+@model TabScore.Models.BoardsList
+@using Resources
 
 <div id="notAllResultsModal" class="modal" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>Warning</h3>
+                    <h3>@Strings.Warning</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>Please wait until there are results entered for every board</p>
+                <p>@Strings.ErrorWaitResults</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    OK <span class="fa fa-check-circle"></span>
+                    @Strings.OK <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -28,15 +29,15 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>Warning</h3>
+                    <h3>@Strings.Warning</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>Please wait until there is a result entered for this board</p>
+                <p>@Strings.ErrorWaitResult</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    OK <span class="fa fa-check-circle"></span>
+                    @Strings.OK <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -48,7 +49,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-10 text-center">
         <h5>
-            This tablet device is not being used for scoring during this round.  Once a board has been scored, you can view it using the buttons below
+            @Strings.NotScoring
         </h5>
     </div>
     <div class="col-1">
@@ -58,7 +59,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-3 mb-3">
     <div class="col-12 text-center">
         <h3>
-            Boards:
+            @Strings.Boards
         </h3>
     </div>
 </div>
@@ -72,10 +73,10 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             </h4>
         </div>
         <div class="col-4 px-0">
-            @if (Result.ContractLevel != -1)
+            @if (Result.Remarks != "Not played")
             {
                 <button class="btn btn-secondary btn-lg m-1" style="width:4em" ontouchstart="View(@Result.BoardNumber)">
-                    View
+                    @Strings.View
                 </button>
             }
         </div>

@@ -16,5 +16,6 @@ namespace TabScore.Models
         public string ScoreNS { get; set; }
         public string ScoreEW { get; set; }
         public double SortPercentage { get; set; }
+        public bool Highlight { get; set; } = false;
     }
 }

@@ -3,6 +3,7 @@
 
 <!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+@using Resources
 
 <head>
     <title>@ViewData["Title"].ToString()</title>
@@ -11,7 +12,6 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <script src="~/Scripts/bootstrap.min.js"></script>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
-    <link rel="preload" as="font" href="/fonts/fontawesome-webfont.woff2?v=4.7.0" type="font/woff2" crossorigin="anonymous">
 </head>
 
 <body style="background-color: ivory">
@@ -38,7 +38,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                     if (buttonOptions == TabScore.Models.ButtonOptions.OKEnabledAndBack || buttonOptions == TabScore.Models.ButtonOptions.OKDisabledAndBack)
                     {
                         <button id="BackButton" class="btn btn-danger ml-2 my-2 float-left" style="font-size: 1.5rem">
-                            <span class="fa fa-chevron-circle-left"></span> Back
+                            <span class="fa fa-chevron-circle-left"></span> @Strings.Back
                         </button>
                     }
                 }
@@ -55,13 +55,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 @if (buttonOptions == TabScore.Models.ButtonOptions.OKDisabled || buttonOptions == TabScore.Models.ButtonOptions.OKDisabledAndBack)
                 {
                     <button id="OKButton" class="btn btn-success mr-2 my-2 float-right" style="font-size: 1.5rem" disabled>
-                        OK <span class="fa fa-chevron-circle-right"></span>
+                        @Strings.OK <span class="fa fa-chevron-circle-right"></span>
                     </button>
                 }
                 else if (buttonOptions == TabScore.Models.ButtonOptions.OKEnabled || buttonOptions == TabScore.Models.ButtonOptions.OKEnabledAndBack)
                 {
                     <button id="OKButton" class="btn btn-success mr-2 my-2 float-right" style="font-size: 1.5rem">
-                        OK <span class="fa fa-chevron-circle-right"></span>
+                        @Strings.OK <span class="fa fa-chevron-circle-right"></span>
                     </button>
                 }
             </div>

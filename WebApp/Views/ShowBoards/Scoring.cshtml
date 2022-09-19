@@ -1,22 +1,23 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.ResultsList
+@model TabScore.Models.BoardsList
+@using Resources
 
 <div id="notAllResultsModal" class="modal" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>Warning</h3>
+                    <h3>@Strings.Warning</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>Please enter a result (or Skip = Not played) for every board</p>
+                <p>@Strings.ErrorEnterResult</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    OK <span class="fa fa-check-circle"></span>
+                    @Strings.OK <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -26,7 +27,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-5 mb-3">
     <div class="col-12 text-center">
         <h3>
-            Boards:
+            @Strings.Boards
         </h3>
     </div>
 </div>
@@ -43,24 +44,24 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             @if (Result.ContractLevel == -999)
             {
                 <button class="btn btn-primary btn-lg m-1" style="width:4.8em" ontouchstart="EnterEdit(@Result.BoardNumber)">
-                    Enter
+                    @Strings.Enter
                 </button>
             }
             else
             {
-                if (Model.ShowViewButton && Result.ContractLevel != -1)
+                if (Model.ShowViewButton && Result.Remarks != "Not played")
                 {
                     <button class="btn btn-info btn-lg m-1 px-0" style="width:2.8em" ontouchstart="EnterEdit(@Result.BoardNumber)">
-                        Edit
+                        @Strings.Edit
                     </button>
                     <button class="btn btn-secondary btn-lg px-0" style="width:2.8em" ontouchstart="View(@Result.BoardNumber)">
-                        View
+                        @Strings.View
                     </button>
                 }
                 else
                 {
                     <button class="btn btn-info btn-lg m-1" style="width:4em" ontouchstart="EnterEdit(@Result.BoardNumber)">
-                        Edit
+                        @Strings.Edit
                     </button>
                 }
             }

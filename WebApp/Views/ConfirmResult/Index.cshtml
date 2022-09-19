@@ -2,11 +2,12 @@
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.ResultInfo
+@using Resources
 
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Model.ResultData.BoardNumber
+            @Strings.Board @Model.ResultData.BoardNumber
         </h3>
     </div>
 </div>
@@ -14,7 +15,7 @@
 <div class="row">
     <div class="col-12 text-center">
         <h3>
-            Confirm result:
+            @Strings.ConfirmResult
         </h3>
     </div>
 </div>
@@ -24,7 +25,7 @@
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3>
-                <span style="color:darkgreen">PASSed Out</span>
+                <span style="color:darkgreen">@Strings.AllPass</span>
             </h3>
         </div>
     </div>
@@ -44,7 +45,7 @@ else
         <div class="row">
             <div class="col-12 text-center">
                 <h3>
-                    @Model.ResultData.Score to NS
+                    @Model.ResultData.Score @Strings.To @Strings.N@Strings.S
                 </h3>
             </div>
         </div>
@@ -54,7 +55,7 @@ else
         <div class="row">
             <div class="col-12 text-center">
                 <h3>
-                    @(-Model.ResultData.Score) to EW
+                    @(-Model.ResultData.Score) @Strings.To @Strings.E@Strings.W
                 </h3>
             </div>
         </div>

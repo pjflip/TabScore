@@ -2,21 +2,22 @@
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.PlayerEntryList
+@using Resources
 
 <div id="notAllPlayerNumbersModal" class="modal" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>Warning</h3>
+                    <h3>@Strings.Warning</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>Please wait until all the player numbers for this table have been entered</p>
+                <p>@Strings.ErrorWaitAllIDs</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    OK <span class="fa fa-check-circle"></span>
+                    @Strings.OK <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -28,15 +29,15 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         <div class="modal-content">
             <div class="modal-header text-primary">
                 <p class="modal-title text-center">
-                    <h3>Warning</h3>
+                    <h3>@Strings.Warning</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>Please select a name or 'Unknown' for all players</p>
+                <p>@Strings.ErrorNoID</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    OK <span class="fa fa-check-circle"></span>
+                    @Strings.OK <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -46,55 +47,39 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Enter/Edit Players:
+            @Strings.EnterEditPlayerIDs
         </h3>
     </div>
 </div>
 
 @foreach (var playerEntry in Model)
 {
-    if (playerEntry.Direction == TabScore.Models.Direction.North)
-    {
-        <div class="row mt-3">
-            <div class="col-12 text-center">
-                <h3 style="color:blue">
-                    North/South: @playerEntry.Number
-                </h3>
-            </div>
+    <div class="row mt-3">
+        <div class="col-12 text-center">
+            <h3 style="color:blue">
+                @playerEntry.Direction: @playerEntry.Number
+            </h3>
         </div>
-    }
-    else if (playerEntry.Direction == TabScore.Models.Direction.East)
-    {
-        <div class="row mt-3">
-            <div class="col-12 text-center">
-                <h3 style="color:blue">
-                    East/West: @playerEntry.Number
-                </h3>
-            </div>
-        </div>
-    }
+    </div>
 
     <div class="row">
-        <div class="col-2 text-right pr-3 align-self-center">
-            <h4>
-                @playerEntry.Direction:
-            </h4>
+        <div class="col-1">
         </div>
         <div class="col-3">
             @if (playerEntry.Name == "")
             {
-                <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerNumber('@playerEntry.Direction')">
-                    Enter
+                <button class="btn btn-primary btn-lg m-1" ontouchstart="EnterPlayerID('@playerEntry.Direction')">
+                    @Strings.Enter
                 </button>
             }
             else
             {
-                <button class="btn btn-info btn-lg m-1" ontouchstart="EnterPlayerNumber('@playerEntry.Direction')">
-                    Edit
+                <button class="btn btn-info btn-lg m-1" ontouchstart="EnterPlayerID('@playerEntry.Direction')">
+                    @Strings.Edit
                 </button>
             }
         </div>
-        <div class="col-7 align-self-center">
+        <div class="col-8 align-self-center">
             <h4>
                 @playerEntry.Name
             </h4>
@@ -109,7 +94,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         </div>
         <div class="col-10 text-center">
             <h5>
-                Please wait until all the player numbers for this table have been entered before pressing OK
+                @Strings.NeedAllIDs
             </h5>
         </div>
         <div class="col-1">
@@ -134,15 +119,15 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         else {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("OKButtonClick", "ShowPlayerNumbers")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+                location.href = '@Url.Action("OKButtonClick", "ShowPlayerIDs")?tabletDeviceNumber=@Model.TabletDeviceNumber';
             }
         }
     });
 
-    function EnterPlayerNumber(direction) {
+    function EnterPlayerID(direction) {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("Index", "EnterPlayerNumber")?tabletDeviceNumber=@Model.TabletDeviceNumber&direction=' + direction;
+                location.href = '@Url.Action("Index", "EnterPlayerID")?tabletDeviceNumber=@Model.TabletDeviceNumber&direction=' + direction;
             }
     }
 </script>

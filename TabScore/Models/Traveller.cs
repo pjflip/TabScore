@@ -12,7 +12,6 @@ namespace TabScore.Models
         public int TabletDeviceNumber { get; set; }
         public int BoardNumber { get; private set; }
         public bool HandRecord { get; private set; }
-        public int NumberNorth { get; private set; }
         public string PercentageNS { get; private set; }
         public string PercentageEW { get; private set; }
         public bool FromView { get; set; }
@@ -21,7 +20,6 @@ namespace TabScore.Models
         {
             TabletDeviceNumber = tabletDeviceNumber;
             BoardNumber = tableStatus.ResultData.BoardNumber;
-            NumberNorth = tableStatus.RoundData.NumberNorth;
             List<Result> boardResultsList = new List<Result>();
 
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
@@ -95,11 +93,13 @@ namespace TabScore.Models
                 }
             };
 
-            // Get list of all scorable results for percentages calculation
+            // Set maximum match points based on total number of results (including Not Played) for Neuberg formula
             int resultsForThisBoard = boardResultsList.Count;
+            int matchPointsMax = 2 * resultsForThisBoard - 2;
+
+            // Get list of all scorable results for matchpoint calculation
             List<Result> currentBoardScoresList = boardResultsList.FindAll(x => x.ContractLevel >= 0 && x.BoardNumber == BoardNumber);
             int scoresForThisBoard = currentBoardScoresList.Count;
-            int matchPointsMax = 2 * resultsForThisBoard - 2;
 
             foreach (Result result in boardResultsList)
             {
@@ -116,27 +116,27 @@ namespace TabScore.Models
                 };
                 if (result.Remarks != "" && result.Remarks != "Wrong direction")
                 {
-                    // No scorable contract, so look for arbitral score
-                    try
+                    // No scorable contract, so look for arbitral percentages
+                    string[] temp = result.Remarks.Split(new char[] { '%', '-' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (temp.Length == 2 && uint.TryParse(temp[0], out uint tempInt0) && uint.TryParse(temp[1], out uint tempInt1))
                     {
-                        string[] temp = result.Remarks.Split(new char[] { '%', '-' }, StringSplitOptions.RemoveEmptyEntries);
                         travellerResult.ScoreNS = $"<span style=\"color:red\">{temp[0]}%</span>";
                         travellerResult.ScoreEW = $"<span style=\"color:red\">{temp[1]}%</span>";
                         travellerResult.SortPercentage = Convert.ToDouble(temp[0]);
-                        if (this.NumberNorth == NumberNorth)
+                        if (result.NumberNorth == tableStatus.RoundData.NumberNorth)
                         {
                             PercentageNS = temp[0] + "%";
                             PercentageEW = temp[1] + "%";
                         }
                     }
-                    catch
+                    else  // Can't work out percentages
                     {
-                        // Can't work out percentages
                         travellerResult.ScoreNS = travellerResult.ScoreEW = "<span style=\"color:red\">???</span>";
                         travellerResult.SortPercentage = 0.0;
-                        if (this.NumberNorth == NumberNorth)
+                        if (result.NumberNorth == tableStatus.RoundData.NumberNorth)
                         {
                             PercentageNS = PercentageEW = "???";
+                            travellerResult.Highlight = true;
                         }
                     }
                 }
@@ -164,11 +164,12 @@ namespace TabScore.Models
                         double neuberg = ((matchpoints + 1) * resultsForThisBoard / (double)scoresForThisBoard) - 1.0;
                         travellerResult.SortPercentage = neuberg / matchPointsMax * 100.0;
                     }
-                    if (this.NumberNorth == NumberNorth)
+                    if (result.NumberNorth == tableStatus.RoundData.NumberNorth)
                     {
                         int intPercentageNS = Convert.ToInt32(travellerResult.SortPercentage);
                         PercentageNS = Convert.ToString(intPercentageNS) + "%";
                         PercentageEW = Convert.ToString(100 - intPercentageNS) + "%";
+                        travellerResult.Highlight = true;
                     }
 
                     if (result.Remarks == "Wrong direction")

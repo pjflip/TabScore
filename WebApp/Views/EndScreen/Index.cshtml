@@ -1,10 +1,12 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
+@using Resources
+
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h2>
-            Score entry complete
+            @Strings.ScoreEntryComplete
         </h2>
     </div>
 </div>
@@ -13,12 +15,12 @@
     <div class="col-1">
     </div>
     <div class="col-10 text-center">
-        <img src="~/Chequered Flag Logo.png" style="width: 100%" />
+        <img src="~/Resources/Chequered Flag Logo.png" style="width: 100%" />
         <h5 class="mt-2">
-            If the event is finished, you can turn off the tablet device
+            @Strings.IfFinished
         </h5>
         <h5>
-            For Swiss events, wait until the TD tells you and then press OK to get the new movement
+            @Strings.ForSwiss
         </h5>
     </div>
     <div class="col-1">

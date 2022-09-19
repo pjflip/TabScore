@@ -1,7 +1,6 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using System;
 using System.Web.Mvc;
 using TabScore.Models;
 using Resources;
@@ -18,7 +17,7 @@ namespace TabScore.Controllers
                 RankingList rankingList = new RankingList(tabletDeviceNumber);
                     
                 // Only show the ranking list if it contains something meaningful
-                if (rankingList != null && rankingList.Count > 0 && rankingList[0].ScoreDecimal != 0.0 && rankingList[0].ScoreDecimal != 50.0)
+                if (rankingList != null && rankingList.Count > 1 && rankingList[0].ScoreDecimal != 0.0)
                 {
                     if (Settings.ShowTimer) ViewData["TimerSeconds"] = Utilities.SetTimerSeconds(tabletDeviceStatus);
                     ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tabletDeviceStatus.RoundNumber}";
@@ -48,7 +47,7 @@ namespace TabScore.Controllers
             RankingList rankingList = new RankingList(tabletDeviceNumber);
 
             // Only show the ranking list if it contains something meaningful
-            if (rankingList == null || rankingList.Count == 0 || rankingList[0].ScoreDecimal == 0 || rankingList[0].ScoreDecimal == 50)
+            if (rankingList == null || rankingList.Count < 2 || rankingList[0].ScoreDecimal == 0.0)
             {
                 return RedirectToAction("Index", "EndScreen", new { tabletDeviceNumber });
             }

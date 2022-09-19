@@ -1,7 +1,8 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.EnterPlayerNumber
+@model TabScore.Models.EnterPlayerID
+@using Resources
 
 <style>
     .btn-numeric {
@@ -15,15 +16,15 @@
         <div class="modal-content">
             <div class="modal-header text-primary">
                 <p class="modal-title text-center">
-                    <h3>Warning</h3>
+                    <h3>@Strings.Warning</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>Please select a player number, or select 'Unknown'</p>
+                <p>@Strings.ErrorNoID</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    OK <span class="fa fa-check-circle"></span>
+                    @Strings.OK <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -33,7 +34,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Enter ID for @Model.Direction
+            @Strings.EnterID @Model.Direction
         </h3>
     </div>
 </div>
@@ -47,7 +48,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center">
         <button id="nk" class="btn btn-secondary btn-lg px-0 m-1" style="width: 6em" ontouchstart="unknown()">
-            Unknown
+            @Strings.Unknown
         </button>
     </div>
 </div>
@@ -109,6 +110,6 @@
 </div>
 
 <script>
-    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterPlayerNumber")?tabletDeviceNumber=@Model.TabletDeviceNumber&direction=@Model.Direction';
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterPlayerID")?tabletDeviceNumber=@Model.TabletDeviceNumber&direction=@Model.Direction';
 </script>
-<script src='@Url.Content("~/Scripts/EnterPlayerNumber.js")' type="text/javascript"></script>
+<script src='@Url.Content("~/Scripts/EnterPlayerID.js")' type="text/javascript"></script>

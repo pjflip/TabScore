@@ -80,7 +80,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             <tbody>
                 @foreach (var Result in Model)
                 {
-                     if (Model.NumberNorth == Result.NumberNorth)
+                     if (Result.Highlight)
                     {
                         <tr class="table-success">
                             <td>@Result.NumberNorth+@Result.NumberSouth</td>

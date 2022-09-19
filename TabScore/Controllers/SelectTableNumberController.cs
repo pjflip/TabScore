@@ -4,6 +4,8 @@
 using System.Web.Mvc;
 using TabScore.Models;
 using Resources;
+using System.Web;
+using System;
 
 namespace TabScore.Controllers
 {
@@ -37,18 +39,29 @@ namespace TabScore.Controllers
                 // One tablet device per table
                 TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
 
-                // Check if tablet device is already registered for this location, and if so confirm
-                if (tabletDeviceStatus != null && !confirm)
+                // Check if tablet device is already registered for this location
+                if (tabletDeviceStatus != null && confirm)
                 {
-                    return RedirectToAction("Index", "SelectTableNumber", new { sectionID, tableNumber, confirm = true });
+                    // Ok to change to this tablet, so set cookie
+                    SetCookie(sectionID, tableNumber);
                 }
-                else if (tabletDeviceStatus == null)  
+                else if (tabletDeviceStatus == null)
                 {
                     // Not on list, so need to add it.  Direction is fixed as North as only one tablet per table
                     tabletDeviceStatus = new TabletDeviceStatus(sectionID, tableNumber, Direction.North, tableStatus.RoundData.NumberNorth, tableStatus.RoundNumber);
                     AppData.TabletDeviceStatusList.Add(tabletDeviceStatus);
+                    SetCookie(sectionID, tableNumber);
                 }
-                
+                else
+                {
+                    // Check if table number cookie has not been set - if so go back to confirm
+                    if (!CheckCookie(sectionID, tableNumber)) 
+                    {                    
+                        return RedirectToAction("Index", "SelectTableNumber", new { sectionID, tableNumber, confirm = true });
+                    }
+                    // else = Cookie is Ok, so this is a re-registration and nothing more to do
+                }
+
                 // tabletDeviceNumber is the key for identifying this particular tablet device and is used throughout the rest of the application
                 int tabletDeviceNumber = AppData.TabletDeviceStatusList.LastIndexOf(tabletDeviceStatus);
 
@@ -68,6 +81,32 @@ namespace TabScore.Controllers
             else   // More than one tablet device per table, so need to know direction for this tablet device
             {
                 return RedirectToAction("Index", "SelectDirection", new { sectionID, tableNumber, tableStatus.RoundNumber });
+            }
+        }
+
+        // Set a cookie for this device
+        private void SetCookie(int sectionID, int tableNumber)
+        {
+            HttpCookie tabScoreCookie = new HttpCookie("tabScore");
+            tabScoreCookie.Values["sectionID"] = sectionID.ToString();
+            tabScoreCookie.Values["tableNumber"] = tableNumber.ToString();
+            Response.Cookies.Add(tabScoreCookie);
+        }
+
+        // Check if matching cookie set
+        private bool CheckCookie(int sectionID, int tableNumber)
+        {
+            HttpCookie tabScoreCookie = Request.Cookies["tabScore"];
+            if (tabScoreCookie == null) return false;
+            int cookieSectionID = Convert.ToInt32(tabScoreCookie.Values["sectionID"]);
+            int cookieTableNumber = Convert.ToInt32(tabScoreCookie.Values["tableNumber"]);
+            if (cookieSectionID == sectionID && cookieTableNumber == tableNumber)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

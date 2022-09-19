@@ -2,6 +2,7 @@
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.Traveller
+@using Resources
 
 <div class="row mt-4">
     @if (Model.HandRecord)
@@ -10,22 +11,22 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             <div class="row">
                 <div class="col-12 text-center">
                     <h3>
-                        Board @Model.BoardNumber
+                        @Strings.Board @Model.BoardNumber
                     </h3>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 text-center">
-                    @if (Model.PercentageNS == -1)
+                    @if (Model.PercentageNS == "")
                     {
                         <h4>
-                            Traveller
+                            @Strings.Traveller
                         </h4>
                     }
                     else
                     {
                         <h4>
-                            NS: @Model.PercentageNS% - EW: @(100 - Model.PercentageNS)%
+                            @Strings.N@Strings.S: @Model.PercentageNS - @Strings.E@Strings.W: @Model.PercentageEW
                         </h4>
                     }
                 </div>
@@ -33,7 +34,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         </div>
         <div class="col-3">
             <button class="btn btn-outline-light btn-lg mr-2 my-2 float-right" ontouchstart="handRecordClick()">
-                <img src="~/Cards Logo.png" />
+                <img src="~/Resources/Cards Logo.png" />
             </button>
         </div>
     }
@@ -41,20 +42,20 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     {
         <div class="col-12 text-center">
             <h4>
-                Board @Model.BoardNumber
+                @Strings.Board @Model.BoardNumber
             </h4>
         </div>
         <div class="col-12 text-center">
-            @if (Model.PercentageNS == -1)
+            @if (Model.PercentageNS == "")
             {
                 <h4>
-                    Traveller
+                    @Strings.Traveller
                 </h4>
             }
             else
             {
                 <h4>
-                    NS: @Model.PercentageNS% - EW: @(100 - Model.PercentageNS)%
+                    @Strings.N@Strings.S: @Model.PercentageNS - @Strings.E@Strings.W: @Model.PercentageEW
                 </h4>
             }
         </div>
@@ -66,40 +67,30 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         <table class="table-sm table-bordered text-center" style="margin:auto; width:50%">
             <thead class="thead-dark">
                 <tr>
-                    <th>NS</th>
-                    <th>EW</th>
-                    <th>Contract</th>
-                    <th>By</th>
-                    <th>Lead</th>
-                    <th>Tricks</th>
-                    <th>NS Score</th>
-                    <th>EW Score</th>
+                    <th>@Strings.N@Strings.S</th>
+                    <th>@Strings.E@Strings.W</th>
+                    <th>@Strings.Contract</th>
+                    <th>@Strings.ByOnTraveller</th>
+                    <th>@Strings.Lead</th>
+                    <th>@Strings.Tricks</th>
+                    <th>@Strings.N@Strings.S @Strings.Score</th>
+                    <th>@Strings.E@Strings.W @Strings.Score</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var Result in Model)
                 {
-                    string ScoreNS = "";
-                    string ScoreEW = "";
-                    if (Result.Score > 0)
-                    {
-                        ScoreNS = Result.Score.ToString();
-                    }
-                    else if (Result.Score < 0)
-                    {
-                        ScoreEW = (-Result.Score).ToString();
-                    }
-                    if (Model.NumberNorth == Result.NumberNorth)
+                   if (Result.Highlight)
                     {
                         <tr class="table-success">
                             <td>@Result.NumberNorth</td>
                             <td>@Result.NumberEast</td>
-                            <td>@Html.Raw(Result.DisplayTravellerContract())</td>
+                            <td>@Html.Raw(Result.Contract)</td>
                             <td>@Result.DeclarerNSEW</td>
-                            <td>@Html.Raw(Result.DisplayLeadCard())</td>
-                            <td>@Result.TricksTakenSymbol</td>
-                            <td>@ScoreNS</td>
-                            <td>@ScoreEW</td>
+                            <td>@Html.Raw(Result.LeadCard)</td>
+                            <td>@Result.TricksTaken</td>
+                            <td>@Html.Raw(Result.ScoreNS)</td>
+                            <td>@Html.Raw(Result.ScoreEW)</td>
                         </tr>
                     }
                     else
@@ -107,12 +98,12 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         <tr>
                             <td>@Result.NumberNorth</td>
                             <td>@Result.NumberEast</td>
-                            <td>@Html.Raw(Result.DisplayTravellerContract())</td>
+                            <td>@Html.Raw(Result.Contract)</td>
                             <td>@Result.DeclarerNSEW</td>
-                            <td>@Html.Raw(Result.DisplayLeadCard())</td>
-                            <td>@Result.TricksTakenSymbol</td>
-                            <td>@ScoreNS</td>
-                            <td>@ScoreEW</td>
+                            <td>@Html.Raw(Result.LeadCard)</td>
+                            <td>@Result.TricksTaken</td>
+                            <td>@Html.Raw(Result.ScoreNS)</td>
+                            <td>@Html.Raw(Result.ScoreEW)</td>
                         </tr>
                     }
                 }

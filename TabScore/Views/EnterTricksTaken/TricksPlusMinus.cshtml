@@ -45,7 +45,7 @@
 {
     <div class="row">
         <div class="col-12 text-center">
-            @for (int i = 7 - Model.ResultData.ContractLevel; i >= 1; i--)
+            @for (int i = ((Model.ResultData.ContractLevel <= 2) ? 5 : 7 - Model.ResultData.ContractLevel); i >= 1; i--)
             {
                 <button id="plus@(i)" class="btn btn-plus btn-lg m-1" style="width:3em" ontouchstart="setPlusTricks(@i)">
                     +@i

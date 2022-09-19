@@ -2,20 +2,21 @@
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.ResultInfo
+@using Resources
 
 <div id="noTricksModal" class="modal modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header text-primary">
             <p class="modal-title text-center">
-                <h3>Warning</h3>
+                <h3>@Strings.Warning</h3>
             </p>
         </div>
         <div class="modal-body">
-            <p>Please select number of tricks</p>
+            <p>@Strings.EnterTricksTaken</p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-lg btn-success" data-dismiss="modal">
-                OK <span class="fa fa-check-circle"></span>
+                @Strings.OK <span class="fa fa-check-circle"></span>
             </button>
         </div>
     </div>
@@ -24,7 +25,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.DisplayContract())
+            @Strings.Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.DisplayContract())
         </h3>
     </div>
 </div>
@@ -32,7 +33,7 @@
 <div class="row">
     <div class="col-12 text-center">
         <h3>
-            Enter tricks taken:
+            @Strings.EnterTricksTaken
         </h3>
     </div>
 </div>

@@ -26,7 +26,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                     else
                     {
                         <h4>
-                            @Strings.N@Strings.S: @Model.PercentageNS - @Strings.E@Strings.W: @Model.PercentageEW)
+                            @Strings.N@Strings.S: @Model.PercentageNS - @Strings.E@Strings.W: @Model.PercentageEW
                         </h4>
                     }
                 </div>
@@ -80,7 +80,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             <tbody>
                 @foreach (var Result in Model)
                 {
-                   if (Model.NumberNorth == Result.NumberNorth)
+                   if (Result.Highlight)
                     {
                         <tr class="table-success">
                             <td>@Result.NumberNorth</td>

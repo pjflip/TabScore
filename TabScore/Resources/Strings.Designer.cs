@@ -394,7 +394,8 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to is already registered.  Do not press Register unless you intend to re-register a tablet device at your current location.
+        ///   Looks up a localized string similar to is already registered.  Do not press Register unless you intend to register a new 
+        ///tablet device at your current location.
         /// </summary>
         public static string ErrorTableRegistered3 {
             get {

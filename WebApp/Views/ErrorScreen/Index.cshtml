@@ -1,6 +1,8 @@
 ﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
+@using Resources
+
 <div class="row mt-5">
     <div class="col-12 text-center text-danger">
         <h2>
@@ -13,10 +15,10 @@
     </div>
     <div class="col-8 text-center">
         <h5 class="mt-2">
-            An error has occurred whilst connecting to the scoring database
+            @Strings.ErrorDBConnection
         </h5>
         <h5>
-            Please click OK to try to re-establish the connection.  If successful, please re-register this tablet to your [section/]table number[/direction]
+            @Strings.ErrorReestablishConnection
         </h5>
     </div>
     <div class="col">

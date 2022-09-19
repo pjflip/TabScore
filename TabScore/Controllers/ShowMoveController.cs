@@ -5,6 +5,7 @@ using System;
 using System.Web.Mvc;
 using TabScore.Models;
 using Resources;
+using System.Web;
 
 namespace TabScore.Controllers
 {
@@ -106,10 +107,11 @@ namespace TabScore.Controllers
                     }
                 }
 
-                if (newTableReady)  // Reset tablet device and table statuses for new round
+                if (newTableReady)  // Reset tablet device and table statuses for new round, and update cookie
                 {
                     tabletDeviceStatus.Update(move.NewTableNumber, move.NewDirection, newRoundNumber);
                     newTableStatus.Update(move.NewTableNumber, newRoundNumber);
+                    SetCookie(section.SectionID, move.NewTableNumber, move.NewDirection);
                 }
                 else  // Go back and wait
                 {
@@ -130,6 +132,16 @@ namespace TabScore.Controllers
                 HandRecords.Refresh();
             }
             return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber });
+        }
+
+        // Set a cookie for this device
+        private void SetCookie(int sectionID, int tableNumber, Direction direction)
+        {
+            HttpCookie tabScoreCookie = new HttpCookie("tabScore");
+            tabScoreCookie.Values["sectionID"] = sectionID.ToString();
+            tabScoreCookie.Values["tableNumber"] = tableNumber.ToString();
+            tabScoreCookie.Values["direction"] = Enum.GetName(typeof(Direction), direction);
+            Response.Cookies.Add(tabScoreCookie);
         }
     }
 }
