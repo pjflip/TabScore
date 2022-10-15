@@ -3,6 +3,7 @@
 
 using System;
 using System.Data.Odbc;
+using Resources;
 
 namespace TabScore.Models
 {
@@ -383,7 +384,7 @@ namespace TabScore.Models
         // Function to deal with different display format options for blank and unknown names
         private static string FormatName(string name, string number)
         {
-            if (name == "" || name == "Unknown")
+            if (name == "" || name == Strings.Unknown)
             {
                 if (number == "")
                 {
@@ -391,11 +392,11 @@ namespace TabScore.Models
                 }
                 else if (number == "0")
                 {
-                    return "Unknown";
+                    return Strings.Unknown;
                 }
                 else
                 {
-                    return "Unknown #" + number;
+                    return Strings.Unknown + " #" + number;
                 }
             }
             else
@@ -412,7 +413,7 @@ namespace TabScore.Models
             
             if (playerID == 0)
             {
-                playerName = "Unknown";
+                playerName = Strings.Unknown;
             }
             else
             {
@@ -429,7 +430,7 @@ namespace TabScore.Models
                         break;
                     case 3:
                         playerName = AppData.GetNameFromPlayerNamesTable(playerID);
-                        if (playerName == "" || playerName.Substring(0, 1) == "#" || (playerName.Length >= 7 && playerName.Substring(0, 7) == "Unknown"))
+                        if (playerName == "" || playerName.Substring(0, 1) == "#" || (playerName.Length >= 7 && playerName.Substring(0, 7) == Strings.Unknown))
                         {
                             playerName = GetNameFromExternalDatabase(playerID);
                         }
@@ -552,7 +553,7 @@ namespace TabScore.Models
                         queryResult = cmd.ExecuteScalar();
                         if (queryResult == null)
                         {
-                            name = "Unknown #" + playerNumber;
+                            name = Strings.Unknown + " #" + playerNumber;
                         }
                         else
                         {

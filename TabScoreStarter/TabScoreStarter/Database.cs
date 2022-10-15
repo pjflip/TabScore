@@ -35,17 +35,19 @@ namespace TabScoreStarter
                     return false;
                 }
 
-                // Check if this is an individual event, when RoundData will have a 'South' field
-                bool individualEvent = true;
+                // Check if this is an individual event, when RoundData will have a filled 'South' field
+                // and set global value accordingly
+                AppData.IsIndividual = true;
                 string SQLString = "SELECT TOP 1 South FROM RoundData";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
-                    cmd.ExecuteScalar();
+                    object queryResult = cmd.ExecuteScalar();
+                    if (queryResult == DBNull.Value || queryResult == null || Convert.ToString(queryResult) == "") AppData.IsIndividual = false;
                 }
                 catch (OdbcException)
                 {
-                    individualEvent = false;
+                    AppData.IsIndividual = false;
                 }
 
                 // SESSION TABLE
@@ -260,7 +262,7 @@ namespace TabScoreStarter
 
                 // RECEIVEDDATA TABLE
                 // If this is an individual event, add extra fields South and West to ReceivedData if they don't exist
-                if (individualEvent)
+                if (AppData.IsIndividual)
                 {
                     SQLString = "ALTER TABLE ReceivedData ADD South SHORT";
                     cmd = new OdbcCommand(SQLString, connection);
@@ -430,7 +432,7 @@ namespace TabScoreStarter
                     int section = reader.GetInt32(0);
                     int table = reader.GetInt32(1);
                     string direction = reader.GetString(2);
-                    if (individualEvent)
+                    if (AppData.IsIndividual)
                     {
                         switch (direction)
                         {
@@ -472,23 +474,33 @@ namespace TabScoreStarter
                 cmd2.Dispose();
 
                 // PLAYERNAMES TABLE
-                // Check if table 'PlayerNames' exists
-                SQLString = "SELECT TOP 1 ID FROM PlayerNames";
+                SQLString = "CREATE TABLE PlayerNames (ID LONG, [Name] VARCHAR(40), strID VARCHAR(8))";
                 cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
-                    cmd.ExecuteScalar();
+                    cmd.ExecuteNonQuery();
                 }
                 catch (OdbcException e)
                 {
-                    if (e.Errors.Count != 1 || e.Errors[0].SQLState != "42S02")
+                    if (e.Errors.Count != 1 || e.Errors[0].SQLState != "42S01")  // Error other than PlayerNames table already exists
                     {
-                        // Error other than 'PlayerNames' table doesn't exist
                         throw e;
                     }
-                    SQLString = "CREATE TABLE PlayerNames (ID LONG, [Name] VARCHAR(40), strID VARCHAR(8))";
-                    cmd = new OdbcCommand(SQLString, connection);
+                }
+
+                // HANDRECORD TABLE
+                SQLString = "CREATE TABLE HandRecord (Section SHORT, Board SHORT, NorthSpades VARCHAR(13), NorthHearts VARCHAR(13), NorthDiamonds VARCHAR(13), NorthClubs VARCHAR(13), EastSpades VARCHAR(13), EastHearts VARCHAR(13), EastDiamonds VARCHAR(13), EastClubs VARCHAR(13), SouthSpades VARCHAR(13), SouthHearts VARCHAR(13), SouthDiamonds VARCHAR(13), SouthClubs VARCHAR(13), WestSpades VARCHAR(13), WestHearts VARCHAR(13), WestDiamonds VARCHAR(13), WestClubs VARCHAR(13))";
+                cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
                     cmd.ExecuteNonQuery();
+                }
+                catch (OdbcException e)
+                {
+                    if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S01")  // Error other than HandRecord table already exists
+                    {
+                        throw e;
+                    }
                 }
 
                 // HANDEVALUATION TABLE

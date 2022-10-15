@@ -26,7 +26,7 @@ function setCard(c) {
     document.getElementById('cK').className = "btn btn-primary btn-lg m-1";
     document.getElementById('cQ').className = "btn btn-primary btn-lg m-1";
     document.getElementById('cJ').className = "btn btn-primary btn-lg m-1";
-    document.getElementById('c10').className = "btn btn-primary btn-lg m-1";
+    document.getElementById('cT').className = "btn btn-primary btn-lg m-1";
     document.getElementById('c9').className = "btn btn-primary btn-lg m-1";
     document.getElementById('c8').className = "btn btn-primary btn-lg m-1";
     document.getElementById('c7').className = "btn btn-primary btn-lg m-1";
@@ -72,7 +72,7 @@ function setSkip() {
     document.getElementById('cK').className = "btn btn-primary btn-lg m-1";
     document.getElementById('cQ').className = "btn btn-primary btn-lg m-1";
     document.getElementById('cJ').className = "btn btn-primary btn-lg m-1";
-    document.getElementById('c10').className = "btn btn-primary btn-lg m-1";
+    document.getElementById('cT').className = "btn btn-primary btn-lg m-1";
     document.getElementById('c9').className = "btn btn-primary btn-lg m-1";
     document.getElementById('c8').className = "btn btn-primary btn-lg m-1";
     document.getElementById('c7').className = "btn btn-primary btn-lg m-1";

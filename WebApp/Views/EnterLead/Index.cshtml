@@ -3,6 +3,7 @@
 
 @model TabScore.Models.ResultInfo
 @using Resources
+@using System.Web.Optimization
 
 <style>
     .btn-suit {
@@ -33,7 +34,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            @Strings.Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.DisplayContract())
+            @Strings.Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.ContractDisplay)
         </h3>
     </div>
 </div>
@@ -65,7 +66,7 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="c10" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('10')">
+        <button id="cT" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('T')">
             10
         </button>
         <button id="c9" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('9')">
@@ -140,4 +141,4 @@
     var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterLead")?tabletDeviceNumber=@Model.TabletDeviceNumber';
     var urlEnterContract = '@Url.Action("Index", "EnterContract")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.ResultData.BoardNumber';
 </script>
-<script src='@Url.Content("~/Scripts/EnterLead.js")' type="text/javascript"></script>
+@Scripts.Render("~/bundles/enterLeadJS")

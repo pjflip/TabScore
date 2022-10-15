@@ -56,7 +56,7 @@ namespace TabScore.Models
                                     NumberWest = reader.GetInt32(3),
                                     DeclarerNSEW = reader.GetString(4),
                                     Contract = reader.GetString(5),
-                                    LeadCard = reader.GetString(6),
+                                    LeadCardDB = reader.GetString(6),
                                     TricksTakenSymbol = reader.GetString(7),
                                     Remarks = reader.GetString(8)
                                 };
@@ -70,7 +70,7 @@ namespace TabScore.Models
                                     NumberEast = reader.GetInt32(1),
                                     DeclarerNSEW = reader.GetString(2),
                                     Contract = reader.GetString(3),
-                                    LeadCard = reader.GetString(4),
+                                    LeadCardDB = reader.GetString(4),
                                     TricksTakenSymbol = reader.GetString(5),
                                     Remarks = reader.GetString(6)
                                 };
@@ -109,9 +109,9 @@ namespace TabScore.Models
                     NumberEast = result.NumberEast,
                     NumberSouth = result.NumberSouth,
                     NumberWest = result.NumberWest,
-                    Contract = result.DisplayTravellerContract(),
+                    Contract = result.ContractTravellerDisplay,
                     DeclarerNSEW = result.DeclarerNSEW,
-                    LeadCard = result.DisplayLeadCard(),
+                    LeadCard = result.LeadCardDisplay,
                     TricksTaken = result.TricksTakenSymbol,
                 };
                 if (result.Remarks != "" && result.Remarks != "Wrong direction")

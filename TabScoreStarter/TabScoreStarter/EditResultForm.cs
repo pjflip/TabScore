@@ -8,14 +8,12 @@ namespace TabScoreStarter
     {
         private readonly Result result;
         private readonly string connectionString;
-        private readonly bool isIndividual;
 
-        public EditResultForm(Result result, bool isIndividual, string connectionString, Point location)
+        public EditResultForm(Result result, string connectionString, Point location)
         {
             InitializeComponent();
             this.result = result;
             this.connectionString = connectionString;
-            this.isIndividual = isIndividual;
             Location = location;
         }
 
@@ -60,7 +58,7 @@ namespace TabScoreStarter
                 comboBoxSuit.Text = result.ContractSuit;
                 comboBoxDouble.Text = result.ContractX;
                 comboBoxDeclarer.Text = result.DeclarerNSEW;
-                comboBoxLead.Text = result.Lead;
+                comboBoxLead.Text = result.LeadCard;
                 comboBoxTricksTaken.Text = result.TricksTaken;
             }
             comboBoxRemarks.Text = result.Remarks;
@@ -138,7 +136,7 @@ namespace TabScoreStarter
                 result.ContractSuit = "";
                 result.ContractX = "";
                 result.DeclarerNSEW = "";
-                result.Lead = "";
+                result.LeadCard = "";
                 result.TricksTaken = "";
                 result.Remarks = comboBoxRemarks.Text;
             }
@@ -149,7 +147,7 @@ namespace TabScoreStarter
                 result.ContractSuit = "";
                 result.ContractX = "";
                 result.DeclarerNSEW = "";
-                result.Lead = "";
+                result.LeadCard = "";
                 result.TricksTaken = "";
                 result.Remarks = comboBoxRemarks.Text;
             }
@@ -170,11 +168,11 @@ namespace TabScoreStarter
                 }
                 result.Contract = contract;
                 result.DeclarerNSEW = comboBoxDeclarer.Text;
-                result.Lead = comboBoxLead.Text;
+                result.LeadCard = comboBoxLead.Text;
                 result.TricksTaken = comboBoxTricksTaken.Text;
                 result.Remarks = comboBoxRemarks.Text;
             }
-            result.UpdateDB(connectionString, isIndividual);
+            result.UpdateDB(connectionString);
             Close();
         }
     }

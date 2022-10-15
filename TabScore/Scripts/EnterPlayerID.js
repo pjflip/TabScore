@@ -2,7 +2,7 @@
 var isSubmitted = false;
 
 function addNumber(e) {
-    if (playerID == "Unknown") {
+    if (playerID == stringUnknown) {
         playerID = "";
     }
     playerID = playerID + e;
@@ -11,7 +11,7 @@ function addNumber(e) {
 }
 
 function unknown() {
-    playerID = "Unknown";
+    playerID = stringUnknown;
     document.getElementById('playerNumberBox').value = playerID;
     document.getElementById("OKButton").disabled = false;
 }
@@ -23,7 +23,7 @@ function clearplayerNumber() {
 }
 
 function clearLastEntry() {
-    if (playerID == "Unknown") {
+    if (playerID == stringUnknown) {
         playerID = "";
         document.getElementById("OKButton").disabled = true;
     }
@@ -37,7 +37,7 @@ function clearLastEntry() {
 }
 
 $(document).on('touchstart', '#OKButton:enabled', function () {
-    if (playerID == "Unknown") playerID = "0";
+    if (playerID == stringUnknown) playerID = "0";
     if (!isSubmitted) {
         isSubmitted = true;
         location.href = urlOKButtonClick + '&playerID=' + playerID;

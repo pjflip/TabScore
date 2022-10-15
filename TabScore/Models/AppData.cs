@@ -68,15 +68,16 @@ namespace TabScore.Models
                 {
                     connection.Open();
 
-                    // Check if new event is an individual (in which case there will be a field 'South' in the RoundData table)
+                    // Check if new event is an individual (in which case there will be a filled field 'South' in the RoundData table)
+                    IsIndividual = true;
                     string SQLString = $"SELECT TOP 1 South FROM RoundData";
                     OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                     try
                     {
                         ODBCRetryHelper.ODBCRetry(() =>
                         {
-                            cmd.ExecuteScalar();
-                            IsIndividual = true;
+                            object queryResult = cmd.ExecuteScalar();
+                            if (queryResult == DBNull.Value || queryResult == null || Convert.ToString(queryResult) == "") IsIndividual = false;
                         });
                     }
                     catch (OdbcException e)
@@ -169,7 +170,7 @@ namespace TabScore.Models
             PlayerRecord player = PlayerNamesTable.Find(x => (x.Number == playerNumber));
             if (player == null)
             {
-                return "Unknown #" + playerNumber;
+                return Strings.Unknown + " #" + playerNumber;
             }
             else
             {

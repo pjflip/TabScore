@@ -2,7 +2,8 @@
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.RankingList
-@using Resources 
+@using Resources
+@using System.Web.Optimization
 
 <div class="row mt-4">
     <div class="col-12 text-center">
@@ -63,4 +64,4 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     var pairNS = @Model.NumberNorth;
     var pairEW = @Model.NumberEast;
 </script>
-<script src='@Url.Content("~/Scripts/OneWinnerRankingList.js")' type="text/javascript"></script>
+@Scripts.Render("~/bundles/oneWinnerRankingListJS")

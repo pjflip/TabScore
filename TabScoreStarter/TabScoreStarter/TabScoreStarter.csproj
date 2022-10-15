@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppData.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="EditResultForm.cs">
       <SubType>Form</SubType>

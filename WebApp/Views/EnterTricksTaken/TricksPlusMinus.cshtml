@@ -3,6 +3,7 @@
 
 @model TabScore.Models.ResultInfo
 @using Resources
+@using System.Web.Optimization
 
 <style>
     .btn-plus {
@@ -17,7 +18,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            @Strings.Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.DisplayContract())
+            @Strings.Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.ContractDisplay)
         </h3>
     </div>
 </div>
@@ -105,4 +106,4 @@
     var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterTricksTaken")?tabletDeviceNumber=@Model.TabletDeviceNumber';
     var urlBackButtonClick = '@Url.Action("BackButtonClick", "EnterTricksTaken")?tabletDeviceNumber=@Model.TabletDeviceNumber';
 </script>
-<script src='@Url.Content("~/Scripts/TricksPlusMinus.js")' type="text/javascript"></script>
+@Scripts.Render("~/bundles/tricksPlusMinusJS")

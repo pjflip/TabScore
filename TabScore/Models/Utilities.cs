@@ -4,7 +4,6 @@
 using Resources;
 using System;
 using System.Data.Odbc;
-using System.Web;
 
 namespace TabScore.Models
 {
@@ -25,13 +24,14 @@ namespace TabScore.Models
 
     public enum Direction
     {
-        Sitout,
         North,
         East,
         South,
         West,
+        Sitout, 
         Null
     }
+
     public enum HandRecordPerspectiveButtonOptions
     {
         None,
@@ -151,13 +151,13 @@ namespace TabScore.Models
             switch ((boardNumber - 1) % 4)
             {
                 case 0:
-                    return "N";
+                    return Strings.N;
                 case 1:
-                    return "E";
+                    return Strings.E;
                 case 2:
-                    return "S";
+                    return Strings.S;
                 case 3:
-                    return "W";
+                    return Strings.W;
                 default:
                     return "#";
             }
@@ -224,7 +224,7 @@ namespace TabScore.Models
             }
         }
 
-        // Calculate the number of seconds to chow on the round timer 
+        // Calculate the number of seconds to show on the round timer 
         public static int SetTimerSeconds(TabletDeviceStatus tabletDeviceStatus)
         {
             RoundTimer roundTimer = AppData.RoundTimerList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.RoundNumber == tabletDeviceStatus.RoundNumber);
@@ -266,10 +266,7 @@ namespace TabScore.Models
 
             string cardSuit = card.Substring(0, 1);
             string cardValue = card.Substring(1, 1);
-            if (cardValue == "1")    // Account for different representations of '10'
-            {
-                cardValue = "T";
-            }
+            if (cardValue == "1") cardValue = "T";   // Use T for 10 as comparing against PBN strings
 
             switch (tableStatus.ResultData.DeclarerNSEW)
             {
@@ -277,16 +274,16 @@ namespace TabScore.Models
                     switch (cardSuit)
                     {
                         case "S":
-                            if (handRecord.EastSpades.Contains(cardValue)) return true;
+                            if (handRecord.EastSpadesPBN.Contains(cardValue)) return true;
                             break;
                         case "H":
-                            if (handRecord.EastHearts.Contains(cardValue)) return true;
+                            if (handRecord.EastHeartsPBN.Contains(cardValue)) return true;
                             break;
                         case "D":
-                            if (handRecord.EastDiamonds.Contains(cardValue)) return true;
+                            if (handRecord.EastDiamondsPBN.Contains(cardValue)) return true;
                             break;
                         case "C":
-                            if (handRecord.EastClubs.Contains(cardValue)) return true;
+                            if (handRecord.EastClubsPBN.Contains(cardValue)) return true;
                             break;
                     }
                     break;
@@ -294,16 +291,16 @@ namespace TabScore.Models
                     switch (cardSuit)
                     {
                         case "S":
-                            if (handRecord.WestSpades.Contains(cardValue)) return true;
+                            if (handRecord.WestSpadesPBN.Contains(cardValue)) return true;
                             break;
                         case "H":
-                            if (handRecord.WestHearts.Contains(cardValue)) return true;
+                            if (handRecord.WestHeartsPBN.Contains(cardValue)) return true;
                             break;
                         case "D":
-                            if (handRecord.WestDiamonds.Contains(cardValue)) return true;
+                            if (handRecord.WestDiamondsPBN.Contains(cardValue)) return true;
                             break;
                         case "C":
-                            if (handRecord.WestClubs.Contains(cardValue)) return true;
+                            if (handRecord.WestClubsPBN.Contains(cardValue)) return true;
                             break;
                     }
                     break;
@@ -311,16 +308,16 @@ namespace TabScore.Models
                     switch (cardSuit)
                     {
                         case "S":
-                            if (handRecord.SouthSpades.Contains(cardValue)) return true;
+                            if (handRecord.SouthSpadesPBN.Contains(cardValue)) return true;
                             break;
                         case "H":
-                            if (handRecord.SouthHearts.Contains(cardValue)) return true;
+                            if (handRecord.SouthHeartsPBN.Contains(cardValue)) return true;
                             break;
                         case "D":
-                            if (handRecord.SouthDiamonds.Contains(cardValue)) return true;
+                            if (handRecord.SouthDiamondsPBN.Contains(cardValue)) return true;
                             break;
                         case "C":
-                            if (handRecord.SouthClubs.Contains(cardValue)) return true;
+                            if (handRecord.SouthClubsPBN.Contains(cardValue)) return true;
                             break;
                     }
                     break;
@@ -328,16 +325,16 @@ namespace TabScore.Models
                     switch (cardSuit)
                     {
                         case "S":
-                            if (handRecord.NorthSpades.Contains(cardValue)) return true;
+                            if (handRecord.NorthSpadesPBN.Contains(cardValue)) return true;
                             break;
                         case "H":
-                            if (handRecord.NorthHearts.Contains(cardValue)) return true;
+                            if (handRecord.NorthHeartsPBN.Contains(cardValue)) return true;
                             break;
                         case "D":
-                            if (handRecord.NorthDiamonds.Contains(cardValue)) return true;
+                            if (handRecord.NorthDiamondsPBN.Contains(cardValue)) return true;
                             break;
                         case "C":
-                            if (handRecord.NorthClubs.Contains(cardValue)) return true;
+                            if (handRecord.NorthClubsPBN.Contains(cardValue)) return true;
                             break;
                     }
                     break;

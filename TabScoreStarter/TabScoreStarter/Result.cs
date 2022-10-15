@@ -6,7 +6,7 @@ using System.Data.Odbc;
 
 namespace TabScoreStarter
 {
-    public class Result : IComparable<Result>
+    public class Result
     {
         public int Section { get; set; }
         public int Table { get; set; }
@@ -20,14 +20,14 @@ namespace TabScoreStarter
         public int ContractLevel { get; set; }
         public string ContractSuit { get; set; }
         public string ContractX { get; set; }
-        public string Lead { get; set; }
+        public string LeadCard { get; set; }
         public string DeclarerNSEW { get; set; }
         public string TricksTaken { get; set; }
         public bool NotPlayed { get; private set; }
         public bool AdjustedScore { get; set; }
         public string Remarks { get; set; }
 
-        public void UpdateDB(string connectionString, bool isIndividual)
+        public void UpdateDB(string connectionString)
         {
             int declarer;
             if (ContractLevel <= 0)
@@ -54,28 +54,18 @@ namespace TabScoreStarter
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
 
-                if (isIndividual)
+                if (AppData.IsIndividual)
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({Section}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTaken}', '{Lead}', '{Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({Section}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTaken}', '{LeadCard}', '{Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
                 }
                 else
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({Section}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTaken}', '{Lead}', '{Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({Section}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTaken}', '{LeadCard}', '{Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
                 }
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
                 cmd.Dispose();
             }
-        }
-
-        public int CompareTo(Result result)
-        {
-            if (result == null) return 1;
-            int ret = this.Section.CompareTo(result.Section);
-            if (ret == 0) ret = this.Table.CompareTo(result.Table);
-            if (ret == 0) ret = this.Round.CompareTo(result.Round);
-            if (ret == 0) ret = this.Board.CompareTo(result.Board);
-            return ret;    
         }
     }
 }

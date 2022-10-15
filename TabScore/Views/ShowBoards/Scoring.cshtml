@@ -40,10 +40,10 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 @Result.BoardNumber:
             </h4>
         </div>
-        <div class="col-4 px-0">
+        <div class="col-5 px-0">
             @if (Result.ContractLevel == -999)
             {
-                <button class="btn btn-primary btn-lg m-1" style="width:4.8em" ontouchstart="EnterEdit(@Result.BoardNumber)">
+                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 5rem" ontouchstart="EnterEdit(@Result.BoardNumber)">
                     @Strings.Enter
                 </button>
             }
@@ -51,24 +51,24 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             {
                 if (Model.ShowViewButton && Result.Remarks != "Not played")
                 {
-                    <button class="btn btn-info btn-lg m-1 px-0" style="width:2.8em" ontouchstart="EnterEdit(@Result.BoardNumber)">
+                    <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4rem" ontouchstart="EnterEdit(@Result.BoardNumber)">
                         @Strings.Edit
                     </button>
-                    <button class="btn btn-secondary btn-lg px-0" style="width:2.8em" ontouchstart="View(@Result.BoardNumber)">
+                    <button class="btn btn-secondary btn-lg px-1" style="min-width: 4rem" ontouchstart="View(@Result.BoardNumber)">
                         @Strings.View
                     </button>
                 }
                 else
                 {
-                    <button class="btn btn-info btn-lg m-1" style="width:4em" ontouchstart="EnterEdit(@Result.BoardNumber)">
+                    <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="EnterEdit(@Result.BoardNumber)">
                         @Strings.Edit
                     </button>
                 }
             }
         </div>
-        <div class="col-6 align-self-center">
+        <div class="col-5 align-self-center">
             <h4>
-                @Html.Raw(Result.DisplayContract())
+                @Html.Raw(Result.ContractDisplay)
             </h4>
         </div>
     </div>

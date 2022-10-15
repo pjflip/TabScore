@@ -208,7 +208,7 @@
     <value>Boardzettel</value>
   </data>
   <data name="StayAtTable" xml:space="preserve">
-    <value>Am Tisch bleiben</value>
+    <value>Bleiben Sie am Tisch</value>
   </data>
   <data name="South" xml:space="preserve">
     <value>Süd</value>
@@ -325,13 +325,13 @@
     <value>N</value>
   </data>
   <data name="MoveToTable" xml:space="preserve">
-    <value>Wechseln Sie zu Tisch (if it is meant to table "4" for example then it is right, if it means only to the next table then it is "zum nächsten Tisch")</value>
+    <value>Wechseln Sie zu Tisch</value>
   </data>
   <data name="MoveToSitOut" xml:space="preserve">
     <value>Wechseln Sie zum Ruhetisch</value>
   </data>
   <data name="MoveForRound" xml:space="preserve">
-    <value>Wechseln Sie zur nächsten Runde</value>
+    <value>Wechseln Sie zu Runde</value>
   </data>
   <data name="LeadNoMatch" xml:space="preserve">
     <value>Ausspiel stimmt nicht mit Handaufzeichnung überein</value>
@@ -367,7 +367,7 @@
     <value>Teiler</value>
   </data>
   <data name="EnterEditPlayerIDs" xml:space="preserve">
-    <value>Spieler-IDs eingeben/ändern</value>
+    <value>Spieler-IDs eingeben/bearbeiten</value>
   </data>
   <data name="EnterID" xml:space="preserve">
     <value>ID eingeben für</value>

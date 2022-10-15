@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Odbc;
+using Resources;
 
 namespace TabScore.Models
 {
@@ -38,26 +39,27 @@ namespace TabScore.Models
                             {
                                 SectionID = reader.GetInt16(0),
                                 BoardNumber = reader.GetInt16(1),
-                                NorthSpades = reader.GetString(2),
-                                NorthHearts = reader.GetString(3),
-                                NorthDiamonds = reader.GetString(4),
-                                NorthClubs = reader.GetString(5),
-                                EastSpades = reader.GetString(6),
-                                EastHearts = reader.GetString(7),
-                                EastDiamonds = reader.GetString(8),
-                                EastClubs = reader.GetString(9),
-                                SouthSpades = reader.GetString(10),
-                                SouthHearts = reader.GetString(11),
-                                SouthDiamonds = reader.GetString(12),
-                                SouthClubs = reader.GetString(13),
-                                WestSpades = reader.GetString(14),
-                                WestHearts = reader.GetString(15),
-                                WestDiamonds = reader.GetString(16),
-                                WestClubs = reader.GetString(17)
+                                NorthSpadesPBN = reader.GetString(2),
+                                NorthHeartsPBN = reader.GetString(3),
+                                NorthDiamondsPBN = reader.GetString(4),
+                                NorthClubsPBN = reader.GetString(5),
+                                EastSpadesPBN = reader.GetString(6),
+                                EastHeartsPBN = reader.GetString(7),
+                                EastDiamondsPBN = reader.GetString(8),
+                                EastClubsPBN = reader.GetString(9),
+                                SouthSpadesPBN = reader.GetString(10),
+                                SouthHeartsPBN = reader.GetString(11),
+                                SouthDiamondsPBN = reader.GetString(12),
+                                SouthClubsPBN = reader.GetString(13),
+                                WestSpadesPBN = reader.GetString(14),
+                                WestHeartsPBN = reader.GetString(15),
+                                WestDiamondsPBN = reader.GetString(16),
+                                WestClubsPBN = reader.GetString(17)
                             };
                             handRecord.Dealer = Utilities.GetDealerForBoard(handRecord.BoardNumber);
                             TempHandRecordsList.Add(handRecord);
                         }
+                        reader.Close();
                     });
                 }
                 catch (OdbcException e)
@@ -71,9 +73,26 @@ namespace TabScore.Models
                         throw (e);
                     }
                 }
-                finally
+
+                // Set display versions of hand record strings using language card names
+                foreach (HandRecord handRecord in TempHandRecordsList)
                 {
-                    reader.Close();
+                    handRecord.NorthSpadesDisplay = handRecord.NorthSpadesPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.NorthHeartsDisplay = handRecord.NorthHeartsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.NorthDiamondsDisplay = handRecord.NorthDiamondsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.NorthClubsDisplay = handRecord.NorthClubsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.EastSpadesDisplay = handRecord.EastSpadesPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.EastHeartsDisplay = handRecord.EastHeartsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.EastDiamondsDisplay = handRecord.EastDiamondsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.EastClubsDisplay = handRecord.EastClubsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.SouthSpadesDisplay = handRecord.SouthSpadesPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.SouthHeartsDisplay = handRecord.SouthHeartsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.SouthDiamondsDisplay = handRecord.SouthDiamondsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.SouthClubsDisplay = handRecord.SouthClubsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.WestSpadesDisplay = handRecord.WestSpadesPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.WestHeartsDisplay = handRecord.WestHeartsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.WestDiamondsDisplay = handRecord.WestDiamondsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
+                    handRecord.WestClubsDisplay = handRecord.WestClubsPBN.Replace("A", Strings.A).Replace("K", Strings.K).Replace("Q", Strings.Q).Replace("J", Strings.J).Replace("T", Strings.TenShorthand);
                 }
 
                 SQLString = $"SELECT Section, Board, NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, NorthNotrump, EastSpades, EastHearts, EastDiamonds, EastClubs, EastNotrump, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, SouthNotrump, WestSpades, WestHearts, WestDiamonds, WestClubs, WestNoTrump, NorthHcp, EastHcp, SouthHcp, WestHcp FROM HandEvaluation";
@@ -115,6 +134,7 @@ namespace TabScore.Models
                                 handRecord.HCPWest = reader.GetInt16(25).ToString();
                             }
                         }
+                        reader.Close();
                     });
                 }
                 catch (OdbcException e)
@@ -126,7 +146,6 @@ namespace TabScore.Models
                 }
                 finally
                 {
-                    reader.Close();
                     cmd.Dispose();
                 }
             }

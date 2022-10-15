@@ -3,15 +3,16 @@
 
 <!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
 @using Resources
+@using TabScore.Models
+@using System.Web.Optimization
 
 <head>
     <title>@ViewData["Title"].ToString()</title>
     <meta name="viewport" content="width=device-width, user-scalable=no">
-    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/coreCSS")
+    @Scripts.Render("~/bundles/coreJS")
 </head>
 
 <body style="background-color: ivory">
@@ -34,10 +35,10 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         <div class="row">
             <div class="col-4">
                 @{
-                    var buttonOptions = (TabScore.Models.ButtonOptions)ViewData["ButtonOptions"];
-                    if (buttonOptions == TabScore.Models.ButtonOptions.OKEnabledAndBack || buttonOptions == TabScore.Models.ButtonOptions.OKDisabledAndBack)
+                    var buttonOptions = (ButtonOptions)ViewData["ButtonOptions"];
+                    if (buttonOptions == ButtonOptions.OKEnabledAndBack || buttonOptions == ButtonOptions.OKDisabledAndBack)
                     {
-                        <button id="BackButton" class="btn btn-danger ml-2 my-2 float-left" style="font-size: 1.5rem">
+                        <button id="BackButton" class="btn btn-danger my-2 float-left" style="font-size: 1.5rem">
                             <span class="fa fa-chevron-circle-left"></span> @Strings.Back
                         </button>
                     }
@@ -46,21 +47,21 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             <div class="col-4 text-center">
                 @if (ViewData.ContainsKey("TimerSeconds") && (int)ViewData["TimerSeconds"] >= 0)
                 {
-                    <button id="timerButton" class="btn my-2" style="font-size: 1.5rem">
+                    <button id="timerButton" class="btn my-0" style="font-size: 1.5rem">
                         <span class="fa fa-clock-o"></span><span id="timerValue"></span>
                     </button>
                 }
             </div>
             <div class="col-4">
-                @if (buttonOptions == TabScore.Models.ButtonOptions.OKDisabled || buttonOptions == TabScore.Models.ButtonOptions.OKDisabledAndBack)
+                @if (buttonOptions == ButtonOptions.OKDisabled || buttonOptions == ButtonOptions.OKDisabledAndBack)
                 {
-                    <button id="OKButton" class="btn btn-success mr-2 my-2 float-right" style="font-size: 1.5rem" disabled>
+                    <button id="OKButton" class="btn btn-success my-2 float-right" style="font-size: 1.5rem" disabled>
                         @Strings.OK <span class="fa fa-chevron-circle-right"></span>
                     </button>
                 }
-                else if (buttonOptions == TabScore.Models.ButtonOptions.OKEnabled || buttonOptions == TabScore.Models.ButtonOptions.OKEnabledAndBack)
+                else if (buttonOptions == ButtonOptions.OKEnabled || buttonOptions == ButtonOptions.OKEnabledAndBack)
                 {
-                    <button id="OKButton" class="btn btn-success mr-2 my-2 float-right" style="font-size: 1.5rem">
+                    <button id="OKButton" class="btn btn-success my-2 float-right" style="font-size: 1.5rem">
                         @Strings.OK <span class="fa fa-chevron-circle-right"></span>
                     </button>
                 }
@@ -71,7 +72,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     @if (ViewData.ContainsKey("TimerSeconds"))
     {
         <script>
-            var timerSeconds = @ViewData["TimerSeconds"];
+                var timerSeconds = @ViewData["TimerSeconds"];
         </script>
     }
     else
@@ -80,7 +81,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             var timerSeconds = -1;
         </script>
     }
-    <script src='@Url.Content("~/Scripts/MainLayout.js")' type="text/javascript"></script>
+    @Scripts.Render("~/bundles/mainLayoutJS")
 </body>
 
 </html>

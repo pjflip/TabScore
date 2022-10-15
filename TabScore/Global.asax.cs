@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 
 namespace TabScore
@@ -9,6 +10,7 @@ namespace TabScore
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
         }

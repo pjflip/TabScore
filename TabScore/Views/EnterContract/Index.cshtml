@@ -2,6 +2,7 @@
     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.ResultInfo
+@using System.Web.Optimization
 @using Resources
 
 <style>
@@ -156,4 +157,4 @@
     var urlOKButtonContract = '@Url.Action("OKButtonContract", "EnterContract")?tabletDeviceNumber=@Model.TabletDeviceNumber';
     var urlShowBoards = '@Url.Action("Index", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
 </script>
-<script src='@Url.Content("~/Scripts/EnterContract.js")' type="text/javascript"></script>
+@Scripts.Render("~/bundles/enterContractJS")
