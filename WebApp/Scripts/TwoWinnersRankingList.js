@@ -55,3 +55,10 @@ $(document).on('touchstart', '#OKButton:enabled', function () {
         }
     }
 });
+
+$(document).on('touchstart', '#BackButton:enabled', function () {
+    if (!isSubmitted) {
+        isSubmitted = true;
+        location.href = urlShowBoards;
+    }
+});

@@ -18,6 +18,7 @@ namespace TabScore.Controllers
             if (tabletDeviceStatus.TableNumber == 0)
             {
                 SitoutRoundInfo sitoutRoundInfo = new SitoutRoundInfo(tabletDeviceNumber);
+                tabletDeviceStatus.AtSitoutTable = true;
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 return View("Sitout", sitoutRoundInfo);
             }
@@ -29,17 +30,25 @@ namespace TabScore.Controllers
 
             RoundInfo roundInfo = new RoundInfo(tabletDeviceNumber, tableStatus);
             Section section = AppData.SectionsList.Find(x => x.SectionID == tabletDeviceStatus.SectionID);
+            
+            // Check if a sitout table
             if (tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == section.MissingPair)
             {
                 tableStatus.ReadyForNextRoundNorth = true;
                 tableStatus.ReadyForNextRoundSouth = true;
                 roundInfo.NSMissing = true;
+                tabletDeviceStatus.AtSitoutTable = true;
             }
             else if (tableStatus.RoundData.NumberEast == 0 || tableStatus.RoundData.NumberEast == section.MissingPair)
             {
                 tableStatus.ReadyForNextRoundEast = true;
                 tableStatus.ReadyForNextRoundWest = true;
                 roundInfo.EWMissing = true;
+                tabletDeviceStatus.AtSitoutTable = true;
+            }
+            else
+            {
+                tabletDeviceStatus.AtSitoutTable = false;
             }
 
             if (tabletDeviceStatus.RoundNumber == 1 || section.TabletDevicesPerTable > 1)
@@ -48,7 +57,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                // Back button needed if one tablet device per table, in case EW need to check their move details 
+                // Back button needed if one tablet device per table, in case EW need to go back to check their move details 
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             }
             if (AppData.IsIndividual)

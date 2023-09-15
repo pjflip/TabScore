@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -22,7 +22,15 @@ namespace TabScore.Controllers
                     if (Settings.ShowTimer) ViewData["TimerSeconds"] = Utilities.SetTimerSeconds(tabletDeviceStatus);
                     ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tabletDeviceStatus.RoundNumber}";
                     ViewData["Title"] = $"{Strings.ShowRankingList} - {tabletDeviceStatus.Location}";
-                    ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+                    if (tabletDeviceStatus.AtSitoutTable)
+                    {
+                        // Can't go back to ShowBoards if it's a sitout and there are no boards to play, so no 'Back' button
+                        ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+                    }
+                    else
+                    {
+                        ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
+                    }
 
                     if (AppData.IsIndividual)
                     {
@@ -45,30 +53,21 @@ namespace TabScore.Controllers
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             RankingList rankingList = new RankingList(tabletDeviceNumber);
-
-            // Only show the ranking list if it contains something meaningful
-            if (rankingList == null || rankingList.Count < 2 || rankingList[0].ScoreDecimal == 0.0)
+            rankingList.FinalRankingList = true;
+            ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tabletDeviceStatus.RoundNumber}";
+            ViewData["Title"] = $"{Strings.ShowFinalRankingList} - {tabletDeviceStatus.Location}";
+            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+            if (AppData.IsIndividual)
             {
-                return RedirectToAction("Index", "EndScreen", new { tabletDeviceNumber });
+                return View("Individual", rankingList);
+            }
+            else if (rankingList.Exists(x => x.Orientation == "E"))
+            {
+                return View("TwoWinners", rankingList);
             }
             else
             {
-                rankingList.FinalRankingList = true;
-                ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tabletDeviceStatus.RoundNumber}";
-                ViewData["Title"] = $"{Strings.ShowFinalRankingList} - {tabletDeviceStatus.Location}";
-                ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-                if (AppData.IsIndividual)
-                {
-                    return View("Individual", rankingList);
-                }
-                else if (rankingList.Exists(x => x.Orientation == "E"))
-                {
-                    return View("TwoWinners", rankingList);
-                }
-                else
-                {
-                    return View("OneWinner", rankingList);
-                }
+                return View("OneWinner", rankingList);
             }
         }
 

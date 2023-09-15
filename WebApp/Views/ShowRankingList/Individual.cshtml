@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.RankingList
@@ -76,6 +76,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     var urlPollRanking = '@Url.Action("PollRanking", "ShowRankingList")?tabletDeviceNumber=@Model.TabletDeviceNumber';
     var urlEndScreen = '@Url.Action("Index", "EndScreen")?tabletDeviceNumber=@Model.TabletDeviceNumber';
     var urlShowMove = '@Url.Action("Index", "ShowMove")?tabletDeviceNumber=@Model.TabletDeviceNumber&newRoundNumber=' + (@Model.RoundNumber + 1).toString();
+    var urlShowBoards = '@Url.Action("Index", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
     var finalRankingList = @Model.FinalRankingList.ToString().ToLower();
     var pairNS = @Model.NumberNorth;
     var pairEW = @Model.NumberEast;

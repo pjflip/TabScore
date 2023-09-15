@@ -16,6 +16,7 @@ namespace TabScore.Models
         public Direction PerspectiveDirection { get; set; }
         public HandRecordPerspectiveButtonOptions PerspectiveButtonOption { get; set; }
         public bool NamesUpdateRequired { get; set; } = true;
+        public bool AtSitoutTable { get; set; }
 
         public TabletDeviceStatus(int sectionID, int tableNumber, Direction direction, int pairNumber, int roundNumber)
         {
