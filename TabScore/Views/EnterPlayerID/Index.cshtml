@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.EnterPlayerID
@@ -48,7 +48,7 @@
 
 <div class="row mt-4">
     <div class="col-12 text-center">
-        <button id="nk" class="btn btn-secondary btn-lg m-1" ontouchstart="unknown()">
+        <button id="nk" class="btn btn-secondary btn-lg m-1" onclick="unknown()">
             @Strings.Unknown
         </button>
     </div>
@@ -56,13 +56,13 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button class="btn btn-primary btn-lg btn-numeric m-1" ontouchstart="addNumber(1)">
+        <button class="btn btn-primary btn-lg btn-numeric m-1" onclick="addNumber(1)">
             1
         </button>
-        <button class="btn btn-primary btn-lg btn-numeric m-1" ontouchstart="addNumber(2)">
+        <button class="btn btn-primary btn-lg btn-numeric m-1" onclick="addNumber(2)">
             2
         </button>
-        <button class="btn btn-primary btn-lg btn-numeric m-1" ontouchstart="addNumber(3)">
+        <button class="btn btn-primary btn-lg btn-numeric m-1" onclick="addNumber(3)">
             3
         </button>
     </div>
@@ -70,13 +70,13 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button class="btn btn-primary btn-lg btn-numeric m-1" ontouchstart="addNumber(4)">
+        <button class="btn btn-primary btn-lg btn-numeric m-1" onclick="addNumber(4)">
             4
         </button>
-        <button class="btn btn-primary btn-lg btn-numeric m-1" ontouchstart="addNumber(5)">
+        <button class="btn btn-primary btn-lg btn-numeric m-1" onclick="addNumber(5)">
             5
         </button>
-        <button class="btn btn-primary btn-lg btn-numeric m-1" ontouchstart="addNumber(6)">
+        <button class="btn btn-primary btn-lg btn-numeric m-1" onclick="addNumber(6)">
             6
         </button>
     </div>
@@ -84,13 +84,13 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button class="btn btn-primary btn-lg btn-numeric m-1" ontouchstart="addNumber(7)">
+        <button class="btn btn-primary btn-lg btn-numeric m-1" onclick="addNumber(7)">
             7
         </button>
-        <button class="btn btn-primary btn-lg btn-numeric m-1" ontouchstart="addNumber(8)">
+        <button class="btn btn-primary btn-lg btn-numeric m-1" onclick="addNumber(8)">
             8
         </button>
-        <button class="btn btn-primary btn-lg btn-numeric m-1" ontouchstart="addNumber(9)">
+        <button class="btn btn-primary btn-lg btn-numeric m-1" onclick="addNumber(9)">
             9
         </button>
     </div>
@@ -98,13 +98,13 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button class="btn btn-warning btn-lg btn-numeric px-0 m-1" ontouchstart="clearLastEntry()">
+        <button class="btn btn-warning btn-lg btn-numeric px-0 m-1" onclick="clearLastEntry()">
             CE
         </button>
-        <button class="btn btn-primary btn-lg btn-numeric m-1" ontouchstart="addNumber(0)">
+        <button class="btn btn-primary btn-lg btn-numeric m-1" onclick="addNumber(0)">
             0
         </button>
-        <button class="btn btn-danger btn-lg btn-numeric m-1" ontouchstart="clearplayerNumber()">
+        <button class="btn btn-danger btn-lg btn-numeric m-1" onclick="clearplayerNumber()">
             C
         </button>
     </div>

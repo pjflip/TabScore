@@ -1,9 +1,12 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
 using System.Collections.Generic;
 using System.Data.Odbc;
+using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace TabScoreStarter
@@ -12,12 +15,29 @@ namespace TabScoreStarter
     {
         public static string ConnectionString(string pathToDB)
         {
+            // Return an Microsoft Access connection string for the database
             OdbcConnectionStringBuilder cs = new OdbcConnectionStringBuilder();
             cs.Driver = "Microsoft Access Driver (*.mdb)";
             cs.Add("Dbq", pathToDB);
             cs.Add("Uid", "Admin");
             cs.Add("Pwd", "");
             return cs.ToString();
+        }
+
+        public static void SetAccessControl(string pathToDB)
+        {
+            // Try to give IIS access permissions to the database file.  This is not necessary if all Users already have access (such as
+            // a folder directly off the root (C:\...), but does no harm.  It may fail (silently) if the current User doesn't own the file.
+            // But it might be necessary if the database file is in a User-owned folder (C:\Users\[current user]\...). 
+            try
+            {
+                FileInfo fileInfo = new FileInfo(pathToDB);
+                FileSecurity fileSecurity = fileInfo.GetAccessControl();
+                fileSecurity.AddAccessRule(new FileSystemAccessRule("IIS_IUSRS", FileSystemRights.FullControl, AccessControlType.Allow));
+                fileInfo.SetAccessControl(fileSecurity);
+            }
+            catch {}
+            return;
         }
 
         public static bool Initialize(string connectionString)

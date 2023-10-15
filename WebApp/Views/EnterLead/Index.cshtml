@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.ResultInfo
@@ -49,16 +49,16 @@
 
 <div class="row mt-4">
     <div class="col-12 text-center">
-        <button id="cA" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('A')">
+        <button id="cA" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('A')">
             @Strings.A
         </button>
-        <button id="cK" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('K')">
+        <button id="cK" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('K')">
             @Strings.K
         </button>
-        <button id="cQ" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('Q')">
+        <button id="cQ" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('Q')">
             @Strings.Q
         </button>
-        <button id="cJ" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('J')">
+        <button id="cJ" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('J')">
             @Strings.J
         </button>
     </div>
@@ -66,19 +66,19 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="cT" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('T')">
+        <button id="cT" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('T')">
             10
         </button>
-        <button id="c9" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('9')">
+        <button id="c9" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('9')">
             9
         </button>
-        <button id="c8" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('8')">
+        <button id="c8" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('8')">
             8
         </button>
-        <button id="c7" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('7')">
+        <button id="c7" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('7')">
             7
         </button>
-        <button id="c6" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('6')">
+        <button id="c6" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('6')">
             6
         </button>
     </div>
@@ -86,16 +86,16 @@
 
 <div class="row">
     <div class="col-12 text-center">
-        <button id="c5" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('5')">
+        <button id="c5" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('5')">
             5
         </button>
-        <button id="c4" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('4')">
+        <button id="c4" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('4')">
             4
         </button>
-        <button id="c3" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('3')">
+        <button id="c3" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('3')">
             3
         </button>
-        <button id="c2" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="setCard('2')">
+        <button id="c2" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="setCard('2')">
             2
         </button>
     </div>
@@ -103,16 +103,16 @@
 
 <div class="row mt-2">
     <div class="col-12 text-center">
-        <button id="sS" class="btn btn-suit btn-lg m-1 p-1" style="color:black; width:3em; height:3em" ontouchstart="setSuit('S')">
+        <button id="sS" class="btn btn-suit btn-lg m-1 p-1" style="color:black; width:3em; height:3em" onclick="setSuit('S')">
             <div style="font-size:xx-large; line-height:1em">&spades;</div>
         </button>
-        <button id="sH" class="btn btn-suit btn-lg m-1 p-1" style="color:red; width:3em; height:3em" ontouchstart="setSuit('H')">
+        <button id="sH" class="btn btn-suit btn-lg m-1 p-1" style="color:red; width:3em; height:3em" onclick="setSuit('H')">
             <div style="font-size:xx-large; line-height:1em">&hearts;</div>
         </button>
-        <button id="sD" class="btn btn-suit btn-lg m-1 p-1" style="color:lightsalmon; width:3em; height:3em" ontouchstart="setSuit('D')">
+        <button id="sD" class="btn btn-suit btn-lg m-1 p-1" style="color:lightsalmon; width:3em; height:3em" onclick="setSuit('D')">
             <div style="font-size:xx-large; line-height:1em">&diams;</div>
         </button>
-        <button id="sC" class="btn btn-suit btn-lg m-1 p-1" style="color:lightslategrey; width:3em; height:3em" ontouchstart="setSuit('C')">
+        <button id="sC" class="btn btn-suit btn-lg m-1 p-1" style="color:lightslategrey; width:3em; height:3em" onclick="setSuit('C')">
             <div style="font-size:xx-large; line-height:1em">&clubs;</div>
         </button>
     </div>
@@ -122,7 +122,7 @@
 {
     <div class="row mt-2">
         <div class="col-12 text-center">
-            <button id="skip" class="btn btn-outline-danger btn-lg m-1" ontouchstart="setSkip()">
+            <button id="skip" class="btn btn-outline-danger btn-lg m-1" onclick="setSkip()">
                 @Strings.Skip
             </button>
         </div>

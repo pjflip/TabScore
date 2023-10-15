@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.PlayerEntryList
@@ -68,13 +68,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         <div class="col-3">
             @if (playerEntry.Name == "")
             {
-                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="EnterPlayerID('@playerEntry.Direction')">
+                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" onclick="EnterPlayerID('@playerEntry.Direction')">
                     @Strings.Enter
                 </button>
             }
             else
             {
-                <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="EnterPlayerID('@playerEntry.Direction')">
+                <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" onclick="EnterPlayerID('@playerEntry.Direction')">
                     @Strings.Edit
                 </button>
             }
@@ -112,7 +112,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart', '#OKButton:enabled', function () {
+    $(document).on('click', '#OKButton:enabled', function () {
         if (@Model.NumberOfBlankEntries > 0) {
             $("#notAllNamesModal").modal("show");
         }

@@ -27,14 +27,14 @@ function setNumTricks(n) {
     document.getElementById("OKButton").disabled = false;
 }
 
-$(document).on('touchstart', '#OKButton:enabled', function () {
+$(document).on('click', '#OKButton:enabled', function () {
     if (!isSubmitted) {
         isSubmitted = true;
         location.href = urlOKButtonClick + '&numTricks=' + numTricks;
     }
 });
 
-$(document).on('touchstart', '#BackButton:enabled', function () {
+$(document).on('click', '#BackButton:enabled', function () {
     if (!isSubmitted) {
         isSubmitted = true;
         location.href = urlBackButtonClick;

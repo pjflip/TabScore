@@ -33,7 +33,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             </div>
         </div>
         <div class="col-3">
-            <button class="btn btn-outline-light btn-lg mr-2 my-2 float-right" ontouchstart="handRecordClick()">
+            <button class="btn btn-outline-light btn-lg mr-2 my-2 float-right" onclick="handRecordClick()">
                 <img src="~/Resources/Cards Logo.png" />
             </button>
         </div>
@@ -115,7 +115,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart', '#OKButton:enabled', function () {
+    $(document).on('click', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("Index", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
@@ -129,7 +129,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         }
     }
 
-    $(document).on('touchstart', '#BackButton:enabled', function () {
+    $(document).on('click', '#BackButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("Index", "ConfirmResult")?tabletDeviceNumber=@Model.TabletDeviceNumber';

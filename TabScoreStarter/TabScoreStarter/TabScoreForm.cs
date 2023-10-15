@@ -38,36 +38,45 @@ namespace TabScoreStarter
                 }
             }
 
-            if (pathToDB != "" && !File.Exists(pathToDB))
+            if (pathToDB == "")
+            {
+                // No database in arguments
+                AddDatabaseFileButton.Visible = true;
+            }
+            else if (!File.Exists(pathToDB))
             {
                 MessageBox.Show("Database passed in parameter string does not exist", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                pathToDB = "";
-            }
-
-            connectionString = Database.ConnectionString(pathToDB);
-            if (pathToDB != "" && Database.Initialize(connectionString))
-            {
-                PathToDBLabel.Text = pathToDB;
-                File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt"), connectionString);
-                SessionStatusLabel.Text = "Session Running";
-                SessionStatusLabel.ForeColor = Color.Green;
-                OptionsButton.Visible = true;
-                ResultsViewerButton.Visible = true;
-                AddHandRecordFileButton.Visible = true;
-                HandsList handsList = new HandsList(connectionString);
-                if (handsList.Count > 0)
-                {
-                    AddHandRecordFileButton.Enabled = false;
-                    PathToHandRecordFileLabel.Text = "Included in Scoring Database";
-                    AnalysingLabel.Text = "Analysing...";
-                    AnalysingLabel.Visible = true;
-                    AnalysingProgressBar.Visible = true;
-                    AnalysisCalculationBackgroundWorker.RunWorkerAsync();
-                }
+                AddDatabaseFileButton.Visible = true;
             }
             else
             {
-                AddDatabaseFileButton.Visible = true;   // No valid database in arguments
+                Database.SetAccessControl(pathToDB);
+                connectionString = Database.ConnectionString(pathToDB);
+                if (Database.Initialize(connectionString))
+                {
+                    PathToDBLabel.Text = pathToDB;
+                    File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt"), connectionString);
+                    SessionStatusLabel.Text = "Session Running";
+                    SessionStatusLabel.ForeColor = Color.Green;
+                    OptionsButton.Visible = true;
+                    ResultsViewerButton.Visible = true;
+                    AddHandRecordFileButton.Visible = true;
+                    HandsList handsList = new HandsList(connectionString);
+                    if (handsList.Count > 0)
+                    {
+                        AddHandRecordFileButton.Enabled = false;
+                        PathToHandRecordFileLabel.Text = "Included in Scoring Database";
+                        AnalysingLabel.Text = "Analysing...";
+                        AnalysingLabel.Visible = true;
+                        AnalysingProgressBar.Visible = true;
+                        AnalysisCalculationBackgroundWorker.RunWorkerAsync();
+                    }
+                }
+                else
+                {
+                    // Database is not valid for some reason and Initialize failed
+                    AddDatabaseFileButton.Visible = true;
+                }
             }
         }
 
@@ -76,6 +85,7 @@ namespace TabScoreStarter
             if (DatabaseFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string pathToDB = DatabaseFileDialog.FileName;
+                Database.SetAccessControl(pathToDB);
                 connectionString = Database.ConnectionString(pathToDB);
                 if (Database.Initialize(connectionString))
                 {
@@ -97,10 +107,6 @@ namespace TabScoreStarter
                         AnalysingProgressBar.Visible = true;
                         AnalysisCalculationBackgroundWorker.RunWorkerAsync();
                     }
-                }
-                else
-                {
-                    MessageBox.Show("Database does not meet TabScore specification", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

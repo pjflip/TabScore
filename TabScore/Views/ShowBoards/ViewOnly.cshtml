@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.BoardsList
@@ -75,7 +75,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         <div class="col-5 px-0">
             @if (Result.Remarks != "Not played")
             {
-                <button class="btn btn-secondary btn-lg m-1 px-1" style="min-width: 5rem" ontouchstart="View(@Result.BoardNumber)">
+                <button class="btn btn-secondary btn-lg m-1 px-1" style="min-width: 5rem" onclick="View(@Result.BoardNumber)">
                     @Strings.View
                 </button>
             }
@@ -104,7 +104,7 @@ else if (Model.Message == "NOTALLRESULTS")
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart', '#OKButton:enabled', function () {
+    $(document).on('click', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("OKButtonClick", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';

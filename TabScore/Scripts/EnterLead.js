@@ -89,14 +89,14 @@ function setSkip() {
     document.getElementById("OKButton").disabled = false;
 }
 
-$(document).on('touchstart', '#OKButton:enabled', function () {
+$(document).on('click', '#OKButton:enabled', function () {
     if (!isSubmitted) {
         isSubmitted = true;
         location.href = urlOKButtonClick + '&card=' + suit + card;
     }
 });
 
-$(document).on('touchstart', '#BackButton:enabled', function () {
+$(document).on('click', '#BackButton:enabled', function () {
     if (!isSubmitted) {
         isSubmitted = true;
         location.href = urlEnterContract;

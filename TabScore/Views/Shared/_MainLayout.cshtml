@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 
-<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @using Resources
@@ -11,6 +11,14 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <head>
     <title>@ViewData["Title"].ToString()</title>
     <meta name="viewport" content="width=device-width, user-scalable=no">
+    <script>
+        // Force reload if browser back button was used (avoids bfcache)
+        (function () {
+            window.onpageshow = function (event) {
+                if (event.persisted) window.location.reload();
+            };
+        })();
+    </script>
     @Styles.Render("~/Content/coreCSS")
     @Scripts.Render("~/bundles/coreJS")
 </head>

@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.SelectTableNumber
@@ -16,7 +16,7 @@
                 <p>@Strings.ErrorTableRegistered1 @Model.TableNumber @Strings.ErrorTableRegistered3</p>
             </div>
             <div class="modal-footer" style="justify-content:space-between">
-                <button class="btn btn-lg btn-danger" ontouchstart="modalLogOn()">
+                <button class="btn btn-lg btn-danger" onclick="modalLogOn()">
                     <span class="fa fa-play-circle"></span> @Strings.Register
                 </button>
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
@@ -39,7 +39,7 @@
     <div class="col-12 text-center">
         @for (int i = 1; i <= Model.NumTables && i < 6; i++)
         {
-            <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="selectTableNumber('@i')">
+            <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="selectTableNumber('@i')">
                 @i
             </button>
         }
@@ -52,7 +52,7 @@
         <div class="col-12 text-center">
             @for (int i = 6; i <= Model.NumTables && i < 11; i++)
             {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="selectTableNumber('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -66,7 +66,7 @@
         <div class="col-12 text-center">
             @for (int i = 11; i <= Model.NumTables && i < 16; i++)
             {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="selectTableNumber('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -80,7 +80,7 @@
         <div class="col-12 text-center">
             @for (int i = 16; i <= Model.NumTables && i < 21; i++)
             {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="selectTableNumber('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -93,7 +93,7 @@
         <div class="col-12 text-center">
             @for (int i = 21; i <= Model.NumTables && i < 26; i++)
             {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="selectTableNumber('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -107,7 +107,7 @@
         <div class="col-12 text-center">
             @for (int i = 26; i <= Model.NumTables && i < 31; i++)
             {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" ontouchstart="selectTableNumber('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -135,7 +135,7 @@
         document.getElementById("OKButton").disabled = false;
     }
 
-    $(document).on('touchstart', '#OKButton:enabled', function () {
+    $(document).on('click', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("OKButtonClick", "SelectTableNumber")?sectionID=@Model.SectionID&tableNumber=' + tableNumber + '&confirm=false';
