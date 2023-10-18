@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 
+using Resources;
 using System;
 using System.Collections.Generic;
 using System.Data.Odbc;
@@ -89,7 +90,22 @@ namespace TabScore.Models
             Round round;
             if (AppData.IsIndividual)
             {
-                move.DisplayDirection = Enum.GetName(typeof(Direction), direction);
+                if (direction == Direction.North)
+                {
+                    move.DisplayDirection = Strings.North;
+                }
+                else if (direction == Direction.East)
+                {
+                    move.DisplayDirection = Strings.East;
+                }
+                else if (direction == Direction.South)
+                {
+                    move.DisplayDirection = Strings.South;
+                }
+                else
+                {
+                    move.DisplayDirection = Strings.West;
+                }
 
                 // Try Direction = North
                 round = Find(x => x.NumberNorth == pairNumber);
@@ -97,7 +113,7 @@ namespace TabScore.Models
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.North;
-                    move.DisplayNewDirection = "North";
+                    move.DisplayNewDirection = Strings.North;
                     move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.North);
                     return move;
                 }
@@ -108,7 +124,7 @@ namespace TabScore.Models
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.South;
-                    move.DisplayNewDirection = "South";
+                    move.DisplayNewDirection = Strings.South;
                     move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.South);
                     return move;
                 }
@@ -119,7 +135,7 @@ namespace TabScore.Models
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.East;
-                    move.DisplayNewDirection = "East";
+                    move.DisplayNewDirection = Strings.East;
                     move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.East);
                     return move;
                 }
@@ -130,7 +146,7 @@ namespace TabScore.Models
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.West;
-                    move.DisplayNewDirection = "West";
+                    move.DisplayNewDirection = Strings.West;
                     move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.West);
                     return move;
                 }
@@ -139,7 +155,7 @@ namespace TabScore.Models
                 {
                     move.NewTableNumber = 0;
                     move.NewDirection = Direction.Sitout;
-                    move.DisplayNewDirection = "Sitout";
+                    move.DisplayNewDirection = Strings.Sitout;
                     move.Stay = false;
                     return move;
                 }
@@ -149,12 +165,12 @@ namespace TabScore.Models
                 if (direction == Direction.North)
                 {
                     round = Find(x => x.NumberNorth == pairNumber);
-                    move.DisplayDirection = "North/South";
+                    move.DisplayDirection = $"{Strings.North}/{Strings.South}";
                 }
                 else
                 {
                     round = Find(x => x.NumberEast == pairNumber);
-                    move.DisplayDirection = "East/West";
+                    move.DisplayDirection = $"{Strings.East}/{Strings.West}";
                 }
 
                 if (round != null)
@@ -181,19 +197,19 @@ namespace TabScore.Models
                         if (direction == Direction.North)
                         {
                             move.NewDirection = Direction.East;
-                            move.DisplayNewDirection = "East/West";
+                            move.DisplayNewDirection = $"{Strings.East}/{Strings.West}";
                         }
                         else
                         {
                             move.NewDirection = Direction.North;
-                            move.DisplayNewDirection = "North/South";
+                            move.DisplayNewDirection = $"{Strings.North}/{Strings.South}";
                         }
                     }
                     else   // No move info found - move to phantom table
                     {
                         move.NewTableNumber = 0;
                         move.NewDirection = Direction.Sitout;
-                        move.DisplayNewDirection = "Sitout";
+                        move.DisplayNewDirection = Strings.Sitout;
                     }
                 }
                 move.Stay = (move.NewTableNumber == tableNumber && move.NewDirection == direction);

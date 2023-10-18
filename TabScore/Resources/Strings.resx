@@ -374,7 +374,7 @@ tablet device at your current location</value>
     <value>Traveller</value>
   </data>
   <data name="Contract" xml:space="preserve">
-    <value>Contract</value>
+    <value>Con&amp;shy;tract</value>
   </data>
   <data name="ByOnTraveller" xml:space="preserve">
     <value>By</value>

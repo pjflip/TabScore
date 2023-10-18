@@ -265,7 +265,7 @@
     <value>S</value>
   </data>
   <data name="Score" xml:space="preserve">
-    <value>Ergebnis</value>
+    <value>Er&amp;shy;gebnis</value>
   </data>
   <data name="RankingList" xml:space="preserve">
     <value>Rangliste</value>
@@ -337,7 +337,7 @@
     <value>Ausspiel stimmt nicht mit Handaufzeichnung überein</value>
   </data>
   <data name="Lead" xml:space="preserve">
-    <value>Ausspiel</value>
+    <value>Aus&amp;shy;spiel</value>
   </data>
   <data name="ForSwiss" xml:space="preserve">
     <value>Bei Schweizer Wettbewerben, warten Sie bis der TL es Ihnen sagt, und drücken Sie dann OK, um das neues Movement zu erhalten</value>
@@ -355,7 +355,7 @@
     <value>Kontrakt eingeben</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Bearbeiten</value>
+    <value>Bearb.</value>
   </data>
   <data name="East" xml:space="preserve">
     <value>Ost</value>
@@ -403,7 +403,7 @@
     <value>Alle PASS</value>
   </data>
   <data name="Contract" xml:space="preserve">
-    <value>Kontrakt</value>
+    <value>Kon&amp;shy;trakt</value>
   </data>
   <data name="ArbitralScore" xml:space="preserve">
     <value>Schiedsrichter-Ergebnis</value>
@@ -427,7 +427,7 @@
     <value>Ergebnis bestätigen</value>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Zurück</value>
+    <value>Zk.</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Fehler</value>

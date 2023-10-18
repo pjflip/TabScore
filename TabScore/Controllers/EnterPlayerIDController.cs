@@ -16,12 +16,7 @@ namespace TabScore.Controllers
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
             ViewData["Title"] = $"{Strings.EnterPlayerIDs} - {tabletDeviceStatus.Location}";
             ViewData["Header"] = $"{tabletDeviceStatus.Location}";
-            EnterPlayerID enterPlayerID = new EnterPlayerID()
-            {
-                TabletDeviceNumber = tabletDeviceNumber,
-                Direction = direction,
-                DisplayDirection = Enum.GetName(typeof(Direction), direction)
-            };
+            EnterPlayerID enterPlayerID = new EnterPlayerID(tabletDeviceNumber, direction);
             return View(enterPlayerID);
         }
 

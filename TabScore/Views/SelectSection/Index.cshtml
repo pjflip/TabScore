@@ -13,10 +13,10 @@
 </div>
 
 <div class="row">
-    <div class="col-12 text-center">
+    <div class="col-12 text-center p-0">
         @foreach (var section in Model)
         {
-            <button id="s@(section.SectionID)" class="btn btn-primary btn-lg m-1" style="width:3em" onclick="selectSection('@(section.SectionID)')">
+            <button id="s@(section.SectionID)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" onclick="selectSection('@(section.SectionID)')">
                 @(section.SectionLetter)
             </button>
         }
@@ -29,9 +29,9 @@
 
     function selectSection(n) {
         if (section != "") {
-            document.getElementById("s" + section).className = "btn btn-primary btn-lg m-1";
+            document.getElementById("s" + section).className = "btn btn-primary btn-lg m-1 px-0";
         }
-        document.getElementById("s" + n).className = "btn btn-warning btn-lg m-1";
+        document.getElementById("s" + n).className = "btn btn-warning btn-lg m-1 px-0";
         section = n;
         document.getElementById("OKButton").disabled = false;
     }

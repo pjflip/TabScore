@@ -15,7 +15,7 @@ namespace TabScore
             bundles.Add(new ScriptBundle("~/bundles/enterContractJS").Include("~/Scripts/EnterContract.js"));
             bundles.Add(new ScriptBundle("~/bundles/enterLeadJS").Include("~/Scripts/EnterLead.js"));
             bundles.Add(new ScriptBundle("~/bundles/enterPlayerIdJS").Include("~/Scripts/EnterPlayerID.js"));
-            bundles.Add(new ScriptBundle("~/bundles/individualRankingListJS").Include("~/Scripts/MainLayout.js"));
+            bundles.Add(new ScriptBundle("~/bundles/individualRankingListJS").Include("~/Scripts/IndividualRankingList.js"));
             bundles.Add(new ScriptBundle("~/bundles/mainLayoutJS").Include("~/Scripts/MainLayout.js"));
             bundles.Add(new ScriptBundle("~/bundles/oneWinnerRankingListJS").Include("~/Scripts/OneWinnerRankingList.js"));
             bundles.Add(new ScriptBundle("~/bundles/showHandRecordJS").Include("~/Scripts/ShowHandRecord.js"));

@@ -128,9 +128,9 @@
 
     function selectTableNumber(n) {
         if (tableNumber != "") {
-           document.getElementById("tn" + tableNumber).className = "btn btn-primary btn-lg m-1";
+           document.getElementById("tn" + tableNumber).className = "btn btn-primary btn-lg m-1 px-0";
         }
-        document.getElementById("tn" + n).className = "btn btn-warning btn-lg m-1";
+        document.getElementById("tn" + n).className = "btn btn-warning btn-lg m-1 px-0";
         tableNumber = n;
         document.getElementById("OKButton").disabled = false;
     }

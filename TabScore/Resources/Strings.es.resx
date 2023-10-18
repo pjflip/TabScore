@@ -350,7 +350,7 @@
     <value>Viajero</value>
   </data>
   <data name="Contract" xml:space="preserve">
-    <value>Contrato</value>
+    <value>Con&amp;shy;trato</value>
   </data>
   <data name="ByOnTraveller" xml:space="preserve">
     <value>Para</value>

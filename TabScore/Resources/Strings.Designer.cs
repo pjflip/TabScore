@@ -151,7 +151,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contract.
+        ///   Looks up a localized string similar to Con&amp;shy;tract.
         /// </summary>
         public static string Contract {
             get {
