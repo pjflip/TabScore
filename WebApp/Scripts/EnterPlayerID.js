@@ -29,7 +29,7 @@ function clearLastEntry() {
     }
     else {
         if (playerID.length > 0) {
-            playerID = playerID.substr(0, playerID.length - 1);
+            playerID = playerID.slice(0, -1);
             if (playerID == "") document.getElementById("OKButton").disabled = true;
         }
     }

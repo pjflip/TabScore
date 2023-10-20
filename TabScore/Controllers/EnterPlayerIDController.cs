@@ -20,7 +20,7 @@ namespace TabScore.Controllers
             return View(enterPlayerID);
         }
 
-        public ActionResult OKButtonClick(int tabletDeviceNumber, Direction direction, int playerID)
+        public ActionResult OKButtonClick(int tabletDeviceNumber, Direction direction, string playerID)
         {
             // Update Round with new player
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];

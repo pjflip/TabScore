@@ -405,13 +405,13 @@ namespace TabScore.Models
             }
         }
 
-        public void UpdatePlayer(int sectionID, int tableNumber, Direction direction, int roundNumber, int playerID)
+        public void UpdatePlayer(int sectionID, int tableNumber, Direction direction, int roundNumber, string playerID)
         {
             // First get name, and update the Round
             string playerName = "";
             string directionLetter = Enum.GetName(typeof(Direction), direction).Substring(0, 1);    // Need just N, S, E or W
             
-            if (playerID == 0)
+            if (playerID == "0")
             {
                 playerName = Strings.Unknown;
             }
@@ -430,7 +430,7 @@ namespace TabScore.Models
                         break;
                     case 3:
                         playerName = AppData.GetNameFromPlayerNamesTable(playerID);
-                        if (playerName == "" || playerName.Substring(0, 1) == "#" || (playerName.Length >= 7 && playerName.Substring(0, 7) == Strings.Unknown))
+                        if (playerName == "" || playerName.Substring(0, 1) == "#" || (playerName.Length >= 7 && playerName.Substring(0, 7) == Strings.Unknown.Substring(0, 7)))
                         {
                             playerName = GetNameFromExternalDatabase(playerID);
                         }
@@ -490,7 +490,7 @@ namespace TabScore.Models
             {
                 roundNumber = 0;
             }
-            if (playerID == 0)
+            if (playerID == "0")
             {
                 playerName = "";
             }
@@ -534,7 +534,7 @@ namespace TabScore.Models
             return;
         }
 
-        private static string GetNameFromExternalDatabase(int playerNumber)
+        private static string GetNameFromExternalDatabase(string playerNumber)
         {
             string name = "";
             OdbcConnectionStringBuilder externalDB = new OdbcConnectionStringBuilder { Driver = "Microsoft Access Driver (*.mdb)" };
