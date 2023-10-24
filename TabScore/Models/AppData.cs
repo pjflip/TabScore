@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Data.Odbc;
 using System.IO;
+using System.Web.DynamicData;
+using System.Web.UI.WebControls;
+using WebGrease.Activities;
 
 namespace TabScore.Models
 {
@@ -122,7 +125,18 @@ namespace TabScore.Models
 
                     // Retrieve global PlayerNames table
                     // Cater for possibility that one or both of ID and strID could be null/blank.  Prefer strID
-                    SQLString = $"SELECT ID, Name, strID FROM PlayerNames";
+                    System.Data.DataTable schema = connection.GetSchema("Columns");
+                    int numCols = 0;
+                    foreach (System.Data.DataRow row in schema.Select("TABLE_NAME = 'PlayerNames'"))
+                    {
+                       numCols++;
+                    }
+                    string extraCol = "";
+                    if ( numCols == 3)
+                    {
+                        extraCol = ", StrID ";
+                    }
+                    SQLString = $"SELECT ID, Name" + extraCol + " FROM PlayerNames";
                     cmd = new OdbcCommand(SQLString, connection);
                     try
                     {
@@ -137,7 +151,7 @@ namespace TabScore.Models
                                     readerID = reader.GetValue(0);
                                 }
                                 object readerStrID = null;
-                                if (!reader.IsDBNull(2))
+                                if (numCols == 3)
                                 {
                                     readerStrID = reader.GetValue(2);
                                 }
