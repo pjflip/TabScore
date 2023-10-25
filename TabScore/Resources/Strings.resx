@@ -249,6 +249,7 @@ tablet device at your current location</value>
   </data>
   <data name="Back" xml:space="preserve">
     <value>Back</value>
+    
   </data>
   <data name="ErrorEnterResult" xml:space="preserve">
     <value>Please enter a result (or Skip = Not played) for every board</value>
@@ -264,6 +265,7 @@ tablet device at your current location</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
+    
   </data>
   <data name="View" xml:space="preserve">
     <value>View</value>
@@ -341,19 +343,19 @@ tablet device at your current location</value>
     <value>Rank</value>
   </data>
   <data name="PlayerNumber" xml:space="preserve">
-    <value>Player no.</value>
-    <comment>@MutedRule(PunctuationTail)</comment>
+    <value>Player ID</value>
+    
   </data>
   <data name="Percentage" xml:space="preserve">
     <value>Percentage</value>
   </data>
   <data name="PairNumber" xml:space="preserve">
     <value>Pair No.</value>
-    <comment>@MutedRule(PunctuationTail)</comment>
+    
   </data>
   <data name="PercentageShort" xml:space="preserve">
     <value>%age</value>
-    <comment>@MutedRule(PunctuationTail)</comment>
+    
   </data>
   <data name="Round" xml:space="preserve">
     <value>Round</value>
@@ -387,7 +389,7 @@ tablet device at your current location</value>
   </data>
   <data name="Score" xml:space="preserve">
     <value>Score</value>
-    <comment>@MutedRule(PunctuationTail)</comment>
+    
   </data>
   <data name="ShowMove" xml:space="preserve">
     <value>Show move</value>

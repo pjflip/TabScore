@@ -313,7 +313,7 @@
     <value>Player</value>
   </data>
   <data name="PlayerNumber" xml:space="preserve">
-    <value>Player no.</value>
+    <value>Player ID</value>
   </data>
   <data name="Q" xml:space="preserve">
     <value>Q</value>

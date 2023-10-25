@@ -110,7 +110,7 @@ namespace TabScore.Models
                     NumberSouth = result.NumberSouth,
                     NumberWest = result.NumberWest,
                     Contract = result.ContractTravellerDisplay,
-                    DeclarerNSEW = result.DeclarerNSEW,
+                    DeclarerNSEW = result.DeclarerNSEWDisplay,
                     LeadCard = result.LeadCardDisplay,
                     TricksTaken = result.TricksTakenSymbol,
                 };

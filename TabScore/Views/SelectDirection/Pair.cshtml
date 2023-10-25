@@ -16,7 +16,7 @@
                 <p>@Strings.ErrorTableRegistered1 @Model.TableNumber @Strings.ErrorTableRegistered2 @Model.Direction @Strings.ErrorTableRegistered3</p>
             </div>
             <div class="modal-footer" style="justify-content:space-between">
-                <button class="btn btn-lg btn-danger" onclick="modalLogOn()">
+                <button class="btn btn-lg btn-danger" ontouchstart="modalLogOn()" onclick="modalLogOn()">
                     <span class="fa fa-play-circle"></span> @Strings.Register
                 </button>
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
@@ -40,7 +40,7 @@
 {
     <div class="row">
         <div class="col-12 text-center">
-            <button id="dNorth" class="btn btn-secondary btn-lg m-1" style="width:8em" onclick="selectDirection('North')">
+            <button id="dNorth" class="btn btn-secondary btn-lg m-1" style="width:8em" ontouchstart="touchAvailable = true; selectDirection('North')" onclick="if (!touchAvailable) selectDirection('North')">
                 @Strings.North/@Strings.South
             </button>
         </div>
@@ -51,7 +51,7 @@
 {
     <div class="row">
         <div class="col-12 text-center">
-            <button id="dEast" class="btn btn-secondary btn-lg m-1" style="width:8em" onclick="selectDirection('East')">
+            <button id="dEast" class="btn btn-secondary btn-lg m-1" style="width:8em" ontouchstart="touchAvailable = true; selectDirection('East')" onclick="if (!touchAvailable) selectDirection('East')">
                 @Strings.East/@Strings.West
             </button>
         </div>
@@ -77,7 +77,7 @@
         document.getElementById("OKButton").disabled = false;
     }
 
-    $(document).on('click', '#OKButton:enabled', function () {
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("OKButtonClick", "SelectDirection")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=' + direction + '&roundNumber=@Model.RoundNumber&confirm=false';

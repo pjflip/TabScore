@@ -134,7 +134,7 @@ function setNSEW(d) {
     if (level > 0 && suit != "") document.getElementById("OKButton").disabled = false;
 }
 
-$(document).on('click', '#OKButton:enabled', function () {
+$(document).on('touchstart click', '#OKButton:enabled', function () {
     if (level == 0) {
         if (!isSubmitted) {
             isSubmitted = true;
@@ -155,7 +155,7 @@ $(document).on('click', '#OKButton:enabled', function () {
     }
 });
 
-$(document).on('click', '#BackButton:enabled', function () {
+$(document).on('touchstart click', '#BackButton:enabled', function () {
     if (!isSubmitted) {
         isSubmitted = true;
         location.href = urlShowBoards;

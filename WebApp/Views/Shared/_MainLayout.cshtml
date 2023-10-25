@@ -18,6 +18,8 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 if (event.persisted) window.location.reload();
             };
         })();
+        // Flag to prevent both touch and click events
+        var touchAvailable = false;
     </script>
     @Styles.Render("~/Content/coreCSS")
     @Scripts.Render("~/bundles/coreJS")

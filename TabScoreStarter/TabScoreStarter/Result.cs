@@ -8,7 +8,8 @@ namespace TabScoreStarter
 {
     public class Result
     {
-        public int Section { get; set; }
+        public int SectionID { get; set; }
+        public string SectionLetter { get; set; }
         public int Table { get; set; }
         public int Round { get; set; }
         public int Board { get; set; }
@@ -50,17 +51,17 @@ namespace TabScoreStarter
             {
                 // Delete any previous result
                 connection.Open();
-                string SQLString = $"DELETE FROM ReceivedData WHERE Section={Section} AND [Table]={Table} AND Round={Round} AND Board={Board}";
+                string SQLString = $"DELETE FROM ReceivedData WHERE Section={SectionID} AND [Table]={Table} AND Round={Round} AND Board={Board}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
 
                 if (AppData.IsIndividual)
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({Section}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTaken}', '{LeadCard}', '{Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {South}, {West}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTaken}', '{LeadCard}', '{Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
                 }
                 else
                 {
-                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({Section}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTaken}', '{LeadCard}', '{Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
+                    SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({SectionID}, {Table}, {Round}, {Board}, {PairNS}, {PairEW}, {declarer}, '{DeclarerNSEW}', '{Contract}', '{TricksTaken}', '{LeadCard}', '{Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
                 }
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();

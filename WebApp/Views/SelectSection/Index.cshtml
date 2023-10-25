@@ -16,7 +16,7 @@
     <div class="col-12 text-center p-0">
         @foreach (var section in Model)
         {
-            <button id="s@(section.SectionID)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" onclick="selectSection('@(section.SectionID)')">
+            <button id="s@(section.SectionID)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; selectSection('@(section.SectionID)')" onclick="if (!touchAvailable) selectSection('@(section.SectionID)')">
                 @(section.SectionLetter)
             </button>
         }
@@ -36,7 +36,7 @@
         document.getElementById("OKButton").disabled = false;
     }
 
-    $(document).on('click', '#OKButton:enabled', function () {
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("Index", "SelectTableNumber")?sectionID=' + section;

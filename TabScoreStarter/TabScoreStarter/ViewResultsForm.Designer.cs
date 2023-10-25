@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewResultsForm));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.EditResultButton = new System.Windows.Forms.Button();
             this.dataGridViewResults = new System.Windows.Forms.DataGridView();
@@ -46,30 +46,16 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 189F));
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
             this.tableLayoutPanel1.Controls.Add(this.EditResultButton, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.dataGridViewResults, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.CloseButton, 1, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(403, 450);
-            this.tableLayoutPanel1.TabIndex = 1;
             // 
             // EditResultButton
             // 
-            this.EditResultButton.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.EditResultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EditResultButton.Location = new System.Drawing.Point(3, 424);
+            resources.ApplyResources(this.EditResultButton, "EditResultButton");
             this.EditResultButton.Name = "EditResultButton";
-            this.EditResultButton.Size = new System.Drawing.Size(153, 23);
-            this.EditResultButton.TabIndex = 1;
-            this.EditResultButton.Text = "Edit Selected Result";
             this.EditResultButton.UseVisualStyleBackColor = true;
             this.EditResultButton.Click += new System.EventHandler(this.EditResultButton_Click);
             // 
@@ -97,81 +83,70 @@
             this.PairNS,
             this.PairEW});
             this.tableLayoutPanel1.SetColumnSpan(this.dataGridViewResults, 2);
-            this.dataGridViewResults.Dock = System.Windows.Forms.DockStyle.Fill;
+            resources.ApplyResources(this.dataGridViewResults, "dataGridViewResults");
             this.dataGridViewResults.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridViewResults.GridColor = System.Drawing.SystemColors.Control;
-            this.dataGridViewResults.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewResults.MultiSelect = false;
             this.dataGridViewResults.Name = "dataGridViewResults";
             this.dataGridViewResults.ReadOnly = true;
             this.dataGridViewResults.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewResults.Size = new System.Drawing.Size(397, 415);
-            this.dataGridViewResults.TabIndex = 2;
             this.dataGridViewResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewResults_CellContentClick);
             // 
             // Section
             // 
-            this.Section.HeaderText = "Section";
+            resources.ApplyResources(this.Section, "Section");
             this.Section.Name = "Section";
             this.Section.ReadOnly = true;
             // 
             // Table
             // 
-            this.Table.HeaderText = "Table";
+            resources.ApplyResources(this.Table, "Table");
             this.Table.Name = "Table";
             this.Table.ReadOnly = true;
             // 
             // Round
             // 
-            this.Round.HeaderText = "Round";
+            resources.ApplyResources(this.Round, "Round");
             this.Round.Name = "Round";
             this.Round.ReadOnly = true;
             // 
             // Board
             // 
-            this.Board.HeaderText = "Board";
+            resources.ApplyResources(this.Board, "Board");
             this.Board.Name = "Board";
             this.Board.ReadOnly = true;
             // 
             // PairNS
             // 
-            this.PairNS.HeaderText = "North";
+            resources.ApplyResources(this.PairNS, "PairNS");
             this.PairNS.Name = "PairNS";
             this.PairNS.ReadOnly = true;
             // 
             // PairEW
             // 
-            this.PairEW.HeaderText = "East";
+            resources.ApplyResources(this.PairEW, "PairEW");
             this.PairEW.Name = "PairEW";
             this.PairEW.ReadOnly = true;
             // 
             // CloseButton
             // 
-            this.CloseButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.CloseButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CloseButton.Location = new System.Drawing.Point(325, 424);
+            resources.ApplyResources(this.CloseButton, "CloseButton");
             this.CloseButton.Name = "CloseButton";
-            this.CloseButton.Size = new System.Drawing.Size(75, 23);
-            this.CloseButton.TabIndex = 3;
-            this.CloseButton.Text = "Close";
             this.CloseButton.UseVisualStyleBackColor = true;
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
             // ViewResultsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(403, 450);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ViewResultsForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "TabScoreStarter - View Results";
             this.Load += new System.EventHandler(this.ViewResultsForm_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).EndInit();
             this.ResumeLayout(false);
 

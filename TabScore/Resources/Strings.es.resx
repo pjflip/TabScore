@@ -230,7 +230,7 @@
     <value>Atrás</value>
   </data>
   <data name="ErrorEnterResult" xml:space="preserve">
-    <value>Introducir un resultado (o Omitir = no jugado) para cada tablilla</value>
+    <value>Introduce un resultado (o Omitir = no jugado) para cada tablilla</value>
   </data>
   <data name="Boards" xml:space="preserve">
     <value>Tablillas</value>
@@ -278,7 +278,7 @@
     <value>aún no está lista. Espere por favor</value>
   </data>
   <data name="MoveForRound" xml:space="preserve">
-    <value>Mover por Ronda</value>
+    <value>Mover por ronda</value>
   </data>
   <data name="MoveToSitOut" xml:space="preserve">
     <value>Mover a la mesa sentarse</value>
@@ -287,7 +287,7 @@
     <value>Quédate en la Mesa</value>
   </data>
   <data name="MoveToTable" xml:space="preserve">
-    <value>Mover a la Mesa</value>
+    <value>Mover a la mesa</value>
   </data>
   <data name="PassToRelayTable" xml:space="preserve">
     <value>Pase a la mesa de relevos</value>
@@ -320,7 +320,7 @@
     <value>Rango</value>
   </data>
   <data name="PlayerNumber" xml:space="preserve">
-    <value>Nro. de jugador</value>
+    <value>ID de jugador</value>
   </data>
   <data name="Percentage" xml:space="preserve">
     <value>Porcentaje</value>
@@ -401,7 +401,7 @@
     <value>Mostrar información de la ronda</value>
   </data>
   <data name="ShowTraveller" xml:space="preserve">
-    <value>Mostar viajero</value>
+    <value>Mostrar viajero</value>
   </data>
   <data name="NotPlayed" xml:space="preserve">
     <value>No jugado</value>

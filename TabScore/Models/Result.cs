@@ -193,21 +193,7 @@ namespace TabScore.Models
                 }
                 s.Append(ContractX);
                 s.Append($"{TricksTakenSymbol} {Strings.by} ");
-                switch (DeclarerNSEW)
-                {
-                    case "N":
-                        s.Append(Strings.N);
-                        break;
-                    case "S":
-                        s.Append(Strings.S);
-                        break;
-                    case "E":
-                        s.Append(Strings.E);
-                        break;
-                    case "W":
-                        s.Append(Strings.W);
-                        break;
-                }
+                s.Append(DeclarerNSEWDisplay);
                 return s.ToString();
             }
         }
@@ -238,6 +224,27 @@ namespace TabScore.Models
                 }
                 s.Append(ContractX);
                 return s.ToString();
+            }
+        }
+
+        // DECLARER
+        public string DeclarerNSEWDisplay
+        {
+            get
+            {
+                switch (DeclarerNSEW)
+                {
+                    case "N":
+                        return Strings.N;
+                    case "S":
+                        return Strings.S;
+                    case "E":
+                        return Strings.E;
+                    case "W":
+                        return Strings.W;
+                    default:
+                        return "";
+                }
             }
         }
 
@@ -292,6 +299,7 @@ namespace TabScore.Models
             }
         }
 
+        // LEAD CARD
         private string leadCard;   // Internal representation of lead card uses 'T' for '10'; database uses '10'.
         public string LeadCard
         {

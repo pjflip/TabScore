@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Resources;
 using System.Windows.Forms;
 
 namespace TabScoreStarter
@@ -8,9 +9,20 @@ namespace TabScoreStarter
     {
         private readonly Result result;
         private readonly string connectionString;
+        private readonly ResourceManager resourceManager;
+        private readonly string[] suitsDatabase = { "", "NT", "S", "H", "D", "C" };
+        private readonly string[] suitsKey = { "", "SuitNT", "SuitS", "SuitH", "SuitD", "SuitC" };
+        private readonly string[] suitsDisplay = new string[6];
+        private readonly string[] declarerDatabase = { "", "N", "S", "E", "W" };
+        private readonly string[] declarerDisplay = new string[5];
+        private readonly string[] leadDatabase = { "", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "CJ", "CQ", "CK", "CA", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "DJ", "DQ", "DK", "DA", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "HJ", "HQ", "HK", "HA", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "SJ", "SQ", "SK", "SA"};
+        private readonly string[] leadDisplay = new string[53];
+        private readonly string[] remarksDatabase = { "", "Not played", "40%-40%", "50%-40%", "60%-40%", "40%-50%", "50%-50%", "60%-50%", "40%-60%", "50%-60%", "60%-60%", "Arbitral score", "Wrong direction"};
+        private readonly string[] remarksDisplay = new string[13];
 
         public EditResultForm(Result result, string connectionString, Point location)
         {
+            resourceManager = new ResourceManager("TabScoreStarter.Strings", typeof(TabScoreForm).Assembly);
             InitializeComponent();
             this.result = result;
             this.connectionString = connectionString;
@@ -20,17 +32,44 @@ namespace TabScoreStarter
         private void EditResultForm_Load(object sender, EventArgs e)
         {
             if (result == null) return;
-            labelSection.Text = result.Section.ToString();
-            labelTable.Text = result.Table.ToString();
-            labelRound.Text = result.Round.ToString();
-            labelBoard.Text = result.Board.ToString();
-            labelNorth.Text = result.PairNS.ToString();
-            labelEast.Text = result.PairEW.ToString();
+            boxSection.Text = result.SectionLetter;
+            boxTable.Text = result.Table.ToString();
+            boxRound.Text = result.Round.ToString();
+            boxBoard.Text = result.Board.ToString();
+            boxNorth.Text = result.PairNS.ToString();
+            boxEast.Text = result.PairEW.ToString();
+
+            // Set up selection lists for combo boxes based on UICulture language
+            suitsDisplay[0] = "";
+            for (int i = 1; i < 6; i++)
+            {
+                suitsDisplay[i] = resourceManager.GetString(suitsKey[i]);
+            }
+            comboBoxSuit.Items.AddRange(suitsDisplay);
+            declarerDisplay[0] = "";
+            for (int i = 1; i < 5; i++)
+            {
+                declarerDisplay[i] = resourceManager.GetString(declarerDatabase[i]);
+            }
+            comboBoxDeclarer.Items.AddRange(declarerDisplay);
+            leadDisplay[0] = "";
+            for (int i = 1; i < 53; i++)
+            {
+                leadDisplay[i] = resourceManager.GetString(leadDatabase[i]);
+            }
+            comboBoxLead.Items.AddRange(leadDisplay);
+            remarksDisplay[0] = "";
+            for (int i = 1; i < 13; i++)
+            {
+                remarksDisplay[i] = resourceManager.GetString(remarksDatabase[i]);
+            }
+            comboBoxRemarks.Items.AddRange(remarksDisplay);
+
             if (result.ContractLevel <= 0)
             {
                 if (result.ContractLevel == 0)
                 {
-                    comboBoxContractLevel.Text = "PASS";
+                    comboBoxContractLevel.Text = resourceManager.GetString("PASS");
                 }
                 else
                 {
@@ -55,13 +94,13 @@ namespace TabScoreStarter
                 {
                     comboBoxTricksTaken.Items.Add("-" + i.ToString());
                 }
-                comboBoxSuit.Text = result.ContractSuit;
+                comboBoxSuit.Text = resourceManager.GetString("Suit" + result.ContractSuit);
                 comboBoxDouble.Text = result.ContractX;
-                comboBoxDeclarer.Text = result.DeclarerNSEW;
-                comboBoxLead.Text = result.LeadCard;
+                comboBoxDeclarer.Text = resourceManager.GetString(result.DeclarerNSEW);
+                comboBoxLead.Text = resourceManager.GetString(result.LeadCard);
                 comboBoxTricksTaken.Text = result.TricksTaken;
             }
-            comboBoxRemarks.Text = result.Remarks;
+            comboBoxRemarks.Text = resourceManager.GetString(result.Remarks);
         }
 
         private void CanxButton_Click(object sender, EventArgs e)
@@ -71,8 +110,9 @@ namespace TabScoreStarter
 
         private void ComboBoxContractLevel_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxContractLevel.Text == "PASS" || comboBoxContractLevel.Text == "")
+            if (comboBoxContractLevel.SelectedIndex == 0 || comboBoxContractLevel.SelectedIndex == 1)
             {
+                // "PASS" or ""
                 comboBoxSuit.Text = "";
                 comboBoxDouble.Text = "";
                 comboBoxDeclarer.Text = "";
@@ -106,8 +146,9 @@ namespace TabScoreStarter
 
         private void ComboBoxRemarks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxRemarks.Text == "" || comboBoxRemarks.Text == "Wrong direction")
+            if (comboBoxRemarks.SelectedIndex == 0 || comboBoxRemarks.SelectedIndex == 12)
             {
+                // "" or "Wrong direction"
                 comboBoxContractLevel.Enabled = true;
                 comboBoxSuit.Enabled = true;
                 comboBoxDouble.Enabled = true;
@@ -117,18 +158,18 @@ namespace TabScoreStarter
             }
             else
             {
-                comboBoxContractLevel.Text = "";  // This invokes ComboBoxContractLevel_SelectedIndexChanged
+                comboBoxContractLevel.SelectedIndex = 0;  // = "".  This invokes ComboBoxContractLevel_SelectedIndexChanged
                 comboBoxContractLevel.Enabled = false;
             }
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (comboBoxContractLevel.Text == "")
+            if (comboBoxContractLevel.SelectedIndex <= 0)
             {
-                if (comboBoxRemarks.Text == "" || comboBoxRemarks.Text == "Wrong direction")
+                if (comboBoxRemarks.SelectedIndex <= 0 || comboBoxRemarks.SelectedIndex == 12)  // "" or "Wrong direction"
                 {
-                    MessageBox.Show("Please enter a valid result", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(resourceManager.GetString("EnterValidResult"), "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 result.ContractLevel = -1;
@@ -138,9 +179,9 @@ namespace TabScoreStarter
                 result.DeclarerNSEW = "";
                 result.LeadCard = "";
                 result.TricksTaken = "";
-                result.Remarks = comboBoxRemarks.Text;
+                result.Remarks = remarksDatabase[comboBoxRemarks.SelectedIndex];
             }
-            else if (comboBoxContractLevel.Text == "PASS")
+            else if (comboBoxContractLevel.SelectedIndex == 1)  // = "PASS" or equivalent
             {
                 result.ContractLevel = 0;
                 result.Contract = "PASS";
@@ -149,17 +190,17 @@ namespace TabScoreStarter
                 result.DeclarerNSEW = "";
                 result.LeadCard = "";
                 result.TricksTaken = "";
-                result.Remarks = comboBoxRemarks.Text;
+                result.Remarks = remarksDatabase[comboBoxRemarks.SelectedIndex];
             }
-            else
+            else  // Normal contract
             {
-                if (comboBoxSuit.Text == "" || comboBoxDeclarer.Text == "" || comboBoxTricksTaken.Text == "")
+                if (comboBoxSuit.SelectedIndex <= 0 || comboBoxDeclarer.SelectedIndex <= 0 || comboBoxTricksTaken.SelectedIndex <= 0)
                 {
-                    MessageBox.Show("Please enter valid contract details", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(resourceManager.GetString("EnterValidContract"), "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 result.ContractLevel = Convert.ToInt32(comboBoxContractLevel.Text);
-                result.ContractSuit = comboBoxSuit.Text;
+                result.ContractSuit = suitsDatabase[comboBoxSuit.SelectedIndex];
                 result.ContractX = comboBoxDouble.Text;
                 string contract = $"{result.ContractLevel} {result.ContractSuit}";
                 if (result.ContractX != "")
@@ -167,10 +208,24 @@ namespace TabScoreStarter
                     contract = $"{contract} {result.ContractX}";
                 }
                 result.Contract = contract;
-                result.DeclarerNSEW = comboBoxDeclarer.Text;
-                result.LeadCard = comboBoxLead.Text;
+                result.DeclarerNSEW = declarerDatabase[comboBoxDeclarer.SelectedIndex];
+                if (comboBoxLead.SelectedIndex <= 0)  // Lead might not have been selected
+                {
+                    result.LeadCard = "";
+                }
+                else
+                {
+                    result.LeadCard = leadDatabase[comboBoxLead.SelectedIndex];
+                }
                 result.TricksTaken = comboBoxTricksTaken.Text;
-                result.Remarks = comboBoxRemarks.Text;
+                if (comboBoxRemarks.SelectedIndex <= 0)  // Remarks might not have been selected
+                {
+                    result.Remarks = "";
+                }
+                else
+                {
+                    result.Remarks = remarksDatabase[comboBoxRemarks.SelectedIndex];
+                }
             }
             result.UpdateDB(connectionString);
             Close();

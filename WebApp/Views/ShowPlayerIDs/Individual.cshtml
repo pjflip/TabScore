@@ -68,13 +68,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         <div class="col-4">
             @if (playerEntry.Name == "")
             {
-                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" onclick="EnterPlayerID('@playerEntry.Direction')">
+                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerID('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerID('@playerEntry.Direction')">
                     @Strings.Enter
                 </button>
             }
             else
             {
-                <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" onclick="EnterPlayerID('@playerEntry.Direction')">
+                <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerID('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerID('@playerEntry.Direction')">
                     @Strings.Edit
                 </button>
             }
@@ -112,7 +112,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    $(document).on('click', '#OKButton:enabled', function () {
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
         if (@Model.NumberOfBlankEntries > 0) {
             $("#notAllNamesModal").modal("show");
         }

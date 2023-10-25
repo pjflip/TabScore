@@ -28,7 +28,7 @@
 <script>
     var isSubmitted = false;
 
-    $(document).on('click', '#OKButton:enabled', function () {
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("OKButtonClick", "ErrorScreen")';

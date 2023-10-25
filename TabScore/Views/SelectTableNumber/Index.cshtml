@@ -39,7 +39,7 @@
     <div class="col-12 text-center p-0">
         @for (int i = 1; i <= Model.NumTables && i < 6; i++)
         {
-            <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" onclick="selectTableNumber('@i')">
+            <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; selectTableNumber('@i')" onclick="if (!touchAvailable) selectTableNumber('@i')">
                 @i
             </button>
         }
@@ -52,7 +52,7 @@
         <div class="col-12 text-center p-0">
             @for (int i = 6; i <= Model.NumTables && i < 11; i++)
             {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" onclick="selectTableNumber('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; selectTableNumber('@i')" onclick="if (!touchAvailable) selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -66,7 +66,7 @@
         <div class="col-12 text-center p-0">
             @for (int i = 11; i <= Model.NumTables && i < 16; i++)
             {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" onclick="selectTableNumber('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; selectTableNumber('@i')" onclick="if (!touchAvailable) selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -80,7 +80,7 @@
         <div class="col-12 text-center p-0">
             @for (int i = 16; i <= Model.NumTables && i < 21; i++)
             {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" onclick="selectTableNumber('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; selectTableNumber('@i')" onclick="if (!touchAvailable) selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -93,7 +93,7 @@
         <div class="col-12 text-center p-0">
             @for (int i = 21; i <= Model.NumTables && i < 26; i++)
             {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" onclick="selectTableNumber('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; selectTableNumber('@i')" onclick="if (!touchAvailable) selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -107,7 +107,7 @@
         <div class="col-12 text-center p-0">
             @for (int i = 26; i <= Model.NumTables && i < 31; i++)
             {
-                <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" onclick="selectTableNumber('@i')">
+                <button id="tn@(i)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; selectTableNumber('@i')" onclick="if (!touchAvailable) selectTableNumber('@i')">
                     @i
                 </button>
             }
@@ -135,7 +135,7 @@
         document.getElementById("OKButton").disabled = false;
     }
 
-    $(document).on('click', '#OKButton:enabled', function () {
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("OKButtonClick", "SelectTableNumber")?sectionID=@Model.SectionID&tableNumber=' + tableNumber + '&confirm=false';

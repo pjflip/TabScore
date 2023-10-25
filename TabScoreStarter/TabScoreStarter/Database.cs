@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Data.Odbc;
 using System.IO;
 using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace TabScoreStarter
@@ -503,6 +502,21 @@ namespace TabScoreStarter
                 catch (OdbcException e)
                 {
                     if (e.Errors.Count != 1 || e.Errors[0].SQLState != "42S01")  // Error other than PlayerNames table already exists
+                    {
+                        throw e;
+                    }
+                }
+
+                // Add field 'strID' to table 'PlayerNames' if it doesn't already exist
+                SQLString = "ALTER TABLE PlayerNames ADD [strID] VARCHAR(18)";
+                cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OdbcException e)
+                {
+                    if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
                     {
                         throw e;
                     }

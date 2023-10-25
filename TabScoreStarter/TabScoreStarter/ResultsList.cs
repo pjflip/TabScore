@@ -10,22 +10,43 @@ namespace TabScoreStarter
     public class ResultsList : List<Result>
     {
         public bool IsIndividual = true;
-        
+        private class Section
+        {
+            public int SectionID { get; set; }
+            public string SectionLetter { get; set; }
+        }
+        private readonly List<Section> sectionsList = new List<Section>();
+
         public ResultsList(string connectionString)
         {
             using (OdbcConnection connection = new OdbcConnection(connectionString))
             {
                 connection.Open();
+                // Create list of sections
+                string SQLString = "SELECT ID, Letter FROM Section";
+                OdbcCommand cmd = new OdbcCommand(SQLString, connection);
+                OdbcDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Section s = new Section
+                    {
+                        SectionID = reader.GetInt32(0),
+                        SectionLetter = reader.GetString(1),
+                    };
+                    sectionsList.Add(s);
+                }
+                reader.Close();
+
                 if (AppData.IsIndividual)
                 {
-                    string SQLString = $"SELECT Section, [Table], Round, Board, PairNS, PairEW, South, West, Contract, [NS/EW], LeadCard, Result, Remarks FROM ReceivedData";
-                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                    OdbcDataReader reader = cmd.ExecuteReader();
+                    SQLString = $"SELECT Section, [Table], Round, Board, PairNS, PairEW, South, West, Contract, [NS/EW], LeadCard, Result, Remarks FROM ReceivedData";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
                         Result result = new Result()
                         {
-                            Section = reader.GetInt32(0),
+                            SectionID = reader.GetInt32(0),
                             Table = reader.GetInt32(1),
                             Round = reader.GetInt32(2),
                             Board = reader.GetInt32(3),
@@ -46,14 +67,14 @@ namespace TabScoreStarter
                 }
                 else
                 {
-                    string SQLString = $"SELECT Section, [Table], Round, Board, PairNS, PairEW, Contract, [NS/EW], LeadCard, Result, Remarks FROM ReceivedData";
-                    OdbcCommand cmd = new OdbcCommand(SQLString, connection);
-                    OdbcDataReader reader = cmd.ExecuteReader();
+                    SQLString = $"SELECT Section, [Table], Round, Board, PairNS, PairEW, Contract, [NS/EW], LeadCard, Result, Remarks FROM ReceivedData";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
                         Result result = new Result()
                         {
-                            Section = reader.GetInt32(0),
+                            SectionID = reader.GetInt32(0),
                             Table = reader.GetInt32(1),
                             Round = reader.GetInt32(2),
                             Board = reader.GetInt32(3),
@@ -74,6 +95,7 @@ namespace TabScoreStarter
 
             foreach (Result result in this)
             {
+                result.SectionLetter = sectionsList.Find(x => x.SectionID == result.SectionID).SectionLetter;
                 if (result.Remarks == "" || result.Remarks == "Wrong direction")
                 {
                     if (result.Contract == "PASS")
@@ -98,9 +120,6 @@ namespace TabScoreStarter
                     result.ContractX = "";
                 }
             }
-/*
-            Sort();  // Using Result CompareTo comparer
-*/
         }
     }
 }

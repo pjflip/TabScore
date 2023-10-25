@@ -647,7 +647,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Player no..
+        ///   Looks up a localized string similar to Player ID.
         /// </summary>
         public static string PlayerNumber {
             get {

@@ -56,14 +56,14 @@ else
 <script>
     var isSubmitted = false;
 
-    $(document).on('click', '#OKButton:enabled', function () {
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("Index", "ShowRankingList")?tabletDeviceNumber=@Model.TabletDeviceNumber';
         }
     });
 
-    $(document).on('click', '#BackButton:enabled', function () {
+    $(document).on('touchstart click', '#BackButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")?tabletDeviceNumber=@Model.TabletDeviceNumber';

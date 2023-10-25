@@ -4,21 +4,30 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Resources;
+// Sets the UI culture to German for debugging
+// using System.Globalization;
+// using System.Threading;
 
 namespace TabScoreStarter
 {
     public partial class TabScoreForm : Form
     {
         private string connectionString = "";
+        private readonly ResourceManager resourceManager;
 
         public TabScoreForm()
         {
+            // Sets the UI culture to German for debugging
+            // Thread.CurrentThread.CurrentUICulture = new CultureInfo("de-DE");
+
+            resourceManager = new ResourceManager("TabScoreStarter.Strings", typeof(TabScoreForm).Assembly);
             InitializeComponent();
         }
 
         private void TabScoreForm_Load(object sender, EventArgs e)
         {
-            Text = $"TabScoreStarter - Version {Assembly.GetExecutingAssembly().GetName().Version}";
+            Text = $"TabScoreStarter - {resourceManager.GetString("Version")} {Assembly.GetExecutingAssembly().GetName().Version}";
             
             string argsString = "", pathToDB = "";
             string[] arguments = Environment.GetCommandLineArgs();
@@ -45,7 +54,7 @@ namespace TabScoreStarter
             }
             else if (!File.Exists(pathToDB))
             {
-                MessageBox.Show("Database passed in parameter string does not exist", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(resourceManager.GetString("DatabaseNotExist"), "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 AddDatabaseFileButton.Visible = true;
             }
             else
@@ -56,7 +65,7 @@ namespace TabScoreStarter
                 {
                     PathToDBLabel.Text = pathToDB;
                     File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt"), connectionString);
-                    SessionStatusLabel.Text = "Session Running";
+                    SessionStatusLabel.Text = resourceManager.GetString("SessionRunning");
                     SessionStatusLabel.ForeColor = Color.Green;
                     OptionsButton.Visible = true;
                     ResultsViewerButton.Visible = true;
@@ -65,8 +74,8 @@ namespace TabScoreStarter
                     if (handsList.Count > 0)
                     {
                         AddHandRecordFileButton.Enabled = false;
-                        PathToHandRecordFileLabel.Text = "Included in Scoring Database";
-                        AnalysingLabel.Text = "Analysing...";
+                        PathToHandRecordFileLabel.Text = resourceManager.GetString("IncludedInDatabase");
+                        AnalysingLabel.Text = resourceManager.GetString("Analysing");
                         AnalysingLabel.Visible = true;
                         AnalysingProgressBar.Visible = true;
                         AnalysisCalculationBackgroundWorker.RunWorkerAsync();
@@ -92,7 +101,7 @@ namespace TabScoreStarter
                     AddDatabaseFileButton.Enabled = false;
                     PathToDBLabel.Text = pathToDB;
                     File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt"), connectionString);
-                    SessionStatusLabel.Text = "Session Running";
+                    SessionStatusLabel.Text = resourceManager.GetString("SessionRunning"); ;
                     SessionStatusLabel.ForeColor = Color.Green;
                     OptionsButton.Visible = true;
                     ResultsViewerButton.Visible = true;
@@ -101,8 +110,8 @@ namespace TabScoreStarter
                     if (handsList.Count > 0)
                     {
                         AddHandRecordFileButton.Enabled = false;
-                        PathToHandRecordFileLabel.Text = "Included in Scoring Database";
-                        AnalysingLabel.Text = "Analysing...";
+                        PathToHandRecordFileLabel.Text = resourceManager.GetString("IncludedInDatabase");
+                        AnalysingLabel.Text = resourceManager.GetString("Analysing");
                         AnalysingLabel.Visible = true;
                         AnalysingProgressBar.Visible = true;
                         AnalysisCalculationBackgroundWorker.RunWorkerAsync();
@@ -120,13 +129,13 @@ namespace TabScoreStarter
                 HandsList handsList = new HandsList(file);
                 if (handsList.Count == 0)
                 {
-                    MessageBox.Show("File contains no hand records", "TabScoreStarter", MessageBoxButtons.OK);
+                    MessageBox.Show(resourceManager.GetString("FileNoHandRecords"), "TabScoreStarter", MessageBoxButtons.OK);
                 }
                 else
                 {
                     handsList.WriteToDB(connectionString);
                     AddHandRecordFileButton.Enabled = false;
-                    AnalysingLabel.Text = "Analysing...";
+                    AnalysingLabel.Text = resourceManager.GetString("Analysing");
                     AnalysingLabel.Visible = true;
                     AnalysingProgressBar.Visible = true;
                     AnalysisCalculationBackgroundWorker.RunWorkerAsync();
@@ -163,8 +172,8 @@ namespace TabScoreStarter
         private void AnalysisCalculation_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             AnalysingProgressBar.Value = 100;
-            AnalysingLabel.Text = "Analysis Complete";
-            AddHandRecordFileButton.Text = "Change hand record file...";
+            AnalysingLabel.Text = resourceManager.GetString("AnalysisComplete");
+            AddHandRecordFileButton.Text = resourceManager.GetString("ChangeHandRecordFile");
             AddHandRecordFileButton.Enabled = true;
         }
 

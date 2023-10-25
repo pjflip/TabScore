@@ -37,7 +37,7 @@
 {
     <div class="row">
         <div class="col-12 text-center p-0">
-            <button id="plus6" class="btn btn-plus btn-lg m-1 px-0" style="width:2.5em" onclick="setPlusTricks(6)">
+            <button id="plus6" class="btn btn-plus btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setPlusTricks(6)" onclick="if (!touchAvailable) setPlusTricks(6)">
                 +6
             </button>
         </div>
@@ -50,7 +50,7 @@
         <div class="col-12 text-center p-0">
             @for (int i = ((Model.ResultData.ContractLevel <= 2) ? 5 : 7 - Model.ResultData.ContractLevel); i >= 1; i--)
             {
-                <button id="plus@(i)" class="btn btn-plus btn-lg m-1 px-0" style="width:2.5em" onclick="setPlusTricks(@i)">
+                <button id="plus@(i)" class="btn btn-plus btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setPlusTricks(@i)" onclick="if (!touchAvailable) setPlusTricks(@i)">
                     +@i
                 </button>
             }
@@ -60,7 +60,7 @@
 
 <div class="row">
     <div class="col-12 text-center p-0">
-        <button id="equals" class="btn btn-primary btn-lg m-1" style="width: 6em" onclick="setEqualsTricks()">
+        <button id="equals" class="btn btn-primary btn-lg m-1" style="width: 6em" ontouchstart="touchAvailable = true; setEqualsTricks()" onclick="if (!touchAvailable) setEqualsTricks()">
             =
         </button>
     </div>
@@ -70,7 +70,7 @@
     <div class="col-12 text-center p-0">
         @for (int i = 1; i <= 5; i++)
         {
-            <button id="minus@(i)" class="btn btn-minus btn-lg m-1 px-0" style="width:2.5em" onclick="setMinusTricks(@i)">
+            <button id="minus@(i)" class="btn btn-minus btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setMinusTricks(@i)" onclick="if (!touchAvailable) setMinusTricks(@i)">
                 -@i
             </button>
         }
@@ -81,7 +81,7 @@
     <div class="col-12 text-center p-0">
         @for (int i = 6; i <= ((Model.ResultData.ContractLevel > 3) ? 10 : (Model.ResultData.ContractLevel + 6)); i++)
         {
-            <button id="minus@(i)" class="btn btn-minus btn-lg m-1 px-0" style="width:2.5em" onclick="setMinusTricks(@i)">
+            <button id="minus@(i)" class="btn btn-minus btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setMinusTricks(@i)" onclick="if (!touchAvailable) setMinusTricks(@i)">
                 -@i
             </button>
         }
@@ -94,7 +94,7 @@
         <div class="col-12 text-center p-0">
             @for (int i = 11; i <= Model.ResultData.ContractLevel + 6; i++)
             {
-                <button id="minus@(i)" class="btn btn-minus btn-lg m-1 px-0" style="width:2.5em" onclick="setMinusTricks(@i)">
+                <button id="minus@(i)" class="btn btn-minus btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setMinusTricks(@i)" onclick="if (!touchAvailable) setMinusTricks(@i)">
                     -@i
                 </button>
             }

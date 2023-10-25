@@ -160,19 +160,19 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="col-12 text-center">
         @if (Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NS)
         {
-            <button id="btnNorth" class="btn btn-secondary m-1" onclick="setNSEW('North')">
+            <button id="btnNorth" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('North')" onclick="if (!touchAvailable) setNSEW('North')">
                 @Strings.N
             </button>
-            <button id="btnSouth" class="btn btn-secondary m-1" onclick="setNSEW('South')">
+            <button id="btnSouth" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('South')" onclick="if (!touchAvailable) setNSEW('South')">
                 @Strings.S
             </button>
         }
         @if (Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.EW)
         {
-            <button id="btnEast" class="btn btn-secondary m-1" onclick="setNSEW('East')">
+            <button id="btnEast" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('East')" onclick="if (!touchAvailable) setNSEW('East')">
                 @Strings.E
             </button>
-            <button id="btnWest" class="btn btn-secondary m-1" onclick="setNSEW('West')">
+            <button id="btnWest" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('West')" onclick="if (!touchAvailable) setNSEW('West')">
                 @Strings.W
             </button>
         }
@@ -189,7 +189,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 </script>
 @Scripts.Render("~/bundles/showHandRecordJS")
 <script>
-    $(document).on('click', '#OKButton:enabled', function () {
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("Index", "ShowTraveller")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber&fromView=@Model.FromView.ToString().ToLower()';

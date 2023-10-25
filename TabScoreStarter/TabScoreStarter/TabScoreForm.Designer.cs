@@ -47,110 +47,70 @@
             // 
             // ScoringDatabaseLabel
             // 
-            this.ScoringDatabaseLabel.AutoSize = true;
-            this.ScoringDatabaseLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ScoringDatabaseLabel.Location = new System.Drawing.Point(15, 17);
+            resources.ApplyResources(this.ScoringDatabaseLabel, "ScoringDatabaseLabel");
             this.ScoringDatabaseLabel.Name = "ScoringDatabaseLabel";
-            this.ScoringDatabaseLabel.Size = new System.Drawing.Size(136, 16);
-            this.ScoringDatabaseLabel.TabIndex = 0;
-            this.ScoringDatabaseLabel.Text = "Scoring Database:";
             // 
             // PathToDBLabel
             // 
+            resources.ApplyResources(this.PathToDBLabel, "PathToDBLabel");
             this.PathToDBLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.PathToDBLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PathToDBLabel.Location = new System.Drawing.Point(16, 39);
             this.PathToDBLabel.Name = "PathToDBLabel";
-            this.PathToDBLabel.Size = new System.Drawing.Size(477, 21);
-            this.PathToDBLabel.TabIndex = 0;
-            this.PathToDBLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // AddHandRecordFileButton
             // 
-            this.AddHandRecordFileButton.Location = new System.Drawing.Point(302, 90);
+            resources.ApplyResources(this.AddHandRecordFileButton, "AddHandRecordFileButton");
             this.AddHandRecordFileButton.Name = "AddHandRecordFileButton";
-            this.AddHandRecordFileButton.Size = new System.Drawing.Size(191, 23);
-            this.AddHandRecordFileButton.TabIndex = 2;
             this.AddHandRecordFileButton.TabStop = false;
-            this.AddHandRecordFileButton.Text = "Add hand record file...";
             this.AddHandRecordFileButton.UseVisualStyleBackColor = true;
-            this.AddHandRecordFileButton.Visible = false;
             this.AddHandRecordFileButton.Click += new System.EventHandler(this.AddHandRecordFileButton_Click);
             // 
             // HandRecordFileLabel
             // 
-            this.HandRecordFileLabel.AutoSize = true;
-            this.HandRecordFileLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HandRecordFileLabel.Location = new System.Drawing.Point(15, 93);
+            resources.ApplyResources(this.HandRecordFileLabel, "HandRecordFileLabel");
             this.HandRecordFileLabel.Name = "HandRecordFileLabel";
-            this.HandRecordFileLabel.Size = new System.Drawing.Size(133, 16);
-            this.HandRecordFileLabel.TabIndex = 0;
-            this.HandRecordFileLabel.Text = "Hand Record File:";
             // 
             // PathToHandRecordFileLabel
             // 
+            resources.ApplyResources(this.PathToHandRecordFileLabel, "PathToHandRecordFileLabel");
             this.PathToHandRecordFileLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.PathToHandRecordFileLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PathToHandRecordFileLabel.Location = new System.Drawing.Point(18, 114);
             this.PathToHandRecordFileLabel.Name = "PathToHandRecordFileLabel";
-            this.PathToHandRecordFileLabel.Size = new System.Drawing.Size(475, 21);
-            this.PathToHandRecordFileLabel.TabIndex = 0;
-            this.PathToHandRecordFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // AddDatabaseFileButton
             // 
-            this.AddDatabaseFileButton.Location = new System.Drawing.Point(302, 14);
+            resources.ApplyResources(this.AddDatabaseFileButton, "AddDatabaseFileButton");
             this.AddDatabaseFileButton.Name = "AddDatabaseFileButton";
-            this.AddDatabaseFileButton.Size = new System.Drawing.Size(191, 23);
-            this.AddDatabaseFileButton.TabIndex = 1;
             this.AddDatabaseFileButton.TabStop = false;
-            this.AddDatabaseFileButton.Text = "Add scoring database file...";
             this.AddDatabaseFileButton.UseVisualStyleBackColor = true;
-            this.AddDatabaseFileButton.Visible = false;
             this.AddDatabaseFileButton.Click += new System.EventHandler(this.AddDatabaseFileButton_Click);
             // 
             // DatabaseFileDialog
             // 
-            this.DatabaseFileDialog.Filter = "BWS Files (*.bws)|*.bws";
-            this.DatabaseFileDialog.Title = "Select Scoring Database";
+            resources.ApplyResources(this.DatabaseFileDialog, "DatabaseFileDialog");
             // 
             // SessionStatusLabel
             // 
-            this.SessionStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.SessionStatusLabel, "SessionStatusLabel");
             this.SessionStatusLabel.ForeColor = System.Drawing.Color.Red;
-            this.SessionStatusLabel.Location = new System.Drawing.Point(150, 194);
             this.SessionStatusLabel.Name = "SessionStatusLabel";
-            this.SessionStatusLabel.Size = new System.Drawing.Size(203, 23);
-            this.SessionStatusLabel.TabIndex = 0;
-            this.SessionStatusLabel.Text = "Session Not Started";
-            this.SessionStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // AnalysingLabel
             // 
-            this.AnalysingLabel.AutoSize = true;
-            this.AnalysingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.AnalysingLabel, "AnalysingLabel");
             this.AnalysingLabel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.AnalysingLabel.Location = new System.Drawing.Point(15, 151);
             this.AnalysingLabel.Name = "AnalysingLabel";
-            this.AnalysingLabel.Size = new System.Drawing.Size(119, 16);
-            this.AnalysingLabel.TabIndex = 0;
-            this.AnalysingLabel.Text = "Analysis Complete";
-            this.AnalysingLabel.Visible = false;
             // 
             // AnalysingProgressBar
             // 
+            resources.ApplyResources(this.AnalysingProgressBar, "AnalysingProgressBar");
             this.AnalysingProgressBar.ForeColor = System.Drawing.Color.Blue;
-            this.AnalysingProgressBar.Location = new System.Drawing.Point(141, 147);
             this.AnalysingProgressBar.Name = "AnalysingProgressBar";
-            this.AnalysingProgressBar.Size = new System.Drawing.Size(352, 23);
             this.AnalysingProgressBar.Step = 1;
-            this.AnalysingProgressBar.TabIndex = 0;
-            this.AnalysingProgressBar.Visible = false;
             // 
             // HandRecordFileDialog
             // 
-            this.HandRecordFileDialog.Filter = "PBN Files (*.pbn)|*.pbn";
-            this.HandRecordFileDialog.Title = "Select Hand Record File";
+            resources.ApplyResources(this.HandRecordFileDialog, "HandRecordFileDialog");
             // 
             // AnalysisCalculationBackgroundWorker
             // 
@@ -161,34 +121,24 @@
             // 
             // OptionsButton
             // 
-            this.OptionsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OptionsButton.Location = new System.Drawing.Point(12, 189);
+            resources.ApplyResources(this.OptionsButton, "OptionsButton");
             this.OptionsButton.Name = "OptionsButton";
-            this.OptionsButton.Size = new System.Drawing.Size(84, 34);
-            this.OptionsButton.TabIndex = 3;
             this.OptionsButton.TabStop = false;
-            this.OptionsButton.Text = "Options";
             this.OptionsButton.UseVisualStyleBackColor = true;
-            this.OptionsButton.Visible = false;
             this.OptionsButton.Click += new System.EventHandler(this.OptionsButton_Click);
             // 
             // ResultsViewerButton
             // 
-            this.ResultsViewerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ResultsViewerButton.Location = new System.Drawing.Point(387, 189);
+            resources.ApplyResources(this.ResultsViewerButton, "ResultsViewerButton");
             this.ResultsViewerButton.Name = "ResultsViewerButton";
-            this.ResultsViewerButton.Size = new System.Drawing.Size(106, 34);
-            this.ResultsViewerButton.TabIndex = 4;
             this.ResultsViewerButton.TabStop = false;
-            this.ResultsViewerButton.Text = "View Results";
             this.ResultsViewerButton.UseVisualStyleBackColor = true;
-            this.ResultsViewerButton.Visible = false;
             this.ResultsViewerButton.Click += new System.EventHandler(this.ResultsViewerButton_Click);
             // 
             // TabScoreForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(505, 234);
+            resources.ApplyResources(this, "$this");
             this.Controls.Add(this.ResultsViewerButton);
             this.Controls.Add(this.OptionsButton);
             this.Controls.Add(this.AnalysingProgressBar);
@@ -201,12 +151,8 @@
             this.Controls.Add(this.PathToDBLabel);
             this.Controls.Add(this.ScoringDatabaseLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(525, 277);
-            this.MinimumSize = new System.Drawing.Size(525, 277);
             this.Name = "TabScoreForm";
-            this.Text = "TabScoreStarter";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TabScoreForm_FormClosed);
             this.Load += new System.EventHandler(this.TabScoreForm_Load);
             this.ResumeLayout(false);

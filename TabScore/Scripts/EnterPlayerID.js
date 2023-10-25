@@ -36,7 +36,7 @@ function clearLastEntry() {
     document.getElementById('playerNumberBox').value = playerID;
 }
 
-$(document).on('click', '#OKButton:enabled', function () {
+$(document).on('touchstart click', '#OKButton:enabled', function () {
     if (playerID == stringUnknown) playerID = "0";
     if (!isSubmitted) {
         isSubmitted = true;

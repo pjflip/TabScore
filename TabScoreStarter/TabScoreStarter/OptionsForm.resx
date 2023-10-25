@@ -117,7 +117,1008 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.Name" xml:space="preserve">
+    <value>HandRecordReversePerspectiveCheckbox</value>
+  </data>
+  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.Parent" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.Name" xml:space="preserve">
+    <value>ShowPercentageCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.Parent" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.Name" xml:space="preserve">
+    <value>ShowHandRecordCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.Parent" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.Name" xml:space="preserve">
+    <value>ShowTravellerCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.Parent" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="TravellerGroup.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt, style=Bold</value>
+  </data>
+  <data name="TravellerGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 74</value>
+  </data>
+  <data name="TravellerGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>290, 122</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="TravellerGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="TravellerGroup.Text" xml:space="preserve">
+    <value>Traveller and Hand Record</value>
+  </data>
+  <data name="&gt;&gt;TravellerGroup.Name" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;TravellerGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TravellerGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;TravellerGroup.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="HandRecordReversePerspectiveCheckbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="HandRecordReversePerspectiveCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="HandRecordReversePerspectiveCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 96</value>
+  </data>
+  <data name="HandRecordReversePerspectiveCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>213, 19</value>
+  </data>
+  <data name="HandRecordReversePerspectiveCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>23</value>
+  </data>
+  <data name="HandRecordReversePerspectiveCheckbox.Text" xml:space="preserve">
+    <value>Hand Record Reverse Perspective</value>
+  </data>
+  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.Name" xml:space="preserve">
+    <value>HandRecordReversePerspectiveCheckbox</value>
+  </data>
+  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.Parent" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ShowPercentageCheckbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ShowPercentageCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="ShowPercentageCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 46</value>
+  </data>
+  <data name="ShowPercentageCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>190, 19</value>
+  </data>
+  <data name="ShowPercentageCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>21</value>
+  </data>
+  <data name="ShowPercentageCheckbox.Text" xml:space="preserve">
+    <value>Show Percentage on Traveller</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.Name" xml:space="preserve">
+    <value>ShowPercentageCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.Parent" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="ShowHandRecordCheckbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ShowHandRecordCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="ShowHandRecordCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 71</value>
+  </data>
+  <data name="ShowHandRecordCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>133, 19</value>
+  </data>
+  <data name="ShowHandRecordCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>22</value>
+  </data>
+  <data name="ShowHandRecordCheckbox.Text" xml:space="preserve">
+    <value>Show Hand Record</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.Name" xml:space="preserve">
+    <value>ShowHandRecordCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.Parent" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="ShowTravellerCheckbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ShowTravellerCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="ShowTravellerCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 21</value>
+  </data>
+  <data name="ShowTravellerCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>107, 19</value>
+  </data>
+  <data name="ShowTravellerCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="ShowTravellerCheckbox.Text" xml:space="preserve">
+    <value>Show Traveller</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.Name" xml:space="preserve">
+    <value>ShowTravellerCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.Parent" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.Name" xml:space="preserve">
+    <value>NameSourceCombobox</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.Parent" xml:space="preserve">
+    <value>PlayersGroup</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.Name" xml:space="preserve">
+    <value>NumberEntryEachRoundCheckbox</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.Parent" xml:space="preserve">
+    <value>PlayersGroup</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="PlayersGroup.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt, style=Bold</value>
+  </data>
+  <data name="PlayersGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>318, 12</value>
+  </data>
+  <data name="PlayersGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>375, 78</value>
+  </data>
+  <data name="PlayersGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="PlayersGroup.Text" xml:space="preserve">
+    <value>Player Names/IDs</value>
+  </data>
+  <data name="&gt;&gt;PlayersGroup.Name" xml:space="preserve">
+    <value>PlayersGroup</value>
+  </data>
+  <data name="&gt;&gt;PlayersGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;PlayersGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;PlayersGroup.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="NameSourceCombobox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="NameSourceCombobox.Items" xml:space="preserve">
+    <value>Internal database</value>
+  </data>
+  <data name="NameSourceCombobox.Items1" xml:space="preserve">
+    <value>External database</value>
+  </data>
+  <data name="NameSourceCombobox.Items2" xml:space="preserve">
+    <value>No name source</value>
+  </data>
+  <data name="NameSourceCombobox.Items3" xml:space="preserve">
+    <value>Internal database first, then external</value>
+  </data>
+  <data name="NameSourceCombobox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 20</value>
+  </data>
+  <data name="NameSourceCombobox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>363, 23</value>
+  </data>
+  <data name="NameSourceCombobox.TabIndex" type="System.Int32, mscorlib">
+    <value>50</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.Name" xml:space="preserve">
+    <value>NameSourceCombobox</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.Parent" xml:space="preserve">
+    <value>PlayersGroup</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 50</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>176, 19</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>51</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.Text" xml:space="preserve">
+    <value>Player ID Entry Each Round</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.Name" xml:space="preserve">
+    <value>NumberEntryEachRoundCheckbox</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.Parent" xml:space="preserve">
+    <value>PlayersGroup</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.Name" xml:space="preserve">
+    <value>ShowRankingCombobox</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.Parent" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="RankingListGroup.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt, style=Bold</value>
+  </data>
+  <data name="RankingListGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 281</value>
+  </data>
+  <data name="RankingListGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>290, 56</value>
+  </data>
+  <data name="RankingListGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="RankingListGroup.Text" xml:space="preserve">
+    <value>Ranking List</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.Name" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="ShowRankingCombobox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="ShowRankingCombobox.Items" xml:space="preserve">
+    <value>Don't show</value>
+  </data>
+  <data name="ShowRankingCombobox.Items1" xml:space="preserve">
+    <value>Show after each round</value>
+  </data>
+  <data name="ShowRankingCombobox.Items2" xml:space="preserve">
+    <value>Show at end of session</value>
+  </data>
+  <data name="ShowRankingCombobox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 21</value>
+  </data>
+  <data name="ShowRankingCombobox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>277, 23</value>
+  </data>
+  <data name="ShowRankingCombobox.TabIndex" type="System.Int32, mscorlib">
+    <value>40</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.Name" xml:space="preserve">
+    <value>ShowRankingCombobox</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.Parent" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.Name" xml:space="preserve">
+    <value>ValidateLeadCardCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.Parent" xml:space="preserve">
+    <value>LeadCardGroup</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.Name" xml:space="preserve">
+    <value>EnterLeadCardCheckbox</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.Parent" xml:space="preserve">
+    <value>LeadCardGroup</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="LeadCardGroup.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt, style=Bold</value>
+  </data>
+  <data name="LeadCardGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 202</value>
+  </data>
+  <data name="LeadCardGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>290, 73</value>
+  </data>
+  <data name="LeadCardGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="LeadCardGroup.Text" xml:space="preserve">
+    <value>Lead Card</value>
+  </data>
+  <data name="&gt;&gt;LeadCardGroup.Name" xml:space="preserve">
+    <value>LeadCardGroup</value>
+  </data>
+  <data name="&gt;&gt;LeadCardGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LeadCardGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;LeadCardGroup.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="ValidateLeadCardCheckbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ValidateLeadCardCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="ValidateLeadCardCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 46</value>
+  </data>
+  <data name="ValidateLeadCardCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>130, 19</value>
+  </data>
+  <data name="ValidateLeadCardCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>31</value>
+  </data>
+  <data name="ValidateLeadCardCheckbox.Text" xml:space="preserve">
+    <value>Validate Lead Card</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.Name" xml:space="preserve">
+    <value>ValidateLeadCardCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.Parent" xml:space="preserve">
+    <value>LeadCardGroup</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="EnterLeadCardCheckbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="EnterLeadCardCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="EnterLeadCardCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 21</value>
+  </data>
+  <data name="EnterLeadCardCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>115, 19</value>
+  </data>
+  <data name="EnterLeadCardCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>30</value>
+  </data>
+  <data name="EnterLeadCardCheckbox.Text" xml:space="preserve">
+    <value>Enter Lead Card</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.Name" xml:space="preserve">
+    <value>EnterLeadCardCheckbox</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.Parent" xml:space="preserve">
+    <value>LeadCardGroup</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="CanxButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="CanxButton.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt, style=Bold</value>
+  </data>
+  <data name="CanxButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>573, 314</value>
+  </data>
+  <data name="CanxButton.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>120, 23</value>
+  </data>
+  <data name="CanxButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 26</value>
+  </data>
+  <data name="CanxButton.TabIndex" type="System.Int32, mscorlib">
+    <value>81</value>
+  </data>
+  <data name="CanxButton.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="&gt;&gt;CanxButton.Name" xml:space="preserve">
+    <value>CanxButton</value>
+  </data>
+  <data name="&gt;&gt;CanxButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;CanxButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;CanxButton.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="SaveButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="SaveButton.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt, style=Bold</value>
+  </data>
+  <data name="SaveButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>318, 314</value>
+  </data>
+  <data name="SaveButton.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>162, 23</value>
+  </data>
+  <data name="SaveButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>162, 26</value>
+  </data>
+  <data name="SaveButton.TabIndex" type="System.Int32, mscorlib">
+    <value>80</value>
+  </data>
+  <data name="SaveButton.Text" xml:space="preserve">
+    <value>Save and Close</value>
+  </data>
+  <data name="&gt;&gt;SaveButton.Name" xml:space="preserve">
+    <value>SaveButton</value>
+  </data>
+  <data name="&gt;&gt;SaveButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SaveButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;SaveButton.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.Name" xml:space="preserve">
+    <value>EnterResultsMethodCombobox</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.Parent" xml:space="preserve">
+    <value>EnterResultsMethodGroup</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="EnterResultsMethodGroup.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt, style=Bold</value>
+  </data>
+  <data name="EnterResultsMethodGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
+  </data>
+  <data name="EnterResultsMethodGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>290, 56</value>
+  </data>
+  <data name="EnterResultsMethodGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="EnterResultsMethodGroup.Text" xml:space="preserve">
+    <value>Enter Results Method</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.Name" xml:space="preserve">
+    <value>EnterResultsMethodGroup</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="EnterResultsMethodCombobox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="EnterResultsMethodCombobox.Items" xml:space="preserve">
+    <value>Tricks plus or minus</value>
+  </data>
+  <data name="EnterResultsMethodCombobox.Items1" xml:space="preserve">
+    <value>Total tricks won</value>
+  </data>
+  <data name="EnterResultsMethodCombobox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 22</value>
+  </data>
+  <data name="EnterResultsMethodCombobox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>277, 23</value>
+  </data>
+  <data name="EnterResultsMethodCombobox.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.Name" xml:space="preserve">
+    <value>EnterResultsMethodCombobox</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.Parent" xml:space="preserve">
+    <value>EnterResultsMethodGroup</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.Name" xml:space="preserve">
+    <value>TabletModePersonalRadioButton</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.Parent" xml:space="preserve">
+    <value>TabletMovesGroupBox</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.Name" xml:space="preserve">
+    <value>TabletModeTraditionalRadioButton</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.Parent" xml:space="preserve">
+    <value>TabletMovesGroupBox</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="TabletMovesGroupBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt, style=Bold</value>
+  </data>
+  <data name="TabletMovesGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>318, 96</value>
+  </data>
+  <data name="TabletMovesGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>375, 72</value>
+  </data>
+  <data name="TabletMovesGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="TabletMovesGroupBox.Text" xml:space="preserve">
+    <value>Table-top Device Mode</value>
+  </data>
+  <data name="&gt;&gt;TabletMovesGroupBox.Name" xml:space="preserve">
+    <value>TabletMovesGroupBox</value>
+  </data>
+  <data name="&gt;&gt;TabletMovesGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TabletMovesGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;TabletMovesGroupBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="TabletModePersonalRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="TabletModePersonalRadioButton.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="TabletModePersonalRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 45</value>
+  </data>
+  <data name="TabletModePersonalRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>220, 19</value>
+  </data>
+  <data name="TabletModePersonalRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>61</value>
+  </data>
+  <data name="TabletModePersonalRadioButton.Text" xml:space="preserve">
+    <value>Personal - tablets move with players</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.Name" xml:space="preserve">
+    <value>TabletModePersonalRadioButton</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.Parent" xml:space="preserve">
+    <value>TabletMovesGroupBox</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 21</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>184, 19</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>60</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.Text" xml:space="preserve">
+    <value>Traditional - 1 tablet per table</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.Name" xml:space="preserve">
+    <value>TabletModeTraditionalRadioButton</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.Parent" xml:space="preserve">
+    <value>TabletMovesGroupBox</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.Name" xml:space="preserve">
+    <value>AdditionalMinutesPerRoundLabel</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.Name" xml:space="preserve">
+    <value>AdditionalMinutesPerRoundNud</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.Name" xml:space="preserve">
+    <value>MinutesPerBoardLabel</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.Name" xml:space="preserve">
+    <value>MinutesPerBoardNud</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.Name" xml:space="preserve">
+    <value>ShowTimerCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="RoundTimerGroupBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt, style=Bold</value>
+  </data>
+  <data name="RoundTimerGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>318, 174</value>
+  </data>
+  <data name="RoundTimerGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>375, 104</value>
+  </data>
+  <data name="RoundTimerGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="RoundTimerGroupBox.Text" xml:space="preserve">
+    <value>Round Timer</value>
+  </data>
+  <data name="&gt;&gt;RoundTimerGroupBox.Name" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;RoundTimerGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;RoundTimerGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;RoundTimerGroupBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 74</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>170, 15</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.Text" xml:space="preserve">
+    <value>Additional Minutes Per Round</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.Name" xml:space="preserve">
+    <value>AdditionalMinutesPerRoundLabel</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundNud.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundNud.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundNud.Location" type="System.Drawing.Point, System.Drawing">
+    <value>300, 73</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundNud.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 22</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundNud.TabIndex" type="System.Int32, mscorlib">
+    <value>72</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AdditionalMinutesPerRoundNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.Name" xml:space="preserve">
+    <value>AdditionalMinutesPerRoundNud</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="MinutesPerBoardLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 47</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 15</value>
+  </data>
+  <data name="MinutesPerBoardLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Text" xml:space="preserve">
+    <value>Minutes Per Board</value>
+  </data>
+  <data name="MinutesPerBoardLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.Name" xml:space="preserve">
+    <value>MinutesPerBoardLabel</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="MinutesPerBoardNud.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="MinutesPerBoardNud.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt</value>
+  </data>
+  <data name="MinutesPerBoardNud.Location" type="System.Drawing.Point, System.Drawing">
+    <value>300, 45</value>
+  </data>
+  <data name="MinutesPerBoardNud.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 22</value>
+  </data>
+  <data name="MinutesPerBoardNud.TabIndex" type="System.Int32, mscorlib">
+    <value>71</value>
+  </data>
+  <data name="MinutesPerBoardNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.Name" xml:space="preserve">
+    <value>MinutesPerBoardNud</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="ShowTimerCheckbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="ShowTimerCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="ShowTimerCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 21</value>
+  </data>
+  <data name="ShowTimerCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>132, 19</value>
+  </data>
+  <data name="ShowTimerCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>70</value>
+  </data>
+  <data name="ShowTimerCheckbox.Text" xml:space="preserve">
+    <value>Show Round Timer</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.Name" xml:space="preserve">
+    <value>ShowTimerCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>709, 350</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAYAAAAAAAEAIAClUQAAZgAAAICAAAABACAAKAgBAAtSAAAwMAAAAQAgAKglAAAzWgEAICAAAAEA
@@ -1890,5 +2891,23 @@
         AAAAAAAAAAAAAAAAAAAA8A+sQcADrEGAAaxBgAGsQQAArEEAAKxBAACsQQAArEEAAKxBAACsQQAArEEA
         AKxBgAGsQYABrEHAA6xB8A+sQQ==
 </value>
+  </data>
+  <data name="$this.MaximumSize" type="System.Drawing.Size, System.Drawing">
+    <value>725, 389</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>725, 389</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>Manual</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>TabScore Options</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>OptionsForm</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

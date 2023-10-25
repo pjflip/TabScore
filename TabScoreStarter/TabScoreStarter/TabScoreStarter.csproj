@@ -112,6 +112,11 @@
     <Compile Include="Result.cs" />
     <Compile Include="ResultsList.cs" />
     <Compile Include="Section.cs" />
+    <Compile Include="Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
     <Compile Include="TabScoreForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,11 +131,45 @@
     <Compile Include="ViewResultsForm.Designer.cs">
       <DependentUpon>ViewResultsForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="EditResultForm.de.resx">
+      <DependentUpon>EditResultForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditResultForm.en.resx">
+      <DependentUpon>EditResultForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditResultForm.es.resx">
+      <DependentUpon>EditResultForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EditResultForm.resx">
       <DependentUpon>EditResultForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.de.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.en.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.es.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OptionsForm.resx">
       <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Strings.de.resx" />
+    <EmbeddedResource Include="Strings.en.resx" />
+    <EmbeddedResource Include="Strings.es.resx" />
+    <EmbeddedResource Include="Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabScoreForm.de.resx">
+      <DependentUpon>TabScoreForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabScoreForm.en.resx">
+      <DependentUpon>TabScoreForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabScoreForm.es.resx">
+      <DependentUpon>TabScoreForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TabScoreForm.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -143,6 +182,15 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ViewResultsForm.de.resx">
+      <DependentUpon>ViewResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewResultsForm.en.resx">
+      <DependentUpon>ViewResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewResultsForm.es.resx">
+      <DependentUpon>ViewResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ViewResultsForm.resx">
       <DependentUpon>ViewResultsForm.cs</DependentUpon>
     </EmbeddedResource>
