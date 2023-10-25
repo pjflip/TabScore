@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.PlayerEntryList
@@ -57,7 +57,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     if (playerEntry.Direction == TabScore.Models.Direction.North)
     {
         <div class="row mt-3">
-            <div class="col-12 text-center">
+            <div class="col-12 text-center p-0">
                 <h3 style="color:blue">
                     @Strings.North/@Strings.South: @playerEntry.Number
                 </h3>
@@ -67,7 +67,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     else if (playerEntry.Direction == TabScore.Models.Direction.East)
     {
         <div class="row mt-3">
-            <div class="col-12 text-center">
+            <div class="col-12 text-center p-0">
                 <h3 style="color:blue">
                     @Strings.East/@Strings.West: @playerEntry.Number
                 </h3>
@@ -76,26 +76,26 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     }
 
     <div class="row">
-        <div class="col-2 text-right pr-3 align-self-center">
+        <div class="col-3 text-right px-0 align-self-center">
             <h4>
-                @playerEntry.Direction:
+                @playerEntry.DisplayDirection:
             </h4>
         </div>
-        <div class="col-3">
+        <div class="col-3 px-1">
             @if (playerEntry.Name == "")
             {
-                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="EnterPlayerID('@playerEntry.Direction')">
+                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" onclick="EnterPlayerID('@playerEntry.Direction')">
                     @Strings.Enter
                 </button>
             }
             else
             {
-                <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="EnterPlayerID('@playerEntry.Direction')">
+                <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" onclick="EnterPlayerID('@playerEntry.Direction')">
                     @Strings.Edit
                 </button>
             }
         </div>
-        <div class="col-7 align-self-center">
+        <div class="col-6 px-0 align-self-center">
             <h4>
                 @playerEntry.Name
             </h4>
@@ -128,7 +128,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart', '#OKButton:enabled', function () {
+    $(document).on('click', '#OKButton:enabled', function () {
         if (@Model.NumberOfBlankEntries > 0) {
             $("#notAllNamesModal").modal("show");
         }

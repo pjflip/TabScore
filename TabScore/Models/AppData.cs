@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Resources;
@@ -23,8 +23,8 @@ namespace TabScore.Models
 
         private class PlayerRecord
         {
+            public string ID; 
             public string Name;
-            public int Number;
         }
         private static readonly List<PlayerRecord> PlayerNamesTable = new List<PlayerRecord>();
         private static readonly string PathToTabScoreDBtxt = Environment.ExpandEnvironmentVariables(@"%Public%\TabScore\TabScoreDB.txt");
@@ -121,7 +121,8 @@ namespace TabScore.Models
                     }
 
                     // Retrieve global PlayerNames table
-                    SQLString = $"SELECT Name, ID FROM PlayerNames";
+                    // Cater for possibility that one or both of ID and strID could be null/blank.  Prefer strID
+                    SQLString = $"SELECT ID, Name, strID FROM PlayerNames";
                     cmd = new OdbcCommand(SQLString, connection);
                     try
                     {
@@ -130,10 +131,24 @@ namespace TabScore.Models
                             reader = cmd.ExecuteReader();
                             while (reader.Read())
                             {
+                                object readerID = null;
+                                if(!reader.IsDBNull(0))
+                                {
+                                    readerID = reader.GetValue(0);
+                                }
+                                object readerStrID = null;
+                                if (!reader.IsDBNull(2))
+                                {
+                                    readerStrID = reader.GetValue(2);
+                                }
+                                string tempID = "";
+                                if (readerStrID != null) tempID = Convert.ToString(readerStrID);
+                                if (tempID == "" && readerID != null) tempID = Convert.ToString(Convert.ToInt32(readerID));
+
                                 PlayerRecord playerRecord = new PlayerRecord
                                 {
-                                    Name = reader.GetString(0),
-                                    Number = reader.GetInt32(1)
+                                    ID = tempID,
+                                    Name = reader.GetString(1),
                                 };
                                 PlayerNamesTable.Add(playerRecord);
                             };
@@ -161,16 +176,16 @@ namespace TabScore.Models
             return "";  // Successful refresh
         }
 
-        public static string GetNameFromPlayerNamesTable(int playerNumber)
+        public static string GetNameFromPlayerNamesTable(string playerID)
         {
             if (PlayerNamesTable.Count == 0)
             {
-                return "#" + playerNumber;
+                return "#" + playerID;
             }
-            PlayerRecord player = PlayerNamesTable.Find(x => (x.Number == playerNumber));
+            PlayerRecord player = PlayerNamesTable.Find(x => (x.ID == playerID));
             if (player == null)
             {
-                return Strings.Unknown + " #" + playerNumber;
+                return Strings.Unknown + " #" + playerID;
             }
             else
             {

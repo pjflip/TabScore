@@ -4,7 +4,7 @@
     if ("getBattery" in navigator) {
         navigator.getBattery().then(function (battery) {
             $("#battery").css("display", "block");
-            $("#header").attr("class", "col-10 my-auto pr-0");
+            $("#header").attr("class", "col-10 my-auto px-2");
             var batteryLevel = battery.level * 100;
             if (batteryLevel > 87.5) {
                 $("#bl").attr("class", "fa fa-battery-full");
@@ -40,7 +40,7 @@ function startTimer(timeSeconds) {
 function setTimerValue(timeSeconds) {
     if (timeSeconds <= 0) {
         $("#timerValue").text(" 00:00");
-        $("#timerButton").attr("class", "btn btn-danger my-2");
+        $("#timerButton").attr("class", "btn btn-danger my-2 px-2");
     }
     else {
         minutes = parseInt(timeSeconds / 60, 10);
@@ -49,7 +49,7 @@ function setTimerValue(timeSeconds) {
         seconds = seconds < 10 ? "0" + seconds : seconds;
         $("#timerValue").text(" " + minutes + ":" + seconds);
         if (timeSeconds <= 60) {
-            $("#timerButton").attr("class", "btn btn-warning my-2");
+            $("#timerButton").attr("class", "btn btn-warning my-2 px-2");
         }
     }
 }

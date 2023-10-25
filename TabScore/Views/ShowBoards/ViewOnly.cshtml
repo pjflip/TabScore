@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.BoardsList
@@ -45,19 +45,15 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 </div>
 
 <div class="row mt-5">
-    <div class="col-1">
-    </div>
-    <div class="col-10 text-center">
+    <div class="col-12 text-center p-0">
         <h5>
             @Strings.NotScoring
         </h5>
     </div>
-    <div class="col-1">
-    </div>
 </div>
 
 <div class="row mt-3 mb-3">
-    <div class="col-12 text-center">
+    <div class="col-12 text-center p-0">
         <h3>
             @Strings.Boards
         </h3>
@@ -67,20 +63,20 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 @foreach (var Result in Model)
 {
     <div class="row">
-        <div class="col-2 text-right pr-3 align-self-center">
+        <div class="col-1 text-right px-0 align-self-center">
             <h4>
                 @Result.BoardNumber:
             </h4>
         </div>
-        <div class="col-5 px-0">
+        <div class="col-6 px-3">
             @if (Result.Remarks != "Not played")
             {
-                <button class="btn btn-secondary btn-lg m-1 px-1" style="min-width: 5rem" ontouchstart="View(@Result.BoardNumber)">
+                <button class="btn btn-secondary btn-lg m-1 px-1" style="min-width: 5rem" onclick="View(@Result.BoardNumber)">
                     @Strings.View
                 </button>
             }
         </div>
-        <div class="col-5 align-self-center">
+        <div class="col-5 px-0 align-self-center">
             <h4>
                 @Html.Raw(Result.ContractDisplay)
             </h4>
@@ -104,7 +100,7 @@ else if (Model.Message == "NOTALLRESULTS")
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart', '#OKButton:enabled', function () {
+    $(document).on('click', '#OKButton:enabled', function () {
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("OKButtonClick", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';

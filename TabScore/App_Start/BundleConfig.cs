@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Optimization;
@@ -15,7 +15,7 @@ namespace TabScore
             bundles.Add(new ScriptBundle("~/bundles/enterContractJS").Include("~/Scripts/EnterContract.js"));
             bundles.Add(new ScriptBundle("~/bundles/enterLeadJS").Include("~/Scripts/EnterLead.js"));
             bundles.Add(new ScriptBundle("~/bundles/enterPlayerIdJS").Include("~/Scripts/EnterPlayerID.js"));
-            bundles.Add(new ScriptBundle("~/bundles/individualRankingListJS").Include("~/Scripts/MainLayout.js"));
+            bundles.Add(new ScriptBundle("~/bundles/individualRankingListJS").Include("~/Scripts/IndividualRankingList.js"));
             bundles.Add(new ScriptBundle("~/bundles/mainLayoutJS").Include("~/Scripts/MainLayout.js"));
             bundles.Add(new ScriptBundle("~/bundles/oneWinnerRankingListJS").Include("~/Scripts/OneWinnerRankingList.js"));
             bundles.Add(new ScriptBundle("~/bundles/showHandRecordJS").Include("~/Scripts/ShowHandRecord.js"));

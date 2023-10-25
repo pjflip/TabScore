@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2022 by Peter Flippant
+﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -16,16 +16,11 @@ namespace TabScore.Controllers
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
             ViewData["Title"] = $"{Strings.EnterPlayerIDs} - {tabletDeviceStatus.Location}";
             ViewData["Header"] = $"{tabletDeviceStatus.Location}";
-            EnterPlayerID enterPlayerID = new EnterPlayerID()
-            {
-                TabletDeviceNumber = tabletDeviceNumber,
-                Direction = direction,
-                DisplayDirection = Enum.GetName(typeof(Direction), direction)
-            };
+            EnterPlayerID enterPlayerID = new EnterPlayerID(tabletDeviceNumber, direction);
             return View(enterPlayerID);
         }
 
-        public ActionResult OKButtonClick(int tabletDeviceNumber, Direction direction, int playerID)
+        public ActionResult OKButtonClick(int tabletDeviceNumber, Direction direction, string playerID)
         {
             // Update Round with new player
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];

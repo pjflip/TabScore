@@ -44,7 +44,7 @@ function pollRankingListener() {
     }, 10000);
 }
 
-$(document).on('touchstart', '#OKButton:enabled', function () {
+$(document).on('click', '#OKButton:enabled', function () {
     if (!isSubmitted) {
         isSubmitted = true;
         if (finalRankingList) {
@@ -56,7 +56,7 @@ $(document).on('touchstart', '#OKButton:enabled', function () {
     }
 });
 
-$(document).on('touchstart', '#BackButton:enabled', function () {
+$(document).on('click', '#BackButton:enabled', function () {
     if (!isSubmitted) {
         isSubmitted = true;
         location.href = urlShowBoards;
