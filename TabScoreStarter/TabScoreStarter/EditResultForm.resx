@@ -285,10 +285,6 @@
   <data name="&gt;&gt;labelEast.ZOrder" xml:space="preserve">
     <value>22</value>
   </data>
-  <data name="comboBoxContractLevel.Items" xml:space="preserve">
-    <value />
-    <comment>@Invariant</comment>
-  </data>
   <data name="comboBoxContractLevel.Items1" xml:space="preserve">
     <value>PASS</value>
   </data>
