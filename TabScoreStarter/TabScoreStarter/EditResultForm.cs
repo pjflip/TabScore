@@ -19,6 +19,7 @@ namespace TabScoreStarter
         private readonly string[] leadDisplay = new string[53];
         private readonly string[] remarksDatabase = { "", "Not played", "40%-40%", "50%-40%", "60%-40%", "40%-50%", "50%-50%", "60%-50%", "40%-60%", "50%-60%", "60%-60%", "Arbitral score", "Wrong direction"};
         private readonly string[] remarksDisplay = new string[13];
+        private readonly string[] contractLevelDisplay = { "", "PASS", "1", "2", "3", "4", "5", "6", "7" };
 
         public EditResultForm(Result result, string connectionString, Point location)
         {
@@ -64,6 +65,8 @@ namespace TabScoreStarter
                 remarksDisplay[i] = resourceManager.GetString(remarksDatabase[i]);
             }
             comboBoxRemarks.Items.AddRange(remarksDisplay);
+            contractLevelDisplay[1] = resourceManager.GetString("PASS");
+            comboBoxContractLevel.Items.AddRange(contractLevelDisplay); 
 
             if (result.ContractLevel <= 0)
             {

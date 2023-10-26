@@ -92,16 +92,6 @@
             // comboBoxContractLevel
             // 
             this.comboBoxContractLevel.FormattingEnabled = true;
-            this.comboBoxContractLevel.Items.AddRange(new object[] {
-            resources.GetString("comboBoxContractLevel.Items"),
-            resources.GetString("comboBoxContractLevel.Items1"),
-            resources.GetString("comboBoxContractLevel.Items2"),
-            resources.GetString("comboBoxContractLevel.Items3"),
-            resources.GetString("comboBoxContractLevel.Items4"),
-            resources.GetString("comboBoxContractLevel.Items5"),
-            resources.GetString("comboBoxContractLevel.Items6"),
-            resources.GetString("comboBoxContractLevel.Items7"),
-            resources.GetString("comboBoxContractLevel.Items8")});
             resources.ApplyResources(this.comboBoxContractLevel, "comboBoxContractLevel");
             this.comboBoxContractLevel.Name = "comboBoxContractLevel";
             this.comboBoxContractLevel.SelectedIndexChanged += new System.EventHandler(this.ComboBoxContractLevel_SelectedIndexChanged);

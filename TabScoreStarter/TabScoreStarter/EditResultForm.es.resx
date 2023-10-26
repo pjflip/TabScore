@@ -141,9 +141,6 @@
   <data name="labelNorth.Text" xml:space="preserve">
     <value>Norte</value>
   </data>
-  <data name="comboBoxContractLevel.Items1" xml:space="preserve">
-    <value>PASO</value>
-  </data>
   <data name="labelRemarks.Text" xml:space="preserve">
     <value>Observaciones (No jugado, Puntuación arbitral, Dirección incorrecta)</value>
   </data>
