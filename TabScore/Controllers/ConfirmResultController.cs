@@ -13,6 +13,10 @@ namespace TabScore.Controllers
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+            if (tableStatus.ResultData == null)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
+            {
+                return RedirectToAction("Index", "ShowBoards", new { tabletDeviceNumber });
+            }
             ResultInfo resultInfo = new ResultInfo(tabletDeviceNumber, tableStatus);
 
             if (Settings.ShowTimer) ViewData["TimerSeconds"] = Utilities.SetTimerSeconds(tabletDeviceStatus);

@@ -18,9 +18,12 @@ namespace TabScore.Controllers
 
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
-            if (fromView)
+            if (tableStatus.ResultData == null)  // Either from ShowBoards/View or browser 'Back' button, so retrieve result
             {
                 tableStatus.ResultData = new Result(tableStatus, boardNumber);
+            }
+            if (fromView)
+            {
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             }
             else

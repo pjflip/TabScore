@@ -1,7 +1,6 @@
 ﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using System;
 using System.Web.Mvc;
 using TabScore.Models;
 using Resources;
@@ -19,6 +18,10 @@ namespace TabScore.Controllers
 
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
+            if (tableStatus.ResultData == null)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
+            {
+                return RedirectToAction("Index", "ShowBoards", new { tabletDeviceNumber });
+            }
             if (tableStatus.ResultData.LeadCard == "")  // Lead not set, so use leadValidation value as passed to controller
             {
                 tableStatus.ResultData.LeadValidation = leadValidation;
