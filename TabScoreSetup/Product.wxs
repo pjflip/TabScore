@@ -25,8 +25,11 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="TabScoreInstallFolder" Name="TabScore">
-          <Directory Id="WebAppInstallFolder" Name="WebApp" />
-        </Directory>
+		  <Directory Id="WebAppInstallFolder" Name="WebApp" />
+		  <Directory Id="TabScoreStarterEnglishInstallFolder" Name="en" />
+		  <Directory Id="TabScoreStarterSpanishInstallFolder" Name="es" />
+		  <Directory Id="TabScoreStarterGermanInstallFolder" Name="de" />
+		</Directory>
       </Directory>
       <Directory Id="UsersPublicFolder">
         <Directory Id="TabScoreDBtxtInstallFolder" Name="TabScore" />
@@ -35,28 +38,42 @@
 
     <Feature Id="TabScoreFeature" Title="TabScore" Level="1">
       <ComponentGroupRef Id="TabScoreStarterComponents" />
-      <ComponentGroupRef Id="WebAppComponents" />
-      <!-- Link to WebApp.wxs file -->
+      <ComponentRef Id="TabScoreStarterEnglish.dllComponent"/>
+	  <ComponentRef Id="TabScoreStarterSpanish.dllComponent"/>
+	  <ComponentRef Id="TabScoreStarterGerman.dllComponent"/>
+	  <ComponentGroupRef Id="WebAppComponents" />      <!-- Link to WebApp.wxs file -->
       <ComponentRef Id="TabScoreDB.txtComponent"/>
       <ComponentRef Id="IISConfigurationComponent" />
     </Feature>
 
-    <ComponentGroup Id="TabScoreStarterComponents" Directory="TabScoreInstallFolder">
-      <Component Id="TabScoreStarter.exe" Guid="{6F4E6488-65FA-4FCB-A9FC-4BC2C6FE2645}">
-        <File Id="TabScoreStarter.exe" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.exe" KeyPath="yes" Checksum="yes"/>
-      </Component>
-      <Component Id="dds.dll" Guid="{4496934B-7E7F-4E23-BDB3-673BBF565960}">
-        <File Id="dds.dll" Source="$(var.TabScoreStarterSourceDir)\dds.dll" KeyPath="yes"/>
-      </Component>
-      <Component Id="TabScoreStarter.exe.config" Guid="{BFEA859C-4FBC-4B02-8425-92918A8BA5CB}">
-        <File Id="TabScoreStarter.exe.config" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.exe.config" KeyPath="yes"/>
-      </Component>
-      <Component Id="TabScoreStarter.pdb" Guid="{8EA97C3C-B0BE-4C86-B1A9-FA0F83015696}">
-        <File Id="TabScoreStarter.pdb" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.pdb" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
+	<ComponentGroup Id="TabScoreStarterComponents" Directory="TabScoreInstallFolder">
+	  <Component Id="TabScoreStarter.exe" Guid="{6F4E6488-65FA-4FCB-A9FC-4BC2C6FE2645}">
+	    <File Id="TabScoreStarter.exe" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.exe" KeyPath="yes" Checksum="yes"/>
+	  </Component>
+	  <Component Id="dds.dll" Guid="{4496934B-7E7F-4E23-BDB3-673BBF565960}">
+		<File Id="dds.dll" Source="$(var.TabScoreStarterSourceDir)\dds.dll" KeyPath="yes"/>
+	  </Component>
+	  <Component Id="TabScoreStarter.exe.config" Guid="{BFEA859C-4FBC-4B02-8425-92918A8BA5CB}">
+		<File Id="TabScoreStarter.exe.config" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.exe.config" KeyPath="yes"/>
+	  </Component>
+	  <Component Id="TabScoreStarter.pdb" Guid="{8EA97C3C-B0BE-4C86-B1A9-FA0F83015696}">
+	    <File Id="TabScoreStarter.pdb" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.pdb" KeyPath="yes"/>
+	  </Component>
+	</ComponentGroup>
 
-    <Component Id="TabScoreDB.txtComponent" Directory="TabScoreDBtxtInstallFolder" Guid="{85D79EC4-6F75-4651-87B3-C3065D33A2DC}">
+	<Component Id="TabScoreStarterEnglish.dllComponent" Directory="TabScoreStarterEnglishInstallFolder" Guid="{4645ADFF-1E03-480B-9A4F-AED322A043F9}">
+	  <File Id="TabScoreStarterEnglish.dll" Source="$(var.TabScoreStarterSourceDir)\en\TabScoreStarter.resources.dll" KeyPath="yes"/>
+	</Component>
+
+	<Component Id="TabScoreStarterSpanish.dllComponent" Directory="TabScoreStarterSpanishInstallFolder" Guid="{9BC9AD0E-B5D2-4CE5-9F04-9CB26DE2A9AE}">
+	  <File Id="TabScoreStarterSpanish.dll" Source="$(var.TabScoreStarterSourceDir)\es\TabScoreStarter.resources.dll" KeyPath="yes"/>
+	</Component>
+
+	<Component Id="TabScoreStarterGerman.dllComponent" Directory="TabScoreStarterGermanInstallFolder" Guid="{1EB7251C-C5D4-419B-BFF4-B70EBC18EAB7}">
+	  <File Id="TabScoreStarterGerman.dll" Source="$(var.TabScoreStarterSourceDir)\de\TabScoreStarter.resources.dll" KeyPath="yes"/>
+	</Component>
+
+	<Component Id="TabScoreDB.txtComponent" Directory="TabScoreDBtxtInstallFolder" Guid="{85D79EC4-6F75-4651-87B3-C3065D33A2DC}">
       <File Id="TabScoreDB.txt" Source="$(var.TabScoreDocumentsSourceDir)\TabScoreDB.txt" KeyPath="yes"/>
     </Component>
 
