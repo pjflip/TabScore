@@ -223,25 +223,25 @@
     <value>Aussetzen</value>
   </data>
   <data name="ShowTraveller" xml:space="preserve">
-    <value>Boardzettel zeigen</value>
+    <value>Boardzettel anzeigen</value>
   </data>
   <data name="ShowRoundInfo" xml:space="preserve">
-    <value>Rundeninfo zeigen</value>
+    <value>Rundeninfo anzeigen</value>
   </data>
   <data name="ShowRankingList" xml:space="preserve">
-    <value>Rangliste zeigen</value>
+    <value>Rangliste anzeigen</value>
   </data>
   <data name="ShowPlayerIDs" xml:space="preserve">
-    <value>Spieler-IDs zeigen</value>
+    <value>Spieler-IDs anzeigen</value>
   </data>
   <data name="ShowMove" xml:space="preserve">
-    <value>Movement zeigen</value>
+    <value>Movement anzeigen</value>
   </data>
   <data name="ShowHandRecord" xml:space="preserve">
-    <value>Handaufzeichnung zeigen</value>
+    <value>Verteilung anzeigen</value>
   </data>
   <data name="ShowFinalRankingList" xml:space="preserve">
-    <value>Endgültige Rangliste zeigen</value>
+    <value>Endgültige Rangliste anzeigen</value>
   </data>
   <data name="ShowBoards" xml:space="preserve">
     <value>Boards anzeigen</value>
@@ -334,7 +334,7 @@
     <value>Wechseln Sie zu Runde</value>
   </data>
   <data name="LeadNoMatch" xml:space="preserve">
-    <value>Ausspiel stimmt nicht mit Handaufzeichnung überein</value>
+    <value>Ausspiel stimmt nicht mit Verteilung überein</value>
   </data>
   <data name="Lead" xml:space="preserve">
     <value>Aus&amp;shy;spiel</value>

@@ -124,13 +124,13 @@
     <value>Analyse abgeschlossen</value>
   </data>
   <data name="ChangeHandRecordFile" xml:space="preserve">
-    <value>Handaufzeichnungsdatei wechseln...</value>
+    <value>Verteilungsdatei wechseln...</value>
   </data>
   <data name="DatabaseNotExist" xml:space="preserve">
     <value>Die in der Parameterzeichenfolge übergebene Datenbank ist nicht vorhanden</value>
   </data>
   <data name="FileNoHandRecords" xml:space="preserve">
-    <value>Die Datei enthält keine Handaufzeichnungen</value>
+    <value>Die Datei enthält keine Verteilungen</value>
   </data>
   <data name="IncludedInDatabase" xml:space="preserve">
     <value>In die Scoring-Datenbank aufgenommen</value>

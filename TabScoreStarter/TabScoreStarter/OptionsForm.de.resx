@@ -124,19 +124,19 @@
     <value>Abbrechen</value>
   </data>
   <data name="ShowRankingCombobox.Items" xml:space="preserve">
-    <value>Nicht zeigen</value>
+    <value>Nicht anzeigen</value>
   </data>
   <data name="EnterLeadCardCheckbox.Text" xml:space="preserve">
     <value>Ausspiel eingeben</value>
   </data>
   <data name="EnterResultsMethodGroup.Text" xml:space="preserve">
-    <value>Ergebnismethode eingeben</value>
+    <value>Ergebniseingabe</value>
   </data>
   <data name="NameSourceCombobox.Items1" xml:space="preserve">
     <value>Externe Datenbank</value>
   </data>
   <data name="HandRecordReversePerspectiveCheckbox.Text" xml:space="preserve">
-    <value>Handaufzeichnung umgekehrter Perspektive</value>
+    <value>Verteilungsdiagramm drehen</value>
   </data>
   <data name="NameSourceCombobox.Items" xml:space="preserve">
     <value>Interne Datenbank</value>
@@ -172,22 +172,22 @@
     <value>Speichern und abschließen</value>
   </data>
   <data name="ShowRankingCombobox.Items1" xml:space="preserve">
-    <value>Nach jeder Runde zeigen</value>
+    <value>Nach jeder Runde anzeigen</value>
   </data>
   <data name="ShowRankingCombobox.Items2" xml:space="preserve">
     <value>Am Ende des Turniers anzeigen</value>
   </data>
   <data name="ShowHandRecordCheckbox.Text" xml:space="preserve">
-    <value>Handaufzeichnung zeigen</value>
+    <value>Verteilung anzeigen</value>
   </data>
   <data name="ShowPercentageCheckbox.Text" xml:space="preserve">
-    <value>Prozentsatz auf dem Boardzettel zeigen</value>
+    <value>Prozentsatz auf dem Boardzettel anzeigen</value>
   </data>
   <data name="ShowTimerCheckbox.Text" xml:space="preserve">
-    <value>Rundentimer zeigen</value>
+    <value>Rundentimer anzeigen</value>
   </data>
   <data name="ShowTravellerCheckbox.Text" xml:space="preserve">
-    <value>Boardzettel zeigen</value>
+    <value>Boardzettel anzeigen</value>
   </data>
   <data name="TabletMovesGroupBox.Text" xml:space="preserve">
     <value>Tischgerätemodus</value>
@@ -202,7 +202,7 @@
     <value>Traditionell - 1 Tablet pro Tisch</value>
   </data>
   <data name="TravellerGroup.Text" xml:space="preserve">
-    <value>Boardzettel und Handaufzeichnung</value>
+    <value>Boardzettel und Verteilung</value>
   </data>
   <data name="EnterResultsMethodCombobox.Items" xml:space="preserve">
     <value>Stiche plus oder minus</value>

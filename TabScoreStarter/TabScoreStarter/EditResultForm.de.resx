@@ -151,7 +151,7 @@
     <value>Runden</value>
   </data>
   <data name="buttonSave.Text" xml:space="preserve">
-    <value>Speichern und schließen</value>
+    <value>Speichern und abschließen</value>
   </data>
   <data name="labelSection.Text" xml:space="preserve">
     <value>Abschnitt</value>

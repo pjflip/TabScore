@@ -124,10 +124,10 @@
     <value>Scoring-Datenbank:</value>
   </data>
   <data name="AddHandRecordFileButton.Text" xml:space="preserve">
-    <value>Handaufzeichnungsdatei hinzufügen...</value>
+    <value>Verteilungsdatei hinzufügen...</value>
   </data>
   <data name="HandRecordFileLabel.Text" xml:space="preserve">
-    <value>Handaufzeichnungsdatei:</value>
+    <value>Verteilungsdatei:</value>
   </data>
   <data name="AddDatabaseFileButton.Text" xml:space="preserve">
     <value>Scoring-Datenbankdatei hinzufügen...</value>
@@ -148,7 +148,7 @@
     <value>PBN Dateien (*.pbn)|*.pbn</value>
   </data>
   <data name="HandRecordFileDialog.Title" xml:space="preserve">
-    <value>Handaufzeichnungsdatei auswählen</value>
+    <value>Verteilungsdatei auswählen</value>
   </data>
   <data name="OptionsButton.Text" xml:space="preserve">
     <value>Optionen</value>
