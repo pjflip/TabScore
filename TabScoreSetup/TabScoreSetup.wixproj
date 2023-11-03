@@ -1,9 +1,6 @@
 <Project Sdk="WixToolset.Sdk/4.0.2">
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DefineConstants>Debug;TabScoreWebAppSourceDir=C:\Program Files (x86)\TabScore\WebApp</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DefineConstants>TabScoreWebAppSourceDir=C:\Users\Peter\source\repos\TabScore\WebApp</DefineConstants>
+  <PropertyGroup>
+	  <DefineConstants>configuration=$(Configuration)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <SuppressIces>ICE60</SuppressIces>

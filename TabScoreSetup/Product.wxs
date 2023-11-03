@@ -1,17 +1,22 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:iis="http://wixtoolset.org/schemas/v4/wxs/iis" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
 
-  <!-- File source definitions -->
-  <?define TabScoreStarterSourceDir = "C:\Users\Peter\source\repos\TabScore\TabScoreStarter\TabScoreStarter\bin\Release" ?>
-  <?define TabScoreDocumentsSourceDir = "C:\Users\Peter\source\repos\TabScore\TabScore Documents" ?>
-
+	<!-- File source definitions -->
+	<?ifdef $(env.TabScoreSourceDir)?>
+		<?define TabScoreStarterSourceDir = "$(env.TabScoreSourceDir)\source\repos\TabScore\TabScoreStarter\TabScoreStarter\bin\Release" ?>
+		<?define TabScoreDocumentsSourceDir = "$(env.TabScoreSourceDir)\source\repos\TabScore\TabScore Documents" ?>
+	<?else?>
+		<?define TabScoreStarterSourceDir = "$(env.USERPROFILE)\source\repos\TabScore\TabScoreStarter\TabScoreStarter\bin\Release" ?>
+		<?define TabScoreDocumentsSourceDir = "$(env.USERPROFILE)\source\repos\TabScore\TabScore Documents" ?>
+	<?endif?>
+	
   <Package Name="TabScore" Language="1033" Version="1.6.2" Manufacturer="TabScore" UpgradeCode="{910e14b2-1e97-47d0-9f52-40f18959a936}" InstallerVersion="200" ProductCode="{3c146288-31a8-4eec-a6b6-e53d90c5ff28}"><MajorUpgrade DowngradeErrorMessage="A later version of TabScore is already installed" />
 
     <MediaTemplate EmbedCab="yes" />
 
     <ui:WixUI Id="WixUI_Minimal" />
-    <WixVariable Id="WixUILicenseRtf" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\InstallerNotice TabScoreSetup.rtf" />
-    <WixVariable Id="WixUIBannerBmp" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\TabScore 493x58.bmp" />
-    <WixVariable Id="WixUIDialogBmp" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\TabScore 493x312.bmp" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.TabScoreDocumentsSourceDir)\InstallerNotice TabScoreSetup.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.TabScoreDocumentsSourceDir)\TabScore 493x58.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.TabScoreDocumentsSourceDir)\TabScore 493x312.bmp" />
 
     <!-- Common documents folder for TabScoreDB.txt install -->
     <SetDirectory Id="UsersPublicFolder" Value="[%PUBLIC]" Sequence="both" />
