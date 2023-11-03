@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <Fragment>
         <DirectoryRef Id="WebAppInstallFolder">
             <Component Id="cmp1C8EEA1585FD44F1722E41E78E5F4C7E" Guid="{8A19C6A7-6AE5-4823-891D-6E07A55EF98E}">
