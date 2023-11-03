@@ -1,68 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
-  xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
-  xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:iis="http://wixtoolset.org/schemas/v4/wxs/iis" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
 
   <!-- File source definitions -->
-  <?define TabScoreStarterSourceDir = "C:\Users\Peter\source\repos\TabScore\TabScoreStarter\TabScoreStarter\bin\Release" ?>
-  <?define TabScoreDocumentsSourceDir = "C:\Users\Peter\source\repos\TabScore\TabScore Documents" ?>
+  <?ifdef $(env.TabScoreSourceDir)?>
+	<?define TabScoreStarterSourceDir = "$(env.TabScoreSourceDir)\source\repos\TabScore\TabScoreStarter\TabScoreStarter\bin\Release" ?>
+	<?define TabScoreDocumentsSourceDir = "$(env.TabScoreSourceDir)\source\repos\TabScore\TabScore Documents" ?>
+  <?else?>
+      <?define TabScoreStarterSourceDir = "$(env.USERPROFILE)\source\repos\TabScore\TabScoreStarter\TabScoreStarter\bin\Release" ?>
+      <?define TabScoreDocumentsSourceDir = "$(env.USERPROFILE)\source\repos\TabScore\TabScore Documents" ?>
+  <?endif?>
 
-  <Product Id="{3c146288-31a8-4eec-a6b6-e53d90c5ff28}" Name="TabScore" Language="1033" Version="1.6.2" Manufacturer="TabScore" UpgradeCode="{910e14b2-1e97-47d0-9f52-40f18959a936}">
-    <Package Id="*" InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
-
-    <MajorUpgrade DowngradeErrorMessage="A later version of TabScore is already installed"/>
+  <Package Name="TabScore" Language="1033" Version="1.6.2" Manufacturer="TabScore" UpgradeCode="{910e14b2-1e97-47d0-9f52-40f18959a936}" InstallerVersion="200" ProductCode="{3c146288-31a8-4eec-a6b6-e53d90c5ff28}"><MajorUpgrade DowngradeErrorMessage="A later version of TabScore is already installed" />
 
     <MediaTemplate EmbedCab="yes" />
 
-    <UIRef Id="WixUI_Minimal" />
-    <WixVariable Id="WixUILicenseRtf" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\InstallerNotice TabScoreSetup.rtf" />
-    <WixVariable Id="WixUIBannerBmp" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\TabScore 493x58.bmp" />
-    <WixVariable Id="WixUIDialogBmp" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\TabScore 493x312.bmp" />
+    <ui:WixUI Id="WixUI_Minimal" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.TabScoreDocumentsSourceDir)\InstallerNotice TabScoreSetup.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.TabScoreDocumentsSourceDir)\TabScore 493x58.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.TabScoreDocumentsSourceDir)\TabScore 493x312.bmp" />
 
     <!-- Common documents folder for TabScoreDB.txt install -->
     <SetDirectory Id="UsersPublicFolder" Value="[%PUBLIC]" Sequence="both" />
 
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
-        <Directory Id="TabScoreInstallFolder" Name="TabScore">
-          <Directory Id="WebAppInstallFolder" Name="WebApp" />
-        </Directory>
-      </Directory>
-      <Directory Id="UsersPublicFolder">
-        <Directory Id="TabScoreDBtxtInstallFolder" Name="TabScore" />
-      </Directory>
-    </Directory>
+    
 
     <Feature Id="TabScoreFeature" Title="TabScore" Level="1">
       <ComponentGroupRef Id="TabScoreStarterComponents" />
       <ComponentGroupRef Id="WebAppComponents" />
       <!-- Link to WebApp.wxs file -->
-      <ComponentRef Id="TabScoreDB.txtComponent"/>
+      <ComponentRef Id="TabScoreDB.txtComponent" />
       <ComponentRef Id="IISConfigurationComponent" />
     </Feature>
 
     <ComponentGroup Id="TabScoreStarterComponents" Directory="TabScoreInstallFolder">
       <Component Id="TabScoreStarter.exe" Guid="{6F4E6488-65FA-4FCB-A9FC-4BC2C6FE2645}">
-        <File Id="TabScoreStarter.exe" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.exe" KeyPath="yes" Checksum="yes"/>
+        <File Id="TabScoreStarter.exe" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.exe" KeyPath="yes" Checksum="yes" />
       </Component>
       <Component Id="dds.dll" Guid="{4496934B-7E7F-4E23-BDB3-673BBF565960}">
-        <File Id="dds.dll" Source="$(var.TabScoreStarterSourceDir)\dds.dll" KeyPath="yes"/>
+        <File Id="dds.dll" Source="$(var.TabScoreStarterSourceDir)\dds.dll" KeyPath="yes" />
       </Component>
       <Component Id="TabScoreStarter.exe.config" Guid="{BFEA859C-4FBC-4B02-8425-92918A8BA5CB}">
-        <File Id="TabScoreStarter.exe.config" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.exe.config" KeyPath="yes"/>
+        <File Id="TabScoreStarter.exe.config" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.exe.config" KeyPath="yes" />
       </Component>
       <Component Id="TabScoreStarter.pdb" Guid="{8EA97C3C-B0BE-4C86-B1A9-FA0F83015696}">
-        <File Id="TabScoreStarter.pdb" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.pdb" KeyPath="yes"/>
+        <File Id="TabScoreStarter.pdb" Source="$(var.TabScoreStarterSourceDir)\TabScoreStarter.pdb" KeyPath="yes" />
       </Component>
     </ComponentGroup>
 
     <Component Id="TabScoreDB.txtComponent" Directory="TabScoreDBtxtInstallFolder" Guid="{85D79EC4-6F75-4651-87B3-C3065D33A2DC}">
-      <File Id="TabScoreDB.txt" Source="$(var.TabScoreDocumentsSourceDir)\TabScoreDB.txt" KeyPath="yes"/>
+      <File Id="TabScoreDB.txt" Source="$(var.TabScoreDocumentsSourceDir)\TabScoreDB.txt" KeyPath="yes" />
     </Component>
 
     <!-- Use built-in Default Web Site to enable binding to Port 80 -->
     <iis:WebSite Id="DefaultWebSite" Description="Default Web Site">
-      <iis:WebAddress Id="AllUnassigned" Port="80"/>
+      <iis:WebAddress Id="AllUnassigned" Port="80" />
     </iis:WebSite>
 
     <Component Id="IISConfigurationComponent" Guid="{975F9F17-DACA-42A2-AC54-128609B9AA40}" Directory="WebAppInstallFolder">
@@ -70,8 +60,17 @@
       <iis:WebVirtualDir Id="TabScoreVirtualDirectory" Alias="TabScore" Directory="WebAppInstallFolder" WebSite="DefaultWebSite">
         <iis:WebApplication Id="TabScoreWebApp" Name="TabScore" WebAppPool="TabScoreAppPool" />
       </iis:WebVirtualDir>
-      <CreateFolder/>
+      <CreateFolder />
     </Component>
 
-  </Product>
+  
+      <StandardDirectory Id="ProgramFilesFolder">
+        <Directory Id="TabScoreInstallFolder" Name="TabScore">
+          <Directory Id="WebAppInstallFolder" Name="WebApp" />
+        </Directory>
+      </StandardDirectory>
+      <Directory Id="UsersPublicFolder">
+        <Directory Id="TabScoreDBtxtInstallFolder" Name="TabScore" />
+      </Directory>
+    </Package>
 </Wix>
