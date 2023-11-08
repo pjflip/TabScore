@@ -16,8 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TabScore Documents\NOTICE = TabScore Documents\NOTICE
 		TabScore Documents\TabScore 493x312.bmp = TabScore Documents\TabScore 493x312.bmp
 		TabScore Documents\TabScore 493x58.bmp = TabScore Documents\TabScore 493x58.bmp
-		TabScore Documents\TabScore ReadMe 1.6.2.txt = TabScore Documents\TabScore ReadMe 1.6.2.txt
-		TabScore Documents\TabScore User Guide 1.6.2.odt = TabScore Documents\TabScore User Guide 1.6.2.odt
+		TabScore Documents\TabScore ReadMe 1.6.3.txt = TabScore Documents\TabScore ReadMe 1.6.3.txt
+		TabScore Documents\TabScore User Guide 1.6.3.odt = TabScore Documents\TabScore User Guide 1.6.3.odt
 		TabScore Documents\TabScore.png = TabScore Documents\TabScore.png
 		TabScore Documents\TabScoreDB.txt = TabScore Documents\TabScoreDB.txt
 	EndProjectSection
@@ -49,7 +49,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {AA5A3DE7-F85F-4F23-9834-D5CDDA5AB06C}
 		RESX_Rules = {"EnabledRules":["StringFormat","WhiteSpaceLead","WhiteSpaceTail","PunctuationLead"]}
+		SolutionGuid = {AA5A3DE7-F85F-4F23-9834-D5CDDA5AB06C}
 	EndGlobalSection
 EndGlobal
