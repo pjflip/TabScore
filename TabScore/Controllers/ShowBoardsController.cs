@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+﻿// TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Resources;
@@ -42,17 +42,9 @@ namespace TabScore.Controllers
             if (result == null || result.ContractLevel < 0)
             {
                 boardsList.Message = "NORESULT";
-                if (AppData.IsIndividual)
-                {
-                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
-                }
-                else
-                {
-                    ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {Strings.N}{Strings.S} {tableStatus.RoundData.NumberNorth} v {Strings.E}{Strings.W} {tableStatus.RoundData.NumberEast}";
-                }
-                ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 ViewData["Title"] = $"{Strings.ShowBoards} - {tabletDeviceStatus.Location}";
-                ViewData["TabletDeviceNumber"] = tabletDeviceNumber;
+                ViewData["Header"] = Utilities.HeaderString(tabletDeviceStatus, tableStatus, -1);
+                ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 return View("ViewOnly", boardsList);
             }
             else
@@ -80,7 +72,6 @@ namespace TabScore.Controllers
                 }
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 ViewData["Title"] = $"{Strings.ShowBoards}  - {tabletDeviceStatus.Location}";
-                ViewData["TabletDeviceNumber"] = tabletDeviceNumber;
                 return View("ViewOnly", boardsList);
             }
             else

@@ -418,4 +418,16 @@
   <data name="ArbitralScore" xml:space="preserve">
     <value>Puntuación arbitral</value>
   </data>
+  <data name="EnterHandRecord" xml:space="preserve">
+    <value>Introducir tablilla</value>
+  </data>
+  <data name="WarningHandRecordBack" xml:space="preserve">
+    <value>Se perderán todas las entradas de registro de la mano para este tablero. Haga clic en "Atrás" para continuar</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Todo</value>
+  </data>
+  <data name="EnterHandRecord2" xml:space="preserve">
+    <value> </value>
+  </data>
 </root>

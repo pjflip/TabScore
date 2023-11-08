@@ -202,12 +202,21 @@
     <value>Traditionell - 1 Tablet pro Tisch</value>
   </data>
   <data name="TravellerGroup.Text" xml:space="preserve">
-    <value>Boardzettel und Verteilung</value>
+    <value>Boardzettel</value>
   </data>
   <data name="EnterResultsMethodCombobox.Items" xml:space="preserve">
     <value>Stiche plus oder minus</value>
   </data>
   <data name="ValidateLeadCardCheckbox.Text" xml:space="preserve">
     <value>Ausspiel validieren</value>
+  </data>
+  <data name="DoubleDummyCheckbox.Text" xml:space="preserve">
+    <value>Double-Dummy-Analyse</value>
+  </data>
+  <data name="HandRecordGroup.Text" xml:space="preserve">
+    <value>Verteilung</value>
+  </data>
+  <data name="ManualHandEntryCheckbox.Text" xml:space="preserve">
+    <value>Manuelle Verteilungseingabe zulassen</value>
   </data>
 </root>

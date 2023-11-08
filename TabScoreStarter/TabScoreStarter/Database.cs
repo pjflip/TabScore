@@ -821,6 +821,47 @@ namespace TabScoreStarter
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
 
+                SQLString = "ALTER TABLE Settings ADD BM2EnterHandRecord YESNO";
+                cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    SQLString = "UPDATE Settings SET BM2EnterHandRecord=NO";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OdbcException e)
+                {
+                    if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                    {
+                        throw e;
+                    }
+                }
+
+                SQLString = "ALTER TABLE Settings ADD DoubleDummy YESNO";
+                cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    if (Properties.Settings.Default.DoubleDummy)
+                    {
+                        SQLString = "UPDATE Settings SET DoubleDummy=YES";
+                    }
+                    else
+                    {
+                        SQLString = "UPDATE Settings SET DoubleDummy=NO";
+                    }
+                    cmd = new OdbcCommand(SQLString, connection);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OdbcException e)
+                {
+                    if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                    {
+                        throw e;
+                    }
+                }
+
                 // Remove unwanted old settings if they're there
                 SQLString = "ALTER TABLE Settings DROP MinutesPerBoard";
                 cmd = new OdbcCommand(SQLString, connection);

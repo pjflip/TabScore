@@ -438,4 +438,16 @@
   <data name="ErrorScreen" xml:space="preserve">
     <value>Fehlerbildschirm</value>
   </data>
+  <data name="EnterHandRecord" xml:space="preserve">
+    <value>Board</value>
+  </data>
+  <data name="WarningHandRecordBack" xml:space="preserve">
+    <value>Alle Verteilungseinträge für dieses Board gehen verloren.  Klicken Sie auf „Zk.“, um fortzufahren</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="EnterHandRecord2" xml:space="preserve">
+    <value>eingeben</value>
+  </data>
 </root>

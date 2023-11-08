@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdditionalMinutesPerRoundLabel.Text" xml:space="preserve">
-    <value>Additional Minutes Per Round</value>
+    <value>Additional minutes per round</value>
   </data>
   <data name="CanxButton.Text" xml:space="preserve">
     <value>Cancel</value>
@@ -127,16 +127,16 @@
     <value>Don't show</value>
   </data>
   <data name="EnterLeadCardCheckbox.Text" xml:space="preserve">
-    <value>Enter Lead Card</value>
+    <value>Enter lead card</value>
   </data>
   <data name="EnterResultsMethodGroup.Text" xml:space="preserve">
-    <value>Enter Results Method</value>
+    <value>Results entry method</value>
   </data>
   <data name="NameSourceCombobox.Items1" xml:space="preserve">
     <value>External database</value>
   </data>
   <data name="HandRecordReversePerspectiveCheckbox.Text" xml:space="preserve">
-    <value>Hand Record Reverse Perspective</value>
+    <value>Hand record reverse perspective</value>
   </data>
   <data name="NameSourceCombobox.Items" xml:space="preserve">
     <value>Internal database</value>
@@ -148,7 +148,7 @@
     <value>Lead Card</value>
   </data>
   <data name="MinutesPerBoardLabel.Text" xml:space="preserve">
-    <value>Minutes Per Board</value>
+    <value>Minutes per board</value>
   </data>
   <data name="NameSourceCombobox.Items2" xml:space="preserve">
     <value>No name source</value>
@@ -160,7 +160,7 @@
     <value>Player Names/IDs</value>
   </data>
   <data name="NumberEntryEachRoundCheckbox.Text" xml:space="preserve">
-    <value>Player ID Entry Each Round</value>
+    <value>Player ID entry each round</value>
   </data>
   <data name="RankingListGroup.Text" xml:space="preserve">
     <value>Ranking list</value>
@@ -181,10 +181,10 @@
     <value>Show hand record</value>
   </data>
   <data name="ShowPercentageCheckbox.Text" xml:space="preserve">
-    <value>Show Percentage on Traveller</value>
+    <value>Show percentage on traveller</value>
   </data>
   <data name="ShowTimerCheckbox.Text" xml:space="preserve">
-    <value>Show Round Timer</value>
+    <value>Show round timer</value>
   </data>
   <data name="ShowTravellerCheckbox.Text" xml:space="preserve">
     <value>Show traveller</value>
@@ -202,12 +202,21 @@
     <value>Traditional - 1 tablet per table</value>
   </data>
   <data name="TravellerGroup.Text" xml:space="preserve">
-    <value>Traveller and Hand Record</value>
+    <value>Traveller</value>
   </data>
   <data name="EnterResultsMethodCombobox.Items" xml:space="preserve">
     <value>Tricks plus or minus</value>
   </data>
   <data name="ValidateLeadCardCheckbox.Text" xml:space="preserve">
-    <value>Validate Lead Card</value>
+    <value>Validate lead card</value>
+  </data>
+  <data name="DoubleDummyCheckbox.Text" xml:space="preserve">
+    <value>Double Dummy analysis</value>
+  </data>
+  <data name="HandRecordGroup.Text" xml:space="preserve">
+    <value>Hand Record</value>
+  </data>
+  <data name="ManualHandEntryCheckbox.Text" xml:space="preserve">
+    <value>Allow manual hand record entry</value>
   </data>
 </root>

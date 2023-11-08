@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All PASS.
         /// </summary>
         public static string AllPass {
@@ -228,6 +237,24 @@ namespace Resources {
         public static string EnterEditPlayerIDs {
             get {
                 return ResourceManager.GetString("EnterEditPlayerIDs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Board.
+        /// </summary>
+        public static string EnterHandRecord {
+            get {
+                return ResourceManager.GetString("EnterHandRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        public static string EnterHandRecord2 {
+            get {
+                return ResourceManager.GetString("EnterHandRecord2", resourceCulture);
             }
         }
         
@@ -1003,6 +1030,15 @@ namespace Resources {
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All hand record entries for this board will be lost.  Click on &apos;Back&apos; to continue.
+        /// </summary>
+        public static string WarningHandRecordBack {
+            get {
+                return ResourceManager.GetString("WarningHandRecordBack", resourceCulture);
             }
         }
         

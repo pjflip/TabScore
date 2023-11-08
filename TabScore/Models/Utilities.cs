@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+﻿// TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Resources;
@@ -145,24 +145,6 @@ namespace TabScore.Models
             }
         }
 
-        // Get the dealer based on board number for standard boards
-        public static string GetDealerForBoard(int boardNumber)
-        {
-            switch ((boardNumber - 1) % 4)
-            {
-                case 0:
-                    return Strings.N;
-                case 1:
-                    return Strings.E;
-                case 2:
-                    return Strings.S;
-                case 3:
-                    return Strings.W;
-                default:
-                    return "#";
-            }
-        }
-
         // Used for setting vulnerability by board number
         public static readonly bool[] NSVulnerability = { false, true, false, true, true, false, true, false, false, true, false, true, true, false, true, false };
         public static readonly bool[] EWVulnerability = { false, false, true, true, false, true, true, false, true, true, false, false, true, false, false, true };
@@ -203,11 +185,11 @@ namespace TabScore.Models
             {
                 if (AppData.IsIndividual)
                 {
-                    return $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
+                    return $"{tabletDeviceStatus.Location}: {Strings.Round} {tableStatus.RoundNumber}: {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
                 }
                 else
                 {
-                    return $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {Strings.N}{Strings.S} {tableStatus.RoundData.NumberNorth} v {Strings.E}{Strings.W} {tableStatus.RoundData.NumberEast}";
+                    return $"{tabletDeviceStatus.Location}: {Strings.Round} {tableStatus.RoundNumber}: {Strings.N}{Strings.S} {tableStatus.RoundData.NumberNorth} v {Strings.E}{Strings.W} {tableStatus.RoundData.NumberEast}";
                 }
             }
             else
@@ -215,11 +197,11 @@ namespace TabScore.Models
                 if (boardNumber == 0) boardNumber = tableStatus.ResultData.BoardNumber;  // Board number not specified, so get it from table status
                 if (AppData.IsIndividual)
                 {
-                    return $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
+                    return $"{tabletDeviceStatus.Location}: {Strings.Round} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
                 }
                 else
                 {
-                    return $"{tabletDeviceStatus.Location} - {Strings.Round} {tableStatus.RoundNumber} - {ColourPairByVulnerability("NS", boardNumber, $"{Strings.N}{Strings.S} {tableStatus.RoundData.NumberNorth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{Strings.E}{Strings.W} {tableStatus.RoundData.NumberEast}")}";
+                    return $"{tabletDeviceStatus.Location}: {Strings.Round} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", boardNumber, $"{Strings.N}{Strings.S} {tableStatus.RoundData.NumberNorth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{Strings.E}{Strings.W} {tableStatus.RoundData.NumberEast}")}";
                 }
             }
         }

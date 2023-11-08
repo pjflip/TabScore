@@ -27,6 +27,8 @@ namespace TabScoreStarter
             ShowRankingCombobox.SelectedIndex = opt.ShowRanking;
             EnterLeadCardCheckbox.Checked = opt.EnterLeadCard;
             ValidateLeadCardCheckbox.Checked = opt.ValidateLeadCard;
+            ManualHandEntryCheckbox.Checked = opt.ManualHandRecordEntry;
+            DoubleDummyCheckbox.Checked = opt.DoubleDummy;
             NameSourceCombobox.SelectedIndex = opt.NameSource;
             NumberEntryEachRoundCheckbox.Checked = opt.NumberEntryEachRound;
             EnterResultsMethodCombobox.SelectedIndex = opt.EnterResultsMethod;
@@ -40,6 +42,7 @@ namespace TabScoreStarter
             ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
             HandRecordReversePerspectiveCheckbox.Enabled = ShowTravellerCheckbox.Checked && ShowHandRecordCheckbox.Checked;
             ValidateLeadCardCheckbox.Enabled = EnterLeadCardCheckbox.Checked;
+            DoubleDummyCheckbox.Enabled = ManualHandEntryCheckbox.Checked;
             MinutesPerBoardNud.Enabled = ShowTimerCheckbox.Checked;
             AdditionalMinutesPerRoundNud.Enabled = ShowTimerCheckbox.Checked;
             MinutesPerBoardLabel.Enabled = ShowTimerCheckbox.Checked;
@@ -62,6 +65,8 @@ namespace TabScoreStarter
                 ShowRanking = ShowRankingCombobox.SelectedIndex,
                 EnterLeadCard = EnterLeadCardCheckbox.Checked,
                 ValidateLeadCard = ValidateLeadCardCheckbox.Checked,
+                ManualHandRecordEntry = ManualHandEntryCheckbox.Checked,
+                DoubleDummy = DoubleDummyCheckbox.Checked,
                 NameSource = NameSourceCombobox.SelectedIndex,
                 NumberEntryEachRound = NumberEntryEachRoundCheckbox.Checked,
                 EnterResultsMethod = EnterResultsMethodCombobox.SelectedIndex,
@@ -73,6 +78,7 @@ namespace TabScoreStarter
             opt.UpdateDB(connectionString);
             Properties.Settings.Default.TabletsMove = opt.TabletsMove;
             Properties.Settings.Default.HandRecordReversePerspective = opt.HandRecordReversePerspective;
+            Properties.Settings.Default.DoubleDummy = opt.DoubleDummy;
             Properties.Settings.Default.ShowTimer = opt.ShowTimer;
             Properties.Settings.Default.SecondsPerBoard = opt.SecondsPerBoard;
             Properties.Settings.Default.AdditionalSecondsPerRound = opt.AdditionalSecondsPerRound;
@@ -95,6 +101,11 @@ namespace TabScoreStarter
         private void EnterLeadCard_CheckedChanged(object sender, EventArgs e)
         {
             ValidateLeadCardCheckbox.Enabled = EnterLeadCardCheckbox.Checked;
+        }
+
+        private void ManualHandRecordEntryCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            DoubleDummyCheckbox.Enabled = ManualHandEntryCheckbox.Checked;
         }
 
         private void ShowTimerCheckbox_CheckedChanged(object sender, EventArgs e)

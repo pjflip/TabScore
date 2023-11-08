@@ -438,4 +438,16 @@
   <data name="West" xml:space="preserve">
     <value>West</value>
   </data>
+  <data name="EnterHandRecord" xml:space="preserve">
+    <value>Enter Board</value>
+  </data>
+  <data name="WarningHandRecordBack" xml:space="preserve">
+    <value>All hand record entries for this board will be lost.  Click on 'Back' to continue</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="EnterHandRecord2" xml:space="preserve">
+    <value> </value>
+  </data>
 </root>

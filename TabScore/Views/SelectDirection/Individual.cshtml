@@ -1,4 +1,4 @@
-﻿<!-- TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore.Models.SelectDirection
@@ -46,7 +46,6 @@
         @if (!Model.EastWestMissing)
         {
             <button id="dEast" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="touchAvailable = true; selectDirection('East')" onclick="if (!touchAvailable) selectDirection('East')">
-                @Strings.North
                 @Strings.East
             </button>
         }

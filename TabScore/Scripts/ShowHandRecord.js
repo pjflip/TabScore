@@ -28,18 +28,10 @@ function setNSEW(direction) {
         document.getElementById('BH').innerHTML = model.NorthHeartsDisplay;
         document.getElementById('BD').innerHTML = model.NorthDiamondsDisplay;
         document.getElementById('BC').innerHTML = model.NorthClubsDisplay;
-        if (model.EvalNorthNT == "###") {
-            document.getElementById('T').innerHTML = stringS;
-            document.getElementById('L').innerHTML = stringE;
-            document.getElementById('R').innerHTML = stringW;
-            document.getElementById('B').innerHTML = stringN;
-        }
-        else {
-            document.getElementById('T').innerHTML = stringS + " (" + model.HCPSouth + ")";
-            document.getElementById('L').innerHTML = stringE + " (" + model.HCPEast + ")";
-            document.getElementById('R').innerHTML = "(" + model.HCPWest + ") " + stringW;
-            document.getElementById('B').innerHTML = stringN + " (" + model.HCPNorth + ")";
-        }
+        document.getElementById('T').innerHTML = stringS + " (" + model.HCPSouth + ")";
+        document.getElementById('L').innerHTML = stringE + " (" + model.HCPEast + ")";
+        document.getElementById('R').innerHTML = "(" + model.HCPWest + ") " + stringW;
+        document.getElementById('B').innerHTML = stringN + " (" + model.HCPNorth + ")";
     }
     else if (direction == 'South') {
         btn = document.getElementById('btnSouth');
@@ -60,18 +52,10 @@ function setNSEW(direction) {
         document.getElementById('BH').innerHTML = model.SouthHeartsDisplay;
         document.getElementById('BD').innerHTML = model.SouthDiamondsDisplay;
         document.getElementById('BC').innerHTML = model.SouthClubsDisplay;
-        if (model.EvalNorthNT == "###") {
-            document.getElementById('T').innerHTML = stringN;
-            document.getElementById('L').innerHTML = stringW;
-            document.getElementById('R').innerHTML = stringE;
-            document.getElementById('B').innerHTML = stringS;
-        }
-        else {
-            document.getElementById('T').innerHTML = stringN + " (" + model.HCPNorth + ")";
-            document.getElementById('L').innerHTML = stringW + " (" + model.HCPWest + ")";
-            document.getElementById('R').innerHTML = "(" + model.HCPEast + ") " + stringE;
-            document.getElementById('B').innerHTML = stringS + " (" + model.HCPSouth + ")";
-        }
+        document.getElementById('T').innerHTML = stringN + " (" + model.HCPNorth + ")";
+        document.getElementById('L').innerHTML = stringW + " (" + model.HCPWest + ")";
+        document.getElementById('R').innerHTML = "(" + model.HCPEast + ") " + stringE;
+        document.getElementById('B').innerHTML = stringS + " (" + model.HCPSouth + ")";
     }
     else if (direction == 'East')
     {
@@ -93,18 +77,10 @@ function setNSEW(direction) {
         document.getElementById('BH').innerHTML = model.EastHeartsDisplay;
         document.getElementById('BD').innerHTML = model.EastDiamondsDisplay;
         document.getElementById('BC').innerHTML = model.EastClubsDisplay;
-        if (model.EvalNorthNT == "###") {
-            document.getElementById('T').innerHTML = stringW;
-            document.getElementById('L').innerHTML = stringS;
-            document.getElementById('R').innerHTML = stringN;
-            document.getElementById('B').innerHTML = stringE;
-        }
-        else {
-            document.getElementById('T').innerHTML = stringW + " (" + model.HCPWest + ")";
-            document.getElementById('L').innerHTML = stringS + " (" + model.HCPSouth + ")";
-            document.getElementById('R').innerHTML = "(" + model.HCPNorth + ") " + stringN;
-            document.getElementById('B').innerHTML = stringE + " (" + model.HCPEast + ")";
-        }
+        document.getElementById('T').innerHTML = stringW + " (" + model.HCPWest + ")";
+        document.getElementById('L').innerHTML = stringS + " (" + model.HCPSouth + ")";
+        document.getElementById('R').innerHTML = "(" + model.HCPNorth + ") " + stringN;
+        document.getElementById('B').innerHTML = stringE + " (" + model.HCPEast + ")";
     }
     else if (direction == 'West') {
         btn = document.getElementById('btnWest')
@@ -125,18 +101,9 @@ function setNSEW(direction) {
         document.getElementById('BH').innerHTML = model.WestHeartsDisplay;
         document.getElementById('BD').innerHTML = model.WestDiamondsDisplay;
         document.getElementById('BC').innerHTML = model.WestClubsDisplay;
-        if (model.EvalNorthNT == "###") {
-            document.getElementById('T').innerHTML = stringE;
-            document.getElementById('L').innerHTML = stringN;
-            document.getElementById('R').innerHTML = stringS;
-            document.getElementById('B').innerHTML = stringW;
-        }
-        else {
-            document.getElementById('T').innerHTML = stringE + " (" + model.HCPEast + ")";
-            document.getElementById('L').innerHTML = stringN + " (" + model.HCPNorth + ")";
-            document.getElementById('R').innerHTML = "(" + model.HCPSouth + ") " + stringS;
-            document.getElementById('B').innerHTML = stringW + " (" + model.HCPWest + ")";
-        }
+        document.getElementById('T').innerHTML = stringE + " (" + model.HCPEast + ")";
+        document.getElementById('L').innerHTML = stringN + " (" + model.HCPNorth + ")";
+        document.getElementById('R').innerHTML = "(" + model.HCPSouth + ") " + stringS;
+        document.getElementById('B').innerHTML = stringW + " (" + model.HCPWest + ")";
     }
 }
-

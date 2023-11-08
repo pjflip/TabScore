@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+﻿// TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -31,7 +31,7 @@ namespace TabScore.Controllers
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == tabletDeviceStatus.SectionID && x.TableNumber == tabletDeviceStatus.TableNumber);
             tableStatus.ResultData.UpdateDB(tableStatus);
-            return RedirectToAction("Index", "ShowTraveller", new { tabletDeviceNumber, boardNumber = tableStatus.ResultData.BoardNumber });
+            return RedirectToAction("Index", "EnterHandRecord", new { tabletDeviceNumber, boardNumber = tableStatus.ResultData.BoardNumber });
         }
 
         public ActionResult BackButtonClick(int tabletDeviceNumber)
