@@ -385,7 +385,6 @@
     <EmbeddedResource Include="Resources\Strings.de.resx" />
     <EmbeddedResource Include="Resources\Strings.en.resx" />
     <EmbeddedResource Include="Resources\Strings.es.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.es.designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
