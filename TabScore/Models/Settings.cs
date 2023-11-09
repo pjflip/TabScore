@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+﻿// TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System;
@@ -23,6 +23,8 @@ namespace TabScore.Models
         public static bool ShowTimer { get; private set; }
         public static int SecondsPerBoard { get; private set; }
         public static int AdditionalSecondsPerRound { get; private set; }
+        public static bool ManualHandRecordEntry { get; private set; }
+        public static bool DoubleDummy { get; private set; }
 
         private static DateTime UpdateTime;
 
@@ -34,7 +36,7 @@ namespace TabScore.Models
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
-                string SQLString = "SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, EnterResultsMethod, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, TabletsMove, HandRecordReversePerspective, ShowTimer, SecondsPerBoard, AdditionalSecondsPerRound FROM Settings";
+                string SQLString = "SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, EnterResultsMethod, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, TabletsMove, HandRecordReversePerspective, ShowTimer, SecondsPerBoard, AdditionalSecondsPerRound, BM2EnterHandRecord, DoubleDummy FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = null;
                 try
@@ -58,6 +60,8 @@ namespace TabScore.Models
                             ShowTimer = reader.GetBoolean(11);
                             SecondsPerBoard = reader.GetInt32(12);
                             AdditionalSecondsPerRound = reader.GetInt32(13);
+                            ManualHandRecordEntry = reader.GetBoolean(14);
+                            DoubleDummy = reader.GetBoolean(15);
                         }
                         reader.Close();
                     });
@@ -78,6 +82,8 @@ namespace TabScore.Models
                     ShowTimer = false;
                     SecondsPerBoard = 390;
                     AdditionalSecondsPerRound = 60;
+                    ManualHandRecordEntry = false;
+                    DoubleDummy = false;
                 }
                 finally
                 {

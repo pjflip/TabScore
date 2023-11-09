@@ -3,9 +3,10 @@
 
 namespace TabScore.Models
 {
-    public class ResultsPerBoard
+    public class EnterHandRecord
     {
-        public int BoardNumber { get; set; }
-        public int NumberOfResults { get; set; }
+        public int SectionID;
+        public int BoardNumber;
+        public int TabletDeviceNumber;
     }
 }

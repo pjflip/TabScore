@@ -22,6 +22,8 @@ namespace TabScoreStarter
         public bool ShowTimer { get; set; }
         public int SecondsPerBoard { get; set; }
         public int AdditionalSecondsPerRound { get; set; }
+        public bool ManualHandRecordEntry { get; set; }
+        public bool DoubleDummy { get; set; }
 
         public Options() { }
 
@@ -30,7 +32,7 @@ namespace TabScoreStarter
             using (OdbcConnection connection = new OdbcConnection(connectionString))
             {
                 connection.Open();
-                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod, TabletsMove, HandRecordReversePerspective, ShowTimer, SecondsPerBoard, AdditionalSecondsPerRound FROM Settings";
+                string SQLString = $"SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, EnterResultsMethod, TabletsMove, HandRecordReversePerspective, ShowTimer, SecondsPerBoard, AdditionalSecondsPerRound, BM2EnterHandRecord, DoubleDummy FROM Settings";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 OdbcDataReader reader = cmd.ExecuteReader();
                 reader.Read();
@@ -49,6 +51,8 @@ namespace TabScoreStarter
                 ShowTimer = reader.GetBoolean(11);
                 SecondsPerBoard = reader.GetInt32(12);
                 AdditionalSecondsPerRound = reader.GetInt32(13);
+                ManualHandRecordEntry = reader.GetBoolean(14);
+                DoubleDummy = reader.GetBoolean(15);
                 reader.Close();
                 cmd.Dispose();
             }
@@ -136,7 +140,24 @@ namespace TabScoreStarter
                     SQLString.Append(" ShowTimer=NO,");
                 }
                 SQLString.Append($" SecondsPerBoard={SecondsPerBoard},");
-                SQLString.Append($" AdditionalSecondsPerRound={AdditionalSecondsPerRound}");
+                SQLString.Append($" AdditionalSecondsPerRound={AdditionalSecondsPerRound},");
+                if (ManualHandRecordEntry)
+                {
+                    SQLString.Append(" BM2EnterHandRecord=YES,");
+                }
+                else
+                {
+                    SQLString.Append(" BM2EnterHandRecord=NO,");
+                }
+                if (DoubleDummy)
+                {
+                    SQLString.Append(" DoubleDummy=YES");
+                }
+                else
+                {
+                    SQLString.Append(" DoubleDummy=NO");
+                }
+
                 connection.Open();
                 OdbcCommand cmd = new OdbcCommand(SQLString.ToString(), connection);
                 cmd.ExecuteNonQuery();

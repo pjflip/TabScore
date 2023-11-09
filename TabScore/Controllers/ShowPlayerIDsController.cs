@@ -1,4 +1,4 @@
-﻿// TabScore - TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+﻿// TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Web.Mvc;
@@ -31,7 +31,7 @@ namespace TabScore.Controllers
 
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             ViewData["Title"] = $"{Strings.ShowPlayerIDs} - {tabletDeviceStatus.Location}";
-            ViewData["Header"] = $"{tabletDeviceStatus.Location} - {Strings.Round} {tabletDeviceStatus.RoundNumber}";
+            ViewData["Header"] = $"{tabletDeviceStatus.Location}: {Strings.Round} {tabletDeviceStatus.RoundNumber}";
 
             if (AppData.IsIndividual)
             {

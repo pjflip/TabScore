@@ -30,9 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsForm));
             this.TravellerGroup = new System.Windows.Forms.GroupBox();
-            this.HandRecordReversePerspectiveCheckbox = new System.Windows.Forms.CheckBox();
             this.ShowPercentageCheckbox = new System.Windows.Forms.CheckBox();
-            this.ShowHandRecordCheckbox = new System.Windows.Forms.CheckBox();
             this.ShowTravellerCheckbox = new System.Windows.Forms.CheckBox();
             this.PlayersGroup = new System.Windows.Forms.GroupBox();
             this.NameSourceCombobox = new System.Windows.Forms.ComboBox();
@@ -55,6 +53,11 @@
             this.MinutesPerBoardLabel = new System.Windows.Forms.Label();
             this.MinutesPerBoardNud = new System.Windows.Forms.NumericUpDown();
             this.ShowTimerCheckbox = new System.Windows.Forms.CheckBox();
+            this.HandRecordGroup = new System.Windows.Forms.GroupBox();
+            this.HandRecordReversePerspectiveCheckbox = new System.Windows.Forms.CheckBox();
+            this.DoubleDummyCheckbox = new System.Windows.Forms.CheckBox();
+            this.ShowHandRecordCheckbox = new System.Windows.Forms.CheckBox();
+            this.ManualHandEntryCheckbox = new System.Windows.Forms.CheckBox();
             this.TravellerGroup.SuspendLayout();
             this.PlayersGroup.SuspendLayout();
             this.RankingListGroup.SuspendLayout();
@@ -64,36 +67,22 @@
             this.RoundTimerGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AdditionalMinutesPerRoundNud)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinutesPerBoardNud)).BeginInit();
+            this.HandRecordGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // TravellerGroup
             // 
-            this.TravellerGroup.Controls.Add(this.HandRecordReversePerspectiveCheckbox);
             this.TravellerGroup.Controls.Add(this.ShowPercentageCheckbox);
-            this.TravellerGroup.Controls.Add(this.ShowHandRecordCheckbox);
             this.TravellerGroup.Controls.Add(this.ShowTravellerCheckbox);
             resources.ApplyResources(this.TravellerGroup, "TravellerGroup");
             this.TravellerGroup.Name = "TravellerGroup";
             this.TravellerGroup.TabStop = false;
-            // 
-            // HandRecordReversePerspectiveCheckbox
-            // 
-            resources.ApplyResources(this.HandRecordReversePerspectiveCheckbox, "HandRecordReversePerspectiveCheckbox");
-            this.HandRecordReversePerspectiveCheckbox.Name = "HandRecordReversePerspectiveCheckbox";
-            this.HandRecordReversePerspectiveCheckbox.UseVisualStyleBackColor = true;
             // 
             // ShowPercentageCheckbox
             // 
             resources.ApplyResources(this.ShowPercentageCheckbox, "ShowPercentageCheckbox");
             this.ShowPercentageCheckbox.Name = "ShowPercentageCheckbox";
             this.ShowPercentageCheckbox.UseVisualStyleBackColor = true;
-            // 
-            // ShowHandRecordCheckbox
-            // 
-            resources.ApplyResources(this.ShowHandRecordCheckbox, "ShowHandRecordCheckbox");
-            this.ShowHandRecordCheckbox.Name = "ShowHandRecordCheckbox";
-            this.ShowHandRecordCheckbox.UseVisualStyleBackColor = true;
-            this.ShowHandRecordCheckbox.CheckedChanged += new System.EventHandler(this.ShowHandRecord_CheckedChanged);
             // 
             // ShowTravellerCheckbox
             // 
@@ -292,10 +281,46 @@
             this.ShowTimerCheckbox.UseVisualStyleBackColor = true;
             this.ShowTimerCheckbox.CheckedChanged += new System.EventHandler(this.ShowTimerCheckbox_CheckedChanged);
             // 
+            // HandRecordGroup
+            // 
+            this.HandRecordGroup.Controls.Add(this.HandRecordReversePerspectiveCheckbox);
+            this.HandRecordGroup.Controls.Add(this.DoubleDummyCheckbox);
+            this.HandRecordGroup.Controls.Add(this.ShowHandRecordCheckbox);
+            this.HandRecordGroup.Controls.Add(this.ManualHandEntryCheckbox);
+            resources.ApplyResources(this.HandRecordGroup, "HandRecordGroup");
+            this.HandRecordGroup.Name = "HandRecordGroup";
+            this.HandRecordGroup.TabStop = false;
+            // 
+            // HandRecordReversePerspectiveCheckbox
+            // 
+            resources.ApplyResources(this.HandRecordReversePerspectiveCheckbox, "HandRecordReversePerspectiveCheckbox");
+            this.HandRecordReversePerspectiveCheckbox.Name = "HandRecordReversePerspectiveCheckbox";
+            this.HandRecordReversePerspectiveCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // DoubleDummyCheckbox
+            // 
+            resources.ApplyResources(this.DoubleDummyCheckbox, "DoubleDummyCheckbox");
+            this.DoubleDummyCheckbox.Name = "DoubleDummyCheckbox";
+            this.DoubleDummyCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // ShowHandRecordCheckbox
+            // 
+            resources.ApplyResources(this.ShowHandRecordCheckbox, "ShowHandRecordCheckbox");
+            this.ShowHandRecordCheckbox.Name = "ShowHandRecordCheckbox";
+            this.ShowHandRecordCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // ManualHandEntryCheckbox
+            // 
+            resources.ApplyResources(this.ManualHandEntryCheckbox, "ManualHandEntryCheckbox");
+            this.ManualHandEntryCheckbox.Name = "ManualHandEntryCheckbox";
+            this.ManualHandEntryCheckbox.UseVisualStyleBackColor = true;
+            this.ManualHandEntryCheckbox.CheckedChanged += new System.EventHandler(this.ManualHandRecordEntryCheckbox_CheckedChanged);
+            // 
             // OptionsForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.HandRecordGroup);
             this.Controls.Add(this.RoundTimerGroupBox);
             this.Controls.Add(this.TabletMovesGroupBox);
             this.Controls.Add(this.EnterResultsMethodGroup);
@@ -324,6 +349,8 @@
             this.RoundTimerGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AdditionalMinutesPerRoundNud)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinutesPerBoardNud)).EndInit();
+            this.HandRecordGroup.ResumeLayout(false);
+            this.HandRecordGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -332,7 +359,6 @@
         #endregion
         private System.Windows.Forms.GroupBox TravellerGroup;
         private System.Windows.Forms.CheckBox ShowPercentageCheckbox;
-        private System.Windows.Forms.CheckBox ShowHandRecordCheckbox;
         private System.Windows.Forms.CheckBox ShowTravellerCheckbox;
         private System.Windows.Forms.GroupBox PlayersGroup;
         private System.Windows.Forms.ComboBox NameSourceCombobox;
@@ -355,6 +381,10 @@
         private System.Windows.Forms.Label MinutesPerBoardLabel;
         private System.Windows.Forms.NumericUpDown MinutesPerBoardNud;
         private System.Windows.Forms.CheckBox ShowTimerCheckbox;
+        private System.Windows.Forms.GroupBox HandRecordGroup;
         private System.Windows.Forms.CheckBox HandRecordReversePerspectiveCheckbox;
+        private System.Windows.Forms.CheckBox DoubleDummyCheckbox;
+        private System.Windows.Forms.CheckBox ShowHandRecordCheckbox;
+        private System.Windows.Forms.CheckBox ManualHandEntryCheckbox;
     }
 }

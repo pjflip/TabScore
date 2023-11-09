@@ -199,7 +199,7 @@
     <value>Tradicional - 1 tableta por mesa</value>
   </data>
   <data name="TravellerGroup.Text" xml:space="preserve">
-    <value>Viajero y registro de la mano</value>
+    <value>Viajero de la mano</value>
   </data>
   <data name="EnterResultsMethodCombobox.Items" xml:space="preserve">
     <value>Bazas más o menos</value>
@@ -209,5 +209,14 @@
   </data>
   <data name="NameSourceCombobox.Items" xml:space="preserve">
     <value>Base de datos interna</value>
+  </data>
+  <data name="DoubleDummyCheckbox.Text" xml:space="preserve">
+    <value>Análisis cartas vistas</value>
+  </data>
+  <data name="HandRecordGroup.Text" xml:space="preserve">
+    <value>Registro de la mano</value>
+  </data>
+  <data name="ManualHandEntryCheckbox.Text" xml:space="preserve">
+    <value>Permitir entrada manual de registros</value>
   </data>
 </root>
