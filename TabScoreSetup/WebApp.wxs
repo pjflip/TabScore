@@ -1,5 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<?if $(var.configuration) = Debug ?>
+	    <?define TabScoreWebAppSourceDir=C:\Program Files (x86)\TabScore\WebApp ?>
+	<?else?>
+	    <?ifdef $(env.TabScoreSourceDir)?>
+	        <?define TabScoreWebAppSourceDir=$(env.TabScoreSourceDir)\Source\Repos\TabScore\TabScore ?>
+	    <?else?>
+	        <?define TabScoreWebAppSourceDir=$(env.USERPROFILE)\source\repos\TabScore\WebApp ?>
+	    <?endif?>
+	<?endif ?>
+	
     <Fragment>
         <DirectoryRef Id="WebAppInstallFolder">
             <Component Id="cmp1C8EEA1585FD44F1722E41E78E5F4C7E" Guid="{D0472A36-3EBF-430C-85EA-F2AA105F0876}">
