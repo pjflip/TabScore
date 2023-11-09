@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabScore", "TabScore\TabScore.csproj", "{05270894-260B-474E-844A-E3EAAF3EB3DC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabScoreStarter", "TabScoreStarter\TabScoreStarter\TabScoreStarter.csproj", "{9EE6B38E-5CBA-4A82-A3FF-12C784125E8A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7589BEA4-87AE-4993-94B6-09AA51FD0250}"
 	ProjectSection(SolutionItems) = preProject
 		HarvestWebApp.bat = HarvestWebApp.bat
@@ -21,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TabScore Documents\TabScore.png = TabScore Documents\TabScore.png
 		TabScore Documents\TabScoreDB.txt = TabScore Documents\TabScoreDB.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabScore", "TabScore\TabScore.csproj", "{05270894-260B-474E-844A-E3EAAF3EB3DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabScoreStarter", "TabScoreStarter\TabScoreStarter\TabScoreStarter.csproj", "{9EE6B38E-5CBA-4A82-A3FF-12C784125E8A}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "TabScoreSetup", "TabScoreSetup\TabScoreSetup.wixproj", "{F9BB088E-AE78-4F8E-8D62-27925DE069D6}"
 EndProject
@@ -49,7 +49,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_Rules = {"EnabledRules":["StringFormat","WhiteSpaceLead","WhiteSpaceTail","PunctuationLead"]}
 		SolutionGuid = {AA5A3DE7-F85F-4F23-9834-D5CDDA5AB06C}
+		RESX_Rules = {"EnabledRules":["StringFormat","WhiteSpaceLead","WhiteSpaceTail","PunctuationLead"]}
 	EndGlobalSection
 EndGlobal
