@@ -467,6 +467,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to from Relay Table.
+        /// </summary>
+        public static string FromRelayTable {
+            get {
+                return ResourceManager.GetString("FromRelayTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to from Table.
+        /// </summary>
+        public static string FromTable {
+            get {
+                return ResourceManager.GetString("FromTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If the event is finished, you can turn off the tablet device.
         /// </summary>
         public static string IfFinished {

@@ -116,14 +116,14 @@ namespace TabScore.Models
             return Convert.ToInt32(queryResult);
         }
 
-        // Get the last round that has any results entered for it
-        public static int GetLastRoundWithResults(int sectionID)
+        // Get the last round for this table that has any results entered for it
+        public static int GetLastRoundWithResults(int sectionID, int tableNumber)
         {
             object queryResult = null;
             using (OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))
             {
                 connection.Open();
-                string SQLString = $"SELECT MAX(Round) FROM ReceivedData WHERE Section={sectionID}";
+                string SQLString = $"SELECT MAX(Round) FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber}";
                 OdbcCommand cmd = new OdbcCommand(SQLString, connection);
                 try
                 {

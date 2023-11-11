@@ -10,6 +10,7 @@ namespace TabScore.Models
         public Round RoundData { get; private set; }
         public bool NSMissing { get; set; } = false;
         public bool EWMissing { get; set; } = false;
+        public int BoardsFromTable { get; set; } = -1;
 
         public RoundInfo(int tabletDeviceNumber, TableStatus tableStatus)
         {
@@ -17,6 +18,12 @@ namespace TabScore.Models
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
             RoundNumber = tabletDeviceStatus.RoundNumber;
             RoundData = tableStatus.RoundData;
+
+            if (RoundNumber > 1)
+            {
+                RoundsList roundsList = new RoundsList(tabletDeviceStatus.SectionID, RoundNumber - 1);
+                BoardsFromTable = roundsList.GetBoardsFromTableNumber(tabletDeviceStatus.RoundNumber, RoundData.LowBoard);
+            }
         }
     }
 }

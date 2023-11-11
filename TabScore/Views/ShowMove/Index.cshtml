@@ -64,6 +64,12 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         @Strings.MoveToTable @move.NewTableNumber @move.DisplayNewDirection
                     </h4>
                 }
+                if (move.NewTableIsSitout)
+                {
+                    <h6>
+                        [ @Strings.SittingOut ]
+                    </h6>
+                }
             }
         </div>
     </div>

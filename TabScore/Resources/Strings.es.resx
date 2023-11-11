@@ -430,4 +430,10 @@
   <data name="EnterHandRecord2" xml:space="preserve">
     <value> </value>
   </data>
+  <data name="FromRelayTable" xml:space="preserve">
+    <value>de la mesa de relevos</value>
+  </data>
+  <data name="FromTable" xml:space="preserve">
+    <value>de la Mesa</value>
+  </data>
 </root>

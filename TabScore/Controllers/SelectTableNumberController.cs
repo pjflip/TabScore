@@ -30,7 +30,7 @@ namespace TabScore.Controllers
             TableStatus tableStatus = AppData.TableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
             if (tableStatus == null)
             {
-                tableStatus = new TableStatus(sectionID, tableNumber, Utilities.GetLastRoundWithResults(sectionID));
+                tableStatus = new TableStatus(sectionID, tableNumber, Utilities.GetLastRoundWithResults(sectionID, tableNumber));
                 AppData.TableStatusList.Add(tableStatus);
             }
             

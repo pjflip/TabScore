@@ -450,4 +450,10 @@
   <data name="EnterHandRecord2" xml:space="preserve">
     <value> </value>
   </data>
+  <data name="FromRelayTable" xml:space="preserve">
+    <value>from Relay Table</value>
+  </data>
+  <data name="FromTable" xml:space="preserve">
+    <value>from Table</value>
+  </data>
 </root>

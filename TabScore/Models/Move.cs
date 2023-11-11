@@ -10,6 +10,7 @@ namespace TabScore.Models
         public Direction NewDirection { get; set; }
         public string DisplayNewDirection { get; set; }
         public bool Stay { get; set; }
+        public bool NewTableIsSitout { get; set; } = false;
         public int PairNumber { get; set; }
     }
 }
