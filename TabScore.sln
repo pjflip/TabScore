@@ -22,9 +22,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabScore", "TabScore\TabSco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabScoreStarter", "TabScoreStarter\TabScoreStarter\TabScoreStarter.csproj", "{9EE6B38E-5CBA-4A82-A3FF-12C784125E8A}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "TabScoreSetup", "TabScoreSetup\TabScoreSetup.wixproj", "{F9BB088E-AE78-4F8E-8D62-27925DE069D6}"
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "TabScoreSetup", "TabScoreSetup\TabScoreSetup.wixproj", "{F9BB088E-AE78-4F8E-8D62-27925DE069D6}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "TabScoreIISSetup", "TabScoreIISSetup\TabScoreIISSetup.wixproj", "{874A13DC-59E7-4B03-8D5B-BD71040BD19A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabScore2Starter", "TabScoreStarter\TabScore2Starter\TabScore2Starter.csproj", "{1AA001CC-490E-4CAD-AF35-105D8B638502}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabScore2", "TabScore2\TabScore2.csproj", "{E8736A91-B2F3-477A-8739-99F38FD28F58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,12 +48,20 @@ Global
 		{F9BB088E-AE78-4F8E-8D62-27925DE069D6}.Release|Any CPU.ActiveCfg = Release|x86
 		{874A13DC-59E7-4B03-8D5B-BD71040BD19A}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{874A13DC-59E7-4B03-8D5B-BD71040BD19A}.Release|Any CPU.ActiveCfg = Release|x86
+		{1AA001CC-490E-4CAD-AF35-105D8B638502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AA001CC-490E-4CAD-AF35-105D8B638502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AA001CC-490E-4CAD-AF35-105D8B638502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AA001CC-490E-4CAD-AF35-105D8B638502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8736A91-B2F3-477A-8739-99F38FD28F58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8736A91-B2F3-477A-8739-99F38FD28F58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8736A91-B2F3-477A-8739-99F38FD28F58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8736A91-B2F3-477A-8739-99F38FD28F58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {AA5A3DE7-F85F-4F23-9834-D5CDDA5AB06C}
 		RESX_Rules = {"EnabledRules":["StringFormat","WhiteSpaceLead","WhiteSpaceTail","PunctuationLead"]}
+		SolutionGuid = {AA5A3DE7-F85F-4F23-9834-D5CDDA5AB06C}
 	EndGlobalSection
 EndGlobal
