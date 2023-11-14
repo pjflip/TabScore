@@ -9,7 +9,7 @@
 		<?define TabScoreDocumentsSourceDir = "$(env.USERPROFILE)\source\repos\TabScore\TabScore Documents" ?>
 	<?endif?>
 	
-  <Package Name="TabScore" Language="1033" Version="1.6.3" Manufacturer="TabScore" UpgradeCode="{910e14b2-1e97-47d0-9f52-40f18959a936}" InstallerVersion="200" ProductCode="{3c146288-31a8-4eec-a6b6-e53d90c5ff28}"><MajorUpgrade DowngradeErrorMessage="A later version of TabScore is already installed" />
+  <Package Name="TabScore" Language="1033" Version="1.6.3" Manufacturer="TabScore" UpgradeCode="{910e14b2-1e97-47d0-9f52-40f18959a936}" InstallerVersion="200" ProductCode="{3c146288-31a8-4eec-a6b6-e53d90c5ff28}"><MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeWarning)"/>
 
     <MediaTemplate EmbedCab="yes" />
 

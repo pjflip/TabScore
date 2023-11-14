@@ -1,36 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<!-- TabScore installer for required Windows IIS features -->
 
-<!-- TabScore installer for required Windows IIS features -->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:fire="http://wixtoolset.org/schemas/v4/wxs/firewall" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
 
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
-     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
-     xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
+	<!-- File source definitions -->
+	<?ifdef $(env.TabScoreSourceDir)?>
+	<?define TabScoreDocumentsSourceDir = "$(env.TabScoreSourceDir)\source\repos\TabScore\TabScore Documents" ?>
+	<?else?>
+	<?define TabScoreDocumentsSourceDir = "$(env.USERPROFILE)\source\repos\TabScore\TabScore Documents" ?>
+	<?endif?>
 
-  <Product Id="{643D7B67-B9DD-4744-A3CD-F824B8C0ED5A}" Name="TabScoreIISSetup" Language="1033" Version="1.5.0" Manufacturer="TabScore" UpgradeCode="{048361FA-F1E0-40B7-BA0A-11FFF5F2F988}">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+  <Package Name="TabScoreIISSetup" Language="1033" Version="1.5.0" Manufacturer="TabScore" UpgradeCode="{048361FA-F1E0-40B7-BA0A-11FFF5F2F988}" InstallerVersion="200" ProductCode="{643D7B67-B9DD-4744-A3CD-F824B8C0ED5A}"><MediaTemplate EmbedCab="yes" />
 
-    <MediaTemplate EmbedCab="yes"/>
-
-    <UIRef Id="WixUI_Minimal" />
-    <WixVariable Id="WixUILicenseRtf" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\InstallerNotice TabScoreIISSetup.rtf" />
-    <WixVariable Id="WixUIBannerBmp" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\TabScore 493x58.bmp" />
-    <WixVariable Id="WixUIDialogBmp" Value="C:\Users\Peter\source\repos\TabScore\TabScore Documents\TabScore 493x312.bmp" />
+    <ui:WixUI Id="WixUI_Minimal" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(TabScoreDocumentsSourceDir)\InstallerNotice TabScoreIISSetup.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="$(TabScoreDocumentsSourceDir)\TabScore 493x58.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(TabScoreDocumentsSourceDir)\TabScore 493x312.bmp" />
 
     <!-- Empty Directory, Component and Feature without which MSI doesn't seem to work properly -->
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Component Id="EmptyComponent" Guid="{EDBC12F7-D726-4B3A-857B-D74ABCC45CD1}" />
-    </Directory>
+    
     <Feature Id="Feature" Title="Feature" Level="1">
       <ComponentRef Id="EmptyComponent" />
       <ComponentRef Id="SetFirewallPortComponent" />
     </Feature>
 
-    <CustomAction Id='AddIISDefaultDocument' Property='IISDefaultDocument' Value='"[system64folder]dism.exe" /norestart /quiet /online /enable-feature /featurename:IIS-DefaultDocument /all' Execute='immediate'/>
-    <CustomAction Id="IISDefaultDocument" BinaryKey="WixCA" DllEntry="CAQuietExec64" Execute="deferred" Return="ignore" Impersonate="no" />
-    <CustomAction Id='AddIISManagementConsole' Property='IISManagementConsole' Value='"[system64folder]dism.exe" /norestart /quiet /online /enable-feature /featurename:IIS-ManagementConsole /all' Execute='immediate'/>
-    <CustomAction Id="IISManagementConsole" BinaryKey="WixCA" DllEntry="CAQuietExec64" Execute="deferred" Return="ignore" Impersonate="no" />
-    <CustomAction Id='AddIISASPNET45' Property='IISASPNET45' Value='"[system64folder]dism.exe" /norestart /quiet /online /enable-feature /featurename:IIS-ASPNET45 /all' Execute='immediate'/>
-    <CustomAction Id="IISASPNET45" BinaryKey="WixCA" DllEntry="CAQuietExec64" Execute="deferred" Return="ignore" Impersonate="no" />
+    <CustomAction Id="AddIISDefaultDocument" Property="IISDefaultDocument" Value="&quot;[system64folder]dism.exe&quot; /norestart /quiet /online /enable-feature /featurename:IIS-DefaultDocument /all" Execute="immediate" />
+    <CustomAction Id="IISDefaultDocument" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no" BinaryRef="Wix4UtilCA_X86" />
+    <CustomAction Id="AddIISManagementConsole" Property="IISManagementConsole" Value="&quot;[system64folder]dism.exe&quot; /norestart /quiet /online /enable-feature /featurename:IIS-ManagementConsole /all" Execute="immediate" />
+    <CustomAction Id="IISManagementConsole" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no" BinaryRef="Wix4UtilCA_X86" />
+    <CustomAction Id="AddIISASPNET45" Property="IISASPNET45" Value="&quot;[system64folder]dism.exe&quot; /norestart /quiet /online /enable-feature /featurename:IIS-ASPNET45 /all" Execute="immediate" />
+    <CustomAction Id="IISASPNET45" DllEntry="WixQuietExec64" Execute="deferred" Return="ignore" Impersonate="no" BinaryRef="Wix4UtilCA_X86" />
        
     <InstallExecuteSequence>
       <Custom Action="AddIISDefaultDocument" After="CostFinalize" />
@@ -45,5 +43,7 @@
       <fire:FirewallException Id="FirewallPort80" Name="TabScore Port 80" Protocol="tcp" Port="80" Scope="localSubnet" IgnoreFailure="yes" Profile="private" />
     </Component>
 
-  </Product>
+  
+      <Component Id="EmptyComponent" Guid="{EDBC12F7-D726-4B3A-857B-D74ABCC45CD1}" Directory="TARGETDIR" />
+    </Package>
 </Wix>
