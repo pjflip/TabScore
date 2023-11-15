@@ -689,12 +689,12 @@ namespace TabScoreStarter
                     }
                 }
 
-                SQLString = "ALTER TABLE Settings ADD Section SHORT";
+                SQLString = "ALTER TABLE Settings ADD EnterResultsMethod SHORT";
                 cmd = new OdbcCommand(SQLString, connection);
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    SQLString = "UPDATE Settings SET Section=0";
+                    SQLString = "UPDATE Settings SET EnterResultsMethod=0";
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }
