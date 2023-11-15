@@ -2722,7 +2722,7 @@
     <value>Manual</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>TabScoreStarter - Edit Result</value>
+    <value>TabScore2Starter - Edit Result</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>EditResultForm</value>

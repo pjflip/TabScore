@@ -4,7 +4,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     public unsafe static class DoubleDummySolver
     {

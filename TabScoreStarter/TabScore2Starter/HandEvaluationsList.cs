@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Data.Odbc;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     class HandEvaluationsList : List<HandEvaluation>
     {

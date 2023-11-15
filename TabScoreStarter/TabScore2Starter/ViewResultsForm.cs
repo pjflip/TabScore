@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Resources;
 using System.Windows.Forms;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     public partial class ViewResultsForm : Form
     {
@@ -13,7 +13,7 @@ namespace TabScoreStarter
 
         public ViewResultsForm(string connectionString, Point location)
         {
-            resourceManager = new ResourceManager("TabScoreStarter.Strings", typeof(TabScoreForm).Assembly);
+            resourceManager = new ResourceManager("TabScore2Starter.Strings", typeof(TabScoreForm).Assembly);
             InitializeComponent();
             dataGridViewResults.SortCompare += new DataGridViewSortCompareEventHandler(this.DataGridViewResults_SortCompare);
             this.connectionString = connectionString;

@@ -3,7 +3,7 @@
 
 using System.Text;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     public class Hand
     {

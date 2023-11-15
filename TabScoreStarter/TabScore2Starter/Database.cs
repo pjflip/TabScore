@@ -8,7 +8,7 @@ using System.IO;
 using System.Security.AccessControl;
 using System.Windows.Forms;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     static class Database
     {
@@ -50,7 +50,7 @@ namespace TabScoreStarter
                 }
                 catch
                 {
-                    MessageBox.Show("Database is not accessible; check file and folder permissions", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Database is not accessible; check file and folder permissions", "TabScore2Starter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
 
@@ -201,7 +201,7 @@ namespace TabScoreStarter
                 // Check that a section exists
                 if (sectionsList.Count == 0)
                 {
-                    MessageBox.Show("Database contains no Sections", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Database contains no Sections", "TabScore2Starter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
 
@@ -211,12 +211,12 @@ namespace TabScoreStarter
                     section.Letter = section.Letter.Trim();  // Remove any spurious characters
                     if (section.ID < 1 || section.ID > 4 || (section.Letter != "A" && section.Letter != "B" && section.Letter != "C" && section.Letter != "D"))
                     {
-                        MessageBox.Show("Database contains incorrect Sections.  Maximum 4 Sections labelled A, B, C, D", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Database contains incorrect Sections.  Maximum 4 Sections labelled A, B, C, D", "TabScore2Starter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
                     if (section.Tables > 30)
                     {
-                        MessageBox.Show("Database contains > 30 Tables in a Section", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Database contains > 30 Tables in a Section", "TabScore2Starter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
 
@@ -711,7 +711,7 @@ namespace TabScoreStarter
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    if (Properties.Settings.Default.TabletsMove)
+                    if (TabScore2Starter.Properties.Settings.Default.TabletsMove)
                     {
                         SQLString = "UPDATE Settings SET TabletsMove=YES";
                     }

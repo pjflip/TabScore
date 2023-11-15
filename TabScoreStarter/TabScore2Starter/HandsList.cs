@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data.Odbc;
 using System.IO;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     class HandsList : List<Hand>
     {

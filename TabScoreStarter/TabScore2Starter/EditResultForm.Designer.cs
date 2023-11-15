@@ -1,4 +1,4 @@
-﻿namespace TabScoreStarter
+﻿namespace TabScore2Starter
 {
     partial class EditResultForm
     {

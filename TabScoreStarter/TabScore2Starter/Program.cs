@@ -4,7 +4,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     static class Program
     {
@@ -14,10 +14,10 @@ namespace TabScoreStarter
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Check if TabScoreStarter is already running
-            if (System.Diagnostics.Process.GetProcessesByName("TabScoreStarter").Length > 1)
+            // Check if TabScore2Starter is already running
+            if (System.Diagnostics.Process.GetProcessesByName("TabScore2Starter").Length > 1)
             {
-                MessageBox.Show("TabScoreStarter is already running", "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("TabScore2Starter is already running", "TabScore2Starter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             Application.Run(new TabScoreForm());

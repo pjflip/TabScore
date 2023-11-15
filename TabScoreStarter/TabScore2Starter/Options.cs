@@ -4,7 +4,7 @@
 using System.Data.Odbc;
 using System.Text;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     class Options
     {

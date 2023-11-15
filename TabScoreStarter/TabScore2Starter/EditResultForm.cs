@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Resources;
 using System.Windows.Forms;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     public partial class EditResultForm : Form
     {
@@ -23,7 +23,7 @@ namespace TabScoreStarter
 
         public EditResultForm(Result result, string connectionString, Point location)
         {
-            resourceManager = new ResourceManager("TabScoreStarter.Strings", typeof(TabScoreForm).Assembly);
+            resourceManager = new ResourceManager("TabScore2Starter.Strings", typeof(TabScoreForm).Assembly);
             InitializeComponent();
             this.result = result;
             this.connectionString = connectionString;
@@ -172,7 +172,7 @@ namespace TabScoreStarter
             {
                 if (comboBoxRemarks.SelectedIndex <= 0 || comboBoxRemarks.SelectedIndex == 12)  // "" or "Wrong direction"
                 {
-                    MessageBox.Show(resourceManager.GetString("EnterValidResult"), "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(resourceManager.GetString("EnterValidResult"), "TabScore2Starter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 result.ContractLevel = -1;
@@ -199,7 +199,7 @@ namespace TabScoreStarter
             {
                 if (comboBoxSuit.SelectedIndex <= 0 || comboBoxDeclarer.SelectedIndex <= 0 || comboBoxTricksTaken.SelectedIndex <= 0)
                 {
-                    MessageBox.Show(resourceManager.GetString("EnterValidContract"), "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(resourceManager.GetString("EnterValidContract"), "TabScore2Starter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 result.ContractLevel = Convert.ToInt32(comboBoxContractLevel.Text);

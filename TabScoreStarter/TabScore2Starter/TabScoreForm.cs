@@ -9,7 +9,7 @@ using System.Resources;
 // using System.Globalization;
 // using System.Threading;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     public partial class TabScoreForm : Form
     {
@@ -21,13 +21,13 @@ namespace TabScoreStarter
             // Sets the UI culture to German for debugging
             // Thread.CurrentThread.CurrentUICulture = new CultureInfo("de-DE");
 
-            resourceManager = new ResourceManager("TabScoreStarter.Strings", typeof(TabScoreForm).Assembly);
+            resourceManager = new ResourceManager("TabScore2Starter.Strings", typeof(TabScoreForm).Assembly);
             InitializeComponent();
         }
 
         private void TabScoreForm_Load(object sender, EventArgs e)
         {
-            Text = $"TabScoreStarter - {resourceManager.GetString("Version")} {Assembly.GetExecutingAssembly().GetName().Version}";
+            Text = $"TabScore2Starter - {resourceManager.GetString("Version")} {Assembly.GetExecutingAssembly().GetName().Version}";
             
             string argsString = "", pathToDB = "";
             string[] arguments = Environment.GetCommandLineArgs();
@@ -54,7 +54,7 @@ namespace TabScoreStarter
             }
             else if (!File.Exists(pathToDB))
             {
-                MessageBox.Show(resourceManager.GetString("DatabaseNotExist"), "TabScoreStarter", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(resourceManager.GetString("DatabaseNotExist"), "TabScore2Starter", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 AddDatabaseFileButton.Visible = true;
             }
             else
@@ -129,7 +129,7 @@ namespace TabScoreStarter
                 HandsList handsList = new HandsList(file);
                 if (handsList.Count == 0)
                 {
-                    MessageBox.Show(resourceManager.GetString("FileNoHandRecords"), "TabScoreStarter", MessageBoxButtons.OK);
+                    MessageBox.Show(resourceManager.GetString("FileNoHandRecords"), "TabScore2Starter", MessageBoxButtons.OK);
                 }
                 else
                 {

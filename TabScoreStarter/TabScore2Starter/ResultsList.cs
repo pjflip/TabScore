@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Odbc;
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     public class ResultsList : List<Result>
     {

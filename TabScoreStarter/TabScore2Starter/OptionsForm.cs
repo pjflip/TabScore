@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System.Drawing;
 
 
-namespace TabScoreStarter
+namespace TabScore2Starter
 {
     public partial class OptionsForm : Form
     {
