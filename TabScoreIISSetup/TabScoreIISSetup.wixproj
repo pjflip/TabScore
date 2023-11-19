@@ -8,6 +8,9 @@
     <CompilerAdditionalOptions>
     </CompilerAdditionalOptions>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <SuppressValidation>false</SuppressValidation>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.UI.wixext" Version="4.0.2" />
     <PackageReference Include="WixToolset.Firewall.wixext" Version="4.0.2" />

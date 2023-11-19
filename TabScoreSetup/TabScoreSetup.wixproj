@@ -5,6 +5,12 @@
   <PropertyGroup>
     <SuppressIces>ICE60</SuppressIces>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <Cultures>de-de;en-us;es-es</Cultures>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <Cultures>en-us,de-de,es-es</Cultures>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\TabScoreStarter\TabScoreStarter\TabScoreStarter.csproj">
       <Name>TabScoreStarter</Name>
@@ -27,5 +33,20 @@
     <PackageReference Include="WixToolset.UI.wixext" Version="4.0.2" />
     <PackageReference Include="WixToolset.Util.wixext" Version="4.0.2" />
     <PackageReference Include="WixToolset.Iis.wixext" Version="4.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Localisation-en.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Product.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Localisation-es.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Product.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Localisation-de.wxl" />
   </ItemGroup>
 </Project>
