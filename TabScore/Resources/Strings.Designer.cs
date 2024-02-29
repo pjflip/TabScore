@@ -331,15 +331,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select a player ID, or select &apos;Unknown&apos;.
-        /// </summary>
-        public static string ErrorNoID {
-            get {
-                return ResourceManager.GetString("ErrorNoID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File TabScoreDB.txt doesn&apos;t exist.  Please re-start TabScoreStarter.exe.
         /// </summary>
         public static string ErrorNoTabScoreDBtxt {
