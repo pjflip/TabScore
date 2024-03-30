@@ -140,6 +140,9 @@
     <EmbeddedResource Include="EditResultForm.es.resx">
       <DependentUpon>EditResultForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="EditResultForm.nl.resx">
+      <DependentUpon>EditResultForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EditResultForm.resx">
       <DependentUpon>EditResultForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -152,12 +155,16 @@
     <EmbeddedResource Include="OptionsForm.es.resx">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.nl.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OptionsForm.resx">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Strings.de.resx" />
     <EmbeddedResource Include="Strings.en.resx" />
     <EmbeddedResource Include="Strings.es.resx" />
+    <EmbeddedResource Include="Strings.nl.resx" />
     <EmbeddedResource Include="Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
@@ -169,6 +176,9 @@
       <DependentUpon>TabScoreForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TabScoreForm.es.resx">
+      <DependentUpon>TabScoreForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabScoreForm.nl.resx">
       <DependentUpon>TabScoreForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TabScoreForm.resx" />
@@ -189,6 +199,9 @@
       <DependentUpon>ViewResultsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewResultsForm.es.resx">
+      <DependentUpon>ViewResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewResultsForm.nl.resx">
       <DependentUpon>ViewResultsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewResultsForm.resx">

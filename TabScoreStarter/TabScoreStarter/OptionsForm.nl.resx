@@ -117,40 +117,106 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ScoringDatabaseLabel.Text" xml:space="preserve">
-    <value>Scoring Database:</value>
+  <data name="TravellerGroup.Text" xml:space="preserve">
+    <value>Scorekaart</value>
   </data>
-  <data name="AddHandRecordFileButton.Text" xml:space="preserve">
-    <value>Add hand record file...</value>
+  <data name="ShowPercentageCheckbox.Text" xml:space="preserve">
+    <value>Toon percentage op scorekaart</value>
   </data>
-  <data name="HandRecordFileLabel.Text" xml:space="preserve">
-    <value>Hand Record File:</value>
+  <data name="ShowTravellerCheckbox.Text" xml:space="preserve">
+    <value>Toon scorekaart</value>
   </data>
-  <data name="AddDatabaseFileButton.Text" xml:space="preserve">
-    <value>Add scoring database file...</value>
+  <data name="PlayersGroup.Text" xml:space="preserve">
+    <value>Spelersnamen/ID's</value>
   </data>
-  <data name="DatabaseFileDialog.Filter" xml:space="preserve">
-    <value>BWS Files (*.bws)|*.bws</value>
+  <data name="NameSourceCombobox.Items" xml:space="preserve">
+    <value>Interne database</value>
   </data>
-  <data name="DatabaseFileDialog.Title" xml:space="preserve">
-    <value>Select Scoring Database</value>
+  <data name="NameSourceCombobox.Items1" xml:space="preserve">
+    <value>Externe database</value>
   </data>
-  <data name="SessionStatusLabel.Text" xml:space="preserve">
-    <value>Session Not Started</value>
+  <data name="NameSourceCombobox.Items3" xml:space="preserve">
+    <value>Eerst interne database, daarna externe</value>
   </data>
-  <data name="AnalysingLabel.Text" xml:space="preserve">
-    <value>Analysis Complete</value>
+  <data name="NumberEntryEachRoundCheckbox.Text" xml:space="preserve">
+    <value>Speler-ID invoer per ronde</value>
   </data>
-  <data name="HandRecordFileDialog.Filter" xml:space="preserve">
-    <value>PBN Files (*.pbn)|*.pbn</value>
+  <data name="RankingListGroup.Text" xml:space="preserve">
+    <value>Ranglijst</value>
   </data>
-  <data name="HandRecordFileDialog.Title" xml:space="preserve">
-    <value>Select Hand Record File</value>
+  <data name="ShowRankingCombobox.Items" xml:space="preserve">
+    <value>Niet tonen</value>
   </data>
-  <data name="OptionsButton.Text" xml:space="preserve">
-    <value>Options</value>
+  <data name="ShowRankingCombobox.Items1" xml:space="preserve">
+    <value>Toon na elke ronde</value>
   </data>
-  <data name="ResultsViewerButton.Text" xml:space="preserve">
-    <value>View Results</value>
+  <data name="ShowRankingCombobox.Items2" xml:space="preserve">
+    <value>Toon aan het einde van de zitting</value>
+  </data>
+  <data name="LeadCardGroup.Text" xml:space="preserve">
+    <value>Uitkomstkaart</value>
+  </data>
+  <data name="ValidateLeadCardCheckbox.Text" xml:space="preserve">
+    <value>Verifieer uitkomstkaart</value>
+  </data>
+  <data name="EnterLeadCardCheckbox.Text" xml:space="preserve">
+    <value>Uitkomstkaart invoeren</value>
+  </data>
+  <data name="CanxButton.Text" xml:space="preserve">
+    <value>Annuleer</value>
+  </data>
+  <data name="SaveButton.Text" xml:space="preserve">
+    <value>Bewaar en Sluit</value>
+  </data>
+  <data name="EnterResultsMethodGroup.Text" xml:space="preserve">
+    <value>Kies wijze van slagen invoeren</value>
+  </data>
+  <data name="EnterResultsMethodCombobox.Items" xml:space="preserve">
+    <value>Slagen plus of min</value>
+  </data>
+  <data name="EnterResultsMethodCombobox.Items1" xml:space="preserve">
+    <value>Totaal aantal slagen</value>
+  </data>
+  <data name="TabletMovesGroupBox.Text" xml:space="preserve">
+    <value>Tafel-modus - apparaat blijft bij de tafel</value>
+  </data>
+  <data name="TabletModePersonalRadioButton.Text" xml:space="preserve">
+    <value>Persoonlijke-modus - apparaat blijft bij spelers</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.Text" xml:space="preserve">
+    <value>Tafelmodus - 1 apparaat per tafel</value>
+  </data>
+  <data name="RoundTimerGroupBox.Text" xml:space="preserve">
+    <value>Ronde timer</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.Text" xml:space="preserve">
+    <value>Extra minuten per ronde</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Text" xml:space="preserve">
+    <value>Minuten per spel</value>
+  </data>
+  <data name="ShowTimerCheckbox.Text" xml:space="preserve">
+    <value>Toon ronde timer</value>
+  </data>
+  <data name="DoubleDummyCheckbox.Text" xml:space="preserve">
+    <value>Double Dummy analyse</value>
+  </data>
+  <data name="ShowHandRecordCheckbox.Text" xml:space="preserve">
+    <value>Toon kaartverdeling</value>
+  </data>
+  <data name="ManualHandEntryCheckbox.Text" xml:space="preserve">
+    <value>Handmatig invoeren kaartverdeling toestaan</value>
+  </data>
+  <data name="HandRecordGroup.Text" xml:space="preserve">
+    <value>Kaartverdeling</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>TabScore Opties</value>
+  </data>
+  <data name="NameSourceCombobox.Items2" xml:space="preserve">
+    <value>Geen naambron</value>
+  </data>
+  <data name="HandRecordReversePerspectiveCheckbox.Text" xml:space="preserve">
+    <value>Draai hetkaartverdelingdiagram om</value>
   </data>
 </root>

@@ -117,40 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ScoringDatabaseLabel.Text" xml:space="preserve">
-    <value>Scoring Database:</value>
+  <data name="EditResultButton.Text" xml:space="preserve">
+    <value>Wijzig geselecteerd resultaat</value>
   </data>
-  <data name="AddHandRecordFileButton.Text" xml:space="preserve">
-    <value>Add hand record file...</value>
+  <data name="Section.HeaderText" xml:space="preserve">
+    <value>Lijn</value>
   </data>
-  <data name="HandRecordFileLabel.Text" xml:space="preserve">
-    <value>Hand Record File:</value>
+  <data name="Table.HeaderText" xml:space="preserve">
+    <value>Tafel</value>
   </data>
-  <data name="AddDatabaseFileButton.Text" xml:space="preserve">
-    <value>Add scoring database file...</value>
+  <data name="Round.HeaderText" xml:space="preserve">
+    <value>Ronde</value>
   </data>
-  <data name="DatabaseFileDialog.Filter" xml:space="preserve">
-    <value>BWS Files (*.bws)|*.bws</value>
+  <data name="Board.HeaderText" xml:space="preserve">
+    <value>Spel</value>
   </data>
-  <data name="DatabaseFileDialog.Title" xml:space="preserve">
-    <value>Select Scoring Database</value>
+  <data name="PairNS.HeaderText" xml:space="preserve">
+    <value>Noord</value>
   </data>
-  <data name="SessionStatusLabel.Text" xml:space="preserve">
-    <value>Session Not Started</value>
+  <data name="PairEW.HeaderText" xml:space="preserve">
+    <value>Oost</value>
   </data>
-  <data name="AnalysingLabel.Text" xml:space="preserve">
-    <value>Analysis Complete</value>
+  <data name="CloseButton.Text" xml:space="preserve">
+    <value>Sluiten</value>
   </data>
-  <data name="HandRecordFileDialog.Filter" xml:space="preserve">
-    <value>PBN Files (*.pbn)|*.pbn</value>
-  </data>
-  <data name="HandRecordFileDialog.Title" xml:space="preserve">
-    <value>Select Hand Record File</value>
-  </data>
-  <data name="OptionsButton.Text" xml:space="preserve">
-    <value>Options</value>
-  </data>
-  <data name="ResultsViewerButton.Text" xml:space="preserve">
-    <value>View Results</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>TabScoreStarter - Bekijk resultaten</value>
   </data>
 </root>

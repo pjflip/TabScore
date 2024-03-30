@@ -453,4 +453,7 @@
   <data name="FromTable" xml:space="preserve">
     <value>vom Tisch</value>
   </data>
+  <data name="ToWelcome" xml:space="preserve">
+    <value>zu</value>
+  </data>
 </root>

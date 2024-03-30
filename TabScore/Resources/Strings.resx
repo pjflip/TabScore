@@ -462,4 +462,7 @@ tablet device at your current location</value>
   <data name="FromTable" xml:space="preserve">
     <value>from Table</value>
   </data>
+  <data name="ToWelcome" xml:space="preserve">
+    <value>to</value>
+  </data>
 </root>

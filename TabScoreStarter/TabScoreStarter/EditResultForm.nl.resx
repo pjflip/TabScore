@@ -117,40 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ScoringDatabaseLabel.Text" xml:space="preserve">
-    <value>Scoring Database:</value>
+  <data name="labelSection.Text" xml:space="preserve">
+    <value>Lijn</value>
   </data>
-  <data name="AddHandRecordFileButton.Text" xml:space="preserve">
-    <value>Add hand record file...</value>
+  <data name="labelTable.Text" xml:space="preserve">
+    <value>Tafel</value>
   </data>
-  <data name="HandRecordFileLabel.Text" xml:space="preserve">
-    <value>Hand Record File:</value>
+  <data name="labelRound.Text" xml:space="preserve">
+    <value>Ronde</value>
   </data>
-  <data name="AddDatabaseFileButton.Text" xml:space="preserve">
-    <value>Add scoring database file...</value>
+  <data name="labelBoard.Text" xml:space="preserve">
+    <value>Spel</value>
   </data>
-  <data name="DatabaseFileDialog.Filter" xml:space="preserve">
-    <value>BWS Files (*.bws)|*.bws</value>
+  <data name="labelNorth.Text" xml:space="preserve">
+    <value>Noord</value>
   </data>
-  <data name="DatabaseFileDialog.Title" xml:space="preserve">
-    <value>Select Scoring Database</value>
+  <data name="labelEast.Text" xml:space="preserve">
+    <value>Oost</value>
   </data>
-  <data name="SessionStatusLabel.Text" xml:space="preserve">
-    <value>Session Not Started</value>
+  <data name="labelSuit.Text" xml:space="preserve">
+    <value>Kleur</value>
   </data>
-  <data name="AnalysingLabel.Text" xml:space="preserve">
-    <value>Analysis Complete</value>
+  <data name="labelDouble.Text" xml:space="preserve">
+    <value>Doublet</value>
   </data>
-  <data name="HandRecordFileDialog.Filter" xml:space="preserve">
-    <value>PBN Files (*.pbn)|*.pbn</value>
+  <data name="labelDeclarer.Text" xml:space="preserve">
+    <value>Leider</value>
   </data>
-  <data name="HandRecordFileDialog.Title" xml:space="preserve">
-    <value>Select Hand Record File</value>
+  <data name="labelLead.Text" xml:space="preserve">
+    <value>Uitkomst</value>
   </data>
-  <data name="OptionsButton.Text" xml:space="preserve">
-    <value>Options</value>
+  <data name="labelResult.Text" xml:space="preserve">
+    <value>Resultaat</value>
   </data>
-  <data name="ResultsViewerButton.Text" xml:space="preserve">
-    <value>View Results</value>
+  <data name="labelRemarks.Text" xml:space="preserve">
+    <value>Opmerkingen (Niet gespeeld, Arbitraire score, verkeerde speelrichting)</value>
+  </data>
+  <data name="buttonSave.Text" xml:space="preserve">
+    <value>Bewaar en Sluit</value>
+  </data>
+  <data name="buttonCancel.Text" xml:space="preserve">
+    <value>Annuleer</value>
+  </data>
+  <data name="labelLevel.Text" xml:space="preserve">
+    <value>Speelhoogte</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>TabScoreStarter - wijzig resultaat</value>
   </data>
 </root>

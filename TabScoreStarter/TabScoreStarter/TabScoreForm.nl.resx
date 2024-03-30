@@ -118,39 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ScoringDatabaseLabel.Text" xml:space="preserve">
-    <value>Scoring Database:</value>
+    <value>Scoring database:</value>
   </data>
   <data name="AddHandRecordFileButton.Text" xml:space="preserve">
-    <value>Add hand record file...</value>
+    <value>Voeg kaartverdeling-bestand toe...</value>
   </data>
   <data name="HandRecordFileLabel.Text" xml:space="preserve">
-    <value>Hand Record File:</value>
+    <value>Kaartverdeling-bestand:</value>
   </data>
   <data name="AddDatabaseFileButton.Text" xml:space="preserve">
-    <value>Add scoring database file...</value>
-  </data>
-  <data name="DatabaseFileDialog.Filter" xml:space="preserve">
-    <value>BWS Files (*.bws)|*.bws</value>
+    <value>Scoring database-bestand toevoegen...</value>
   </data>
   <data name="DatabaseFileDialog.Title" xml:space="preserve">
-    <value>Select Scoring Database</value>
+    <value>Kies scoring database</value>
   </data>
   <data name="SessionStatusLabel.Text" xml:space="preserve">
-    <value>Session Not Started</value>
+    <value>Zitting is niet gestart</value>
   </data>
   <data name="AnalysingLabel.Text" xml:space="preserve">
-    <value>Analysis Complete</value>
-  </data>
-  <data name="HandRecordFileDialog.Filter" xml:space="preserve">
-    <value>PBN Files (*.pbn)|*.pbn</value>
+    <value>Analyse voltooid</value>
   </data>
   <data name="HandRecordFileDialog.Title" xml:space="preserve">
-    <value>Select Hand Record File</value>
+    <value>Kies kaartverdeling-bestand</value>
   </data>
   <data name="OptionsButton.Text" xml:space="preserve">
-    <value>Options</value>
+    <value>Opties</value>
   </data>
   <data name="ResultsViewerButton.Text" xml:space="preserve">
-    <value>View Results</value>
+    <value>Bekijk resultaat</value>
+  </data>
+  <data name="DatabaseFileDialog.Filter" xml:space="preserve">
+    <value>BWS Bestanden (*.bws)|*.bws</value>
+  </data>
+  <data name="HandRecordFileDialog.Filter" xml:space="preserve">
+    <value>PBN Bestanden (*.pbn)|*.pbn</value>
   </data>
 </root>

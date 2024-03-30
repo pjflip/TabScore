@@ -953,6 +953,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to to.
+        /// </summary>
+        public static string ToWelcome {
+            get {
+                return ResourceManager.GetString("ToWelcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Traveller.
         /// </summary>
         public static string Traveller {
