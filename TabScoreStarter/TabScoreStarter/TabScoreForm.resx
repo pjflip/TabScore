@@ -136,6 +136,7 @@
   </data>
   <data name="ScoringDatabaseLabel.Text" xml:space="preserve">
     <value>Scoring Database:</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="ScoringDatabaseLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -233,6 +234,7 @@
   </data>
   <data name="HandRecordFileLabel.Text" xml:space="preserve">
     <value>Hand Record File:</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="HandRecordFileLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
