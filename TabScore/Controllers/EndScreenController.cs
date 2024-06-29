@@ -23,7 +23,7 @@ namespace TabScore.Controllers
         {
             // Check if new round has been added; can't apply to individuals
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
-            if (tabletDeviceStatus.RoundNumber == Utilities.NumberOfRoundsInEvent(tabletDeviceStatus.SectionID))  
+            if (tabletDeviceStatus.RoundNumber == Utilities.GetNumberOfRoundsInSection(tabletDeviceStatus.SectionID))  
             {
                 // Final round, so no new rounds added
                 return RedirectToAction("Index", "EndScreen", new { tabletDeviceNumber });

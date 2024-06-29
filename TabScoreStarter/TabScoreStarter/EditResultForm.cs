@@ -133,6 +133,7 @@ namespace TabScoreStarter
                 comboBoxDeclarer.Enabled = true;
                 comboBoxLead.Enabled = true;
                 comboBoxTricksTaken.Items.Clear();
+                comboBoxTricksTaken.ResetText();
                 int contractLevel = Convert.ToInt32(comboBoxContractLevel.Text);
                 for (int i = 7 - contractLevel; i > 0; i--)
                 {
@@ -143,6 +144,7 @@ namespace TabScoreStarter
                 {
                     comboBoxTricksTaken.Items.Add("-" + i.ToString());
                 }
+                comboBoxTricksTaken.SelectedItem = result.TricksTaken;
                 comboBoxTricksTaken.Enabled = true;
             }
         }

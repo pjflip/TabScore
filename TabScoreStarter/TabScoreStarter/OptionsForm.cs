@@ -76,6 +76,15 @@ namespace TabScoreStarter
                 AdditionalSecondsPerRound = Convert.ToInt32(AdditionalMinutesPerRoundNud.Value * 60)
             };
             opt.UpdateDB(connectionString);
+            Properties.Settings.Default.ShowTraveller = opt.ShowTraveller;
+            Properties.Settings.Default.ShowPercentage = opt.ShowPercentage;
+            Properties.Settings.Default.EnterLeadCard = opt.EnterLeadCard;
+            Properties.Settings.Default.ValidateLeadCard = opt.ValidateLeadCard;
+            Properties.Settings.Default.ShowRanking = opt.ShowRanking;
+            Properties.Settings.Default.ShowHandRecord = opt.ShowHandRecord;
+            Properties.Settings.Default.NumberEntryEachRound = opt.NumberEntryEachRound;
+            Properties.Settings.Default.NameSource = opt.NameSource;
+            Properties.Settings.Default.EnterResultsMethod = opt.EnterResultsMethod;
             Properties.Settings.Default.TabletsMove = opt.TabletsMove;
             Properties.Settings.Default.HandRecordReversePerspective = opt.HandRecordReversePerspective;
             Properties.Settings.Default.DoubleDummy = opt.DoubleDummy;

@@ -95,7 +95,7 @@ namespace TabScore.Models
 
         // Find out how many rounds there are in the event
         // Need to re-query database in case rounds are added/removed by scoring program
-        public static int NumberOfRoundsInEvent(int sectionID)
+        public static int GetNumberOfRoundsInSection(int sectionID)
         {
             object queryResult = null;
             using(OdbcConnection connection = new OdbcConnection(AppData.DBConnectionString))

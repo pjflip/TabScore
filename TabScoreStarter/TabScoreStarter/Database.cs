@@ -177,6 +177,24 @@ namespace TabScoreStarter
                     }
                 }
 
+                // Add field 'MissingPair' to table 'Section' if it doesn't already exist
+                SQLString = "ALTER TABLE Section ADD MissingPair SHORT";
+                cmd = new OdbcCommand(SQLString, connection);
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    SQLString = $"UPDATE Section SET MissingPair=0";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OdbcException e)
+                {
+                    if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                    {
+                        throw;
+                    }
+                }
+
                 // Read sections
                 List<Section> sectionsList = new List<Section>();
                 int sectionID;
@@ -558,7 +576,14 @@ namespace TabScoreStarter
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    SQLString = "UPDATE Settings SET ShowResults=YES";
+                    if (Properties.Settings.Default.ShowTraveller)
+                    {
+                        SQLString = "UPDATE Settings SET ShowResults=YES";
+                    }
+                    else
+                    {
+                        SQLString = "UPDATE Settings SET ShowResults=NO";
+                    }
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }
@@ -575,7 +600,14 @@ namespace TabScoreStarter
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    SQLString = "UPDATE Settings SET ShowPercentage=YES";
+                    if (Properties.Settings.Default.ShowPercentage)
+                    {
+                        SQLString = "UPDATE Settings SET ShowPercentage=YES";
+                    }
+                    else
+                    {
+                        SQLString = "UPDATE Settings SET ShowPercentage=NO";
+                    }
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }
@@ -592,7 +624,14 @@ namespace TabScoreStarter
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    SQLString = "UPDATE Settings SET LeadCard=YES";
+                    if (Properties.Settings.Default.EnterLeadCard)
+                    {
+                        SQLString = "UPDATE Settings SET LeadCard=YES";
+                    }
+                    else
+                    {
+                        SQLString = "UPDATE Settings SET LeadCard=NO";
+                    }
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }
@@ -609,7 +648,14 @@ namespace TabScoreStarter
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    SQLString = "UPDATE Settings SET BM2ValidateLeadCard=YES";
+                    if (Properties.Settings.Default.ValidateLeadCard)
+                    {
+                        SQLString = "UPDATE Settings SET BM2ValidateLeadCard=YES";
+                    }
+                    else
+                    {
+                        SQLString = "UPDATE Settings SET BM2ValidateLeadCard=NO";
+                    }
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }
@@ -626,7 +672,14 @@ namespace TabScoreStarter
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    SQLString = "UPDATE Settings SET BM2NumberEntryEachRound=NO";
+                    if (Properties.Settings.Default.NumberEntryEachRound)
+                    {
+                        SQLString = "UPDATE Settings SET BM2NumberEntryEachRound=YES";
+                    }
+                    else
+                    {
+                        SQLString = "UPDATE Settings SET BM2NumberEntryEachRound=NO";
+                    }
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }
@@ -643,7 +696,14 @@ namespace TabScoreStarter
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    SQLString = "UPDATE Settings SET BM2ViewHandRecord=YES";
+                    if (Properties.Settings.Default.ShowHandRecord)
+                    {
+                        SQLString = "UPDATE Settings SET BM2ViewHandRecord=YES";
+                    }
+                    else
+                    {
+                        SQLString = "UPDATE Settings SET BM2ViewHandRecord=NO";
+                    }
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }
@@ -660,7 +720,7 @@ namespace TabScoreStarter
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    SQLString = "UPDATE Settings SET BM2Ranking=1";
+                    SQLString = $"UPDATE Settings SET BM2Ranking={Properties.Settings.Default.ShowRanking}";
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }
@@ -677,7 +737,7 @@ namespace TabScoreStarter
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    SQLString = "UPDATE Settings SET BM2NameSource=0";
+                    SQLString = $"UPDATE Settings SET BM2NameSource={Properties.Settings.Default.NameSource}";
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }
@@ -694,7 +754,7 @@ namespace TabScoreStarter
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    SQLString = "UPDATE Settings SET EnterResultsMethod=0";
+                    SQLString = $"UPDATE Settings SET EnterResultsMethod={Properties.Settings.Default.EnterResultsMethod}";
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }

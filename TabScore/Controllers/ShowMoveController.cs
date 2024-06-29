@@ -14,7 +14,7 @@ namespace TabScore.Controllers
         public ActionResult Index(int tabletDeviceNumber, int newRoundNumber, int tableNotReadyNumber = -1)
         {
             TabletDeviceStatus tabletDeviceStatus = AppData.TabletDeviceStatusList[tabletDeviceNumber];
-            if (newRoundNumber > Utilities.NumberOfRoundsInEvent(tabletDeviceStatus.SectionID))  // Session complete
+            if (newRoundNumber > Utilities.GetNumberOfRoundsInSection(tabletDeviceStatus.SectionID))  // Session complete
             {
                 if (Settings.ShowRanking == 2)
                 {
